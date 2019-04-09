@@ -27,7 +27,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         Log.e(Constants.APP_NAME, "Hour $hour")
         Log.e(Constants.APP_NAME, "Min  $min")
 
-        if(hour in 0..7 || hour in 22..24){
+        if(hour in 0..8 || hour in 22..24){
             val copy = context
             if (copy != null) {
                 // copy is guaranteed to be to non-nullable whatever you do
@@ -35,7 +35,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             }
         }
 
-        if(hour in 7..16){
+        if(hour in 8..16){
             val copy = context
             if (copy != null) {
                 VolumeHandler.setVibrate(copy)
