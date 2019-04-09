@@ -14,10 +14,6 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import java.time.LocalDateTime
 import android.content.ComponentName
-import android.media.AudioManager
-import android.os.Build
-import android.support.v4.content.ContextCompat.getSystemService
-import android.app.NotificationManager
 import android.widget.Button
 
 
@@ -29,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
 
-        volume()
+        VolumeHandler.getVolumePermission(this)
 
 
 
@@ -37,21 +33,21 @@ class MainActivity : AppCompatActivity() {
         val btn_click_me = findViewById(R.id.button) as Button
         // set on-click listener
         btn_click_me.setOnClickListener {
-           setSilent()
+            VolumeHandler.setSilent(this)
         }
 
         // get reference to button
         val btn1_click_me = findViewById(R.id.button2) as Button
         // set on-click listener
         btn1_click_me.setOnClickListener {
-            setLoud()
+            VolumeHandler.setLoud(this)
         }
 
         // get reference to button
         val btn2_click_me = findViewById(R.id.button3) as Button
         // set on-click listener
         btn2_click_me.setOnClickListener {
-            setVibrate()
+            VolumeHandler.setVibrate(this)
         }
 
 
@@ -77,12 +73,12 @@ class MainActivity : AppCompatActivity() {
 
         // Set an alarm to trigger 5 second after this code is called
 
-       /* alarmMgr.setRepeating(
+        alarmMgr.setRepeating(
             AlarmManager.RTC_WAKEUP,
-            System.currentTimeMillis() + 5000,
-            1000 * 5,
+            System.currentTimeMillis() + 100,
+            1000 * 60 * 15,
             pIntent
-        )*/
+        )
 
 
     }
@@ -111,64 +107,4 @@ class MainActivity : AppCompatActivity() {
         startActivity( getPackageManager().getLaunchIntentForPackage("felixnuesse.de.uniVV_webbrowser"))
         return true
     }
-
-    fun volume() {
-
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !notificationManager.isNotificationPolicyAccessGranted) {
-
-            val intent = Intent(
-                android.provider.Settings
-                    .ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS
-            )
-
-            startActivity(intent)
-        }
-
-    }
-
-
-    fun setSilent(){
-
-        val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        setStreamToPercent(manager, AudioManager.STREAM_MUSIC, 0)
-        setStreamToPercent(manager, AudioManager.STREAM_ALARM, 0)
-        setStreamToPercent(manager, AudioManager.STREAM_NOTIFICATION, 0)
-        setStreamToPercent(manager, AudioManager.STREAM_RING, 0)
-        manager.setRingerMode(AudioManager.RINGER_MODE_SILENT)
-
-    }
-
-    fun setLoud(){
-
-        val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-        manager.setStreamVolume(AudioManager.STREAM_MUSIC, manager.getStreamMaxVolume( AudioManager.STREAM_MUSIC), 0)
-        manager.setStreamVolume(AudioManager.STREAM_ALARM, manager.getStreamMaxVolume( AudioManager.STREAM_ALARM), 0)
-        manager.setStreamVolume(AudioManager.STREAM_RING, manager.getStreamMaxVolume( AudioManager.STREAM_RING), 0)
-        manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, manager.getStreamMaxVolume( AudioManager.STREAM_NOTIFICATION), 0)
-        manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL)
-
-    }
-
-    fun setVibrate(){
-
-        val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL)
-        setStreamToPercent(manager, AudioManager.STREAM_MUSIC, 0)
-        setStreamToPercent(manager, AudioManager.STREAM_ALARM, 0)
-        setStreamToPercent(manager, AudioManager.STREAM_NOTIFICATION, 0)
-        setStreamToPercent(manager, AudioManager.STREAM_RING, 0)
-
-    }
-
-    fun setStreamToPercent(manager: AudioManager, stream: Int , percentage: Int){
-
-        val maxVol = manager.getStreamMaxVolume(stream)
-        val onePercent=maxVol/100
-        val vol=onePercent*percentage
-        manager.setStreamVolume(stream, vol, 0);
-    }
-
 }
