@@ -43,6 +43,12 @@ class VolumeHandler {
 
             val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
+
+            if(manager.ringerMode!= AudioManager.RINGER_MODE_NORMAL){
+                manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL)
+            }
+
+
             manager.setStreamVolume(AudioManager.STREAM_MUSIC, manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
             manager.setStreamVolume(AudioManager.STREAM_ALARM, manager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0)
             manager.setStreamVolume(AudioManager.STREAM_RING, manager.getStreamMaxVolume(AudioManager.STREAM_RING), 0)
@@ -51,7 +57,7 @@ class VolumeHandler {
                 manager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION),
                 0
             )
-            manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL)
+
 
         }
 

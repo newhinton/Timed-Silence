@@ -46,6 +46,21 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        (findViewById(R.id.button_delay_one) as Button).setOnClickListener {
+            AlarmHandler.removeRepeatingTimecheck(this)
+            AlarmHandler.reenableInGivenTime(this)
+        }
+
+        (findViewById(R.id.button_delay_three) as Button).setOnClickListener {
+            AlarmHandler.removeRepeatingTimecheck(this)
+        }
+
+        (findViewById(R.id.button_delay_eight) as Button).setOnClickListener {
+            AlarmHandler.removeRepeatingTimecheck(this)
+        }
+
+
+
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
