@@ -32,6 +32,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             if (copy != null) {
                 // copy is guaranteed to be to non-nullable whatever you do
                 VolumeHandler.setSilent(copy)
+                Log.e(Constants.APP_NAME, "set silent!")
             }
         }
 
@@ -39,6 +40,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             val copy = context
             if (copy != null) {
                 VolumeHandler.setVibrate(copy)
+                Log.e(Constants.APP_NAME, "set vibrate!")
             }
         }
 
@@ -46,6 +48,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             val copy = context
             if (copy != null) {
                 VolumeHandler.setLoud(copy)
+                Log.e(Constants.APP_NAME, "set loud!")
             }
         }
 

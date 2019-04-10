@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         alarmMgr.setRepeating(
             AlarmManager.RTC_WAKEUP,
             System.currentTimeMillis() + 100,
-            1000 * 60 * 15,
+            1000 * 60 * 1,
             pIntent
         )
 

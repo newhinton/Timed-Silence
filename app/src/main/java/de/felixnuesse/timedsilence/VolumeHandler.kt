@@ -51,7 +51,11 @@ class VolumeHandler {
         fun setVibrate(context: Context) {
 
             val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-            manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL)
+
+            if(manager.ringerMode!= AudioManager.RINGER_MODE_VIBRATE){
+                manager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE)
+            }
+
             setStreamToPercent(manager, AudioManager.STREAM_MUSIC, 0)
             setStreamToPercent(manager, AudioManager.STREAM_ALARM, 0)
             setStreamToPercent(manager, AudioManager.STREAM_NOTIFICATION, 0)
