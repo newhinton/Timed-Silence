@@ -22,6 +22,11 @@ android {
     }
 }
 
+// Running 'gradle wrapper' will generate gradlew - Getting gradle wrapper working and using it will save you a lot of pain.
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2'
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
