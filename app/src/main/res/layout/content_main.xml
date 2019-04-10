@@ -20,23 +20,37 @@
     <Button
             android:text="Loud"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/button"
+            android:layout_height="wrap_content" android:id="@+id/button_set_loud"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"/>
     <Button
             android:text="Vibrate"
             android:layout_width="wrap_content"
-            android:layout_height="53dp" android:id="@+id/button2"
+            android:layout_height="53dp" android:id="@+id/button_set_vibrate"
             android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/button" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_set_loud" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
     />
     <Button
             android:text="Silent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/button3"
+            android:layout_height="wrap_content" android:id="@+id/button_set_silent"
             android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/button2" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_set_vibrate" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"/>
+    <Button
+            android:text="Start"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:id="@+id/button_start_checking" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"/>
+    <Button
+            android:text="Stop"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:id="@+id/button_stop_checking" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/button_start_checking" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"/>
 
 </android.support.constraint.ConstraintLayout>

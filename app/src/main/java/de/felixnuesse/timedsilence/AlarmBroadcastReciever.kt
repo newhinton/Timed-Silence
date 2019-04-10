@@ -1,12 +1,9 @@
 package de.felixnuesse.timedsilence
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
+
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
-import android.support.v4.app.NotificationCompat
 import android.util.Log
 import java.time.LocalDateTime
 
@@ -19,6 +16,14 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         val current = LocalDateTime.now()
         Log.e(Constants.APP_NAME, "Current Date and Time is: $current")
 
+        if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)){
+            switchVolumeMode(context)
+        }
+
+
+    }
+
+    fun switchVolumeMode(context: Context?){
 
         val hour= LocalDateTime.now().hour
         val min= LocalDateTime.now().minute
@@ -51,32 +56,6 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
                 Log.e(Constants.APP_NAME, "set loud!")
             }
         }
-
-
-        val copy = context
-        if (copy != null) {
-
-            val name = "test"
-            val descriptionText = "desc"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val mChannel = NotificationChannel("0010", name, importance)
-            mChannel.description = descriptionText
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            val notificationManager = copy.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(mChannel)
-
-
-            var builder = NotificationCompat.Builder(copy,"0010")
-                .setSmallIcon(R.drawable.navigation_empty_icon)
-                .setContentTitle("test")
-                .setContentText("test1")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-
-        }
-
-
 
 
     }

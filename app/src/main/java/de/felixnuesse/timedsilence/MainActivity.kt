@@ -1,20 +1,16 @@
 package de.felixnuesse.timedsilence
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
-import java.time.LocalDateTime
 import android.content.ComponentName
 import android.widget.Button
+import kotlinx.android.synthetic.main.content_main.view.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,25 +25,24 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        // get reference to button
-        val btn_click_me = findViewById(R.id.button) as Button
-        // set on-click listener
-        btn_click_me.setOnClickListener {
+        (findViewById(R.id.button_set_loud) as Button).setOnClickListener {
             VolumeHandler.setLoud(this)
         }
 
-        // get reference to button
-        val btn1_click_me = findViewById(R.id.button2) as Button
-        // set on-click listener
-        btn1_click_me.setOnClickListener {
+        (findViewById(R.id.button_set_vibrate) as Button).setOnClickListener {
             VolumeHandler.setVibrate(this)
         }
 
-        // get reference to button
-        val btn2_click_me = findViewById(R.id.button3) as Button
-        // set on-click listener
-        btn2_click_me.setOnClickListener {
+        (findViewById(R.id.button_set_silent) as Button).setOnClickListener {
             VolumeHandler.setSilent(this)
+        }
+
+        (findViewById(R.id.button_start_checking) as Button).setOnClickListener {
+            AlarmHandler.createRepeatingTimecheck(this, 1)
+        }
+
+        (findViewById(R.id.button_stop_checking) as Button).setOnClickListener {
+            AlarmHandler.removeRepeatingTimecheck(this)
         }
 
 
@@ -57,28 +52,6 @@ class MainActivity : AppCompatActivity() {
 
 
         }
-
-        val alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val broadcastIntent = Intent(this, AlarmBroadcastReceiver::class.java)
-
-        // The Pending Intent to pass in AlarmManager
-        val pIntent = PendingIntent.getBroadcast(this,0,broadcastIntent,0)
-
-
-        val current = LocalDateTime.now()
-        Log.e(Constants.APP_NAME, "Current Date and Time is: $current")
-
-
-
-        // Set an alarm to trigger 5 second after this code is called
-
-        alarmMgr.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            System.currentTimeMillis() + 100,
-            1000 * 60 * 1,
-            pIntent
-        )
 
 
     }
