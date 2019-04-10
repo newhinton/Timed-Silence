@@ -41,5 +41,10 @@ class Constants {
 
 
         const val DEFAULT_DELAY = 60
+        const val PREFS_NAME = "prefsname"
+
+
+        const val PREF_INTERVAL_CHECK = "PREF_INTERVAL_CHECK"
+        const val PREF_INTERVAL_CHECK_DEFAULT = 15
     }
 }

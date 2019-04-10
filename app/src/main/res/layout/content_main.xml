@@ -14,7 +14,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/button_set_loud"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"/>
+            android:layout_marginStart="8dp" android:layout_marginTop="72dp"
+            app:layout_constraintTop_toTopOf="parent"
+    />
     <Button
             android:text="Vibrate"
             android:layout_width="wrap_content"
@@ -33,21 +35,21 @@
             android:text="Start"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:id="@+id/button_start_checking" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"/>
+            android:id="@+id/button_start_checking"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" android:layout_marginTop="72dp" app:layout_constraintTop_toTopOf="parent"/>
     <Button
             android:text="Stop"
             android:layout_width="wrap_content"
             android:layout_height="52dp"
-            android:id="@+id/button_stop_checking" android:layout_marginTop="8dp"
+            android:id="@+id/button_stop_checking" android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@+id/button_start_checking" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"/>
     <Button
             android:text="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button_delay_one" android:layout_marginTop="156dp"
+            android:id="@+id/button_delay_one" android:layout_marginTop="60dp"
             app:layout_constraintTop_toBottomOf="@+id/button_stop_checking" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"/>
     <Button
@@ -64,5 +66,32 @@
             android:id="@+id/button_delay_eight" android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/button_delay_three" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"/>
+    <SeekBar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBar_waittime"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/interval_text_view"/>
+    <TextView
+            android:text="Interval between Checks:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            android:id="@+id/interval_text_view"/>
+    <TextView
+            android:text="Minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" android:id="@+id/textView4"/>
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textview_waittime_content" app:layout_constraintEnd_toStartOf="@+id/textView4"
+            android:layout_marginEnd="8dp" android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

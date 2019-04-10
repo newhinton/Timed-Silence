@@ -39,6 +39,9 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.ComponentName
 import android.widget.Button
+import android.widget.SeekBar
+import android.widget.TextView
+import android.widget.Toast
 import kotlinx.android.synthetic.main.content_main.view.*
 
 
@@ -67,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         (findViewById(R.id.button_start_checking) as Button).setOnClickListener {
-            AlarmHandler.createRepeatingTimecheck(this, 1)
+            AlarmHandler.createRepeatingTimecheck(this)
         }
 
         (findViewById(R.id.button_stop_checking) as Button).setOnClickListener {
@@ -91,6 +94,35 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        val seekBarSupportText= findViewById<TextView>(R.id.textview_waittime_content)
+        val seekBar = findViewById<SeekBar>(R.id.seekBar_waittime)
+
+        val interval= SharedPreferencesHandler.getPref(this, Constants.PREF_INTERVAL_CHECK, Constants.PREF_INTERVAL_CHECK_DEFAULT)
+
+        seekBarSupportText.text=interval.toString()
+        seekBar.progress=interval
+
+        //minimum is zero, so we need to offset by one
+        seekBar.max=179
+        seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                // Write code to perform some action when progress is changed.
+                seekBarSupportText.text= (seekBar.progress+1).toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                // Write code to perform some action when touch is started.
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                // Write code to perform some action when touch is stopped.
+                //Toast.makeText(this@MainActivity, "Progress is " + seekBar.progress+1 + "%", Toast.LENGTH_SHORT).show()
+                seekBarSupportText.text= (seekBar.progress+1).toString()
+                setInterval(seekBar.progress+1)
+
+            }
+        })
+
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -99,6 +131,14 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+
+    }
+
+    fun setInterval(interval: Int){
+
+        SharedPreferencesHandler.setPref(this, Constants.PREF_INTERVAL_CHECK, interval)
+        AlarmHandler.removeRepeatingTimecheck(this)
+        AlarmHandler.createRepeatingTimecheck(this)
 
     }
 

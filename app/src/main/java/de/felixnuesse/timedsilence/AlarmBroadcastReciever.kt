@@ -59,7 +59,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
                 //restart now because extra was "now"
 
-                AlarmHandler.createRepeatingTimecheck(context!!, Constants.DEFAULT_DELAY as Long)
+                AlarmHandler.createRepeatingTimecheck(context!!)
             }
 
         }

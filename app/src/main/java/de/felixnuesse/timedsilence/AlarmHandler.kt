@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -49,13 +50,21 @@ class AlarmHandler {
             )
         }
 
-        fun createRepeatingTimecheck(context: Context, intervalInMinutes: Long){
+        fun createRepeatingTimecheck(context: Context){
 
+            val interval= SharedPreferencesHandler.getPref(context, Constants.PREF_INTERVAL_CHECK, Constants.PREF_INTERVAL_CHECK_DEFAULT)
+
+            createRepeatingTimecheck(context, interval)
+        }
+
+        fun createRepeatingTimecheck(context: Context, intervalInMinutes: Int){
+
+            //todo create inexact version
             val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarms.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 System.currentTimeMillis() + 100,
-                1000 * 60 * intervalInMinutes,
+                (1000 * 60 * intervalInMinutes).toLong(),
                 createIntentBroadcast(context)
             )
         }
