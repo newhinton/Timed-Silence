@@ -33,21 +33,21 @@ class MainActivity : AppCompatActivity() {
         val btn_click_me = findViewById(R.id.button) as Button
         // set on-click listener
         btn_click_me.setOnClickListener {
-            VolumeHandler.setSilent(this)
+            VolumeHandler.setLoud(this)
         }
 
         // get reference to button
         val btn1_click_me = findViewById(R.id.button2) as Button
         // set on-click listener
         btn1_click_me.setOnClickListener {
-            VolumeHandler.setLoud(this)
+            VolumeHandler.setVibrate(this)
         }
 
         // get reference to button
         val btn2_click_me = findViewById(R.id.button3) as Button
         // set on-click listener
         btn2_click_me.setOnClickListener {
-            VolumeHandler.setVibrate(this)
+            VolumeHandler.setSilent(this)
         }
 
 

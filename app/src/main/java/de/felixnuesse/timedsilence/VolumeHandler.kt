@@ -5,6 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.provider.Settings
+import android.support.v4.content.ContextCompat.getSystemService
+
+
 
 class VolumeHandler {
     companion object {
@@ -28,7 +31,11 @@ class VolumeHandler {
             setStreamToPercent(manager, AudioManager.STREAM_ALARM, 0)
             setStreamToPercent(manager, AudioManager.STREAM_NOTIFICATION, 0)
             setStreamToPercent(manager, AudioManager.STREAM_RING, 0)
-            manager.setRingerMode(AudioManager.RINGER_MODE_SILENT)
+
+
+            val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+            mNotificationManager!!.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
+            mNotificationManager!!.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
 
         }
 
