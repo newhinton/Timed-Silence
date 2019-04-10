@@ -39,7 +39,15 @@ class AlarmHandler {
     companion object {
 
 
+        fun createAlarmIntime(context: Context, delayInMs: Long){
 
+            val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarms.set(
+                AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + delayInMs,
+                createRestartBroadcast(context)
+            )
+        }
 
         fun createRepeatingTimecheck(context: Context, intervalInMinutes: Long){
 
@@ -59,30 +67,23 @@ class AlarmHandler {
 
         }
 
-        fun reenableInGivenTime(context: Context){
-
-            val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarms.cancel(createDelayBroadcast(context))
-
-        }
-
         private fun createIntentBroadcast(context: Context): PendingIntent? {
 
             val broadcastIntent = Intent(context, AlarmBroadcastReceiver::class.java)
-            broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION,Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)
+            broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION, Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)
 
             // The Pending Intent to pass in AlarmManager
-            val pIntent = PendingIntent.getBroadcast(context,0,broadcastIntent,0)
+            val pIntent = PendingIntent.getBroadcast(context, 0, broadcastIntent, 0)
 
             return pIntent
 
         }
 
-        private fun createDelayBroadcast(context: Context, delay: Int): PendingIntent? {
+        private fun createRestartBroadcast(context: Context): PendingIntent? {
 
             val broadcastIntent = Intent(context, AlarmBroadcastReceiver::class.java)
             broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION,Constants.BROADCAST_INTENT_ACTION_DELAY)
-            broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA,delay)
+            broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA,Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)
 
             // The Pending Intent to pass in AlarmManager
             val pIntent = PendingIntent.getBroadcast(context,0,broadcastIntent,0)

@@ -7,5 +7,9 @@ class Constants {
         const val BROADCAST_INTENT_ACTION_UPDATE_VOLUME = "volumeUpdate"
         const val BROADCAST_INTENT_ACTION_DELAY = "delayVolumeUpdate"
         const val BROADCAST_INTENT_ACTION_DELAY_EXTRA = "delayVolumeUpdate_EXTRA"
+        const val BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW = "restartDelayNow"
+
+
+        const val DEFAULT_DELAY = 60
     }
 }

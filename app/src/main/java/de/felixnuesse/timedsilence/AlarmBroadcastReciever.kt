@@ -6,6 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import java.time.LocalDateTime
+import android.support.v4.app.NotificationCompat.getExtras
+import android.os.Bundle
+
+
 
 class AlarmBroadcastReceiver : BroadcastReceiver() {
 
@@ -18,6 +22,19 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)){
             switchVolumeMode(context)
+        }
+
+        if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_DELAY)){
+
+
+            val extra = intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA)
+
+            if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
+                //restart now because extra was "now"
+
+                AlarmHandler.createRepeatingTimecheck(context!!, Constants.DEFAULT_DELAY as Long)
+            }
+
         }
 
 

@@ -48,15 +48,17 @@ class MainActivity : AppCompatActivity() {
 
         (findViewById(R.id.button_delay_one) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
-            AlarmHandler.reenableInGivenTime(this)
+            AlarmHandler.createAlarmIntime(this, 1 * 60 * 60 * 1000)
         }
 
         (findViewById(R.id.button_delay_three) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
+            AlarmHandler.createAlarmIntime(this, 3 * 60 * 60 * 1000)
         }
 
         (findViewById(R.id.button_delay_eight) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
+            AlarmHandler.createAlarmIntime(this, 8 * 60 * 60 * 1000)
         }
 
 
