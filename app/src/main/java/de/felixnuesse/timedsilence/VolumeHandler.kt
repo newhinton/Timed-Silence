@@ -6,7 +6,7 @@ import android.content.Intent
 import android.media.AudioManager
 import android.provider.Settings
 import android.support.v4.content.ContextCompat.getSystemService
-
+import android.util.Log
 
 
 class VolumeHandler {
@@ -49,14 +49,10 @@ class VolumeHandler {
             }
 
 
-            manager.setStreamVolume(AudioManager.STREAM_MUSIC, manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
-            manager.setStreamVolume(AudioManager.STREAM_ALARM, manager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0)
-            manager.setStreamVolume(AudioManager.STREAM_RING, manager.getStreamMaxVolume(AudioManager.STREAM_RING), 0)
-            manager.setStreamVolume(
-                AudioManager.STREAM_NOTIFICATION,
-                manager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION),
-                0
-            )
+            setStreamToPercent(manager, AudioManager.STREAM_MUSIC, 80)
+            setStreamToPercent(manager, AudioManager.STREAM_ALARM, 80)
+            setStreamToPercent(manager, AudioManager.STREAM_NOTIFICATION, 80)
+            setStreamToPercent(manager, AudioManager.STREAM_RING, 80)
 
 
         }
@@ -77,11 +73,10 @@ class VolumeHandler {
         }
 
         fun setStreamToPercent(manager: AudioManager, stream: Int, percentage: Int) {
-
-            val maxVol = manager.getStreamMaxVolume(stream)
+            val maxVol = manager.getStreamMaxVolume(stream)*100
             val onePercent = maxVol / 100
-            val vol = onePercent * percentage
-            manager.setStreamVolume(stream, vol, 0);
+            val vol = (onePercent * percentage)/100
+            manager.setStreamVolume(stream, vol, 0)
         }
 
     }
