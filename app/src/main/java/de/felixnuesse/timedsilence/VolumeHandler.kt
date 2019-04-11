@@ -55,15 +55,22 @@ class VolumeHandler {
         fun setSilent(context: Context) {
 
             val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-            setStreamToPercent(manager, AudioManager.STREAM_MUSIC, 0)
-            setStreamToPercent(manager, AudioManager.STREAM_ALARM, 0)
-            setStreamToPercent(manager, AudioManager.STREAM_NOTIFICATION, 0)
-            setStreamToPercent(manager, AudioManager.STREAM_RING, 0)
-
 
             val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
             mNotificationManager!!.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
             mNotificationManager!!.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
+
+            if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
+                manager.setRingerMode(AudioManager.RINGER_MODE_SILENT)
+            }
+
+            setStreamToPercent(manager, AudioManager.STREAM_MUSIC, 0)
+            setStreamToPercent(manager, AudioManager.STREAM_ALARM, 70)
+            setStreamToPercent(manager, AudioManager.STREAM_NOTIFICATION, 0)
+            setStreamToPercent(manager, AudioManager.STREAM_RING, 0)
+
+
+
 
         }
 

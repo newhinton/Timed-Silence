@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         (findViewById(R.id.button_start_checking) as Button).setOnClickListener {
+            AlarmHandler.createAlarmIntime(this, 100);
             AlarmHandler.createRepeatingTimecheck(this)
         }
 
