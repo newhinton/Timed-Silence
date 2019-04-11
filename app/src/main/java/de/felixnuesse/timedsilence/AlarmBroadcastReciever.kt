@@ -47,9 +47,18 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         val current = LocalDateTime.now()
         Log.e(Constants.APP_NAME, "Current Date and Time is: $current")
 
+        val action_extra=intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION)
+        Log.e(Constants.APP_NAME, "extra1: "+action_extra)
+        Log.e(Constants.APP_NAME, "extra2: "+Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)
+
+
+
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)){
+            Log.e(Constants.APP_NAME, "extra: ")
             switchVolumeMode(context)
         }
+
+        switchVolumeMode(context)
 
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_DELAY)){
 
@@ -59,7 +68,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
                 //restart now because extra was "now"
 
-                AlarmHandler.createRepeatingTimecheck(context!!)
+               // AlarmHandler.createRepeatingTimecheck(context!!)
             }
 
         }

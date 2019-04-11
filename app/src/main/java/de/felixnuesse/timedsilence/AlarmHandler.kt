@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.util.Log
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -41,12 +42,12 @@ class AlarmHandler {
 
 
         fun createAlarmIntime(context: Context, delayInMs: Long){
-
+            Log.e(Constants.APP_NAME, "Start Check with delay: "+delayInMs)
             val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarms.set(
                 AlarmManager.RTC_WAKEUP,
                 System.currentTimeMillis() + delayInMs,
-                createRestartBroadcast(context)
+                createIntentBroadcast(context)
             )
         }
 
@@ -81,8 +82,12 @@ class AlarmHandler {
             val broadcastIntent = Intent(context, AlarmBroadcastReceiver::class.java)
             broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION, Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)
 
+
+            Log.e(Constants.APP_NAME, "Create intent!")
+
             // The Pending Intent to pass in AlarmManager
             val pIntent = PendingIntent.getBroadcast(context, 0, broadcastIntent, 0)
+
 
             return pIntent
 
