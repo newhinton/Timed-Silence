@@ -51,6 +51,8 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             switchVolumeMode(context)
         }
 
+        //switchVolumeMode(context)
+
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_DELAY)){
 
 
@@ -59,7 +61,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
                 //restart now because extra was "now"
 
-                AlarmHandler.createRepeatingTimecheck(context!!)
+               // AlarmHandler.createRepeatingTimecheck(context!!)
             }
 
         }

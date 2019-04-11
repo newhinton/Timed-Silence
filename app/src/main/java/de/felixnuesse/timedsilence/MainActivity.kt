@@ -39,10 +39,10 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.ComponentName
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
-import android.widget.Toast
-import kotlinx.android.synthetic.main.content_main.view.*
+import de.felixnuesse.timedsilence.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         (findViewById(R.id.button_start_checking) as Button).setOnClickListener {
-            AlarmHandler.createAlarmIntime(this, 100);
+            //AlarmHandler.createAlarmIntime(this, 100);
             AlarmHandler.createRepeatingTimecheck(this)
         }
 
@@ -81,18 +81,21 @@ class MainActivity : AppCompatActivity() {
 
         (findViewById(R.id.button_delay_one) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
-            AlarmHandler.createAlarmIntime(this, 1 * 60 * 60 * 1000)
+            //AlarmHandler.createAlarmIntime(this, 1 * 60 * 60 * 1000)
         }
 
         (findViewById(R.id.button_delay_three) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
-            AlarmHandler.createAlarmIntime(this, 3 * 60 * 60 * 1000)
+            //AlarmHandler.createAlarmIntime(this, 3 * 60 * 60 * 1000)
         }
 
         (findViewById(R.id.button_delay_eight) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
-            AlarmHandler.createAlarmIntime(this, 8 * 60 * 60 * 1000)
+            //AlarmHandler.createAlarmIntime(this, 8 * 60 * 60 * 1000)
         }
+
+
+        checkStateOfAlarm()
 
 
         val seekBarSupportText= findViewById<TextView>(R.id.textview_waittime_content)
@@ -135,12 +138,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun setInterval(interval: Int){
-
-        SharedPreferencesHandler.setPref(this, Constants.PREF_INTERVAL_CHECK, interval)
-        AlarmHandler.removeRepeatingTimecheck(this)
-        AlarmHandler.createRepeatingTimecheck(this)
-
+    override fun onResume() {
+        super.onResume()
+        checkStateOfAlarm()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -166,5 +166,23 @@ class MainActivity : AppCompatActivity() {
         //startActivity(intentDeviceTest)
         startActivity( getPackageManager().getLaunchIntentForPackage("felixnuesse.de.uniVV_webbrowser"))
         return true
+    }
+
+
+
+    fun setInterval(interval: Int){
+
+        SharedPreferencesHandler.setPref(this, Constants.PREF_INTERVAL_CHECK, interval)
+        AlarmHandler.removeRepeatingTimecheck(this)
+        AlarmHandler.createRepeatingTimecheck(this)
+
+    }
+
+    fun checkStateOfAlarm(){
+        val status= findViewById<TextView>(R.id.statusCircle) as ImageView
+        status.setImageDrawable(getDrawable(R.drawable.circle_red))
+        if(AlarmHandler.getNextAlarm(this)){
+            status.setImageDrawable(getDrawable(R.drawable.circle_green))
+        }
     }
 }

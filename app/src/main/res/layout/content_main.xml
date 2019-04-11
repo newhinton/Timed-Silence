@@ -93,5 +93,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/textview_waittime_content" app:layout_constraintEnd_toStartOf="@+id/textView4"
             android:layout_marginEnd="8dp" android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"/>
+    <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp" app:srcCompat="@drawable/circle_red"
+            android:id="@+id/statusCircle"
+            app:layout_constraintEnd_toStartOf="@+id/button_start_checking" android:layout_marginEnd="24dp"
+            android:layout_marginTop="72dp" app:layout_constraintTop_toTopOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -46,5 +46,10 @@ class Constants {
 
         const val PREF_INTERVAL_CHECK = "PREF_INTERVAL_CHECK"
         const val PREF_INTERVAL_CHECK_DEFAULT = 15
+
+
+
+
+        const val RECURRING_INTENT_ID = 123789
     }
 }
