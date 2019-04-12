@@ -38,10 +38,18 @@ import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.ComponentName
+import android.support.design.widget.TabLayout
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.view.ViewPager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
+import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
+import de.felixnuesse.timedsilence.fragments.WifiSearchingFragment
+import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -145,6 +153,45 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        val tabs = findViewById<TabLayout>(R.id.tabLayout)
+        val mPager = findViewById<ViewPager>(R.id.viewPager)
+
+        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                mPager.currentItem = tab.position
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {
+
+            }
+        })
+
+        mPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+            }
+            override fun onPageSelected(position: Int) {
+                val tab = tabs.getTabAt(position)
+                tab?.select()
+            }
+
+        })
+
+
+        // The pager adapter, which provides the pages to the view pager widget.
+        val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
+        mPager.adapter = pagerAdapter
+
+
+
     }
 
     override fun onResume() {
@@ -194,4 +241,25 @@ class MainActivity : AppCompatActivity() {
             status.setImageDrawable(getDrawable(R.drawable.circle_green))
         }
     }
+
+
+    /**
+     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+     * sequence.
+     */
+    private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+        override fun getCount(): Int = 3
+
+        override fun getItem(position: Int): Fragment {
+
+            when (position) {
+                0 -> return WifiConnectedFragment()
+                1 -> return WifiSearchingFragment()
+                2 -> return CalendarEventFragment()
+                else -> return WifiConnectedFragment()
+            }
+        }
+    }
+
+
 }
