@@ -42,7 +42,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
-import de.felixnuesse.timedsilence.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -59,39 +58,47 @@ class MainActivity : AppCompatActivity() {
 
         (findViewById(R.id.button_set_loud) as Button).setOnClickListener {
             VolumeHandler.setLoud(this)
+            checkStateOfAlarm()
         }
 
         (findViewById(R.id.button_set_vibrate) as Button).setOnClickListener {
             VolumeHandler.setVibrate(this)
+            checkStateOfAlarm()
         }
 
         (findViewById(R.id.button_set_silent) as Button).setOnClickListener {
             VolumeHandler.setSilent(this)
+            checkStateOfAlarm()
         }
 
         (findViewById(R.id.button_start_checking) as Button).setOnClickListener {
             //AlarmHandler.createAlarmIntime(this, 100);
             AlarmHandler.createRepeatingTimecheck(this)
+            checkStateOfAlarm()
         }
 
         (findViewById(R.id.button_stop_checking) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
+            checkStateOfAlarm()
         }
 
 
         (findViewById(R.id.button_delay_one) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
             //AlarmHandler.createAlarmIntime(this, 1 * 60 * 60 * 1000)
+            checkStateOfAlarm()
         }
 
         (findViewById(R.id.button_delay_three) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
             //AlarmHandler.createAlarmIntime(this, 3 * 60 * 60 * 1000)
+            checkStateOfAlarm()
         }
 
         (findViewById(R.id.button_delay_eight) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
             //AlarmHandler.createAlarmIntime(this, 8 * 60 * 60 * 1000)
+            checkStateOfAlarm()
         }
 
 

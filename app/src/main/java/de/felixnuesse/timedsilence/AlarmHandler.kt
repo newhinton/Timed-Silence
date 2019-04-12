@@ -56,45 +56,40 @@ class AlarmHandler {
         fun createRepeatingTimecheck(context: Context){
 
             val interval= SharedPreferencesHandler.getPref(context, Constants.PREF_INTERVAL_CHECK, Constants.PREF_INTERVAL_CHECK_DEFAULT)
-
-            getNextAlarm(context)
             createRepeatingTimecheck(context, interval)
-
-            getNextAlarm(context)
         }
 
         fun createRepeatingTimecheck(context: Context, intervalInMinutes: Int){
 
+            /*if(!getNextAlarm(context)){
+                Log.e(Constants.APP_NAME, "Not creating repeating alarm, already set!")
+                //return
+            }else{
+                Log.e(Constants.APP_NAME, "Creating repeating alarm")
+
+            }*/
+
             //todo create inexact version
             val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-            val intentToSend=createIntentBroadcast(context)
-
-            if(intentToSend==null){
-                Log.e(Constants.APP_NAME, "Alarm already set!")
-                return
-            }
-
-            Log.e(Constants.APP_NAME, "Alarm not set. yet")
-
-
             alarms.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 System.currentTimeMillis() + 100,
                 (1000 * 60 * intervalInMinutes).toLong(),
-                intentToSend
+                createIntentBroadcast(context)
             )
         }
 
         fun removeRepeatingTimecheck(context: Context){
 
-
-            getNextAlarm(context)
             val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarms.cancel(createIntentBroadcast(context))
             createIntentBroadcast(context)?.cancel()
 
-            getNextAlarm(context)
+            if(!getNextAlarm(context)){
+                Log.e(Constants.APP_NAME, "Alarm canceled")
+                return
+            }
+            Log.e(Constants.APP_NAME, "Error canceling alarm!")
 
         }
 
@@ -127,14 +122,15 @@ class AlarmHandler {
         }
 
         fun getNextAlarm(context: Context): Boolean{
-
+            Log.e(Constants.APP_NAME, "checking!");
             val pIntent = createIntentBroadcast(context,PendingIntent.FLAG_NO_CREATE)
-            if (pIntent != null) {
-                Log.e(Constants.APP_NAME, "intent exists")
-                return true
-            }else{
-                Log.e(Constants.APP_NAME, "intent does not exists")
+
+            if(pIntent == null){
+                Log.e(Constants.APP_NAME, "null!")
                 return false
+            }else {
+                Log.e(Constants.APP_NAME, "notnull!");
+                return true
             }
         }
 
