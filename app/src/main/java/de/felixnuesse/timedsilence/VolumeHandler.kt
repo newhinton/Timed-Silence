@@ -41,8 +41,7 @@ class VolumeHandler {
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (!notificationManager.isNotificationPolicyAccessGranted) {
                 val intent = Intent(
-                    Settings
-                        .ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS
+                    Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS
                 )
                 context.startActivity(intent)
             }
@@ -54,11 +53,11 @@ class VolumeHandler {
             val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
             val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-            mNotificationManager!!.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
-            mNotificationManager!!.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
+            mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
+            mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
 
             if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
-                manager.setRingerMode(AudioManager.RINGER_MODE_SILENT)
+                manager.ringerMode=AudioManager.RINGER_MODE_SILENT
             }
 
             setStreamToPercent(manager, AudioManager.STREAM_MUSIC, 0)
@@ -94,7 +93,7 @@ class VolumeHandler {
             val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
             if(manager.ringerMode!= AudioManager.RINGER_MODE_VIBRATE){
-                manager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE)
+                manager.ringerMode=AudioManager.RINGER_MODE_VIBRATE
             }
 
             setStreamToPercent(manager, AudioManager.STREAM_MUSIC, 0)

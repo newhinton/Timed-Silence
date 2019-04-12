@@ -103,6 +103,8 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        WifiManager.requestPermissions(this)
+        WifiManager.getCurrentSsid(this)
         checkStateOfAlarm()
 
 

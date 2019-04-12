@@ -33,9 +33,6 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import java.time.LocalDateTime
-import android.support.v4.app.NotificationCompat.getExtras
-import android.os.Bundle
-
 
 
 class AlarmBroadcastReceiver : BroadcastReceiver() {
@@ -46,8 +43,8 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         Log.e(Constants.APP_NAME, "Alarmintent: Recieved Alarmintent at: $current")
 
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)){
-            switchVolumeMode(context)
             Log.e(Constants.APP_NAME, "Alarmintent: Content is to \"check the time\"")
+            switchVolumeMode(context)
 
 
         }
@@ -67,33 +64,42 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     fun switchVolumeMode(context: Context?){
 
+
+
+        val nonNullContext = context
+        // copy is guaranteed to be to non-nullable whatever you do
+        if (nonNullContext == null) {
+            Log.e(Constants.APP_NAME, "Alarmintent: Error! Context invalid! Stopping!")
+            return
+        }
+
+
+        val wifiSSid="\"AndroidWifi\""
+
+        if(WifiManager.getCurrentSsid(nonNullContext).equals(wifiSSid)){
+            VolumeHandler.setSilent(nonNullContext)
+            Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: Set silent, because Connected to $wifiSSid")
+            return
+        }
+
         val hour= LocalDateTime.now().hour
         val min= LocalDateTime.now().minute
 
 
         if(hour in 0..8 || hour in 22..24){
-            val copy = context
-            if (copy != null) {
-                // copy is guaranteed to be to non-nullable whatever you do
-                VolumeHandler.setSilent(copy)
-                Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
-            }
+            VolumeHandler.setSilent(nonNullContext)
+            Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
         }
 
         if(hour in 8..16){
-            val copy = context
-            if (copy != null) {
-                VolumeHandler.setVibrate(copy)
-                Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
-            }
+            VolumeHandler.setVibrate(nonNullContext)
+            Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
         }
 
         if(hour in 16..22){
-            val copy = context
-            if (copy != null) {
-                VolumeHandler.setLoud(copy)
-                Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
-            }
+            VolumeHandler.setLoud(nonNullContext)
+            Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
+
         }
 
 
