@@ -4,9 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.util.Log
-import de.felixnuesse.timedsilence.Constants.Companion.RECURRING_INTENT_ID
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -42,98 +40,86 @@ class AlarmHandler {
     companion object {
 
 
-        fun createAlarmIntime(context: Context, delayInMs: Long){
+       fun createAlarmIntime(context: Context, delayInMs: Long){
 
-          /*  val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarms.set(
-                AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis() + delayInMs,
-                createRestartBroadcast(context)
-            )
-            */
-        }
+             val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+             alarms.set(
+                 AlarmManager.RTC_WAKEUP,
+                 System.currentTimeMillis() + delayInMs,
+                 createRestartBroadcast(context)
+             )
 
-        fun createRepeatingTimecheck(context: Context){
+       }
 
-            val interval= SharedPreferencesHandler.getPref(context, Constants.PREF_INTERVAL_CHECK, Constants.PREF_INTERVAL_CHECK_DEFAULT)
-            createRepeatingTimecheck(context, interval)
-        }
+       fun createRepeatingTimecheck(context: Context){
 
-        fun createRepeatingTimecheck(context: Context, intervalInMinutes: Int){
+           val interval= SharedPreferencesHandler.getPref(context, Constants.PREF_INTERVAL_CHECK, Constants.PREF_INTERVAL_CHECK_DEFAULT)
+           createRepeatingTimecheck(context, interval)
+       }
 
-            /*if(!getNextAlarm(context)){
-                Log.e(Constants.APP_NAME, "Not creating repeating alarm, already set!")
-                //return
-            }else{
-                Log.e(Constants.APP_NAME, "Creating repeating alarm")
+       fun createRepeatingTimecheck(context: Context, intervalInMinutes: Int){
 
-            }*/
+           //todo create inexact version
+           val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+           alarms.setRepeating(
+               AlarmManager.RTC_WAKEUP,
+               System.currentTimeMillis() + 100,
+               (1000 * 60 * intervalInMinutes).toLong(),
+               createIntentBroadcast(context)
+           )
+       }
 
-            //todo create inexact version
-            val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarms.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis() + 100,
-                (1000 * 60 * intervalInMinutes).toLong(),
-                createIntentBroadcast(context)
-            )
-        }
+       fun removeRepeatingTimecheck(context: Context){
 
-        fun removeRepeatingTimecheck(context: Context){
+           val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+           alarms.cancel(createIntentBroadcast(context))
+           createIntentBroadcast(context)?.cancel()
 
-            val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarms.cancel(createIntentBroadcast(context))
-            createIntentBroadcast(context)?.cancel()
+           if(!checkIfNextAlarmExists(context)){
+               Log.e(Constants.APP_NAME, "AlarmHandler: Recurring alarm canceled")
+               return
+           }
+           Log.e(Constants.APP_NAME, "AlarmHandler: Error canceling recurring alarm!")
 
-            if(!getNextAlarm(context)){
-                Log.e(Constants.APP_NAME, "Alarm canceled")
-                return
-            }
-            Log.e(Constants.APP_NAME, "Error canceling alarm!")
+       }
 
-        }
+       private fun createIntentBroadcast(context: Context): PendingIntent? {
+           return createIntentBroadcast(context, PendingIntent.FLAG_UPDATE_CURRENT)
+       }
 
-        private fun createIntentBroadcast(context: Context): PendingIntent? {
-            return createIntentBroadcast(context, PendingIntent.FLAG_UPDATE_CURRENT)
-        }
+       private fun createIntentBroadcast(context: Context, flag: Int): PendingIntent? {
 
-        private fun createIntentBroadcast(context: Context, flag: Int): PendingIntent? {
+           val broadcastIntent = Intent(context, AlarmBroadcastReceiver::class.java)
+           broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION, Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)
 
-            val broadcastIntent = Intent(context, AlarmBroadcastReceiver::class.java)
-            broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION, Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)
+           // The Pending Intent to pass in AlarmManager
+           return PendingIntent.getBroadcast(context, Constants.RECURRING_INTENT_ID, broadcastIntent,  flag)
 
-            // The Pending Intent to pass in AlarmManager
-            val pIntent = PendingIntent.getBroadcast(context, Constants.RECURRING_INTENT_ID, broadcastIntent,  flag)
-            return pIntent
+       }
 
-        }
+       private fun createRestartBroadcast(context: Context): PendingIntent? {
 
-        private fun createRestartBroadcast(context: Context): PendingIntent? {
+           val broadcastIntent = Intent(context, AlarmBroadcastReceiver::class.java)
+           broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION,Constants.BROADCAST_INTENT_ACTION_DELAY)
+           broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA,Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)
 
-            val broadcastIntent = Intent(context, AlarmBroadcastReceiver::class.java)
-            broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION,Constants.BROADCAST_INTENT_ACTION_DELAY)
-            broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA,Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)
+           // The Pending Intent to pass in AlarmManager
+           return PendingIntent.getBroadcast(context,0,broadcastIntent,0)
 
-            // The Pending Intent to pass in AlarmManager
-            val pIntent = PendingIntent.getBroadcast(context,0,broadcastIntent,0)
+       }
 
-            return pIntent
+       fun checkIfNextAlarmExists(context: Context): Boolean{
+           val pIntent = createIntentBroadcast(context,PendingIntent.FLAG_NO_CREATE)
 
-        }
+           if(pIntent == null){
+               Log.e(Constants.APP_NAME, "AlarmHandler: There is no next Alarm set!")
+               return false
+           }else {
+               Log.e(Constants.APP_NAME, "AlarmHandler: There is an upcoming Alarm!")
+               return true
+           }
+       }
 
-        fun getNextAlarm(context: Context): Boolean{
-            Log.e(Constants.APP_NAME, "checking!");
-            val pIntent = createIntentBroadcast(context,PendingIntent.FLAG_NO_CREATE)
-
-            if(pIntent == null){
-                Log.e(Constants.APP_NAME, "null!")
-                return false
-            }else {
-                Log.e(Constants.APP_NAME, "notnull!");
-                return true
-            }
-        }
-
-    }
+   }
 
 }

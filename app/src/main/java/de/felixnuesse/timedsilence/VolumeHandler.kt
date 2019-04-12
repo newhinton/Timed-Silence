@@ -33,9 +33,6 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.provider.Settings
-import android.support.v4.content.ContextCompat.getSystemService
-import android.util.Log
-
 
 class VolumeHandler {
     companion object {

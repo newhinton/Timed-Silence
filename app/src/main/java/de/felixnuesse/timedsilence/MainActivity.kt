@@ -32,7 +32,7 @@ package de.felixnuesse.timedsilence
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 
@@ -85,8 +85,9 @@ class MainActivity : AppCompatActivity() {
 
         (findViewById(R.id.button_delay_one) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
-            //AlarmHandler.createAlarmIntime(this, 1 * 60 * 60 * 1000)
             checkStateOfAlarm()
+            //AlarmHandler.createAlarmIntime(this, 1 * 60 * 60 * 1000)
+            AlarmHandler.createAlarmIntime(this, 5000)
         }
 
         (findViewById(R.id.button_delay_three) as Button).setOnClickListener {
@@ -126,8 +127,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                // Write code to perform some action when touch is stopped.
-                //Toast.makeText(this@MainActivity, "Progress is " + seekBar.progress+1 + "%", Toast.LENGTH_SHORT).show()
+             //Toast.makeText(this@MainActivity, "Progress is " + seekBar.progress+1 + "%", Toast.LENGTH_SHORT).show()
                 seekBarSupportText.text= (seekBar.progress+1).toString()
                 setInterval(seekBar.progress+1)
 
@@ -186,9 +186,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun checkStateOfAlarm(){
-        val status= findViewById<TextView>(R.id.statusCircle) as ImageView
+        val status= findViewById<ImageView>(R.id.statusCircle) as ImageView
         status.setImageDrawable(getDrawable(R.drawable.circle_red))
-        if(AlarmHandler.getNextAlarm(this)){
+        if(AlarmHandler.checkIfNextAlarmExists(this)){
             status.setImageDrawable(getDrawable(R.drawable.circle_green))
         }
     }

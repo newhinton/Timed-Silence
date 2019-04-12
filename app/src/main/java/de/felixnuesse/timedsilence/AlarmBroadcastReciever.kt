@@ -42,31 +42,27 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-
-        Log.e(Constants.APP_NAME, "test!")
         val current = LocalDateTime.now()
-        Log.e(Constants.APP_NAME, "Current Date and Time is: $current")
+        Log.e(Constants.APP_NAME, "Alarmintent: Recieved Alarmintent at: $current")
 
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)){
             switchVolumeMode(context)
-        }
+            Log.e(Constants.APP_NAME, "Alarmintent: Content is to \"check the time\"")
 
-        //switchVolumeMode(context)
+
+        }
 
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_DELAY)){
 
-
             val extra = intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA)
+            Log.e(Constants.APP_NAME, "Alarmintent: Content is to \""+extra+"\"")
 
             if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
-                //restart now because extra was "now"
-
-               // AlarmHandler.createRepeatingTimecheck(context!!)
+                Log.e(Constants.APP_NAME, "Alarmintent: Content is to \"Restart recurring alarms\"")
+                AlarmHandler.createRepeatingTimecheck(context!!)
             }
 
         }
-
-
     }
 
     fun switchVolumeMode(context: Context?){
@@ -75,15 +71,12 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         val min= LocalDateTime.now().minute
 
 
-        Log.e(Constants.APP_NAME, "Hour $hour")
-        Log.e(Constants.APP_NAME, "Min  $min")
-
         if(hour in 0..8 || hour in 22..24){
             val copy = context
             if (copy != null) {
                 // copy is guaranteed to be to non-nullable whatever you do
                 VolumeHandler.setSilent(copy)
-                Log.e(Constants.APP_NAME, "set silent!")
+                Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
             }
         }
 
@@ -91,7 +84,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             val copy = context
             if (copy != null) {
                 VolumeHandler.setVibrate(copy)
-                Log.e(Constants.APP_NAME, "set vibrate!")
+                Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
             }
         }
 
@@ -99,7 +92,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             val copy = context
             if (copy != null) {
                 VolumeHandler.setLoud(copy)
-                Log.e(Constants.APP_NAME, "set loud!")
+                Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
             }
         }
 
