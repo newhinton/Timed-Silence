@@ -50,6 +50,7 @@ import android.widget.TextView
 import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.WifiSearchingFragment
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
+import de.felixnuesse.timedsilence.fragments.TimeFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -248,15 +249,16 @@ class MainActivity : AppCompatActivity() {
      * sequence.
      */
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-        override fun getCount(): Int = 3
+        override fun getCount(): Int = 4
 
         override fun getItem(position: Int): Fragment {
 
             when (position) {
-                0 -> return WifiConnectedFragment()
-                1 -> return WifiSearchingFragment()
-                2 -> return CalendarEventFragment()
-                else -> return WifiConnectedFragment()
+                0 -> return TimeFragment()
+                1 -> return WifiConnectedFragment()
+                2 -> return WifiSearchingFragment()
+                3 -> return CalendarEventFragment()
+                else -> return TimeFragment()
             }
         }
     }
