@@ -73,11 +73,13 @@ class MainActivity : AppCompatActivity() {
             checkStateOfAlarm()
         }
 
+        (findViewById(R.id.button_set_vibrate) as Button).isSoundEffectsEnabled=false
         (findViewById(R.id.button_set_vibrate) as Button).setOnClickListener {
             VolumeHandler.setVibrate(this)
             checkStateOfAlarm()
         }
 
+        (findViewById(R.id.button_set_silent) as Button).isSoundEffectsEnabled=false
         (findViewById(R.id.button_set_silent) as Button).setOnClickListener {
             VolumeHandler.setSilent(this)
             checkStateOfAlarm()
