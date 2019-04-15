@@ -29,6 +29,7 @@ package de.felixnuesse.timedsilence
  */
 
 import android.app.NotificationManager
+import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
@@ -65,9 +66,6 @@ class VolumeHandler {
             setStreamToPercent(manager, AudioManager.STREAM_NOTIFICATION, 0)
             setStreamToPercent(manager, AudioManager.STREAM_RING, 0)
 
-
-
-
         }
 
         fun setLoud(context: Context) {
@@ -84,7 +82,6 @@ class VolumeHandler {
             setStreamToPercent(manager, AudioManager.STREAM_ALARM, 80)
             setStreamToPercent(manager, AudioManager.STREAM_NOTIFICATION, 80)
             setStreamToPercent(manager, AudioManager.STREAM_RING, 80)
-
 
         }
 

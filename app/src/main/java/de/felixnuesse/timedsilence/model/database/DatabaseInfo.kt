@@ -1,9 +1,8 @@
-package de.felixnuesse.timedsilence;
-
+package de.felixnuesse.timedsilence.model.database
 
 /**
  * Copyright (C) 2019  Felix Nüsse
- * Created on 10.04.19 - 18:07
+ * Created on 13.04.19 - 19:34
  *
  * Edited by: Felix Nüsse felix.nuesse(at)t-online.de
  *
@@ -29,30 +28,28 @@ package de.felixnuesse.timedsilence;
  *
  */
 
-
-class Constants {
+class DatabaseInfo{
     companion object {
-        const val APP_NAME = "Timed Silence"
-        const val BROADCAST_INTENT_ACTION = "action"
-        const val BROADCAST_INTENT_ACTION_UPDATE_VOLUME = "volumeUpdate"
-        const val BROADCAST_INTENT_ACTION_DELAY = "delayVolumeUpdate"
-        const val BROADCAST_INTENT_ACTION_DELAY_EXTRA = "delayVolumeUpdate_EXTRA"
-        const val BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW = "restartDelayNow"
+        val TABLE="timetable";
+        val SCHEDULE_ID= "id";
+        val SCHEDULE_START= "time_start";
+        val SCHEDULE_END= "time_end";
+        val SCHEDULE_SETTING= "schedule_volume";
+        val SCHEDULE_NAME= "schedule_name";
+
+        // If you change the database schema, you must increment the database version.
+        const val DATABASE_VERSION = 1
+        const val DATABASE_NAME = "FeedReader.db"
+
+        val SQL_CREATE_ENTRIES =
+            "CREATE TABLE ${TABLE} (" +
+                    "${SCHEDULE_ID} INTEGER PRIMARY KEY," +
+                    "${SCHEDULE_START} LONG," +
+                    "${SCHEDULE_END} LONG," +
+                    "${SCHEDULE_SETTING} INT," +
+                    "${SCHEDULE_NAME} TEXT)"
 
 
-        const val DEFAULT_DELAY = 60
-        const val PREFS_NAME = "prefsname"
 
-
-        const val PREF_INTERVAL_CHECK = "PREF_INTERVAL_CHECK"
-        const val PREF_INTERVAL_CHECK_DEFAULT = 15
-
-
-        const val TIME_SETTING_SILENT = 1
-        const val TIME_SETTING_VIBRATE = 2
-        const val TIME_SETTING_LOUD = 3
-
-
-        const val RECURRING_INTENT_ID = 123789
     }
 }

@@ -4,7 +4,13 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.provider.Settings
 import android.util.Log
+import java.text.DateFormat
+import java.util.*
+import android.provider.Settings.System.NEXT_ALARM_FORMATTED
+
+
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -119,6 +125,25 @@ class AlarmHandler {
                return true
            }
        }
+
+        fun getNextAlarmTimestamp(context: Context): String{
+            val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val clockInfo =  alarms.nextAlarmClock
+
+  //          val pIntent = createIntentBroadcast(context,PendingIntent.FLAG_NO_CREATE) as PendingIntent
+
+
+//            Log.e(Constants.APP_NAME, "AlarmHandler: Next Runtime: "+pIntent.intentSender.)
+
+            if(clockInfo==null){
+
+                return context.getString(R.string.no_next_time_set)
+            }
+
+            Log.e(Constants.APP_NAME, "AlarmHandler: Next Runtime: "+clockInfo.triggerTime)
+            return  DateFormat.getDateInstance().format(Date(clockInfo.triggerTime))
+
+        }
 
    }
 

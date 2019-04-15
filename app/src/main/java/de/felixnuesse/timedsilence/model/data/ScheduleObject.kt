@@ -1,9 +1,8 @@
-package de.felixnuesse.timedsilence;
-
+package de.felixnuesse.timedsilence.model.data
 
 /**
  * Copyright (C) 2019  Felix Nüsse
- * Created on 10.04.19 - 18:07
+ * Created on 13.04.19 - 19:41
  *
  * Edited by: Felix Nüsse felix.nuesse(at)t-online.de
  *
@@ -28,31 +27,14 @@ package de.felixnuesse.timedsilence;
  *
  *
  */
+class ScheduleObject(name: String, time_start: Long, time_end: Long, time_setting: Int, id: Int) {
+
+    var name: String = name
+    var time_start: Long = time_start
+    var time_end: Long = time_end
+    var time_setting: Int = time_setting
+    var id: Int = id
 
 
-class Constants {
-    companion object {
-        const val APP_NAME = "Timed Silence"
-        const val BROADCAST_INTENT_ACTION = "action"
-        const val BROADCAST_INTENT_ACTION_UPDATE_VOLUME = "volumeUpdate"
-        const val BROADCAST_INTENT_ACTION_DELAY = "delayVolumeUpdate"
-        const val BROADCAST_INTENT_ACTION_DELAY_EXTRA = "delayVolumeUpdate_EXTRA"
-        const val BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW = "restartDelayNow"
 
-
-        const val DEFAULT_DELAY = 60
-        const val PREFS_NAME = "prefsname"
-
-
-        const val PREF_INTERVAL_CHECK = "PREF_INTERVAL_CHECK"
-        const val PREF_INTERVAL_CHECK_DEFAULT = 15
-
-
-        const val TIME_SETTING_SILENT = 1
-        const val TIME_SETTING_VIBRATE = 2
-        const val TIME_SETTING_LOUD = 3
-
-
-        const val RECURRING_INTENT_ID = 123789
-    }
 }

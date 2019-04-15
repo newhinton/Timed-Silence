@@ -38,6 +38,7 @@ import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.ComponentName
+import android.content.Context
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -51,6 +52,8 @@ import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.WifiSearchingFragment
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
+import android.content.SharedPreferences
+import android.util.Log
 
 
 class MainActivity : AppCompatActivity() {
@@ -115,7 +118,6 @@ class MainActivity : AppCompatActivity() {
         WifiManager.requestPermissions(this)
         WifiManager.getCurrentSsid(this)
         checkStateOfAlarm()
-
 
         val seekBarSupportText= findViewById<TextView>(R.id.textview_waittime_content)
         val seekBar = findViewById<SeekBar>(R.id.seekBar_waittime)
@@ -192,6 +194,19 @@ class MainActivity : AppCompatActivity() {
         mPager.adapter = pagerAdapter
 
 
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+            Log.e(Constants.APP_NAME, "Main: SharedPrefs: prefs: "+prefs)
+            Log.e(Constants.APP_NAME, "Main: SharedPrefs: key:   "+key)
+
+
+            if(key=="last_ExecTime"){
+                updateTimeCheckDisplay()
+            }
+        }
+
+
+        val sharedPref = this?.getSharedPreferences("test", Context.MODE_PRIVATE)
+        sharedPref.registerOnSharedPreferenceChangeListener(listener)
 
     }
 
@@ -241,8 +256,18 @@ class MainActivity : AppCompatActivity() {
         if(AlarmHandler.checkIfNextAlarmExists(this)){
             status.setImageDrawable(getDrawable(R.drawable.circle_green))
         }
+        updateTimeCheckDisplay()
     }
 
+    fun updateTimeCheckDisplay(){
+        val nextCheckDisplayTextView= findViewById<TextView>(R.id.nextCheckDisplay)
+        //nextCheckDisplayTextView.text=AlarmHandler.getNextAlarmTimestamp(this)
+
+        val sharedPref = this?.getSharedPreferences("test", Context.MODE_PRIVATE) ?: return
+        val highScore = sharedPref.getString("last_ExecTime", "notset")
+
+        nextCheckDisplayTextView.text=highScore
+    }
 
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in

@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Timed Silence</string>
     <string name="action_settings">Settings</string>
+    <string name="no_next_time_set">Not Set</string>
+    <string name="title_activity_add_schedule">AddScheduleActivity</string>
 </resources>

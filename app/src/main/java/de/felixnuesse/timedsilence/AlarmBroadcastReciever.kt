@@ -32,6 +32,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.model.data.ScheduleObject
+import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import java.time.LocalDateTime
 
 
@@ -44,8 +49,15 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)){
             Log.e(Constants.APP_NAME, "Alarmintent: Content is to \"check the time\"")
-            switchVolumeMode(context)
 
+            val sharedPref = context?.getSharedPreferences("test", Context.MODE_PRIVATE)
+            with (sharedPref!!.edit()) {
+                putString("last_ExecTime", current.toString())
+                apply()
+            }
+
+
+            switchVolumeMode(context)
 
         }
 
@@ -86,23 +98,30 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         val min= LocalDateTime.now().minute
 
 
-        if(hour in 0..8 || hour in 22..24){
-            VolumeHandler.setSilent(nonNullContext)
-            Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
+
+        DatabaseHandler(context).getAllSchedules().forEach{
+
+            val time = hour*60*60*1000 + min*60*1000
+
+            if(time in it.time_start..it.time_end){
+
+                if(it.time_setting==TIME_SETTING_SILENT){
+                    VolumeHandler.setSilent(nonNullContext)
+                    Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
+                }
+
+                if(it.time_setting== TIME_SETTING_VIBRATE){
+                    VolumeHandler.setVibrate(nonNullContext)
+                    Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
+                }
+
+                if(it.time_setting==TIME_SETTING_LOUD){
+                    VolumeHandler.setLoud(nonNullContext)
+                    Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
+                }
+
+            }
         }
-
-        if(hour in 8..16){
-            VolumeHandler.setVibrate(nonNullContext)
-            Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
-        }
-
-        if(hour in 16..22){
-            VolumeHandler.setLoud(nonNullContext)
-            Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
-
-        }
-
-
     }
 
     fun Any?.notNull(f: ()-> Unit){
