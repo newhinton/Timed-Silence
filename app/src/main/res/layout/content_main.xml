@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:layout_weight="1"/>
         <TextView
-                android:text="Next Check:"
+                android:text="Last Check:"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView2"
