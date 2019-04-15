@@ -3,7 +3,6 @@ package de.felixnuesse.timedsilence.model.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.DATABASE_NAME
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.DATABASE_VERSION
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_END
@@ -14,6 +13,10 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDUL
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.TABLE
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
+import android.content.ContentValues
+import android.util.Log
+import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -64,7 +67,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     }
 
 
-    fun getAllSchedules(): List<ScheduleObject> {
+    fun getAllSchedules(): ArrayList<ScheduleObject> {
         val db = readableDatabase
 
         // Define a projection that specifies which columns from the database
@@ -99,23 +102,143 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
                 cursor.getLong(2),
                 cursor.getLong(3),
                 cursor.getInt(4),
-                cursor.getInt(0)
+                cursor.getLong(0)
             )
 
             results.add(so)
         }
         cursor.close()
 
-
-
-
-
-        results.clear()
-        results.add(ScheduleObject("Early morning", 0, 8*60*60*1000, Constants.TIME_SETTING_SILENT, 1))
-        results.add(ScheduleObject("Work", 8*60*60*1000+1, 16*60*60*1000, Constants.TIME_SETTING_VIBRATE, 2))
-        results.add(ScheduleObject("Free Time", 16*60*60*1000+1, 22*60*60*1000, Constants.TIME_SETTING_LOUD, 3))
-        results.add(ScheduleObject("Evening", 22*60*60*1000+1, 24*60*60*1000, Constants.TIME_SETTING_SILENT, 4))
         return results
     }
+
+
+    fun getScheduleByID(id: Long): ScheduleObject {
+        val db = readableDatabase
+
+        val projection = arrayOf<String>(
+            SCHEDULE_ID,
+            SCHEDULE_NAME,
+            SCHEDULE_START,
+            SCHEDULE_END,
+            SCHEDULE_SETTING
+        )
+
+        val selection = SCHEDULE_ID + " = ?"
+        val selectionArgs = arrayOf(id.toString())
+
+        val sortOrder = SCHEDULE_ID + " DESC"
+
+
+        val cursor = db.query(
+            TABLE, // The table to query
+            projection, // The array of columns to return (pass null to get all)
+            selection, // The columns for the WHERE clause
+            selectionArgs, // don't group the rows
+            null, null, // don't filter by row groups
+            sortOrder                                   // The sort order
+        )// The values for the WHERE clause
+
+        val results = arrayListOf<ScheduleObject>()
+        while (cursor.moveToNext()) {
+
+            val so = ScheduleObject(
+                cursor.getString(1),
+                cursor.getLong(2),
+                cursor.getLong(3),
+                cursor.getInt(4),
+                cursor.getLong(0)
+            )
+
+            results.add(so)
+        }
+        cursor.close()
+        return results.get(0)
+    }
+
+    /**
+     * Deletes ScheduleObject with the given id
+     * @param id Switch to delete
+     * @return amount of rows affected
+     */
+    fun deleteEntry(id: Long): Int {
+        val db = writableDatabase
+        // Define 'where' part of query.
+        val selection = SCHEDULE_ID + " LIKE ?"
+        // Specify arguments in placeholder order.
+        val selectionArgs = arrayOf(id.toString())
+        // Issue SQL statement.
+        return db.delete(TABLE, selection, selectionArgs)
+
+    }
+
+    /**
+     * Creates a switch entry
+     * @param so Switch to create
+     * @return id
+     */
+    fun createEntry(so: ScheduleObject): ScheduleObject {
+        val db = writableDatabase
+
+        val projection = arrayOf<String>(
+            SCHEDULE_ID,
+            SCHEDULE_NAME,
+            SCHEDULE_START,
+            SCHEDULE_END,
+            SCHEDULE_SETTING
+        )
+
+
+        // Create a new map of values, where column names are the keys
+        val values = ContentValues()
+        //values.put(SCHEDULE_ID, so.id)
+        values.put(SCHEDULE_NAME, so.name)
+        values.put(SCHEDULE_START, so.time_start)
+        values.put(SCHEDULE_END, so.time_end)
+        values.put(SCHEDULE_SETTING, so.time_setting)
+
+        // Insert the new row, returning the primary key value of the new row
+        val newRowId = db.insert(TABLE, null, values)
+        Log.e(APP_NAME,"Database: Create: RowID: $newRowId")
+
+        val newObject = ScheduleObject("",0,0,0,newRowId)
+
+        newObject.name=so.name
+        newObject.time_start=so.time_start
+        newObject.time_end=so.time_end
+        newObject.time_setting=so.time_setting
+
+
+        Log.e(APP_NAME,"Database: Create: Result: ${newObject.name}")
+
+        return newObject
+
+    }
+
+    fun updateEntry(so: ScheduleObject) {
+        val db = writableDatabase
+
+        // Create a new map of values, where column names are the keys
+        val values = ContentValues()
+        values.put(SCHEDULE_ID, so.id)
+        values.put(SCHEDULE_NAME, so.name)
+        values.put(SCHEDULE_START, so.time_start)
+        values.put(SCHEDULE_END, so.time_end)
+        values.put(SCHEDULE_SETTING, so.time_setting)
+
+        val idofchangedobject = arrayOf<String>(
+            so.id.toString()
+        )
+
+        // Insert the new row, returning the primary key value of the new row
+        db.update(
+            TABLE,
+            values,
+            SCHEDULE_ID + " = ?",
+            idofchangedobject
+        )
+
+    }
+
 
 }

@@ -27,13 +27,13 @@ package de.felixnuesse.timedsilence.model.data
  *
  *
  */
-class ScheduleObject(name: String, time_start: Long, time_end: Long, time_setting: Int, id: Int) {
+class ScheduleObject(name: String, time_start: Long, time_end: Long, time_setting: Int, id: Long) {
 
     var name: String = name
     var time_start: Long = time_start
     var time_end: Long = time_end
     var time_setting: Int = time_setting
-    var id: Int = id
+    var id: Long = id
 
 
 

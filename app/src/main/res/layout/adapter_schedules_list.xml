@@ -16,7 +16,7 @@
             android:text="DEL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button" android:layout_marginTop="8dp"
+            android:id="@+id/delete_schedule_element" android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"/>
     <TextView
@@ -38,6 +38,7 @@
             android:text="EDIT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button2" app:layout_constraintEnd_toStartOf="@+id/button" android:layout_marginEnd="8dp"
+            android:id="@+id/edit_schedule_element" app:layout_constraintEnd_toStartOf="@+id/delete_schedule_element"
+            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"/>
 </android.support.constraint.ConstraintLayout>

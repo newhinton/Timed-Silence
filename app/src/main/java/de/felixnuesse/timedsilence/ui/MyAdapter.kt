@@ -4,12 +4,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
+import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import kotlinx.android.synthetic.main.adapter_schedules_list.view.*
 import java.text.DateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -35,13 +37,20 @@ import java.util.*
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
-class MyAdapter(private val myDataset: List<ScheduleObject>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class MyAdapter(private val myDataset: ArrayList<ScheduleObject>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+
+        fun removeAt(position: Int) {
+                myDataset.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, myDataset.size)
+        }
 
 // Provide a reference to the views for each data item
 // Complex data items may need more than one view per item, and
 // you provide access to all the views for a data item in a view holder.
 // Each data item is just a string in this case that is shown in a TextView.
 class MyViewHolder(val scheduleView: View) : RecyclerView.ViewHolder(scheduleView)
+
 
 
         // Create new views (invoked by the layout manager)
@@ -60,11 +69,20 @@ class MyViewHolder(val scheduleView: View) : RecyclerView.ViewHolder(scheduleVie
                 val df = DateFormat.getTimeInstance()
                 df.timeZone= TimeZone.getTimeZone("UTC")
 
-                holder.scheduleView.textView_schedule_row_title.text = (myDataset.get(position) as ScheduleObject).name
+                holder.scheduleView.textView_schedule_row_title.text = myDataset.get(position).name
                 holder.scheduleView.textView_schedule_row_time_start.text = df.format(myDataset.get(position).time_start)
                 holder.scheduleView.textView_schedule_row_time_end.text =  df.format(myDataset.get(position).time_end)
+
+
+                holder.scheduleView.delete_schedule_element.setOnClickListener {
+                        DatabaseHandler(holder.scheduleView.context).deleteEntry(myDataset.get(position).id)
+                        removeAt(position)
+
+                }
         }
 
         // Return the size of your dataset (invoked by the layout manager)
         override fun getItemCount() = myDataset.size
         }
+
+
