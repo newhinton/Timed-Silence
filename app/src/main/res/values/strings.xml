@@ -3,4 +3,9 @@
     <string name="action_settings">Settings</string>
     <string name="no_next_time_set">Not Set</string>
     <string name="title_activity_add_schedule">AddScheduleActivity</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="volume_setting_silent">Silent</string>
+    <string name="volume_setting_loud">Loud</string>
+    <string name="volume_setting_vibrate">Vibrate</string>
 </resources>

@@ -19,11 +19,15 @@ import android.widget.TimePicker
 import android.app.TimePickerDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.MyAdapter
 import java.text.DateFormat
 import java.util.*
+
 
 
 class TimeFragment : Fragment() {
@@ -32,17 +36,9 @@ class TimeFragment : Fragment() {
         fun newInstance() = TimeFragment()
     }
 
-
-    var schedule_add_title =""
-    var schedule_add_start_time_hour =0
-    var schedule_add_start_time_min =0
-
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
-
-
 
     private lateinit var viewModel: TimeViewModel
 
@@ -69,13 +65,7 @@ class TimeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         button_time_fragment.setOnClickListener {
             Log.e(APP_NAME, "TimeFragment: Add new!")
-
-            schedule_add_title =""
-
-
             createTitleDialog(view.context)
-
-
         }
 
 
@@ -137,8 +127,6 @@ class TimeFragment : Fragment() {
         val mTimePicker: TimePickerDialog
         mTimePicker = TimePickerDialog(context,
             TimePickerDialog.OnTimeSetListener { timePicker, selectedHour, selectedMinute ->
-                schedule_add_start_time_hour=selectedHour
-                schedule_add_start_time_min=selectedMinute
                 createEndDialog(context, title, (selectedHour*60*60*1000+selectedMinute*60*1000).toLong())
             }, hour, minute, true
         )//Yes 24 hour time
@@ -155,8 +143,6 @@ class TimeFragment : Fragment() {
         val mTimePicker: TimePickerDialog
         mTimePicker = TimePickerDialog(context,
             TimePickerDialog.OnTimeSetListener { timePicker, selectedHour, selectedMinute ->
-                schedule_add_start_time_hour=selectedHour
-                schedule_add_start_time_min=selectedMinute
                 createSettingDialog(context, title,start_Time, (selectedHour*60*60*1000+selectedMinute*60*1000).toLong())
             }, hour, minute, true
         )//Yes 24 hour time
@@ -165,33 +151,77 @@ class TimeFragment : Fragment() {
     }
 
     fun createSettingDialog(context: Context, title: String, start_Time: Long, end_Time: Long){
+
+
+
+        var selectedItem = 1 // Where we track the selected items
+
+        val selectables = arrayOf(
+            resources.getString(R.string.volume_setting_loud),
+            resources.getString(R.string.volume_setting_vibrate),
+            resources.getString(R.string.volume_setting_silent))
+
         val builder = AlertDialog.Builder(context)
         builder.setTitle("setting (sil 1 vib 2 loud 3)")
 
-        // Set up the input
-        val input = EditText(context)
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.inputType = InputType.TYPE_CLASS_NUMBER
-        builder.setView(input)
-
-        // Set up the buttons
-        builder.setPositiveButton("OK",
+            // Specify the list array, the items to be selected by default (null for none),
+            // and the listener through which to receive callbacks when items are selected
+        builder.setSingleChoiceItems(selectables, 0,
             DialogInterface.OnClickListener { dialog, which ->
 
-                val df = DateFormat.getTimeInstance()
-                df.timeZone= TimeZone.getTimeZone("UTC")
+                val item = selectables.get(which)
+                Log.e(APP_NAME, "hmm "+selectedItem)
 
 
-                Log.e(APP_NAME, "TimeFragment: Schedulebuilder: A: "+title)
-                Log.e(APP_NAME, "TimeFragment: Schedulebuilder: B: "+df.format(start_Time))
-                Log.e(APP_NAME, "TimeFragment: Schedulebuilder: C: "+df.format(end_Time))
-                Log.e(APP_NAME, "TimeFragment: Schedulebuilder: D: "+input.text.toString())
 
-                DatabaseHandler(context).createEntry(ScheduleObject(title,start_Time,end_Time, input.text.toString().toInt(),0))
+                when (item) {
+                    resources.getString(R.string.volume_setting_loud) -> selectedItem= TIME_SETTING_LOUD
+                    resources.getString(R.string.volume_setting_vibrate) -> selectedItem= TIME_SETTING_VIBRATE
+                    resources.getString(R.string.volume_setting_silent) -> selectedItem= TIME_SETTING_SILENT
+                }
+
 
             })
-        builder.setNegativeButton("Cancel",
-            DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+
+            // Set the action buttons
+         builder.setPositiveButton(R.string.ok,
+                DialogInterface.OnClickListener { dialog, id ->
+                    val df = DateFormat.getTimeInstance()
+                    df.timeZone= TimeZone.getTimeZone("UTC")
+
+
+                    Log.e(APP_NAME, "TimeFragment: Schedulebuilder: A: "+title)
+                    Log.e(APP_NAME, "TimeFragment: Schedulebuilder: B: "+df.format(start_Time))
+                    Log.e(APP_NAME, "TimeFragment: Schedulebuilder: C: "+df.format(end_Time))
+                    Log.e(APP_NAME, "TimeFragment: Schedulebuilder: D: "+selectedItem.toString())
+
+                    val db = DatabaseHandler(context)
+                    db.createEntry(ScheduleObject(title,start_Time,end_Time, selectedItem,0))
+                    viewAdapter = MyAdapter(db.getAllSchedules())
+
+                    my_recycler_view.apply {
+                        // use this setting to improve performance if you know that changes
+                        // in content do not change the layout size of the RecyclerView
+                        setHasFixedSize(true)
+
+                        // use a linear layout manager
+                        layoutManager = viewManager
+
+                        // specify an viewAdapter (see also next example)
+                        adapter = viewAdapter
+
+                    }
+                })
+            .setNegativeButton(R.string.cancel,
+                DialogInterface.OnClickListener { dialog, id ->
+
+                })
+
+        builder.create()
+
+
+
+
 
         builder.show()
     }
