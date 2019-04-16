@@ -6,4 +6,20 @@
           android:title="@string/action_settings"
           android:orderInCategory="100"
           app:showAsAction="never"/>
+    <item android:id="@+id/action_set_manual_loud"
+          android:title="@string/action_set_manual_loud"
+          android:orderInCategory="100"
+          android:icon="@drawable/ic_volume_up_black_24dp"
+          app:showAsAction="never"/>
+    <item android:id="@+id/action_set_manual_vibrate"
+          android:title="@string/action_set_manual_vibrate"
+          android:orderInCategory="100"
+          android:icon="@drawable/ic_vibration_black_24dp"
+          app:showAsAction="never"/>
+    <item android:id="@+id/action_set_manual_silent"
+          android:title="@string/action_set_manual_silent"
+          android:orderInCategory="100"
+          android:icon="@drawable/ic_volume_off_black_24dp"
+          app:showAsAction="never"/>
+
 </menu>

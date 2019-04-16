@@ -41,8 +41,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:id="@+id/tabLayout"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" app:layout_constraintHorizontal_bias="0.0">
 
         <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
@@ -105,7 +105,7 @@
             android:layout_height="wrap_content" android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            android:id="@+id/constraintLayout">
+            android:id="@+id/constraintLayout" android:visibility="gone">
 
         <LinearLayout
                 android:layout_width="0dp"
@@ -179,37 +179,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:layout_weight="1"/>
         </LinearLayout>
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-                app:layout_constraintHorizontal_bias="0.0"
-                android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/textView6">
-            <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    app:srcCompat="@drawable/circle_red"
-                    android:id="@+id/statusCircle"/>
-            <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:layout_weight="1"/>
-            <Button
-                    android:text="Start"
-                    android:layout_width="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:id="@+id/button_start_checking"
-                    android:layout_height="wrap_content"/>
-            <Button
-                    android:text="Stop"
-                    android:layout_width="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:id="@+id/button_stop_checking"
-                    android:layout_height="wrap_content"/>
-        </LinearLayout>
         <TextView
                 android:text="Set Manually:"
                 android:layout_width="wrap_content"
@@ -225,13 +194,6 @@
                 android:id="@+id/textView5"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2" android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
-        <TextView
-                android:text="Start checking:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView6" android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"/>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

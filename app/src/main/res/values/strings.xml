@@ -8,4 +8,9 @@
     <string name="volume_setting_silent">Silent</string>
     <string name="volume_setting_loud">Loud</string>
     <string name="volume_setting_vibrate">Vibrate</string>
+    <string name="timecheck_start">start</string>
+    <string name="timecheck_stop">stop</string>
+    <string name="action_set_manual_loud">Set Loud</string>
+    <string name="action_set_manual_vibrate">Set Vibrate</string>
+    <string name="action_set_manual_silent">Set Silent</string>
 </resources>

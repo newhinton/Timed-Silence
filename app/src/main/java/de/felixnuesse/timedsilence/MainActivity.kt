@@ -53,6 +53,8 @@ import de.felixnuesse.timedsilence.fragments.WifiSearchingFragment
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
+import android.support.design.widget.FloatingActionButton
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 
@@ -83,11 +85,7 @@ class MainActivity : AppCompatActivity() {
             checkStateOfAlarm()
             val b = (findViewById(R.id.button_buttonsound_fix) as Button)
 
-            b.performClick();
-           // b.setPressed(true);
-           // b.invalidate();
-           // b.setPressed(false);
-           // b.invalidate();
+            b.performClick()
         }
 
         (findViewById(R.id.button_set_vibrate) as Button).isSoundEffectsEnabled=false
@@ -99,17 +97,6 @@ class MainActivity : AppCompatActivity() {
         (findViewById(R.id.button_set_silent) as Button).isSoundEffectsEnabled=false
         (findViewById(R.id.button_set_silent) as Button).setOnClickListener {
             VolumeHandler.setSilent(this)
-            checkStateOfAlarm()
-        }
-
-        (findViewById(R.id.button_start_checking) as Button).setOnClickListener {
-            //AlarmHandler.createAlarmIntime(this, 100);
-            AlarmHandler.createRepeatingTimecheck(this)
-            checkStateOfAlarm()
-        }
-
-        (findViewById(R.id.button_stop_checking) as Button).setOnClickListener {
-            AlarmHandler.removeRepeatingTimecheck(this)
             checkStateOfAlarm()
         }
 
@@ -133,9 +120,6 @@ class MainActivity : AppCompatActivity() {
             checkStateOfAlarm()
         }
 
-
-        WifiManager.requestPermissions(this)
-        WifiManager.getCurrentSsid(this)
         checkStateOfAlarm()
 
         val seekBarSupportText= findViewById<TextView>(R.id.textview_waittime_content)
@@ -166,10 +150,18 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-
+        val fabTextView = findViewById<TextView>(R.id.fab_textview)
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            //get current state
+            checkStateOfAlarm()
+
+            if(fabTextView.text == getString(R.string.timecheck_start)){
+                AlarmHandler.createRepeatingTimecheck(this)
+                setFabStarted(fab, fabTextView)
+            }else{
+                AlarmHandler.removeRepeatingTimecheck(this)
+                setFabStopped(fab, fabTextView)
+            }
 
 
         }
@@ -229,6 +221,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun setFabStarted(fab: FloatingActionButton, text: TextView){
+        text.text = getString(R.string.timecheck_stop)
+        fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_started))
+
+    }
+
+    fun setFabStopped(fab: FloatingActionButton, text: TextView){
+        text.text = getString(R.string.timecheck_start)
+        fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
+        AlarmHandler.removeRepeatingTimecheck(this)
+    }
+
     override fun onResume() {
         super.onResume()
         checkStateOfAlarm()
@@ -244,10 +248,14 @@ class MainActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
+
+        when (item.itemId) {
             R.id.action_settings -> callThirdparty()
-            else -> super.onOptionsItemSelected(item)
+            R.id.action_set_manual_loud -> VolumeHandler.setLoud(applicationContext)
+            R.id.action_set_manual_vibrate -> VolumeHandler.setVibrate(applicationContext)
+            R.id.action_set_manual_silent -> VolumeHandler.setSilent(applicationContext)
         }
+        return true;
     }
 
     fun callThirdparty(): Boolean {
@@ -270,10 +278,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun checkStateOfAlarm(){
-        val status= findViewById<ImageView>(R.id.statusCircle) as ImageView
-        status.setImageDrawable(getDrawable(R.drawable.circle_red))
+        val fabTextView = findViewById<TextView>(R.id.fab_textview)
+        setFabStopped(fab, fabTextView)
+
         if(AlarmHandler.checkIfNextAlarmExists(this)){
-            status.setImageDrawable(getDrawable(R.drawable.circle_green))
+            setFabStarted(fab, fabTextView)
         }
         updateTimeCheckDisplay()
     }
