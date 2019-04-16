@@ -4,6 +4,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
@@ -66,7 +69,7 @@ class MyViewHolder(val scheduleView: View) : RecyclerView.ViewHolder(scheduleVie
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-                val df = DateFormat.getTimeInstance()
+                val df = DateFormat.getTimeInstance(DateFormat.SHORT)
                 df.timeZone= TimeZone.getTimeZone("UTC")
 
                 holder.scheduleView.textView_schedule_row_title.text = myDataset.get(position).name
@@ -79,6 +82,18 @@ class MyViewHolder(val scheduleView: View) : RecyclerView.ViewHolder(scheduleVie
                         removeAt(position)
 
                 }
+
+
+                var imageID=R.drawable.ic_volume_up_black_24dp
+                when (myDataset.get(position).time_setting) {
+                        TIME_SETTING_LOUD -> imageID=R.drawable.ic_volume_up_black_24dp
+                        TIME_SETTING_VIBRATE -> imageID=R.drawable.ic_vibration_black_24dp
+                        TIME_SETTING_SILENT -> imageID=R.drawable.ic_volume_off_black_24dp
+                }
+                holder.scheduleView.imageView_volume_state.setImageDrawable(holder.scheduleView.context.getDrawable(imageID))
+
+
+
         }
 
         // Return the size of your dataset (invoked by the layout manager)

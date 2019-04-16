@@ -154,7 +154,7 @@ class TimeFragment : Fragment() {
 
 
 
-        var selectedItem = 1 // Where we track the selected items
+        var selectedItem = TIME_SETTING_LOUD // Where we track the selected items
 
         val selectables = arrayOf(
             resources.getString(R.string.volume_setting_loud),
@@ -171,8 +171,6 @@ class TimeFragment : Fragment() {
 
                 val item = selectables.get(which)
                 Log.e(APP_NAME, "hmm "+selectedItem)
-
-
 
                 when (item) {
                     resources.getString(R.string.volume_setting_loud) -> selectedItem= TIME_SETTING_LOUD
