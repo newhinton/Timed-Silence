@@ -54,6 +54,7 @@ import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import android.content.SharedPreferences
 import android.util.Log
+import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 
 
 class MainActivity : AppCompatActivity() {
@@ -68,9 +69,25 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+        //This hidden button is needed because the buttonsound of the main button is supressed because the device is still muted. A click is performed on this button, and when the onClick handler is set,
+        //it plays a sound after the volume has changed to loud. Therefore it seems to be the main button who makes the sound
+        (findViewById(R.id.button_buttonsound_fix) as Button).isSoundEffectsEnabled=true
+        (findViewById(R.id.button_buttonsound_fix) as Button).setOnClickListener {
+            Log.e(APP_NAME,"MainAcitivity: HiddenButton: PerformClick to make sound")
+        }
+
+        (findViewById(R.id.button_set_loud) as Button).isSoundEffectsEnabled=false
         (findViewById(R.id.button_set_loud) as Button).setOnClickListener {
             VolumeHandler.setLoud(this)
             checkStateOfAlarm()
+            val b = (findViewById(R.id.button_buttonsound_fix) as Button)
+
+            b.performClick();
+           // b.setPressed(true);
+           // b.invalidate();
+           // b.setPressed(false);
+           // b.invalidate();
         }
 
         (findViewById(R.id.button_set_vibrate) as Button).isSoundEffectsEnabled=false
