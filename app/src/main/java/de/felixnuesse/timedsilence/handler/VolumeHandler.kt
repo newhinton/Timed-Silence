@@ -33,6 +33,8 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.provider.Settings
+import android.util.Log
+import de.felixnuesse.timedsilence.Constants
 
 class VolumeHandler {
     companion object {
@@ -60,11 +62,9 @@ class VolumeHandler {
                 manager.ringerMode=AudioManager.RINGER_MODE_SILENT
             }
 
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_MUSIC,
-                0
-            )
+
+            setMediaVolume(0, context, manager)
+
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_ALARM,
@@ -93,11 +93,8 @@ class VolumeHandler {
             }
 
 
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_MUSIC,
-                80
-            )
+            setMediaVolume(80, context, manager)
+
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_ALARM,
@@ -124,11 +121,8 @@ class VolumeHandler {
                 manager.ringerMode=AudioManager.RINGER_MODE_VIBRATE
             }
 
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_MUSIC,
-                0
-            )
+            setMediaVolume(0, context, manager)
+
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_ALARM,
@@ -152,6 +146,26 @@ class VolumeHandler {
             val onePercent = maxVol / 100
             val vol = (onePercent * percentage)/100
             manager.setStreamVolume(stream, vol, 0)
+        }
+
+
+        fun setMediaVolume(percentage: Int, context: Context, manager: AudioManager){
+
+
+            Log.e(Constants.APP_NAME, "VolumeHandler: Setting Audio Volume!")
+
+            if(HeadsetHandler.headphonesConnected(context)){
+                Log.e(Constants.APP_NAME, "VolumeHandler: Found headset, skipping...")
+                return
+            }
+
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_MUSIC,
+                percentage
+            )
+            Log.e(Constants.APP_NAME, "VolumeHandler: Mediavolume set.")
+
         }
 
     }

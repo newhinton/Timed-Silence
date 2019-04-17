@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
 
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> <!-- Needed for headset identification -->
+
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
@@ -34,6 +36,7 @@
             </intent-filter>
         </activity> <!-- Registering the BroadcastReceiver ! -->
         <receiver android:name=".reciever.AlarmBroadcastReceiver"/>
+        <receiver android:name=".reciever.NoisyBroadcastReciever"/>
     </application>
 
 </manifest>
