@@ -39,6 +39,7 @@
         <receiver android:name=".receiver.NoisyBroadcastReciever">
             <intent-filter>
                 <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
+                <!-- This does not work. Needs to be registered from code. Needs workaround, maybe a service -->
             </intent-filter>
         </receiver>
 </application>
