@@ -1,18 +1,14 @@
-package de.felixnuesse.timedsilence
+package de.felixnuesse.timedsilence.handler
 
 import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.net.wifi.WifiInfo
-import android.content.Context.WIFI_SERVICE
-import android.support.v4.content.ContextCompat.getSystemService
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.content.Context.CONNECTIVITY_SERVICE
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
+import de.felixnuesse.timedsilence.Constants
 
 
 /**
@@ -44,7 +40,7 @@ import android.util.Log
  */
 
 
-class WifiManager {
+class WifiHandler {
 
     companion object {
         fun getCurrentSsid(context: Context): String? {

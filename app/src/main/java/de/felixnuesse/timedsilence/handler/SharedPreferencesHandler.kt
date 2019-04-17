@@ -1,6 +1,7 @@
-package de.felixnuesse.timedsilence
+package de.felixnuesse.timedsilence.handler
 
 import android.content.Context
+import de.felixnuesse.timedsilence.Constants
 
 /**
  * Copyright (C) 2019  Felix Nüsse

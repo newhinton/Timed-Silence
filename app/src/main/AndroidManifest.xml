@@ -33,7 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity> <!-- Registering the BroadcastReceiver ! -->
-        <receiver android:name=".AlarmBroadcastReceiver"/>
+        <receiver android:name=".reciever.AlarmBroadcastReceiver"/>
     </application>
 
 </manifest>

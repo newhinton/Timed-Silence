@@ -1,15 +1,15 @@
-package de.felixnuesse.timedsilence
+package de.felixnuesse.timedsilence.handler
 
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.provider.Settings
 import android.util.Log
 import java.text.DateFormat
 import java.util.*
-import android.provider.Settings.System.NEXT_ALARM_FORMATTED
-
+import de.felixnuesse.timedsilence.reciever.AlarmBroadcastReceiver
+import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.R
 
 
 /**
@@ -59,7 +59,11 @@ class AlarmHandler {
 
        fun createRepeatingTimecheck(context: Context){
 
-           val interval= SharedPreferencesHandler.getPref(context, Constants.PREF_INTERVAL_CHECK, Constants.PREF_INTERVAL_CHECK_DEFAULT)
+           val interval= SharedPreferencesHandler.getPref(
+               context,
+               Constants.PREF_INTERVAL_CHECK,
+               Constants.PREF_INTERVAL_CHECK_DEFAULT
+           )
            createRepeatingTimecheck(context, interval)
        }
 
@@ -90,24 +94,37 @@ class AlarmHandler {
        }
 
        private fun createIntentBroadcast(context: Context): PendingIntent? {
-           return createIntentBroadcast(context, PendingIntent.FLAG_UPDATE_CURRENT)
+           return createIntentBroadcast(
+               context,
+               PendingIntent.FLAG_UPDATE_CURRENT
+           )
        }
 
        private fun createIntentBroadcast(context: Context, flag: Int): PendingIntent? {
 
            val broadcastIntent = Intent(context, AlarmBroadcastReceiver::class.java)
-           broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION, Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)
+           broadcastIntent.putExtra(
+               Constants.BROADCAST_INTENT_ACTION,
+               Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME
+           )
 
            // The Pending Intent to pass in AlarmManager
-           return PendingIntent.getBroadcast(context, Constants.RECURRING_INTENT_ID, broadcastIntent,  flag)
+           return PendingIntent.getBroadcast(context,
+               Constants.RECURRING_INTENT_ID, broadcastIntent,  flag)
 
        }
 
        private fun createRestartBroadcast(context: Context): PendingIntent? {
 
            val broadcastIntent = Intent(context, AlarmBroadcastReceiver::class.java)
-           broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION,Constants.BROADCAST_INTENT_ACTION_DELAY)
-           broadcastIntent.putExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA,Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)
+           broadcastIntent.putExtra(
+               Constants.BROADCAST_INTENT_ACTION,
+               Constants.BROADCAST_INTENT_ACTION_DELAY
+           )
+           broadcastIntent.putExtra(
+               Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA,
+               Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW
+           )
 
            // The Pending Intent to pass in AlarmManager
            return PendingIntent.getBroadcast(context,0,broadcastIntent,0)
@@ -115,7 +132,10 @@ class AlarmHandler {
        }
 
        fun checkIfNextAlarmExists(context: Context): Boolean{
-           val pIntent = createIntentBroadcast(context,PendingIntent.FLAG_NO_CREATE)
+           val pIntent = createIntentBroadcast(
+               context,
+               PendingIntent.FLAG_NO_CREATE
+           )
 
            if(pIntent == null){
                Log.e(Constants.APP_NAME, "AlarmHandler: There is no next Alarm set!")

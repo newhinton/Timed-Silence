@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence
+package de.felixnuesse.timedsilence.handler
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -29,7 +29,6 @@ package de.felixnuesse.timedsilence
  */
 
 import android.app.NotificationManager
-import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
@@ -61,10 +60,26 @@ class VolumeHandler {
                 manager.ringerMode=AudioManager.RINGER_MODE_SILENT
             }
 
-            setStreamToPercent(manager, AudioManager.STREAM_MUSIC, 0)
-            setStreamToPercent(manager, AudioManager.STREAM_ALARM, 70)
-            setStreamToPercent(manager, AudioManager.STREAM_NOTIFICATION, 0)
-            setStreamToPercent(manager, AudioManager.STREAM_RING, 0)
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_MUSIC,
+                0
+            )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_ALARM,
+                70
+            )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_NOTIFICATION,
+                0
+            )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_RING,
+                0
+            )
 
         }
 
@@ -78,10 +93,26 @@ class VolumeHandler {
             }
 
 
-            setStreamToPercent(manager, AudioManager.STREAM_MUSIC, 80)
-            setStreamToPercent(manager, AudioManager.STREAM_ALARM, 80)
-            setStreamToPercent(manager, AudioManager.STREAM_NOTIFICATION, 80)
-            setStreamToPercent(manager, AudioManager.STREAM_RING, 80)
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_MUSIC,
+                80
+            )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_ALARM,
+                80
+            )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_NOTIFICATION,
+                80
+            )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_RING,
+                80
+            )
 
         }
 
@@ -93,10 +124,26 @@ class VolumeHandler {
                 manager.ringerMode=AudioManager.RINGER_MODE_VIBRATE
             }
 
-            setStreamToPercent(manager, AudioManager.STREAM_MUSIC, 0)
-            setStreamToPercent(manager, AudioManager.STREAM_ALARM, 0)
-            setStreamToPercent(manager, AudioManager.STREAM_NOTIFICATION, 0)
-            setStreamToPercent(manager, AudioManager.STREAM_RING, 0)
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_MUSIC,
+                0
+            )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_ALARM,
+                0
+            )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_NOTIFICATION,
+                0
+            )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_RING,
+                0
+            )
 
         }
 

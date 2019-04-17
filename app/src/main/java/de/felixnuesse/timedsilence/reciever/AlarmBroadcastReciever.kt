@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence
+package de.felixnuesse.timedsilence.reciever
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -32,10 +32,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
-import de.felixnuesse.timedsilence.model.data.ScheduleObject
+import de.felixnuesse.timedsilence.handler.AlarmHandler
+import de.felixnuesse.timedsilence.handler.VolumeHandler
+import de.felixnuesse.timedsilence.handler.WifiHandler
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import java.time.LocalDateTime
 
@@ -88,7 +91,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
         val wifiSSid="\"AndroidWifi\""
 
-        if(WifiManager.getCurrentSsid(nonNullContext).equals(wifiSSid)){
+        if(WifiHandler.getCurrentSsid(nonNullContext).equals(wifiSSid)){
             VolumeHandler.setSilent(nonNullContext)
             Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: Set silent, because Connected to $wifiSSid")
             return
