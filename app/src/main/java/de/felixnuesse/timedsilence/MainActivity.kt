@@ -29,15 +29,13 @@ package de.felixnuesse.timedsilence
  *
  */
 
-import android.content.Intent
+import android.content.*
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
-import android.content.ComponentName
-import android.content.Context
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -50,14 +48,16 @@ import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.WifiSearchingFragment
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
-import android.content.SharedPreferences
 import android.content.res.ColorStateList
+import android.media.AudioManager
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.VolumeHandler
+import de.felixnuesse.timedsilence.receiver.NoisyBroadcastReciever
 
 
 class MainActivity : AppCompatActivity() {
@@ -220,6 +220,7 @@ class MainActivity : AppCompatActivity() {
         val sharedPref = this?.getSharedPreferences("test", Context.MODE_PRIVATE)
         sharedPref.registerOnSharedPreferenceChangeListener(listener)
 
+
     }
 
     fun setFabStarted(fab: FloatingActionButton, text: TextView){
@@ -280,11 +281,13 @@ class MainActivity : AppCompatActivity() {
 
     fun checkStateOfAlarm(){
         val fabTextView = findViewById<TextView>(R.id.fab_textview)
-        setFabStopped(fab, fabTextView)
 
         if(AlarmHandler.checkIfNextAlarmExists(this)){
             setFabStarted(fab, fabTextView)
+        }else{
+            setFabStopped(fab, fabTextView)
         }
+
         updateTimeCheckDisplay()
     }
 

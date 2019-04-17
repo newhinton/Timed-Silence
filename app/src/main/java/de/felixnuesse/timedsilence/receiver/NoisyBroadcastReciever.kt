@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.reciever
+package de.felixnuesse.timedsilence.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context

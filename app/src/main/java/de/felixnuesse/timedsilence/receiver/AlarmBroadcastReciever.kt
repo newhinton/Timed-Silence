@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.reciever
+package de.felixnuesse.timedsilence.receiver
 
 /**
  * Copyright (C) 2019  Felix Nüsse

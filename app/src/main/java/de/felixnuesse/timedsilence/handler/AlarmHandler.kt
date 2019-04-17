@@ -7,7 +7,7 @@ import android.content.Intent
 import android.util.Log
 import java.text.DateFormat
 import java.util.*
-import de.felixnuesse.timedsilence.reciever.AlarmBroadcastReceiver
+import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 
