@@ -48,5 +48,25 @@ class PrefConstants {
         const val PREF_IGNORE_CHECK_WHEN_HEADSET= "PREF_IGNORE_CHECK_WHEN_HEADSET"
         const val PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT = true
 
+
+
+        const val VOLUME_LOW_WARNING_THRESHOLD = 15
+
+        const val PREF_VOLUME_ALARM = "PREF_VOLUME_ALARM"
+        const val PREF_VOLUME_ALARM_DEFAULT = 80
+
+
+        const val PREF_VOLUME_RINGER = "PREF_VOLUME_RINGER"
+        const val PREF_VOLUME_RINGER_DEFAULT = 80
+
+
+        const val PREF_VOLUME_NOTIFICATION = "PREF_VOLUME_NOTIFICATION"
+        const val PREF_VOLUME_NOTIFICATION_DEFAULT = 80
+
+
+        const val PREF_VOLUME_MUSIC = "PREF_VOLUME_MUSIC"
+        const val PREF_VOLUME_MUSIC_DEFAULT = 80
+
+
     }
 }

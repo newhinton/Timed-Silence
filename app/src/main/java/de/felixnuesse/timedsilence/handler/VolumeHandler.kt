@@ -69,7 +69,7 @@ class VolumeHandler {
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_ALARM,
-                70
+                SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
             )
             setStreamToPercent(
                 manager,
@@ -99,10 +99,17 @@ class VolumeHandler {
 
             setMediaVolume(0, context, manager)
 
+
+            var alarmVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
+            if(false){
+                alarmVolume=0;
+            }
+
+
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_ALARM,
-                70
+                alarmVolume
             )
             setStreamToPercent(
                 manager,
@@ -121,7 +128,6 @@ class VolumeHandler {
 
             val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-
             val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
             mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
 
@@ -129,23 +135,28 @@ class VolumeHandler {
                 manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
             }
 
+            var alarmVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
+            var mediaVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_MUSIC, PrefConstants.PREF_VOLUME_MUSIC_DEFAULT)
+            var notifcationVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_NOTIFICATION, PrefConstants.PREF_VOLUME_NOTIFICATION_DEFAULT)
+            var ringerVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_RINGER, PrefConstants.PREF_VOLUME_RINGER_DEFAULT)
 
-            setMediaVolume(80, context, manager)
+
+            setMediaVolume(mediaVolume, context, manager)
 
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_ALARM,
-                80
+                alarmVolume
             )
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_NOTIFICATION,
-                80
+                notifcationVolume
             )
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_RING,
-                80
+                ringerVolume
             )
 
         }
