@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> <!-- Needed for headset identification -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /><!-- Needed for restart of app -->
 
     <application
             android:allowBackup="true"
@@ -40,6 +41,11 @@
             <intent-filter>
                 <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
                 <!-- This does not work. Needs to be registered from code. Needs workaround, maybe a service -->
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.BootReciever">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 </application>

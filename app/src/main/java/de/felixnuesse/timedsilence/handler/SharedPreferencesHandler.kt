@@ -76,5 +76,10 @@ class SharedPreferencesHandler {
             val prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0)
             return prefs.getInt(name, value)
         }
+
+        fun getPref(context: Context, name: String, value: Boolean): Boolean{
+            val prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0)
+            return prefs.getBoolean(name, value)
+        }
     }
 }

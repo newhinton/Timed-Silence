@@ -83,28 +83,23 @@ class MainActivity : AppCompatActivity() {
         (findViewById(R.id.button_set_loud) as Button).isSoundEffectsEnabled=false
         (findViewById(R.id.button_set_loud) as Button).setOnClickListener {
             VolumeHandler.setLoud(this)
-            checkStateOfAlarm()
             val b = (findViewById(R.id.button_buttonsound_fix) as Button)
-
             b.performClick()
         }
 
         (findViewById(R.id.button_set_vibrate) as Button).isSoundEffectsEnabled=false
         (findViewById(R.id.button_set_vibrate) as Button).setOnClickListener {
             VolumeHandler.setVibrate(this)
-            checkStateOfAlarm()
         }
 
         (findViewById(R.id.button_set_silent) as Button).isSoundEffectsEnabled=false
         (findViewById(R.id.button_set_silent) as Button).setOnClickListener {
             VolumeHandler.setSilent(this)
-            checkStateOfAlarm()
         }
 
 
         (findViewById(R.id.button_delay_one) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
-            checkStateOfAlarm()
             //AlarmHandler.createAlarmIntime(this, 1 * 60 * 60 * 1000)
             AlarmHandler.createAlarmIntime(this, 5000)
         }
@@ -112,16 +107,12 @@ class MainActivity : AppCompatActivity() {
         (findViewById(R.id.button_delay_three) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
             //AlarmHandler.createAlarmIntime(this, 3 * 60 * 60 * 1000)
-            checkStateOfAlarm()
         }
 
         (findViewById(R.id.button_delay_eight) as Button).setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
             //AlarmHandler.createAlarmIntime(this, 8 * 60 * 60 * 1000)
-            checkStateOfAlarm()
         }
-
-        checkStateOfAlarm()
 
         val seekBarSupportText= findViewById<TextView>(R.id.textview_waittime_content)
         val seekBar = findViewById<SeekBar>(R.id.seekBar_waittime)
@@ -159,10 +150,13 @@ class MainActivity : AppCompatActivity() {
             if(fabTextView.text == getString(R.string.timecheck_start)){
                 AlarmHandler.createRepeatingTimecheck(this)
                 setFabStarted(fab, fabTextView)
+                SharedPreferencesHandler.setPref(this, Constants.PREF_BOOT_RESTART,true)
             }else{
                 AlarmHandler.removeRepeatingTimecheck(this)
                 setFabStopped(fab, fabTextView)
+                SharedPreferencesHandler.setPref(this, Constants.PREF_BOOT_RESTART,false)
             }
+
 
 
         }

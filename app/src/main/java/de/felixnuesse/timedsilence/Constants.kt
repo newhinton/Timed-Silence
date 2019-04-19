@@ -48,6 +48,11 @@ class Constants {
         const val PREF_INTERVAL_CHECK_DEFAULT = 15
 
 
+        const val PREF_BOOT_RESTART = "PREF_BOOT_RESTART"
+        const val PREF_BOOT_RESTART_DEFAULT = false
+
+
+
         const val TIME_SETTING_SILENT = 1
         const val TIME_SETTING_VIBRATE = 2
         const val TIME_SETTING_LOUD = 3
