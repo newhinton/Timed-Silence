@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
 import de.felixnuesse.timedsilence.Constants
@@ -89,6 +90,7 @@ class SettingsVolumeActivity : AppCompatActivity() {
             }
         })
 
+        checkWarningVisibility()
 
     }
 
@@ -98,6 +100,30 @@ class SettingsVolumeActivity : AppCompatActivity() {
 
         if(percent<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
             textView.setTextColor(Color.RED)
+        }
+        checkWarningVisibility()
+    }
+
+    fun checkWarningVisibility(){
+        warning_low_volume.visibility = View.INVISIBLE
+
+        var warning_show=false
+
+        if(seekBarVolumeAlarm.progress<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
+            warning_show=true
+        }
+        if(seekBarVolumeMusic.progress<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
+            warning_show=true
+        }
+        if(seekBarVolumeNotifications.progress<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
+            warning_show=true
+        }
+        if(seekBarVolumeRinger.progress<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
+            warning_show=true
+        }
+
+        if(warning_show){
+            warning_low_volume.visibility = View.VISIBLE
         }
 
     }

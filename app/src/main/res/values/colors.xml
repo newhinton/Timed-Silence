@@ -7,4 +7,8 @@
 
     <color name="colorFab_started">#43A047</color>
     <color name="colorFab_stopped">#E53935</color>
+
+
+
+    <color name="text_warning">#E91E1E</color>
 </resources>
