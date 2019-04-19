@@ -2,6 +2,7 @@ package de.felixnuesse.timedsilence.handler
 
 import android.content.Context
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.PrefConstants
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -35,50 +36,50 @@ import de.felixnuesse.timedsilence.Constants
 class SharedPreferencesHandler {
     companion object {
         fun setPref(context: Context, name: String, value: String){
-            val prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0)
+            val prefs = context.getSharedPreferences(PrefConstants.PREFS_NAME, 0)
             val editor = prefs!!.edit()
             editor.putString(name, value)
             editor.apply()
         }
 
         fun setPref(context: Context, name: String, value: Int){
-            val prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0)
+            val prefs = context.getSharedPreferences(PrefConstants.PREFS_NAME, 0)
             val editor = prefs!!.edit()
             editor.putInt(name, value)
             editor.apply()
         }
 
         fun setPref(context: Context, name: String, value: Long){
-            val prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0)
+            val prefs = context.getSharedPreferences(PrefConstants.PREFS_NAME, 0)
             val editor = prefs!!.edit()
             editor.putLong(name, value)
             editor.apply()
         }
 
         fun setPref(context: Context, name: String, value: Boolean){
-            val prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0)
+            val prefs = context.getSharedPreferences(PrefConstants.PREFS_NAME, 0)
             val editor = prefs!!.edit()
             editor.putBoolean(name, value)
             editor.apply()
         }
 
         fun getPref(context: Context, name: String, value: String): String?{
-            val prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0)
+            val prefs = context.getSharedPreferences(PrefConstants.PREFS_NAME, 0)
             return prefs.getString(name, value)
         }
 
         fun getPref(context: Context, name: String, value: Long): Long{
-            val prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0)
+            val prefs = context.getSharedPreferences(PrefConstants.PREFS_NAME, 0)
             return prefs.getLong(name, value)
         }
 
         fun getPref(context: Context, name: String, value: Int): Int{
-            val prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0)
+            val prefs = context.getSharedPreferences(PrefConstants.PREFS_NAME, 0)
             return prefs.getInt(name, value)
         }
 
         fun getPref(context: Context, name: String, value: Boolean): Boolean{
-            val prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0)
+            val prefs = context.getSharedPreferences(PrefConstants.PREFS_NAME, 0)
             return prefs.getBoolean(name, value)
         }
     }

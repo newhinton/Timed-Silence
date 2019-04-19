@@ -7,6 +7,7 @@ import android.media.AudioManager
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 
@@ -19,8 +20,8 @@ class BootReciever : BroadcastReceiver(){
 
         val restartOnBoot= SharedPreferencesHandler.getPref(
             context,
-            Constants.PREF_BOOT_RESTART,
-            Constants.PREF_BOOT_RESTART_DEFAULT
+            PrefConstants.PREF_BOOT_RESTART,
+            PrefConstants.PREF_BOOT_RESTART_DEFAULT
         )
 
         if(restartOnBoot){

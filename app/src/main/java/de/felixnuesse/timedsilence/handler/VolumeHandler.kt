@@ -35,6 +35,7 @@ import android.media.AudioManager
 import android.provider.Settings
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.PrefConstants
 
 class VolumeHandler {
     companion object {
@@ -162,7 +163,9 @@ class VolumeHandler {
 
             Log.e(Constants.APP_NAME, "VolumeHandler: Setting Audio Volume!")
 
-            if(HeadsetHandler.headphonesConnected(context)){
+            val ignoreCheckWhenConnected=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)
+
+            if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
                 Log.e(Constants.APP_NAME, "VolumeHandler: Found headset, skipping...")
                 return
             }

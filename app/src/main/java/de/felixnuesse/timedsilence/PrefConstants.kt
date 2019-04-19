@@ -30,20 +30,23 @@ package de.felixnuesse.timedsilence;
  */
 
 
-class Constants {
+class PrefConstants {
     companion object {
-        const val APP_NAME = "Timed Silence"
-        const val BROADCAST_INTENT_ACTION = "action"
-        const val BROADCAST_INTENT_ACTION_UPDATE_VOLUME = "volumeUpdate"
-        const val BROADCAST_INTENT_ACTION_DELAY = "delayVolumeUpdate"
-        const val BROADCAST_INTENT_ACTION_DELAY_EXTRA = "delayVolumeUpdate_EXTRA"
-        const val BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW = "restartDelayNow"
 
-        const val TIME_SETTING_SILENT = 1
-        const val TIME_SETTING_VIBRATE = 2
-        const val TIME_SETTING_LOUD = 3
+        const val DEFAULT_DELAY = 60
+        const val PREFS_NAME = "prefsname"
 
 
-        const val RECURRING_INTENT_ID = 123789
+        const val PREF_INTERVAL_CHECK = "PREF_INTERVAL_CHECK"
+        const val PREF_INTERVAL_CHECK_DEFAULT = 15
+
+
+        const val PREF_BOOT_RESTART = "PREF_BOOT_RESTART"
+        const val PREF_BOOT_RESTART_DEFAULT = false
+
+
+        const val PREF_IGNORE_CHECK_WHEN_HEADSET= "PREF_IGNORE_CHECK_WHEN_HEADSET"
+        const val PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT = true
+
     }
 }

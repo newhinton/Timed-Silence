@@ -9,9 +9,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
-
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> <!-- Needed for headset identification -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /><!-- Needed for restart of app -->
+    <uses-permission
+            android:name="android.permission.MODIFY_AUDIO_SETTINGS"/> <!-- Needed for headset identification -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
             android:allowBackup="true"
@@ -21,6 +21,10 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activities.SettingsMainActivity">
+        </activity>
+        <activity android:name=".activities.SettingsVolumeActivity">
+        </activity>
         <activity
                 android:name=".activities.EditScheduleActivity"
                 android:label="@string/title_activity_add_schedule"
@@ -45,9 +49,9 @@
         </receiver>
         <receiver android:name=".receiver.BootReciever">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-</application>
+    </application>
 
 </manifest>

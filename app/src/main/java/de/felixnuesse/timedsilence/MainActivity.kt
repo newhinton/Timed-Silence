@@ -54,6 +54,7 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.activities.SettingsMainActivity
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.VolumeHandler
@@ -117,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         val seekBarSupportText= findViewById<TextView>(R.id.textview_waittime_content)
         val seekBar = findViewById<SeekBar>(R.id.seekBar_waittime)
 
-        val interval= SharedPreferencesHandler.getPref(this, Constants.PREF_INTERVAL_CHECK, Constants.PREF_INTERVAL_CHECK_DEFAULT)
+        val interval= SharedPreferencesHandler.getPref(this, PrefConstants.PREF_INTERVAL_CHECK, PrefConstants.PREF_INTERVAL_CHECK_DEFAULT)
 
         seekBarSupportText.text=interval.toString()
         seekBar.progress=interval
@@ -150,11 +151,11 @@ class MainActivity : AppCompatActivity() {
             if(fabTextView.text == getString(R.string.timecheck_start)){
                 AlarmHandler.createRepeatingTimecheck(this)
                 setFabStarted(fab, fabTextView)
-                SharedPreferencesHandler.setPref(this, Constants.PREF_BOOT_RESTART,true)
+                SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
             }else{
                 AlarmHandler.removeRepeatingTimecheck(this)
                 setFabStopped(fab, fabTextView)
-                SharedPreferencesHandler.setPref(this, Constants.PREF_BOOT_RESTART,false)
+                SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,false)
             }
 
 
@@ -246,7 +247,7 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
 
         when (item.itemId) {
-            R.id.action_settings -> callThirdparty()
+            R.id.action_settings -> openSettings()
             R.id.action_set_manual_loud -> VolumeHandler.setLoud(applicationContext)
             R.id.action_set_manual_vibrate -> VolumeHandler.setVibrate(applicationContext)
             R.id.action_set_manual_silent -> VolumeHandler.setSilent(applicationContext)
@@ -254,12 +255,9 @@ class MainActivity : AppCompatActivity() {
         return true;
     }
 
-    fun callThirdparty(): Boolean {
-        val intentDeviceTest = Intent("android.intent.action.MAIN")
-        intentDeviceTest.component = ComponentName("felixnuesse.de.uniVV_webbrowser", "LogoActivity")
-
-        //startActivity(intentDeviceTest)
-        startActivity( getPackageManager().getLaunchIntentForPackage("felixnuesse.de.uniVV_webbrowser"))
+    fun openSettings(): Boolean {
+        val intent = Intent(this, SettingsMainActivity::class.java).apply {}
+        startActivity(intent)
         return true
     }
 
@@ -267,7 +265,7 @@ class MainActivity : AppCompatActivity() {
 
     fun setInterval(interval: Int){
 
-        SharedPreferencesHandler.setPref(this, Constants.PREF_INTERVAL_CHECK, interval)
+        SharedPreferencesHandler.setPref(this, PrefConstants.PREF_INTERVAL_CHECK, interval)
         AlarmHandler.removeRepeatingTimecheck(this)
         AlarmHandler.createRepeatingTimecheck(this)
 

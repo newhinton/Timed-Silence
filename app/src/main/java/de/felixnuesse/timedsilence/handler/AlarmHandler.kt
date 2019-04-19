@@ -9,6 +9,7 @@ import java.text.DateFormat
 import java.util.*
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 
 
@@ -61,8 +62,8 @@ class AlarmHandler {
 
            val interval= SharedPreferencesHandler.getPref(
                context,
-               Constants.PREF_INTERVAL_CHECK,
-               Constants.PREF_INTERVAL_CHECK_DEFAULT
+               PrefConstants.PREF_INTERVAL_CHECK,
+               PrefConstants.PREF_INTERVAL_CHECK_DEFAULT
            )
            createRepeatingTimecheck(context, interval)
        }
