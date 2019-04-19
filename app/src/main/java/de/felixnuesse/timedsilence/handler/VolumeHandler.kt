@@ -83,13 +83,49 @@ class VolumeHandler {
 
         }
 
+        fun setVibrate(context: Context) {
+
+            val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+            if(manager.ringerMode!= AudioManager.RINGER_MODE_VIBRATE){
+                manager.ringerMode=AudioManager.RINGER_MODE_VIBRATE
+            }
+
+
+            val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+            mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+
+
+            setMediaVolume(0, context, manager)
+
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_ALARM,
+                70
+            )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_NOTIFICATION,
+                0
+            )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_RING,
+                0
+            )
+
+        }
+
         fun setLoud(context: Context) {
 
             val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
 
+            val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+            mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+
             if(manager.ringerMode!= AudioManager.RINGER_MODE_NORMAL){
-                manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL)
+                manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
             }
 
 
@@ -109,34 +145,6 @@ class VolumeHandler {
                 manager,
                 AudioManager.STREAM_RING,
                 80
-            )
-
-        }
-
-        fun setVibrate(context: Context) {
-
-            val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-            if(manager.ringerMode!= AudioManager.RINGER_MODE_VIBRATE){
-                manager.ringerMode=AudioManager.RINGER_MODE_VIBRATE
-            }
-
-            setMediaVolume(0, context, manager)
-
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_ALARM,
-                0
-            )
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_NOTIFICATION,
-                0
-            )
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_RING,
-                0
             )
 
         }
