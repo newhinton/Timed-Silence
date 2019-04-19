@@ -28,27 +28,49 @@ package de.felixnuesse.timedsilence.handler
  *
  */
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.media.AudioManager
 import android.provider.Settings
+import android.support.v4.app.ActivityCompat.finishAffinity
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
+import de.felixnuesse.timedsilence.R
 
 class VolumeHandler {
     companion object {
 
-        fun getVolumePermission(context: Context) {
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        fun getVolumePermission(activity: Activity) {
+            val notificationManager = activity.baseContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (!notificationManager.isNotificationPolicyAccessGranted) {
-                val intent = Intent(
-                    Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS
-                )
-                context.startActivity(intent)
+
+                Log.e(Constants.APP_NAME, "VolumeHandler: Ask for DND-Access")
+
+                val builder = AlertDialog.Builder(activity)
+                builder.setMessage(R.string.GrantDNDPermissionAccess)
+                    .setPositiveButton(R.string.GrantDND,
+                        DialogInterface.OnClickListener { dialog, id ->
+                            val intent = Intent(
+                                Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS
+                            )
+                            activity.baseContext.startActivity(intent)
+                        })
+                    .setNegativeButton(R.string.cancel,
+                        DialogInterface.OnClickListener { dialog, id ->
+                            Log.e(Constants.APP_NAME, "VolumeHandler: Did not get 'Do not Disturb'-Access, quitting...")
+                            finishAffinity(activity)
+                        })
+                // Create the AlertDialog object and return it
+                builder.create().show()
             }
         }
+
+
 
 
         fun setSilent(context: Context) {

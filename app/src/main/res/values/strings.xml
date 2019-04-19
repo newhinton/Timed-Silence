@@ -15,4 +15,8 @@
     <string name="action_set_manual_silent">Set Silent</string>
     <string name="timecheck_stopped">Stopped</string>
     <string name="timecheck_running">Running</string>
+    <string name="GrantDNDPermissionAccess">This app requires access to the \"Do not Disturb\" Permission to mute
+        and unmute the device. Please Grant the permission and press return to get back to this app.
+    </string>
+    <string name="GrantDND">Grant!</string>
 </resources>

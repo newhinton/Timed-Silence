@@ -141,27 +141,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-     /*
-        fab.setOnClickListener { view ->
-            //get current state
-            checkStateOfAlarm()
-
-            if(fabTextView.text == getString(R.string.timecheck_start)){
-                AlarmHandler.createRepeatingTimecheck(this)
-                setFabStarted(fab, fabTextView)
-                SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
-            }else{
-                AlarmHandler.removeRepeatingTimecheck(this)
-                setFabStopped(fab, fabTextView)
-                SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,false)
-            }
-
-
-
-        }*/
-
-
-        val fabTextView = findViewById<TextView>(R.id.fab_textview)
         button_check.setOnClickListener { view ->
             //get current state
             checkStateOfAlarm()
