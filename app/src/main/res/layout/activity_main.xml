@@ -21,30 +21,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"/>
-
-    <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right">
-
-        <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/fab_margin"
-                android:src="@android:color/transparent" />
-
-        <TextView
-                android:id="@+id/fab_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/timecheck_start"
-                android:elevation="16dp"
-                android:textColor="@android:color/white"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-    </FrameLayout>
+    <include layout="@layout/content_main" android:layout_height="576dp"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

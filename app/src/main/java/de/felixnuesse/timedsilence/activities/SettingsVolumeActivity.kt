@@ -12,7 +12,6 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
-import kotlinx.android.synthetic.main.activity_settings_main.*
 import kotlinx.android.synthetic.main.activity_settings_volume.*
 
 class SettingsVolumeActivity : AppCompatActivity() {

@@ -13,4 +13,6 @@
     <string name="action_set_manual_loud">Set Loud</string>
     <string name="action_set_manual_vibrate">Set Vibrate</string>
     <string name="action_set_manual_silent">Set Silent</string>
+    <string name="timecheck_stopped">Stopped</string>
+    <string name="timecheck_running">Running</string>
 </resources>
