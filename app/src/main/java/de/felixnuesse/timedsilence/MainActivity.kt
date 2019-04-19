@@ -74,8 +74,8 @@ class MainActivity : AppCompatActivity() {
 
         //This hidden button is needed because the buttonsound of the main button is supressed because the device is still muted. A click is performed on this button, and when the onClick handler is set,
         //it plays a sound after the volume has changed to loud. Therefore it seems to be the main button who makes the sound
-        (findViewById(R.id.button_buttonsound_fix) as Button).isSoundEffectsEnabled=true
-        (findViewById(R.id.button_buttonsound_fix) as Button).setOnClickListener {
+        button_buttonsound_fix.isSoundEffectsEnabled=true
+        button_buttonsound_fix.setOnClickListener {
             Log.e(APP_NAME,"MainAcitivity: HiddenButton: PerformClick to make sound")
         }
 
@@ -253,7 +253,14 @@ class MainActivity : AppCompatActivity() {
 
         when (item.itemId) {
             R.id.action_settings -> openSettings()
-            R.id.action_set_manual_loud -> VolumeHandler.setLoud(applicationContext)
+            R.id.action_set_manual_loud -> {
+                val makeSound=!VolumeHandler.isButtonClickAudible(this)
+
+                VolumeHandler.setLoud(applicationContext)
+                if(makeSound){
+                    button_buttonsound_fix.performClick()
+                }
+            }
             R.id.action_set_manual_vibrate -> VolumeHandler.setVibrate(applicationContext)
             R.id.action_set_manual_silent -> VolumeHandler.setSilent(applicationContext)
         }

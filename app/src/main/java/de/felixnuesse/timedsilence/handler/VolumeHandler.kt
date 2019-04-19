@@ -212,5 +212,14 @@ class VolumeHandler {
 
         }
 
+        fun isButtonClickAudible(context: Context): Boolean{
+            Log.e(Constants.APP_NAME, "VolumeHandler: Check if Buttonclicks are audible")
+            val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            if(0>=manager.getStreamVolume(AudioManager.STREAM_RING)){
+                return false
+            }
+            return true
+        }
+
     }
 }
