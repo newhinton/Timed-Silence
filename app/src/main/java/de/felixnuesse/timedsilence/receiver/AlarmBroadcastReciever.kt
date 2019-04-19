@@ -106,7 +106,22 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
             val time = hour*60*60*1000 + min*60*1000
 
-            if(time in it.time_start..it.time_end){
+            var isInInversedTimeInterval=false
+            if(it.time_end<=it.time_start){
+                Log.e(Constants.APP_NAME, "Alarmintent: End is before or equal start")
+
+                if(time>=it.time_start && time<24*60*60*1000){
+                    Log.e(Constants.APP_NAME, "Alarmintent: Current time is after start time of interval but before 0:00")
+                    isInInversedTimeInterval=true;
+                }
+
+                if(time<it.time_end && time>= 0){
+                    Log.e(Constants.APP_NAME, "Alarmintent: Current time is before end time of interval but after 0:00")
+                    isInInversedTimeInterval=true;
+                }
+            }
+
+            if(time in it.time_start..it.time_end || isInInversedTimeInterval){
 
                 if(it.time_setting==TIME_SETTING_SILENT){
                     VolumeHandler.setSilent(nonNullContext)

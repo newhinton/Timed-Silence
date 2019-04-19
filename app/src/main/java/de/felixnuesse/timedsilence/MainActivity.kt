@@ -79,36 +79,36 @@ class MainActivity : AppCompatActivity() {
             Log.e(APP_NAME,"MainAcitivity: HiddenButton: PerformClick to make sound")
         }
 
-        (findViewById(R.id.button_set_loud) as Button).isSoundEffectsEnabled=false
-        (findViewById(R.id.button_set_loud) as Button).setOnClickListener {
+        button_set_loud.isSoundEffectsEnabled=false
+        button_set_loud.setOnClickListener {
             VolumeHandler.setLoud(this)
             val b = (findViewById(R.id.button_buttonsound_fix) as Button)
             b.performClick()
         }
 
-        (findViewById(R.id.button_set_vibrate) as Button).isSoundEffectsEnabled=false
-        (findViewById(R.id.button_set_vibrate) as Button).setOnClickListener {
+        button_set_vibrate.isSoundEffectsEnabled=false
+        button_set_vibrate.setOnClickListener {
             VolumeHandler.setVibrate(this)
         }
 
-        (findViewById(R.id.button_set_silent) as Button).isSoundEffectsEnabled=false
-        (findViewById(R.id.button_set_silent) as Button).setOnClickListener {
+        button_set_silent.isSoundEffectsEnabled=false
+        button_set_silent.setOnClickListener {
             VolumeHandler.setSilent(this)
         }
 
 
-        (findViewById(R.id.button_delay_one) as Button).setOnClickListener {
+        button_delay_one.setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
             //AlarmHandler.createAlarmIntime(this, 1 * 60 * 60 * 1000)
             AlarmHandler.createAlarmIntime(this, 5000)
         }
 
-        (findViewById(R.id.button_delay_three) as Button).setOnClickListener {
+        button_delay_three.setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
             //AlarmHandler.createAlarmIntime(this, 3 * 60 * 60 * 1000)
         }
 
-        (findViewById(R.id.button_delay_eight) as Button).setOnClickListener {
+        button_delay_eight.setOnClickListener {
             AlarmHandler.removeRepeatingTimecheck(this)
             //AlarmHandler.createAlarmIntime(this, 8 * 60 * 60 * 1000)
         }

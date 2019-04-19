@@ -72,7 +72,7 @@ class TimeFragment : Fragment() {
 
         val db = DatabaseHandler(view.context)
 
-        Log.e(APP_NAME, "test "+db.getAllSchedules().size)
+        Log.e(APP_NAME, "TimeFragment: DatabaseResuluts: Size: "+db.getAllSchedules().size)
 
         viewManager = LinearLayoutManager(view.context)
         viewAdapter = MyAdapter(db.getAllSchedules())
@@ -107,12 +107,12 @@ class TimeFragment : Fragment() {
         builder.setView(input)
 
         // Set up the buttons
-        builder.setPositiveButton("OK",
+        builder.setPositiveButton(R.string.ok,
             DialogInterface.OnClickListener { dialog, which ->
                 createStartDialog(context, input.text.toString())
 
             })
-        builder.setNegativeButton("Cancel",
+        builder.setNegativeButton(R.string.cancel,
             DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
 
         builder.show()
