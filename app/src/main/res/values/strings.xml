@@ -19,4 +19,5 @@
         and unmute the device. Please Grant the permission and press return to get back to this app.
     </string>
     <string name="GrantDND">Grant!</string>
+    <string name="qs_tile_label">Pause Timed Silence</string>
 </resources>

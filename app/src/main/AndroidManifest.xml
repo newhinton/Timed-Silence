@@ -52,6 +52,17 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+        <service
+                android:name=".services.PauseTileService"
+                android:icon="@drawable/ic_delete_black_24dp"
+                android:label="pause"
+                android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+            </intent-filter>
+        </service>
+        <service android:name="de.felixnuesse.timedsilence.services.PauseTimerService"/>
     </application>
 
 </manifest>

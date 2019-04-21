@@ -45,5 +45,9 @@ class Constants {
 
 
         const val RECURRING_INTENT_ID = 123789
+
+
+        const val SERVICE_INTENT_DELAY_ACTION = "SERVICE_INTENT_DELAY_ACTION"
+        const val SERVICE_INTENT_DELAY_AMOUNT = "SERVICE_INTENT_DELAY_AMOUNT"
     }
 }
