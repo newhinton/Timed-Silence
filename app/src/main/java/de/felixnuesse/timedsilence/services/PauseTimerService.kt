@@ -43,7 +43,13 @@ import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 
 class PauseTimerService : Service() {
 
+    var mTimer: CountDownTimer? = null
+
+
     companion object {
+
+        var mCurentLengthIndex : Int = 0
+
         var mListenerList= arrayListOf<TimerInterface>()
 
         fun registerListener(listener: TimerInterface){
@@ -73,14 +79,28 @@ class PauseTimerService : Service() {
             Log.e(Constants.APP_NAME, "PauseTimerService: Intent is pause "+intent?.getStringExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT))
             AlarmHandler.removeRepeatingTimecheck(applicationContext)
 
-            var time: Long= (60*60) // one hour
+            var time: Long= -1
             val ie = intent?.getLongExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, time)
 
-            if(ie!=null){
-                time = ie as Long;
-            }
+            mTimer?.cancel()
 
+
+            if(ie==time){
+                if(mCurentLengthIndex>Constants.TIME_PAUSE_SERVICE_LENGTH_ARRAY.size-1){
+                    mCurentLengthIndex=1
+                }
+
+
+                Log.e(Constants.APP_NAME, "PauseTimerService: No custom time set, autotime: "+ mCurentLengthIndex+" : "+ Constants.TIME_PAUSE_SERVICE_LENGTH_ARRAY[mCurentLengthIndex])
+
+                time = Constants.TIME_PAUSE_SERVICE_LENGTH_ARRAY[mCurentLengthIndex].toLong()
+                mCurentLengthIndex++
+            }else{
+                time = ie as Long
+            }
             timer(time).start()
+
+
 
         }
 
@@ -88,23 +108,27 @@ class PauseTimerService : Service() {
 
     }
 
-    fun timer(seconds: Long) : CountDownTimer{
+    fun timer(milliseconds: Long) : CountDownTimer{
 
-        val timer = object : CountDownTimer(seconds * 1000, 1000) {
+        val timer = object : CountDownTimer(milliseconds, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                Log.e(Constants.APP_NAME, "PauseTimerService: Timer($seconds): running, ${millisUntilFinished/1000} left")
+               // Log.e(Constants.APP_NAME, "PauseTimerService: Timer($seconds): running, ${millisUntilFinished/1000} left")
                 for (interfaceElement in mListenerList){
-                    Log.e(Constants.APP_NAME, "PauseTimerService: Timer update interfaces")
+                    //Log.e(Constants.APP_NAME, "PauseTimerService: Timer update interfaces")
                     interfaceElement.timerReduced(millisUntilFinished)
                 }
             }
 
             override fun onFinish() {
-                Log.e(Constants.APP_NAME, "PauseTimerService: Timer($seconds): ended, restarting checks!")
+                Log.e(Constants.APP_NAME, "PauseTimerService: Timer($milliseconds): ended, restarting checks!")
                 AlarmHandler.createRepeatingTimecheck(applicationContext)
+                for (interfaceElement in mListenerList){
+                    //Log.e(Constants.APP_NAME, "PauseTimerService: Timer update interfaces")
+                    interfaceElement.timerFinished()
+                }
             }
         }
-
+        mTimer = timer
         return timer
     }
 }

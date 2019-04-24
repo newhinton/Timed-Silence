@@ -9,6 +9,8 @@ import de.felixnuesse.timedsilence.R
 import android.content.Intent
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -44,28 +46,37 @@ class PauseTileService: TileService(), TimerInterface {
 
     companion object {
         const val state_unused= "1"
+
+        var icon = R.drawable.ic_av_timer_black_24dp
     }
 
     override fun timerReduced(timeAsLong: Long) {
-        val tile = qsTile
-        tile.label = "t: "+timeAsLong.toString()
-        tile.updateTile()
+
+        val date = Date(timeAsLong)
+        val format:SimpleDateFormat?
+
+        Log.e(APP_NAME, ""+Constants.HOUR)
+        if(timeAsLong>=Constants.HOUR){
+            format = SimpleDateFormat("HH:mm:ss")
+        }else {
+            format = SimpleDateFormat("mm:ss")
+        }
+
+        format.timeZone = TimeZone.getTimeZone("UTC")
+
+        updateTile(format.format(date), Tile.STATE_ACTIVE)
+
     }
 
-    var icon = R.drawable.ic_av_timer_black_24dp
+    override fun timerFinished() {
+        updateTile(getString(R.string.qs_tile_label), Tile.STATE_INACTIVE)
+    }
 
     override fun onClick() {
         super.onClick()
         Log.e(APP_NAME,"PauseTileService: onClick")
-        val tile = qsTile
-        tile.icon = Icon.createWithResource(this, icon)
-        tile.label = "hmmm"
-        tile.contentDescription = "help?"
-        tile.state = Tile.STATE_ACTIVE
 
-        tile.updateTile()
-
-
+        updateTile(Tile.STATE_ACTIVE)
 
         val i =Intent(this, PauseTimerService::class.java)
         i.putExtra(Constants.SERVICE_INTENT_DELAY_ACTION,Constants.SERVICE_INTENT_DELAY_ACTION)
@@ -82,14 +93,7 @@ class PauseTileService: TileService(), TimerInterface {
 
     override fun onTileAdded() {
         super.onTileAdded()
-
-        val tile = qsTile
-        tile.icon = Icon.createWithResource(this, icon)
-        tile.label = getString(R.string.qs_tile_label)
-        tile.contentDescription = PauseTileService.state_unused
-        tile.state = Tile.STATE_ACTIVE
-
-        tile.updateTile()
+        updateTile(getString(R.string.qs_tile_label), Tile.STATE_ACTIVE)
 
         // Do something when the user add the Tile
     }
@@ -98,6 +102,8 @@ class PauseTileService: TileService(), TimerInterface {
         super.onStartListening()
         Log.e(APP_NAME,"PauseTileService: onStartListening")
         PauseTimerService.registerListener(this)
+        updateTile(getString(R.string.qs_tile_label), Tile.STATE_INACTIVE)
+
         // Called when the Tile becomes visible
     }
 
@@ -106,5 +112,24 @@ class PauseTileService: TileService(), TimerInterface {
         Log.e(APP_NAME,"PauseTileService: onStopListening")
 
         // Called when the tile is no longer visible
+    }
+
+
+    fun updateTile(state: Int){
+        updateTile(qsTile.label.toString(), state)
+    }
+
+    fun updateTile(label: String){
+        updateTile(label, qsTile.state)
+    }
+
+    fun updateTile(label: String, state: Int){
+        val tile = qsTile
+        tile.icon = Icon.createWithResource(this, icon)
+        tile.label = label
+        tile.contentDescription = PauseTileService.state_unused
+        tile.state = state
+
+        tile.updateTile()
     }
 }

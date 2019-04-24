@@ -30,5 +30,6 @@ package de.felixnuesse.timedsilence.services.`interface`
 interface TimerInterface {
 
     fun timerReduced(timeAsLong: Long)
+    fun timerFinished()
 
 }

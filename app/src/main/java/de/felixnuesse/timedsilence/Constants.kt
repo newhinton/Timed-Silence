@@ -49,5 +49,10 @@ class Constants {
 
         const val SERVICE_INTENT_DELAY_ACTION = "SERVICE_INTENT_DELAY_ACTION"
         const val SERVICE_INTENT_DELAY_AMOUNT = "SERVICE_INTENT_DELAY_AMOUNT"
+
+        const val MIN = 60*1000
+        const val HOUR = 60*MIN
+
+        var TIME_PAUSE_SERVICE_LENGTH_ARRAY: IntArray = intArrayOf(5*MIN, 15*MIN, 30*MIN, HOUR, 3*HOUR, 8*HOUR, 0)
     }
 }
