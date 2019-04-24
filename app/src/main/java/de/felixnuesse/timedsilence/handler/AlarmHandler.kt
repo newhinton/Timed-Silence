@@ -60,6 +60,7 @@ class AlarmHandler {
 
        fun createRepeatingTimecheck(context: Context){
 
+
            val interval= SharedPreferencesHandler.getPref(
                context,
                PrefConstants.PREF_INTERVAL_CHECK,
@@ -70,6 +71,7 @@ class AlarmHandler {
 
        fun createRepeatingTimecheck(context: Context, intervalInMinutes: Int){
 
+           Log.e(Constants.APP_NAME, "AlarmHandler: CreateRepeatingTimecheck: Precreate")
            //todo create inexact version
            val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
            alarms.setRepeating(

@@ -65,31 +65,10 @@ import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), TimerInterface {
 
-    override fun timerReduced(timeAsLong: Long) {
-        textViewPausedTimestamp.visibility= View.VISIBLE
-        label_Paused_until.visibility= View.VISIBLE
-        textViewPausedTimestamp.text=PauseTileService.getTimestampInProperLength(timeAsLong);
-        checkStateOfAlarm()
-    }
-
-    override fun timerFinished() {
-        textViewPausedTimestamp.visibility= View.INVISIBLE
-        label_Paused_until.visibility= View.INVISIBLE
-        checkStateOfAlarm()
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
-
-        VolumeHandler.getVolumePermission(this)
-
-        PauseTimerService.registerListener(this)
-
-
 
         //This hidden button is needed because the buttonsound of the main button is supressed because the device is still muted. A click is performed on this button, and when the onClick handler is set,
         //it plays a sound after the volume has changed to loud. Therefore it seems to be the main button who makes the sound
@@ -98,39 +77,15 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             Log.e(APP_NAME,"MainAcitivity: HiddenButton: PerformClick to make sound")
         }
 
-        button_set_loud.isSoundEffectsEnabled=false
-        button_set_loud.setOnClickListener {
-            VolumeHandler.setLoud(this)
-            val b = (findViewById(R.id.button_buttonsound_fix) as Button)
-            b.performClick()
+        frameLayout.setOnClickListener { view ->
+            Log.e(Constants.APP_NAME, "Main: FabTester: Clicked")
+            buttonState()
+        }
+        button_check.setOnClickListener { view ->
+            Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: Clicked")
+            buttonState()
         }
 
-        button_set_vibrate.isSoundEffectsEnabled=false
-        button_set_vibrate.setOnClickListener {
-            VolumeHandler.setVibrate(this)
-        }
-
-        button_set_silent.isSoundEffectsEnabled=false
-        button_set_silent.setOnClickListener {
-            VolumeHandler.setSilent(this)
-        }
-
-
-        button_delay_one.setOnClickListener {
-            AlarmHandler.removeRepeatingTimecheck(this)
-            //AlarmHandler.createAlarmIntime(this, 1 * 60 * 60 * 1000)
-            AlarmHandler.createAlarmIntime(this, 5000)
-        }
-
-        button_delay_three.setOnClickListener {
-            AlarmHandler.removeRepeatingTimecheck(this)
-            //AlarmHandler.createAlarmIntime(this, 3 * 60 * 60 * 1000)
-        }
-
-        button_delay_eight.setOnClickListener {
-            AlarmHandler.removeRepeatingTimecheck(this)
-            //AlarmHandler.createAlarmIntime(this, 8 * 60 * 60 * 1000)
-        }
 
         val seekBarSupportText= findViewById<TextView>(R.id.textview_waittime_content)
         val seekBar = findViewById<SeekBar>(R.id.seekBar_waittime)
@@ -159,16 +114,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
             }
         })
-        frameLayout.setOnClickListener { view ->
-            Log.e(Constants.APP_NAME, "Main: FabTester: Clicked")
-            checkStateOfAlarm()
-        }
-        button_check.setOnClickListener { view ->
-            //get current state
-            checkStateOfAlarm()
-            Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: Clicked")
-            buttonState()
-        }
 
 
         val tabs = findViewById<TabLayout>(R.id.tabLayout)
@@ -179,28 +124,18 @@ class MainActivity : AppCompatActivity(), TimerInterface {
                 mPager.currentItem = tab.position
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {
-
-            }
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
         mPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
-            }
+            override fun onPageScrollStateChanged(state: Int) {}
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
             override fun onPageSelected(position: Int) {
                 val tab = tabs.getTabAt(position)
                 tab?.select()
             }
-
         })
 
 
@@ -209,62 +144,21 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         mPager.adapter = pagerAdapter
 
 
-        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
-            Log.e(Constants.APP_NAME, "Main: SharedPrefs: prefs: "+prefs)
-            Log.e(Constants.APP_NAME, "Main: SharedPrefs: key:   "+key)
+        SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(getSharedPreferencesListener())
 
 
-            if(key=="last_ExecTime"){
-                updateTimeCheckDisplay()
-            }
-        }
+        VolumeHandler.getVolumePermission(this)
+
+        PauseTimerService.registerListener(this)
 
 
-        val sharedPref = this?.getSharedPreferences("test", Context.MODE_PRIVATE)
-        sharedPref.registerOnSharedPreferenceChangeListener(listener)
-
-
-    }
-
-    private fun buttonState() {
-        if(button_check.text == getString(R.string.timecheck_start)){
-            Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: Start: "+button_check.text)
-            AlarmHandler.createRepeatingTimecheck(this)
-            fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_started))
-            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
-
-            button_check.text=getString(R.string.timecheck_stop)
-        }else if(button_check.text == getString(R.string.timecheck_pause)){
-            Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: Paused: "+button_check.text)
-            AlarmHandler.createRepeatingTimecheck(this)
-            fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_paused))
-            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
-        }else{
-            Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: Stop: "+button_check.text)
-            AlarmHandler.removeRepeatingTimecheck(this)
-            fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
-            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,false)
-
-
-            button_check.text=getString(R.string.timecheck_start)
-        }
-    }
-
-    fun setFabStarted(fab: FloatingActionButton, text: TextView){
-        text.text = getString(R.string.timecheck_running)
-        fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_started))
-
-    }
-
-    fun setFabStopped(fab: FloatingActionButton, text: TextView){
-        text.text = getString(R.string.timecheck_stopped)
-        fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
-        AlarmHandler.removeRepeatingTimecheck(this)
+        buttonState()
     }
 
     override fun onResume() {
         super.onResume()
-        checkStateOfAlarm()
+        buttonState()
+        SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(getSharedPreferencesListener())
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -294,6 +188,20 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         return true;
     }
 
+    override fun timerReduced(timeAsLong: Long) {
+        textViewPausedTimestamp.visibility= View.VISIBLE
+        label_Paused_until.visibility= View.VISIBLE
+        textViewPausedTimestamp.text=PauseTileService.getTimestampInProperLength(timeAsLong);
+        buttonState()
+    }
+
+    override fun timerFinished() {
+        textViewPausedTimestamp.visibility= View.INVISIBLE
+        label_Paused_until.visibility= View.INVISIBLE
+        buttonState()
+    }
+
+
     fun openSettings(): Boolean {
         val intent = Intent(this, SettingsMainActivity::class.java).apply {}
         startActivity(intent)
@@ -310,23 +218,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     }
 
-    fun checkStateOfAlarm(){
-        val fabTextView = findViewById<TextView>(R.id.fab_textview)
-
-        if(AlarmHandler.checkIfNextAlarmExists(this)){
-            setFabStarted(fab, fabTextView)
-            button_check.text=getString(R.string.timecheck_stop)
-        }else if (PauseTimerService.isTimerRunning()){
-            Log.e(Constants.APP_NAME, "Main: checkStateOfAlarm: State: Paused")
-            fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_paused))
-            button_check.text=getString(R.string.timecheck_pause)
-        }else{
-            setFabStopped(fab, fabTextView)
-            button_check.text=getString(R.string.timecheck_start)
-        }
-
-        updateTimeCheckDisplay()
-    }
 
     fun updateTimeCheckDisplay(){
         val nextCheckDisplayTextView= findViewById<TextView>(R.id.nextCheckDisplay)
@@ -337,6 +228,69 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         nextCheckDisplayTextView.text=highScore
     }
+
+
+
+    private fun buttonState() {
+        val fabTextView = findViewById<TextView>(R.id.fab_textview)
+
+        Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: "+button_check.text)
+
+        if(button_check.text == getString(R.string.timecheck_start)){
+
+            AlarmHandler.createRepeatingTimecheck(this)
+            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
+            setFabStarted(fab, fabTextView)
+
+        }else if(button_check.text == getString(R.string.timecheck_paused)){
+
+            AlarmHandler.createRepeatingTimecheck(this)
+            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
+            setFabPaused(fab, fabTextView)
+
+        }else{
+
+            AlarmHandler.removeRepeatingTimecheck(this)
+            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,false)
+            setFabStopped(fab, fabTextView)
+        }
+        updateTimeCheckDisplay()
+    }
+
+    fun setFabStarted(fab: FloatingActionButton, text: TextView){
+        text.text = getString(R.string.timecheck_running)
+        fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_started))
+        button_check.text=getString(R.string.timecheck_stop)
+
+    }
+
+    fun setFabStopped(fab: FloatingActionButton, text: TextView){
+        text.text = getString(R.string.timecheck_stopped)
+        fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
+        AlarmHandler.removeRepeatingTimecheck(this)
+        button_check.text=getString(R.string.timecheck_start)
+    }
+
+    fun setFabPaused(fab: FloatingActionButton, text: TextView){
+        text.text = getString(R.string.timecheck_paused)
+        fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_paused))
+        button_check.text=getString(R.string.timecheck_paused)
+    }
+
+    @Deprecated("replace by callback")
+    fun getSharedPreferencesListener(): SharedPreferences.OnSharedPreferenceChangeListener {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+            Log.e(Constants.APP_NAME, "Main: SharedPrefs: prefs: "+prefs)
+            Log.e(Constants.APP_NAME, "Main: SharedPrefs: key:   "+key)
+
+
+            if(key==PrefConstants.PREFS_LAST_KEY_EXEC){
+                updateTimeCheckDisplay()
+            }
+        }
+        return listener
+    }
+
 
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in

@@ -36,6 +36,8 @@ class PrefConstants {
         const val DEFAULT_DELAY = 60
         const val PREFS_NAME = "prefsname"
 
+        const val PREFS_LAST_KEY_EXEC = "last_ExecTime"
+
 
         const val PREF_INTERVAL_CHECK = "PREF_INTERVAL_CHECK"
         const val PREF_INTERVAL_CHECK_DEFAULT = 15

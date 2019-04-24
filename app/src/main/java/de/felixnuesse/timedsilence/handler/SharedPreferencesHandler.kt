@@ -1,6 +1,8 @@
 package de.felixnuesse.timedsilence.handler
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
 
@@ -81,6 +83,11 @@ class SharedPreferencesHandler {
         fun getPref(context: Context, name: String, value: Boolean): Boolean{
             val prefs = context.getSharedPreferences(PrefConstants.PREFS_NAME, 0)
             return prefs.getBoolean(name, value)
+        }
+
+        fun getPreferences(context: Context): SharedPreferences? {
+            val sharedPref = context.getSharedPreferences(PrefConstants.PREFS_NAME, Context.MODE_PRIVATE)
+            return sharedPref;
         }
     }
 }
