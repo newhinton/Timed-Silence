@@ -8,6 +8,7 @@ import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
 import android.content.Intent
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 
 
 /**
@@ -38,13 +39,26 @@ import de.felixnuesse.timedsilence.Constants
  *
  */
 
-class PauseTileService: TileService(){
+class PauseTileService: TileService(), TimerInterface {
+
+
+    companion object {
+        const val state_unused= "1"
+    }
+
+    override fun timerReduced(timeAsLong: Long) {
+        val tile = qsTile
+        tile.label = "t: "+timeAsLong.toString()
+        tile.updateTile()
+    }
+
+    var icon = R.drawable.ic_av_timer_black_24dp
 
     override fun onClick() {
         super.onClick()
         Log.e(APP_NAME,"PauseTileService: onClick")
         val tile = qsTile
-        tile.icon = Icon.createWithResource(this, R.drawable.ic_edit_black_24dp)
+        tile.icon = Icon.createWithResource(this, icon)
         tile.label = "hmmm"
         tile.contentDescription = "help?"
         tile.state = Tile.STATE_ACTIVE
@@ -70,7 +84,7 @@ class PauseTileService: TileService(){
         super.onTileAdded()
 
         val tile = qsTile
-        tile.icon = Icon.createWithResource(this, R.drawable.ic_edit_black_24dp)
+        tile.icon = Icon.createWithResource(this, icon)
         tile.label = getString(R.string.qs_tile_label)
         tile.contentDescription = PauseTileService.state_unused
         tile.state = Tile.STATE_ACTIVE
@@ -82,17 +96,15 @@ class PauseTileService: TileService(){
 
     override fun onStartListening() {
         super.onStartListening()
-
+        Log.e(APP_NAME,"PauseTileService: onStartListening")
+        PauseTimerService.registerListener(this)
         // Called when the Tile becomes visible
     }
 
     override fun onStopListening() {
         super.onStopListening()
+        Log.e(APP_NAME,"PauseTileService: onStopListening")
 
         // Called when the tile is no longer visible
-    }
-
-    companion object {
-        const val state_unused= "1"
     }
 }

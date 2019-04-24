@@ -12,6 +12,7 @@ import android.content.Context.VIBRATOR_SERVICE
 import android.support.v4.content.ContextCompat.getSystemService
 import android.os.Vibrator
 import de.felixnuesse.timedsilence.handler.AlarmHandler
+import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 
 
 /**
@@ -42,8 +43,17 @@ import de.felixnuesse.timedsilence.handler.AlarmHandler
 
 class PauseTimerService : Service() {
 
-    var mTimer = null
+    companion object {
+        var mListenerList= arrayListOf<TimerInterface>()
 
+        fun registerListener(listener: TimerInterface){
+            if(!mListenerList.contains(listener)){
+                Log.e(Constants.APP_NAME,"PauseTimerService: mListenerList registered")
+                mListenerList.add(listener)
+            }
+        }
+
+    }
 
     override fun onBind(intent: Intent?): IBinder? {
 
@@ -83,7 +93,10 @@ class PauseTimerService : Service() {
         val timer = object : CountDownTimer(seconds * 1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 Log.e(Constants.APP_NAME, "PauseTimerService: Timer($seconds): running, ${millisUntilFinished/1000} left")
-                //val tile = qsTile;
+                for (interfaceElement in mListenerList){
+                    Log.e(Constants.APP_NAME, "PauseTimerService: Timer update interfaces")
+                    interfaceElement.timerReduced(millisUntilFinished)
+                }
             }
 
             override fun onFinish() {
@@ -94,6 +107,5 @@ class PauseTimerService : Service() {
 
         return timer
     }
-
 }
 
