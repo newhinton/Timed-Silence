@@ -11,6 +11,7 @@ import android.app.AlarmManager
 import android.content.Context.VIBRATOR_SERVICE
 import android.support.v4.content.ContextCompat.getSystemService
 import android.os.Vibrator
+import android.widget.Toast
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 
@@ -49,6 +50,7 @@ class PauseTimerService : Service() {
     companion object {
 
         var mCurentLengthIndex : Int = 0
+        var mIsRunning: Boolean = false
 
         var mListenerList= arrayListOf<TimerInterface>()
 
@@ -57,6 +59,10 @@ class PauseTimerService : Service() {
                 Log.e(Constants.APP_NAME,"PauseTimerService: mListenerList registered")
                 mListenerList.add(listener)
             }
+        }
+
+        fun isTimerRunning(): Boolean{
+            return mIsRunning
         }
 
     }
@@ -110,8 +116,13 @@ class PauseTimerService : Service() {
 
     fun timer(milliseconds: Long) : CountDownTimer{
 
+        if(!AlarmHandler.checkIfNextAlarmExists(this)){
+            Toast.makeText(this, "Restarted Regular Checking in (${PauseTileService.getTimestampInProperLength(milliseconds)})", Toast.LENGTH_SHORT).show()
+        }
+
         val timer = object : CountDownTimer(milliseconds, 1000) {
             override fun onTick(millisUntilFinished: Long) {
+                mIsRunning=true
                // Log.e(Constants.APP_NAME, "PauseTimerService: Timer($seconds): running, ${millisUntilFinished/1000} left")
                 for (interfaceElement in mListenerList){
                     //Log.e(Constants.APP_NAME, "PauseTimerService: Timer update interfaces")
@@ -126,10 +137,13 @@ class PauseTimerService : Service() {
                     //Log.e(Constants.APP_NAME, "PauseTimerService: Timer update interfaces")
                     interfaceElement.timerFinished()
                 }
+                mIsRunning=false
             }
         }
         mTimer = timer
         return timer
     }
+
+
 }
 

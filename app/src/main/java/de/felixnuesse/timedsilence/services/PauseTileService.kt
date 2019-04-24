@@ -7,7 +7,9 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
 import android.content.Intent
+import android.widget.Toast
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import java.text.SimpleDateFormat
 import java.util.*
@@ -48,23 +50,27 @@ class PauseTileService: TileService(), TimerInterface {
         const val state_unused= "1"
 
         var icon = R.drawable.ic_av_timer_black_24dp
+
+        fun getTimestampInProperLength(timeAsLong: Long):String{
+            val date = Date(timeAsLong)
+            val format:SimpleDateFormat?
+
+            if(timeAsLong>=Constants.HOUR){
+                format = SimpleDateFormat("HH:mm:ss")
+            }else {
+                format = SimpleDateFormat("mm:ss")
+            }
+
+            format.timeZone = TimeZone.getTimeZone("UTC")
+            return format.format(date)
+        }
     }
 
     override fun timerReduced(timeAsLong: Long) {
 
-        val date = Date(timeAsLong)
-        val format:SimpleDateFormat?
 
-        Log.e(APP_NAME, ""+Constants.HOUR)
-        if(timeAsLong>=Constants.HOUR){
-            format = SimpleDateFormat("HH:mm:ss")
-        }else {
-            format = SimpleDateFormat("mm:ss")
-        }
 
-        format.timeZone = TimeZone.getTimeZone("UTC")
-
-        updateTile(format.format(date), Tile.STATE_ACTIVE)
+        updateTile(getTimestampInProperLength(timeAsLong), Tile.STATE_ACTIVE)
 
     }
 
@@ -131,5 +137,10 @@ class PauseTileService: TileService(), TimerInterface {
         tile.state = state
 
         tile.updateTile()
+    }
+
+    fun toastMaker(){
+        val i =Intent(this, ToastService::class.java)
+        startService(i)
     }
 }

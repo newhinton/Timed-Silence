@@ -51,15 +51,33 @@ import de.felixnuesse.timedsilence.fragments.TimeFragment
 import android.content.res.ColorStateList
 import android.support.design.widget.FloatingActionButton
 import android.util.Log
+import android.view.View
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.activities.SettingsMainActivity
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.VolumeHandler
+import de.felixnuesse.timedsilence.services.PauseTileService
+import de.felixnuesse.timedsilence.services.PauseTimerService
+import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import kotlinx.android.synthetic.main.content_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TimerInterface {
+
+    override fun timerReduced(timeAsLong: Long) {
+        textViewPausedTimestamp.visibility= View.VISIBLE
+        label_Paused_until.visibility= View.VISIBLE
+        textViewPausedTimestamp.text=PauseTileService.getTimestampInProperLength(timeAsLong);
+        checkStateOfAlarm()
+    }
+
+    override fun timerFinished() {
+        textViewPausedTimestamp.visibility= View.INVISIBLE
+        label_Paused_until.visibility= View.INVISIBLE
+        checkStateOfAlarm()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +87,7 @@ class MainActivity : AppCompatActivity() {
 
         VolumeHandler.getVolumePermission(this)
 
+        PauseTimerService.registerListener(this)
 
 
 
@@ -140,31 +159,15 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
-
+        frameLayout.setOnClickListener { view ->
+            Log.e(Constants.APP_NAME, "Main: FabTester: Clicked")
+            checkStateOfAlarm()
+        }
         button_check.setOnClickListener { view ->
             //get current state
             checkStateOfAlarm()
             Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: Clicked")
-
-            if(button_check.text == getString(R.string.timecheck_start)){
-                Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: Start"+button_check.text)
-                AlarmHandler.createRepeatingTimecheck(this)
-                fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_started))
-                SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
-
-                button_check.text=getString(R.string.timecheck_stop)
-            }else{
-                Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: Stop"+button_check.text)
-                AlarmHandler.removeRepeatingTimecheck(this)
-                fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
-                SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,false)
-
-
-                button_check.text=getString(R.string.timecheck_start)
-            }
-
-
-
+            buttonState()
         }
 
 
@@ -221,6 +224,30 @@ class MainActivity : AppCompatActivity() {
         sharedPref.registerOnSharedPreferenceChangeListener(listener)
 
 
+    }
+
+    private fun buttonState() {
+        if(button_check.text == getString(R.string.timecheck_start)){
+            Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: Start: "+button_check.text)
+            AlarmHandler.createRepeatingTimecheck(this)
+            fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_started))
+            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
+
+            button_check.text=getString(R.string.timecheck_stop)
+        }else if(button_check.text == getString(R.string.timecheck_pause)){
+            Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: Paused: "+button_check.text)
+            AlarmHandler.createRepeatingTimecheck(this)
+            fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_paused))
+            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
+        }else{
+            Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: Stop: "+button_check.text)
+            AlarmHandler.removeRepeatingTimecheck(this)
+            fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
+            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,false)
+
+
+            button_check.text=getString(R.string.timecheck_start)
+        }
     }
 
     fun setFabStarted(fab: FloatingActionButton, text: TextView){
@@ -289,6 +316,10 @@ class MainActivity : AppCompatActivity() {
         if(AlarmHandler.checkIfNextAlarmExists(this)){
             setFabStarted(fab, fabTextView)
             button_check.text=getString(R.string.timecheck_stop)
+        }else if (PauseTimerService.isTimerRunning()){
+            Log.e(Constants.APP_NAME, "Main: checkStateOfAlarm: State: Paused")
+            fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_paused))
+            button_check.text=getString(R.string.timecheck_pause)
         }else{
             setFabStopped(fab, fabTextView)
             button_check.text=getString(R.string.timecheck_start)

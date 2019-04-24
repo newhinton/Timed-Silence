@@ -6,6 +6,7 @@
 
 
     <color name="colorFab_started">#43A047</color>
+    <color name="colorFab_paused">#FFC107</color>
     <color name="colorFab_stopped">#E53935</color>
 
 

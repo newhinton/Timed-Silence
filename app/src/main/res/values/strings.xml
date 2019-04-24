@@ -20,4 +20,5 @@
     </string>
     <string name="GrantDND">Grant!</string>
     <string name="qs_tile_label">Pause Timed Silence</string>
+    <string name="timecheck_pause">Paused</string>
 </resources>
