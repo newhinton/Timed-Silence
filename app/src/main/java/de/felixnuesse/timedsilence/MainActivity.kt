@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         }
         button_check.setOnClickListener { view ->
             Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: Clicked")
-            buttonState()
+            setHandlerState()
         }
 
 
@@ -236,26 +236,41 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: "+button_check.text)
 
+        if(AlarmHandler.checkIfNextAlarmExists(this)){
+            setFabStarted(fab, fabTextView)
+        }else if(PauseTimerService.isTimerRunning()){
+            setFabPaused(fab, fabTextView)
+        }else{
+            setFabStopped(fab, fabTextView)
+        }
+        updateTimeCheckDisplay()
+    }
+
+    private fun setHandlerState() {
+
+        Log.e(Constants.APP_NAME, "Main: setHandlerState: State: "+button_check.text)
+
         if(button_check.text == getString(R.string.timecheck_start)){
 
             AlarmHandler.createRepeatingTimecheck(this)
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
-            setFabStarted(fab, fabTextView)
+
 
         }else if(button_check.text == getString(R.string.timecheck_paused)){
 
             AlarmHandler.createRepeatingTimecheck(this)
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
-            setFabPaused(fab, fabTextView)
+            PauseTimerService.cancelTimer()
 
         }else{
 
             AlarmHandler.removeRepeatingTimecheck(this)
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,false)
-            setFabStopped(fab, fabTextView)
+
         }
-        updateTimeCheckDisplay()
+        buttonState()
     }
+
 
     fun setFabStarted(fab: FloatingActionButton, text: TextView){
         text.text = getString(R.string.timecheck_running)

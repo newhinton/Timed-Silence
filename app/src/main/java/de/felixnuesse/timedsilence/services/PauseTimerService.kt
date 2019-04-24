@@ -8,6 +8,7 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import android.R.string.cancel
 import android.app.AlarmManager
+import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
 import android.support.v4.content.ContextCompat.getSystemService
 import android.os.Vibrator
@@ -44,13 +45,15 @@ import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 
 class PauseTimerService : Service() {
 
-    var mTimer: CountDownTimer? = null
+
 
 
     companion object {
 
         var mCurentLengthIndex : Int = 0
         var mIsRunning: Boolean = false
+
+        var mTimer: CountDownTimer? = null
 
         var mListenerList= arrayListOf<TimerInterface>()
 
@@ -63,6 +66,27 @@ class PauseTimerService : Service() {
 
         fun isTimerRunning(): Boolean{
             return mIsRunning
+        }
+
+        fun finishTimer(context: Context){
+
+            AlarmHandler.createRepeatingTimecheck(context)
+            for (interfaceElement in mListenerList){
+                interfaceElement.timerFinished()
+            }
+
+            mTimer!!.cancel()
+            mIsRunning=false
+        }
+
+        fun cancelTimer(){
+
+            for (interfaceElement in mListenerList){
+                interfaceElement.timerFinished()
+            }
+
+            mTimer!!.cancel()
+            mIsRunning=false
         }
 
     }
@@ -134,7 +158,6 @@ class PauseTimerService : Service() {
                 Log.e(Constants.APP_NAME, "PauseTimerService: Timer($milliseconds): ended, restarting checks!")
                 AlarmHandler.createRepeatingTimecheck(applicationContext)
                 for (interfaceElement in mListenerList){
-                    //Log.e(Constants.APP_NAME, "PauseTimerService: Timer update interfaces")
                     interfaceElement.timerFinished()
                 }
                 mIsRunning=false
