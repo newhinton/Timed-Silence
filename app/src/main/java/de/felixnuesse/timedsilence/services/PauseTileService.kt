@@ -139,8 +139,4 @@ class PauseTileService: TileService(), TimerInterface {
         tile.updateTile()
     }
 
-    fun toastMaker(){
-        val i =Intent(this, ToastService::class.java)
-        startService(i)
-    }
 }
