@@ -188,6 +188,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         return true;
     }
 
+    override fun timerStarted(timeAsLong: Long) {}
+
     override fun timerReduced(timeAsLong: Long) {
         textViewPausedTimestamp.visibility= View.VISIBLE
         label_Paused_until.visibility= View.VISIBLE

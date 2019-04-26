@@ -21,6 +21,16 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+        <receiver android:name=".widgets.AHourWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/ahour_widget_info"/>
+        </receiver>
+
         <activity android:name=".activities.SettingsMainActivity">
         </activity>
         <activity android:name=".activities.SettingsVolumeActivity">
@@ -52,17 +62,17 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+
         <service
                 android:name=".services.PauseTileService"
                 android:icon="@drawable/ic_delete_black_24dp"
                 android:label="pause"
                 android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE"/>
             </intent-filter>
         </service>
-        <service android:name="de.felixnuesse.timedsilence.services.PauseTimerService"/>
+        <service android:name=".services.PauseTimerService"/>
     </application>
 
 </manifest>

@@ -21,4 +21,6 @@
     <string name="GrantDND">Grant!</string>
     <string name="qs_tile_label">Pause Timed Silence</string>
     <string name="timecheck_paused">restart</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

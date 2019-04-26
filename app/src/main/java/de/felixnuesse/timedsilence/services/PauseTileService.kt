@@ -66,12 +66,11 @@ class PauseTileService: TileService(), TimerInterface {
         }
     }
 
+    override fun timerStarted(timeAsLong: Long) {
+    }
+
     override fun timerReduced(timeAsLong: Long) {
-
-
-
         updateTile(getTimestampInProperLength(timeAsLong), Tile.STATE_ACTIVE)
-
     }
 
     override fun timerFinished() {
