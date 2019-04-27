@@ -21,16 +21,6 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <receiver android:name=".widgets.AHourWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-
-            <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/ahour_widget_info"/>
-        </receiver>
-
         <activity android:name=".activities.SettingsMainActivity">
         </activity>
         <activity android:name=".activities.SettingsVolumeActivity">
@@ -74,6 +64,35 @@
         </service>
         <service android:name=".services.PauseTimerService"/>
         <service android:name=".services.WidgetService"/>
+
+        <receiver android:name=".widgets.OneHourWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/ahour_widget_info"/>
+        </receiver>
+        <receiver android:name=".widgets.ThreeHourWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/ahour_widget_info"/>
+        </receiver>
+        <receiver android:name=".widgets.EightHourWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/ahour_widget_info"/>
+        </receiver>
+
     </application>
 
 </manifest>

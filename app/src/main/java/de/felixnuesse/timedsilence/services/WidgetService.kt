@@ -3,13 +3,15 @@ package de.felixnuesse.timedsilence.services
 import android.app.Service
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
-import android.support.v4.view.accessibility.AccessibilityEventCompat.setAction
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
-import de.felixnuesse.timedsilence.widgets.AHourWidget
+import de.felixnuesse.timedsilence.widgets.AbstractHourWidget
+import de.felixnuesse.timedsilence.widgets.EightHourWidget
+import de.felixnuesse.timedsilence.widgets.OneHourWidget
+import de.felixnuesse.timedsilence.widgets.ThreeHourWidget
 
 
 /**
@@ -54,7 +56,7 @@ class WidgetService : Service(), TimerInterface {
     }
 
     override fun timerFinished() {
-
+        setTimeOnWidgets(0)
     }
 
 
@@ -70,23 +72,30 @@ class WidgetService : Service(), TimerInterface {
     fun setTimeOnWidgets(timeAsLong: Long){
 
 
-        val intent = Intent(this, AHourWidget::class.java)
-        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-        intent.putExtra("test_widget",timeAsLong)
-
-
+        sendBroadcast(updateWidgetIntentByName(OneHourWidget::class.java))
+        sendBroadcast(updateWidgetIntentByName(ThreeHourWidget::class.java))
+        sendBroadcast(updateWidgetIntentByName(EightHourWidget::class.java))
 
         Log.e(Constants.APP_NAME,"WidgetService: Updated Widgets!")
+
+    }
+
+
+    fun updateWidgetIntentByName(name: Class<*>):Intent{
+
+        val intent = Intent(this, name)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
 
         // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
         // since it seems the onUpdate() is only fired on that:
 
         val awm= AppWidgetManager.getInstance(application)
-        val comname=ComponentName(application, AHourWidget::class.java)
+        val comname=ComponentName(application, name)
         val ids = awm.getAppWidgetIds(comname)
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
-        sendBroadcast(intent)
 
+
+        return intent
     }
 
 

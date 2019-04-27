@@ -57,6 +57,7 @@ class PauseTimerService : Service() {
 
         var mTimer: CountDownTimer? = null
         var mTimerTimeLeft: Long = -1
+        var mTimerTimeInitial: Long = -1
 
         var mListenerList= arrayListOf<TimerInterface>()
 
@@ -80,6 +81,29 @@ class PauseTimerService : Service() {
             Log.e(Constants.APP_NAME,"PauseTileService: service started")
             context.startService(i)
         }
+
+        /**
+         * This starts the autotimer. If it is already running, it cancels it and starts the next autotime in the array.
+         */
+        fun startTimer(context: Context, timeInMs: Long){
+            val i =Intent(context, PauseTimerService::class.java)
+            i.putExtra(Constants.SERVICE_INTENT_DELAY_ACTION,Constants.SERVICE_INTENT_DELAY_ACTION)
+            i.putExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, timeInMs)
+            Log.e(Constants.APP_NAME,"PauseTileService: service started with custom time")
+            context.startService(i)
+        }
+
+        /**
+         * This toggles the timer. If it is already running, it cancels it .
+         */
+        fun toggleTimer(context: Context, timeInMs: Long){
+            val i =Intent(context, PauseTimerService::class.java)
+            i.putExtra(Constants.SERVICE_INTENT_DELAY_ACTION,Constants.SERVICE_INTENT_DELAY_ACTION_TOGGLE)
+            i.putExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, timeInMs)
+            Log.e(Constants.APP_NAME,"PauseTileService: service toggled with custom time")
+            context.startService(i)
+        }
+
 
         /**
          * This cancels a currently running timer immediately. Also it informs all registered listener that the timer has reached its end and is now finished. Also resets the auto-timer to the first value.
@@ -138,16 +162,30 @@ class PauseTimerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
 
+        //Todo: overhaul this stupid mess
+
         //super.onBind(intent)
         Log.e(Constants.APP_NAME, "PauseTimerService: Intent is called")
 
-        if (intent?.getStringExtra(Constants.SERVICE_INTENT_DELAY_ACTION).equals(Constants.SERVICE_INTENT_DELAY_ACTION)){
-            Log.e(Constants.APP_NAME, "PauseTimerService: Intent is pause "+intent?.getStringExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT))
-            AlarmHandler.removeRepeatingTimecheck(applicationContext)
+        var toggle=false;
 
-            //resetTimerSystem()
+        if (intent?.getStringExtra(Constants.SERVICE_INTENT_DELAY_ACTION).equals(Constants.SERVICE_INTENT_DELAY_ACTION_TOGGLE)){
+            Log.e(Constants.APP_NAME,"PauseTileService: service toggled")
+            if(mIsRunning){
+                PauseTimerService.finishTimer(this)
+                resetTimerSystem()
+            }else{
+                toggle=true
+            }
+        }
+
+        if (intent?.getStringExtra(Constants.SERVICE_INTENT_DELAY_ACTION).equals(Constants.SERVICE_INTENT_DELAY_ACTION) || toggle){
 
             var time: Long= -1
+
+            Log.e(Constants.APP_NAME, "PauseTimerService: Intent is pause "+intent?.getLongExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, time))
+            AlarmHandler.removeRepeatingTimecheck(applicationContext)
+
             val ie = intent?.getLongExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, time)
 
             mTimer?.cancel()
@@ -182,6 +220,7 @@ class PauseTimerService : Service() {
             Toast.makeText(this, "Restarted Regular Checking in (${PauseTimerService.getTimestampInProperLength(milliseconds)})", Toast.LENGTH_SHORT).show()
         }
 
+        mTimerTimeInitial=milliseconds
         val timer = object : CountDownTimer(milliseconds, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 mIsRunning=true
@@ -209,6 +248,7 @@ class PauseTimerService : Service() {
     private fun resetTimerSystem(){
         mIsRunning=false
         mTimerTimeLeft=-1
+        mTimerTimeInitial=-1
         //reset autotimer when finished
         mCurentLengthIndex=0
     }

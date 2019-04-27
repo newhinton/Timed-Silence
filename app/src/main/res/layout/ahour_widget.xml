@@ -3,33 +3,25 @@
                 android:layout_height="match_parent"
                 android:padding="@dimen/widget_margin">
 
-    <ImageButton
-            android:id="@+id/appwidget_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/appwidget_text"
-            android:background="@null"
-            android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_av_timer_black_24dp"
-    />
     <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="@+id/appwidget_text"
-            android:layout_below="@+id/appwidget_text" android:id="@+id/layout_descriptor">
+            android:layout_centerInParent="true"
+    >
+        <ImageButton
+                android:id="@+id/appwidget_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/appwidget_text"
+                android:background="@null"
+                android:src="@drawable/ic_av_timer_black_24dp"/>
         <TextView
                 android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textViewHours"/>
-        <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textViewHours_label"/>
+                android:id="@+id/widget_tv_label" android:textAlignment="center"/>
     </LinearLayout>
 
 </RelativeLayout>
