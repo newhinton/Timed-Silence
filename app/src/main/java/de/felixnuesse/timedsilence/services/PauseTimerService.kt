@@ -15,6 +15,8 @@ import android.os.Vibrator
 import android.widget.Toast
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -54,6 +56,7 @@ class PauseTimerService : Service() {
         var mIsRunning: Boolean = false
 
         var mTimer: CountDownTimer? = null
+        var mTimerTimeLeft: Long = -1
 
         var mListenerList= arrayListOf<TimerInterface>()
 
@@ -68,6 +71,15 @@ class PauseTimerService : Service() {
             return mIsRunning
         }
 
+        /**
+         * This starts the autotimer. If it is already running, it cancels it and starts the next autotime in the array.
+         */
+        fun startAutoTimer(context: Context){
+            val i =Intent(context, PauseTimerService::class.java)
+            i.putExtra(Constants.SERVICE_INTENT_DELAY_ACTION,Constants.SERVICE_INTENT_DELAY_ACTION)
+            Log.e(Constants.APP_NAME,"PauseTileService: service started")
+            context.startService(i)
+        }
 
         /**
          * This cancels a currently running timer immediately. Also it informs all registered listener that the timer has reached its end and is now finished. Also resets the auto-timer to the first value.
@@ -99,6 +111,20 @@ class PauseTimerService : Service() {
             mIsRunning=false
         }
 
+        fun getTimestampInProperLength(timeAsLong: Long):String{
+            val date = Date(timeAsLong)
+            val format: SimpleDateFormat?
+
+            if(timeAsLong>=Constants.HOUR){
+                format = SimpleDateFormat("HH:mm:ss")
+            }else {
+                format = SimpleDateFormat("mm:ss")
+            }
+
+            format.timeZone = TimeZone.getTimeZone("UTC")
+            return format.format(date)
+        }
+
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -118,6 +144,8 @@ class PauseTimerService : Service() {
         if (intent?.getStringExtra(Constants.SERVICE_INTENT_DELAY_ACTION).equals(Constants.SERVICE_INTENT_DELAY_ACTION)){
             Log.e(Constants.APP_NAME, "PauseTimerService: Intent is pause "+intent?.getStringExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT))
             AlarmHandler.removeRepeatingTimecheck(applicationContext)
+
+            //resetTimerSystem()
 
             var time: Long= -1
             val ie = intent?.getLongExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, time)
@@ -151,12 +179,13 @@ class PauseTimerService : Service() {
     fun timer(milliseconds: Long) : CountDownTimer{
 
         if(!AlarmHandler.checkIfNextAlarmExists(this)){
-            Toast.makeText(this, "Restarted Regular Checking in (${PauseTileService.getTimestampInProperLength(milliseconds)})", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Restarted Regular Checking in (${PauseTimerService.getTimestampInProperLength(milliseconds)})", Toast.LENGTH_SHORT).show()
         }
 
         val timer = object : CountDownTimer(milliseconds, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 mIsRunning=true
+                mTimerTimeLeft=millisUntilFinished
                // Log.e(Constants.APP_NAME, "PauseTimerService: Timer($seconds): running, ${millisUntilFinished/1000} left")
                 for (interfaceElement in mListenerList){
                     //Log.e(Constants.APP_NAME, "PauseTimerService: Timer update interfaces")
@@ -170,13 +199,18 @@ class PauseTimerService : Service() {
                 for (interfaceElement in mListenerList){
                     interfaceElement.timerFinished()
                 }
-                mIsRunning=false
-                //reset autotimer when finished
-                mCurentLengthIndex=0
+                resetTimerSystem()
             }
         }
         mTimer = timer
         return timer
+    }
+
+    private fun resetTimerSystem(){
+        mIsRunning=false
+        mTimerTimeLeft=-1
+        //reset autotimer when finished
+        mCurentLengthIndex=0
     }
 
 

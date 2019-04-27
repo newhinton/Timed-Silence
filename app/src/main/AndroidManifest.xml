@@ -73,6 +73,7 @@
             </intent-filter>
         </service>
         <service android:name=".services.PauseTimerService"/>
+        <service android:name=".services.WidgetService"/>
     </application>
 
 </manifest>

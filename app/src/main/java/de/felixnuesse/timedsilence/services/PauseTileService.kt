@@ -50,27 +50,13 @@ class PauseTileService: TileService(), TimerInterface {
         const val state_unused= "1"
 
         var icon = R.drawable.ic_av_timer_black_24dp
-
-        fun getTimestampInProperLength(timeAsLong: Long):String{
-            val date = Date(timeAsLong)
-            val format:SimpleDateFormat?
-
-            if(timeAsLong>=Constants.HOUR){
-                format = SimpleDateFormat("HH:mm:ss")
-            }else {
-                format = SimpleDateFormat("mm:ss")
-            }
-
-            format.timeZone = TimeZone.getTimeZone("UTC")
-            return format.format(date)
-        }
     }
 
     override fun timerStarted(timeAsLong: Long) {
     }
 
     override fun timerReduced(timeAsLong: Long) {
-        updateTile(getTimestampInProperLength(timeAsLong), Tile.STATE_ACTIVE)
+        updateTile(PauseTimerService.getTimestampInProperLength(timeAsLong), Tile.STATE_ACTIVE)
     }
 
     override fun timerFinished() {
@@ -83,11 +69,7 @@ class PauseTileService: TileService(), TimerInterface {
 
         updateTile(Tile.STATE_ACTIVE)
 
-        val i =Intent(this, PauseTimerService::class.java)
-        i.putExtra(Constants.SERVICE_INTENT_DELAY_ACTION,Constants.SERVICE_INTENT_DELAY_ACTION)
-        Log.e(APP_NAME,"PauseTileService: service started")
-        startService(i)
-        // Called when the user click the tile
+        PauseTimerService.startAutoTimer(this)
     }
 
     override fun onTileRemoved() {

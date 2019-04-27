@@ -59,6 +59,7 @@ import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.VolumeHandler
 import de.felixnuesse.timedsilence.services.PauseTileService
 import de.felixnuesse.timedsilence.services.PauseTimerService
+import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -151,6 +152,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         PauseTimerService.registerListener(this)
 
+        // use this to start and trigger a service
+        val i = Intent(this, WidgetService::class.java)
+        // potentially add data to the intent
+        i.putExtra("KEY1", "Value to be used by the service");
+        startService(i)
+
 
         buttonState()
     }
@@ -193,7 +200,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     override fun timerReduced(timeAsLong: Long) {
         textViewPausedTimestamp.visibility= View.VISIBLE
         label_Paused_until.visibility= View.VISIBLE
-        textViewPausedTimestamp.text=PauseTileService.getTimestampInProperLength(timeAsLong);
+        textViewPausedTimestamp.text=PauseTimerService.getTimestampInProperLength(timeAsLong);
         buttonState()
     }
 
