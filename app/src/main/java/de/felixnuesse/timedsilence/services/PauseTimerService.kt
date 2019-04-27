@@ -253,6 +253,5 @@ class PauseTimerService : Service() {
         mCurentLengthIndex=0
     }
 
-
 }
 

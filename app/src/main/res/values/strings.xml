@@ -23,4 +23,5 @@
     <string name="timecheck_paused">restart</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="pause_check_schedule">Pause Timed Silence</string>
 </resources>

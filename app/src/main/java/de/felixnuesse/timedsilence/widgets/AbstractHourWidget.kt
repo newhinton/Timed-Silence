@@ -55,12 +55,13 @@ abstract class AbstractHourWidget : AppWidgetProvider() {
 
             val appWidgetManager = AppWidgetManager.getInstance(context)
 
-            val remoteViews = RemoteViews(context.packageName, R.layout.ahour_widget)
+            val remoteViews = RemoteViews(context.packageName, R.layout.abstract_hour_pause_widget)
             val watchWidget = ComponentName(context, mWidgetClass)
 
             Log.e(Constants.APP_NAME, "AbstractHourWidget($mWidgetName): A widget was clicked!")
 
-            PauseTimerService.toggleTimer(context, mWidgetTime)
+
+            toggleAction(context)
 
             appWidgetManager.updateAppWidget(watchWidget, remoteViews)
 
@@ -70,29 +71,50 @@ abstract class AbstractHourWidget : AppWidgetProvider() {
     protected fun getPendingSelfIntent(context: Context, action: String): PendingIntent {
         val intent = Intent(context, mWidgetClass)
         intent.action = action
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
+        return PendingIntent.getBroadcast(context, 0, intent, 0)
     }
 
     private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
 
-        val views = RemoteViews(context.packageName, R.layout.ahour_widget)
+        val views = RemoteViews(context.packageName, R.layout.abstract_hour_pause_widget)
 
 
-        views.setOnClickPendingIntent(R.id.appwidget_text, getPendingSelfIntent(context, SYNC_CLICKED));
+        views.setOnClickPendingIntent(R.id.widget_abstracthour_imagebutton, getPendingSelfIntent(context, SYNC_CLICKED))
+        views.setOnClickPendingIntent(R.id.widget_abstracthour_textview, getPendingSelfIntent(context, SYNC_CLICKED))
 
-        val timetodisplay: String
-
-        if (PauseTimerService.isTimerRunning() && PauseTimerService.mTimerTimeInitial == mWidgetTime) {
-            timetodisplay = PauseTimerService.getTimestampInProperLength(PauseTimerService.mTimerTimeLeft)
-
+        val timetodisplay: String = if (buttonTextDecider()) {
+            PauseTimerService.getTimestampInProperLength(PauseTimerService.mTimerTimeLeft)
         } else {
-            timetodisplay = PauseTimerService.getTimestampInProperLength(mWidgetTime)
+            getDefaultButtonText(context)
         }
 
-        views.setTextViewText(R.id.widget_tv_label, "Pause for $timetodisplay")
+        views.setTextViewText(R.id.widget_abstracthour_textview, "Pause for $timetodisplay")
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views)
+    }
+
+    /**
+     * If pause is already running, and it was not created by the instance of this widget, stop the timer and then restart it with the current time.
+     * If it was started by this instance, stop it.
+     */
+    open fun toggleAction(context: Context){
+
+        if(PauseTimerService.isTimerRunning()){
+            if(PauseTimerService.mTimerTimeInitial!=mWidgetTime){
+                PauseTimerService.cancelTimer()
+            }
+        }
+
+        PauseTimerService.toggleTimer(context, mWidgetTime)
+    }
+
+    open fun getDefaultButtonText(context: Context):String{
+        return PauseTimerService.getTimestampInProperLength(mWidgetTime)
+    }
+
+    open fun buttonTextDecider():Boolean{
+        return PauseTimerService.isTimerRunning() && PauseTimerService.mTimerTimeInitial == mWidgetTime
     }
 }
 

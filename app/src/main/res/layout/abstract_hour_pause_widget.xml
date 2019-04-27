@@ -10,7 +10,7 @@
             android:layout_centerInParent="true"
     >
         <ImageButton
-                android:id="@+id/appwidget_text"
+                android:id="@+id/widget_abstracthour_imagebutton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -18,10 +18,10 @@
                 android:background="@null"
                 android:src="@drawable/ic_av_timer_black_24dp"/>
         <TextView
-                android:text="TextView"
+                android:text="@string/pause_check_schedule"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/widget_tv_label" android:textAlignment="center"/>
+                android:id="@+id/widget_abstracthour_textview" android:textAlignment="center"/>
     </LinearLayout>
 
 </RelativeLayout>

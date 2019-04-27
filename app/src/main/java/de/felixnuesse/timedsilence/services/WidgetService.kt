@@ -8,10 +8,7 @@ import android.os.IBinder
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
-import de.felixnuesse.timedsilence.widgets.AbstractHourWidget
-import de.felixnuesse.timedsilence.widgets.EightHourWidget
-import de.felixnuesse.timedsilence.widgets.OneHourWidget
-import de.felixnuesse.timedsilence.widgets.ThreeHourWidget
+import de.felixnuesse.timedsilence.widgets.*
 
 
 /**
@@ -75,6 +72,7 @@ class WidgetService : Service(), TimerInterface {
         sendBroadcast(updateWidgetIntentByName(OneHourWidget::class.java))
         sendBroadcast(updateWidgetIntentByName(ThreeHourWidget::class.java))
         sendBroadcast(updateWidgetIntentByName(EightHourWidget::class.java))
+        sendBroadcast(updateWidgetIntentByName(AutoHourWidget::class.java))
 
         Log.e(Constants.APP_NAME,"WidgetService: Updated Widgets!")
 
