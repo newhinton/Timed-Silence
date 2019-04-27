@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.services;
+package de.felixnuesse.timedsilence.services
 
 import android.app.Service
 import android.content.Intent
@@ -68,6 +68,10 @@ class PauseTimerService : Service() {
             return mIsRunning
         }
 
+
+        /**
+         * This cancels a currently running timer immediately. Also it informs all registered listener that the timer has reached its end and is now finished. Also resets the auto-timer to the first value.
+         */
         fun finishTimer(context: Context){
 
             AlarmHandler.createRepeatingTimecheck(context)
@@ -76,15 +80,21 @@ class PauseTimerService : Service() {
             }
 
             mTimer!!.cancel()
+            mCurentLengthIndex=0
             mIsRunning=false
         }
 
+        /**
+         * This cancels a timer and informs listeners about it beeing finished. Does not restart alarmchecks
+         */
         fun cancelTimer(){
 
             for (interfaceElement in mListenerList){
                 interfaceElement.timerFinished()
             }
 
+
+            mCurentLengthIndex=0
             mTimer!!.cancel()
             mIsRunning=false
         }
@@ -161,6 +171,8 @@ class PauseTimerService : Service() {
                     interfaceElement.timerFinished()
                 }
                 mIsRunning=false
+                //reset autotimer when finished
+                mCurentLengthIndex=0
             }
         }
         mTimer = timer
