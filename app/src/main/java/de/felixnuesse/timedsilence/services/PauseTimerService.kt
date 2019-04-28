@@ -1,18 +1,18 @@
 package de.felixnuesse.timedsilence.services
 
-import android.app.Service
+import android.app.*
 import android.content.Intent
 import android.os.CountDownTimer
 import android.os.IBinder
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
-import android.R.string.cancel
-import android.app.AlarmManager
+import de.felixnuesse.timedsilence.R
 import android.content.Context
-import android.content.Context.VIBRATOR_SERVICE
-import android.support.v4.content.ContextCompat.getSystemService
-import android.os.Vibrator
+import android.graphics.Color
+import android.os.Build
+import android.support.annotation.RequiresApi
 import android.widget.Toast
+import de.felixnuesse.timedsilence.MainActivity
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import java.text.SimpleDateFormat
@@ -79,7 +79,7 @@ class PauseTimerService : Service() {
             val i =Intent(context, PauseTimerService::class.java)
             i.putExtra(Constants.SERVICE_INTENT_DELAY_ACTION,Constants.SERVICE_INTENT_DELAY_ACTION)
             Log.e(Constants.APP_NAME,"PauseTileService: service started")
-            context.startService(i)
+            context.startForegroundService(i)
         }
 
         /**
@@ -90,7 +90,7 @@ class PauseTimerService : Service() {
             i.putExtra(Constants.SERVICE_INTENT_DELAY_ACTION,Constants.SERVICE_INTENT_DELAY_ACTION)
             i.putExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, timeInMs)
             Log.e(Constants.APP_NAME,"PauseTileService: service started with custom time")
-            context.startService(i)
+            context.startForegroundService(i)
         }
 
         /**
@@ -101,7 +101,7 @@ class PauseTimerService : Service() {
             i.putExtra(Constants.SERVICE_INTENT_DELAY_ACTION,Constants.SERVICE_INTENT_DELAY_ACTION_TOGGLE)
             i.putExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, timeInMs)
             Log.e(Constants.APP_NAME,"PauseTileService: service toggled with custom time")
-            context.startService(i)
+            context.startForegroundService(i)
         }
 
 
@@ -158,8 +158,47 @@ class PauseTimerService : Service() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(channelId: String, channelName: String): String{
+        val chan = NotificationChannel(channelId,
+            channelName, NotificationManager.IMPORTANCE_NONE)
+        chan.lightColor = Color.BLUE
+        chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+        val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        service.createNotificationChannel(chan)
+        return channelId
+    }
+
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
+
+
+
+        val channelId =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createNotificationChannel("my_service", "My Background Service")
+            } else {
+                // If earlier version channel ID is not used
+                // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
+                ""
+            }
+
+
+
+        val pendingIntent: PendingIntent = Intent(this, MainActivity::class.java).let { notificationIntent ->
+                PendingIntent.getActivity(this, 500, notificationIntent, 0)
+            }
+
+        val notification: Notification = Notification.Builder(this, channelId)
+            .setContentTitle("Title")
+            .setContentText("ContentText")
+            .setSmallIcon(R.drawable.ic_add_circle_outline_black_24dp)
+            .setContentIntent(pendingIntent)
+            .setTicker("ticker?")
+            .build()
+
+        startForeground(11211, notification)
 
 
         //Todo: overhaul this stupid mess
