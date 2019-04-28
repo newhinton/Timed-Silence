@@ -109,6 +109,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         }
         cursor.close()
 
+        db.close()
         return results
     }
 
@@ -167,8 +168,14 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val selection = SCHEDULE_ID + " LIKE ?"
         // Specify arguments in placeholder order.
         val selectionArgs = arrayOf(id.toString())
+
         // Issue SQL statement.
-        return db.delete(TABLE, selection, selectionArgs)
+        val retcode: Int = db.delete(TABLE, selection, selectionArgs)
+        db.close()
+
+        return retcode
+
+
 
     }
 
@@ -211,6 +218,8 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         Log.e(APP_NAME,"Database: Create: Result: ${newObject.name}")
 
+
+        db.close()
         return newObject
 
     }
@@ -237,6 +246,8 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             SCHEDULE_ID + " = ?",
             idofchangedobject
         )
+
+        db.close()
 
     }
 
