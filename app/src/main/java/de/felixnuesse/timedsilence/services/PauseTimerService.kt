@@ -8,13 +8,10 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 import android.content.Context
-import android.graphics.Color
-import android.os.Build
-import android.support.annotation.RequiresApi
 import android.widget.Toast
-import de.felixnuesse.timedsilence.MainActivity
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
+import de.felixnuesse.timedsilence.ui.PauseNotification
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -158,47 +155,10 @@ class PauseTimerService : Service() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(channelId: String, channelName: String): String{
-        val chan = NotificationChannel(channelId,
-            channelName, NotificationManager.IMPORTANCE_NONE)
-        chan.lightColor = Color.BLUE
-        chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
-        val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        service.createNotificationChannel(chan)
-        return channelId
-    }
-
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-
-
-
-        val channelId =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                createNotificationChannel("my_service", "My Background Service")
-            } else {
-                // If earlier version channel ID is not used
-                // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
-                ""
-            }
-
-
-
-        val pendingIntent: PendingIntent = Intent(this, MainActivity::class.java).let { notificationIntent ->
-                PendingIntent.getActivity(this, 500, notificationIntent, 0)
-            }
-
-        val notification: Notification = Notification.Builder(this, channelId)
-            .setContentTitle("Title")
-            .setContentText("ContentText")
-            .setSmallIcon(R.drawable.ic_add_circle_outline_black_24dp)
-            .setContentIntent(pendingIntent)
-            .setTicker("ticker?")
-            .build()
-
-        startForeground(11211, notification)
+        val pn = PauseNotification()
+        startForeground(11211, pn.startNotification(applicationContext))
 
 
         //Todo: overhaul this stupid mess
