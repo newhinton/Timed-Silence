@@ -247,15 +247,15 @@
                 android:id="@+id/textViewPausedTimestamp"
                 app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/frameLayout" android:layout_marginEnd="8dp"
-                tools:visibility="invisible"/>
+                tools:visibility="invisible" android:visibility="invisible"/>
         <TextView
-                android:text="Paused until:"
+                android:text="Paused for:"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/label_Paused_until" android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/textViewPausedTimestamp"
-                android:layout_marginEnd="8dp" tools:visibility="invisible"/>
+                android:layout_marginEnd="8dp" android:visibility="invisible"/>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
