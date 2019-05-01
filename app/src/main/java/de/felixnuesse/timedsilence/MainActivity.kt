@@ -195,16 +195,16 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         return true;
     }
 
-    override fun timerStarted(timeAsLong: Long) {}
+    override fun timerStarted(context: Context, timeAsLong: Long, timeAsString: String) {}
 
-    override fun timerReduced(timeAsLong: Long) {
+    override fun timerReduced(context: Context, timeAsLong: Long, timeAsString: String) {
         textViewPausedTimestamp.visibility= View.VISIBLE
         label_Paused_until.visibility= View.VISIBLE
         textViewPausedTimestamp.text=PauseTimerService.getTimestampInProperLength(timeAsLong);
         buttonState()
     }
 
-    override fun timerFinished() {
+    override fun timerFinished(context: Context) {
         textViewPausedTimestamp.visibility= View.INVISIBLE
         label_Paused_until.visibility= View.INVISIBLE
         buttonState()
@@ -269,7 +269,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
             AlarmHandler.createRepeatingTimecheck(this)
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
-            PauseTimerService.cancelTimer()
+            PauseTimerService.cancelTimer(this)
 
         }else{
 

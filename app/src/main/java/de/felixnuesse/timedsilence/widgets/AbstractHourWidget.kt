@@ -102,7 +102,7 @@ abstract class AbstractHourWidget : AppWidgetProvider() {
 
         if(PauseTimerService.isTimerRunning()){
             if(PauseTimerService.mTimerTimeInitial!=mWidgetTime){
-                PauseTimerService.cancelTimer()
+                PauseTimerService.cancelTimer(context)
             }
         }
 

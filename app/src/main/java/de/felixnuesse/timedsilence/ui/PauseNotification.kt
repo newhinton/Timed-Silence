@@ -46,65 +46,66 @@ import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 
 class PauseNotification: TimerInterface{
 
-    lateinit var mContext: Context
 
-    override fun timerStarted(timeAsLong: Long) {
+    companion object{
+        const val NOTIFICATION_ID=11211
+    }
+
+    override fun timerStarted(context: Context, timeAsLong: Long, timeAsString: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun timerReduced(timeAsLong: Long) {
-        Log.e(APP_NAME, "test")
-        val n = startNotification(mContext, "time", PauseTimerService.getTimestampInProperLength(timeAsLong))
+    override fun timerReduced(context: Context, timeAsLong: Long, timeAsString: String) {
 
-        NotificationManagerCompat.from(mContext).notify(11211, n)
+        var notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(NOTIFICATION_ID, buildNotification(context, "Paused for:", PauseTimerService.getTimestampInProperLength(timeAsLong)).build())
 
 
     }
 
-    override fun timerFinished() {
-        cancelNotification(11211)
+    override fun timerFinished(context: Context) {
+        cancelNotification(NOTIFICATION_ID, context)
     }
 
 
-    fun cancelNotification(notifyId: Int) {
-        NotificationManagerCompat.from(mContext).cancel(notifyId)
+    fun cancelNotification(notifyId: Int, context: Context) {
+        NotificationManagerCompat.from(context).cancel(notifyId)
     }
 
-    fun startNotification(context: Context): Notification {
-        return startNotification(context, "title", "content")
-    }
-
-    fun startNotification(context: Context, title: String, content: String): Notification {
-
-
-        PauseTimerService.registerListener(this)
-        mContext=context
-
+    fun buildNotification(context: Context, title: String, content: String):Notification.Builder{
 
         var cid= "my_service"
         var cname="My Background Service"
 
-        val chan = NotificationChannel(cid, cname, NotificationManager.IMPORTANCE_NONE)
 
-        chan.lightColor = Color.BLUE
+        //NotificationManager.IMPORTANCE_NONE does not update
+        val chan = NotificationChannel(cid, cname, NotificationManager.IMPORTANCE_LOW)
+
         chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
 
         val service = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         service.createNotificationChannel(chan)
 
-        val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java).let { notificationIntent ->
+     /*   val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java).let { notificationIntent ->
             PendingIntent.getActivity(context, 500, notificationIntent, 0)
-        }
+        }*/
 
-        val notification: Notification = Notification.Builder(context, cid)
-            .setContentTitle("Title")
-            .setContentText("ContentText")
+        return Notification.Builder(context, cid)
+            .setContentTitle(title)
+            .setContentText(content)
             .setSmallIcon(R.drawable.ic_add_circle_outline_black_24dp)
-            .setContentIntent(pendingIntent)
-            .setOnlyAlertOnce(true)
-            .build()
-
-        return notification
+           // .setOnlyAlertOnce(true)
     }
+
+    fun startNotification(context: Context): Notification {
+        return startNotification(context, "Started!", "")
+    }
+
+    fun startNotification(context: Context, title: String, content: String): Notification {
+        PauseTimerService.registerListener(this)
+        return buildNotification(context, title, content).build()
+    }
+
+
 
 }

@@ -3,6 +3,7 @@ package de.felixnuesse.timedsilence.services
 import android.app.Service
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
@@ -44,15 +45,15 @@ class WidgetService : Service(), TimerInterface {
     }
 
 
-    override fun timerStarted(timeAsLong: Long) {
+    override fun timerStarted(context: Context, timeAsLong: Long, timeAsString: String) {
         setTimeOnWidgets(timeAsLong)
     }
 
-    override fun timerReduced(timeAsLong: Long) {
+    override fun timerReduced(context: Context, timeAsLong: Long, timeAsString: String) {
         setTimeOnWidgets(timeAsLong)
     }
 
-    override fun timerFinished() {
+    override fun timerFinished(context: Context) {
         setTimeOnWidgets(0)
     }
 

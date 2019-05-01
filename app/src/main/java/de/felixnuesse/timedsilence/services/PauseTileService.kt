@@ -1,5 +1,6 @@
 package de.felixnuesse.timedsilence.services
 
+import android.content.Context
 import android.graphics.drawable.Icon
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
@@ -52,14 +53,14 @@ class PauseTileService: TileService(), TimerInterface {
         var icon = R.drawable.ic_av_timer_black_24dp
     }
 
-    override fun timerStarted(timeAsLong: Long) {
+    override fun timerStarted(context: Context, timeAsLong: Long, timeAsString: String) {
     }
 
-    override fun timerReduced(timeAsLong: Long) {
+    override fun timerReduced(context: Context, timeAsLong: Long, timeAsString: String) {
         updateTile(PauseTimerService.getTimestampInProperLength(timeAsLong), Tile.STATE_ACTIVE)
     }
 
-    override fun timerFinished() {
+    override fun timerFinished(context: Context) {
         updateTile(getString(R.string.qs_tile_label), Tile.STATE_INACTIVE)
     }
 

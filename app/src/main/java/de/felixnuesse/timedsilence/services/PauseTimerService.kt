@@ -109,7 +109,7 @@ class PauseTimerService : Service() {
 
             AlarmHandler.createRepeatingTimecheck(context)
             for (interfaceElement in mListenerList){
-                interfaceElement.timerFinished()
+                interfaceElement.timerFinished(context)
             }
 
             mTimer!!.cancel()
@@ -120,10 +120,10 @@ class PauseTimerService : Service() {
         /**
          * This cancels a timer and informs listeners about it beeing finished. Does not restart alarmchecks
          */
-        fun cancelTimer(){
+        fun cancelTimer(context: Context){
 
             for (interfaceElement in mListenerList){
-                interfaceElement.timerFinished()
+                interfaceElement.timerFinished(context)
             }
 
 
@@ -158,7 +158,7 @@ class PauseTimerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         val pn = PauseNotification()
-        startForeground(11211, pn.startNotification(applicationContext))
+        startForeground(PauseNotification.NOTIFICATION_ID, pn.startNotification(applicationContext))
 
 
         //Todo: overhaul this stupid mess
@@ -166,12 +166,12 @@ class PauseTimerService : Service() {
         //super.onBind(intent)
         Log.e(Constants.APP_NAME, "PauseTimerService: Intent is called")
 
-        var toggle=false;
+        var toggle=false
 
         if (intent?.getStringExtra(Constants.SERVICE_INTENT_DELAY_ACTION).equals(Constants.SERVICE_INTENT_DELAY_ACTION_TOGGLE)){
             Log.e(Constants.APP_NAME,"PauseTileService: service toggled")
             if(mIsRunning){
-                PauseTimerService.finishTimer(this)
+                finishTimer(this)
                 resetTimerSystem()
             }else{
                 toggle=true
@@ -203,7 +203,7 @@ class PauseTimerService : Service() {
             }else{
                 time = ie as Long
             }
-            timer(time).start()
+            timer(time, this).start()
 
 
 
@@ -213,10 +213,10 @@ class PauseTimerService : Service() {
 
     }
 
-    fun timer(milliseconds: Long) : CountDownTimer{
+    fun timer(milliseconds: Long, context: Context) : CountDownTimer{
 
         if(!AlarmHandler.checkIfNextAlarmExists(this)){
-            Toast.makeText(this, "Restarted Regular Checking in (${PauseTimerService.getTimestampInProperLength(milliseconds)})", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Restarted Regular Checking in (${getTimestampInProperLength(milliseconds)})", Toast.LENGTH_SHORT).show()
         }
 
         mTimerTimeInitial=milliseconds
@@ -227,7 +227,7 @@ class PauseTimerService : Service() {
                // Log.e(Constants.APP_NAME, "PauseTimerService: Timer($seconds): running, ${millisUntilFinished/1000} left")
                 for (interfaceElement in mListenerList){
                     //Log.e(Constants.APP_NAME, "PauseTimerService: Timer update interfaces")
-                    interfaceElement.timerReduced(millisUntilFinished)
+                    interfaceElement.timerReduced(context, millisUntilFinished, getTimestampInProperLength(millisUntilFinished))
                 }
             }
 
@@ -235,7 +235,7 @@ class PauseTimerService : Service() {
                 Log.e(Constants.APP_NAME, "PauseTimerService: Timer($milliseconds): ended, restarting checks!")
                 AlarmHandler.createRepeatingTimecheck(applicationContext)
                 for (interfaceElement in mListenerList){
-                    interfaceElement.timerFinished()
+                    interfaceElement.timerFinished(context)
                 }
                 resetTimerSystem()
             }

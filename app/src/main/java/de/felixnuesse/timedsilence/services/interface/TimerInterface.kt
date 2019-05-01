@@ -1,5 +1,7 @@
 package de.felixnuesse.timedsilence.services.`interface`
 
+import android.content.Context
+
 /**
  * Copyright (C) 2019  Felix Nüsse
  * Created on 24.04.19 - 13:51
@@ -29,8 +31,8 @@ package de.felixnuesse.timedsilence.services.`interface`
  */
 interface TimerInterface {
 
-    fun timerStarted(timeAsLong: Long)
-    fun timerReduced(timeAsLong: Long)
-    fun timerFinished()
+    fun timerStarted(context: Context, timeAsLong: Long, timeAsString: String)
+    fun timerReduced(context: Context, timeAsLong: Long, timeAsString: String)
+    fun timerFinished(context: Context)
 
 }
