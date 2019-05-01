@@ -82,15 +82,20 @@ class PauseTileService: TileService(), TimerInterface {
     override fun onTileAdded() {
         super.onTileAdded()
         updateTile(getString(R.string.qs_tile_label), Tile.STATE_ACTIVE)
-
-        // Do something when the user add the Tile
     }
 
     override fun onStartListening() {
         super.onStartListening()
         Log.e(APP_NAME,"PauseTileService: onStartListening")
         PauseTimerService.registerListener(this)
-        updateTile(getString(R.string.qs_tile_label), Tile.STATE_INACTIVE)
+
+        if(PauseTimerService.isTimerRunning()){
+            updateTile(getString(R.string.qs_tile_label), Tile.STATE_ACTIVE)
+        }else{
+            updateTile(getString(R.string.qs_tile_label), Tile.STATE_INACTIVE)
+        }
+
+        updateTile(getString(R.string.qs_tile_label))
 
         // Called when the Tile becomes visible
     }
