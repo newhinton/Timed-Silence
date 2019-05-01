@@ -157,10 +157,6 @@ class PauseTimerService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        val pn = PauseNotification()
-        startForeground(PauseNotification.NOTIFICATION_ID, pn.startNotification(applicationContext))
-
-
         //Todo: overhaul this stupid mess
 
         //super.onBind(intent)
@@ -199,10 +195,17 @@ class PauseTimerService : Service() {
                 Log.e(Constants.APP_NAME, "PauseTimerService: No custom time set, autotime: "+ mCurentLengthIndex+" : "+ Constants.TIME_PAUSE_SERVICE_LENGTH_ARRAY[mCurentLengthIndex])
 
                 time = Constants.TIME_PAUSE_SERVICE_LENGTH_ARRAY[mCurentLengthIndex].toLong()
+
                 mCurentLengthIndex++
             }else{
                 time = ie as Long
             }
+
+            if(time>0){
+                val pn = PauseNotification()
+                startForeground(PauseNotification.NOTIFICATION_ID, pn.startNotification(applicationContext, getTimestampInProperLength(time)))
+            }
+
             timer(time, this).start()
 
 
@@ -250,6 +253,9 @@ class PauseTimerService : Service() {
         mTimerTimeInitial=-1
         //reset autotimer when finished
         mCurentLengthIndex=0
+
+        stopForeground(false)
+        PauseNotification().cancelNotification(PauseNotification.NOTIFICATION_ID, this)
     }
 
 }

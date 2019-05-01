@@ -9,6 +9,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.support.v4.app.NotificationManagerCompat
 import android.util.Log
+import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.MainActivity
@@ -51,6 +52,9 @@ class PauseNotification: TimerInterface{
         const val NOTIFICATION_ID=11211
     }
 
+    var mNotfificationTitle="Paused for:"
+
+
     override fun timerStarted(context: Context, timeAsLong: Long, timeAsString: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -58,18 +62,23 @@ class PauseNotification: TimerInterface{
     override fun timerReduced(context: Context, timeAsLong: Long, timeAsString: String) {
 
         var notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(NOTIFICATION_ID, buildNotification(context, "Paused for:", PauseTimerService.getTimestampInProperLength(timeAsLong)).build())
+        notificationManager.notify(NOTIFICATION_ID, buildNotification(context, mNotfificationTitle, PauseTimerService.getTimestampInProperLength(timeAsLong)).build())
 
 
     }
 
     override fun timerFinished(context: Context) {
-        cancelNotification(NOTIFICATION_ID, context)
     }
 
 
     fun cancelNotification(notifyId: Int, context: Context) {
-        NotificationManagerCompat.from(context).cancel(notifyId)
+
+        Log.e(APP_NAME, "PauseNotification: Cancel Notification")
+
+        var notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(notifyId)
+
+
     }
 
     fun buildNotification(context: Context, title: String, content: String):Notification.Builder{
@@ -93,18 +102,25 @@ class PauseNotification: TimerInterface{
         return Notification.Builder(context, cid)
             .setContentTitle(title)
             .setContentText(content)
-            .setSmallIcon(R.drawable.ic_add_circle_outline_black_24dp)
-           // .setOnlyAlertOnce(true)
+            .setSmallIcon(R.drawable.ic_av_timer_black_24dp)
+            .setOnlyAlertOnce(true)
     }
 
     fun startNotification(context: Context): Notification {
-        return startNotification(context, "Started!", "")
+        return startNotification(context, mNotfificationTitle, "")
+    }
+
+    fun startNotification(context: Context, content: String): Notification {
+        PauseTimerService.registerListener(this)
+        return buildNotification(context, mNotfificationTitle, content).build()
     }
 
     fun startNotification(context: Context, title: String, content: String): Notification {
         PauseTimerService.registerListener(this)
         return buildNotification(context, title, content).build()
     }
+
+
 
 
 
