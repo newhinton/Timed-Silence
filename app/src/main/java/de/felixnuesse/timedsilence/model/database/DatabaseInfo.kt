@@ -30,19 +30,20 @@ package de.felixnuesse.timedsilence.model.database
 
 class DatabaseInfo{
     companion object {
-        val TABLE="timetable";
-        val SCHEDULE_ID= "id";
-        val SCHEDULE_START= "time_start";
-        val SCHEDULE_END= "time_end";
-        val SCHEDULE_SETTING= "schedule_volume";
-        val SCHEDULE_NAME= "schedule_name";
 
         // If you change the database schema, you must increment the database version.
-        const val DATABASE_VERSION = 1
-        const val DATABASE_NAME = "FeedReader.db"
+        const val DATABASE_VERSION = 2
+        const val DATABASE_NAME = "TimedSilence.db"
+
+        val SCHEDULE_TABLE="timetable"
+        val SCHEDULE_ID= "id"
+        val SCHEDULE_START= "time_start"
+        val SCHEDULE_END= "time_end"
+        val SCHEDULE_SETTING= "schedule_volume"
+        val SCHEDULE_NAME= "schedule_name"
 
         val SQL_CREATE_ENTRIES =
-            "CREATE TABLE ${TABLE} (" +
+            "CREATE TABLE ${SCHEDULE_TABLE} (" +
                     "${SCHEDULE_ID} INTEGER PRIMARY KEY," +
                     "${SCHEDULE_START} LONG," +
                     "${SCHEDULE_END} LONG," +
@@ -50,6 +51,18 @@ class DatabaseInfo{
                     "${SCHEDULE_NAME} TEXT)"
 
 
+        val WIFI_TABLE="wifi_timetable"
+        val WIFI_ID= "wifi_id"
+        val WIFI_TYPE= "wifi_type"
+        val WIFI_VOL_MODE= "wifi_volume_mode"
+        val WIFI_SSID= "wifi_ssid"
+
+        val SQL_CREATE_ENTRIES_WIFI =
+            "CREATE TABLE ${WIFI_TABLE} (" +
+                    "${WIFI_ID} INTEGER PRIMARY KEY," +
+                    "${WIFI_SSID} TEXT," +
+                    "${WIFI_VOL_MODE} INT," +
+                    "${WIFI_TYPE} INT)"
 
     }
 }

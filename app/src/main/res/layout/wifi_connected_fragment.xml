@@ -1,27 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.WifiConnectedFragment">
 
     <android.support.constraint.ConstraintLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".fragments.WifiConnectedFragment">
+            android:layout_height="match_parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" android:id="@+id/WifiRequestLocationContainer"
+            tools:visibility="visible">
+
+        <TextView
+                android:text="You need location access because wifi can be used to identify a location. We are not doing that, see X"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewRequestWifiPermissions"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="8dp"/>
         <Button
                 android:text="Request"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/buttonRequestWifiPermissions" app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"
-                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
+                android:id="@+id/buttonRequestWifiPermissions"
+                android:layout_marginEnd="161dp"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="162dp" android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/textViewRequestWifiPermissions"/>
-    <TextView
-            android:text="You need location access because wifi can be used to identify a location. We are not doing that, see X"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/textViewRequestWifiPermissions"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="32dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="32dp"/>
+    </android.support.constraint.ConstraintLayout>
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" tools:visibility="gone" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" android:id="@+id/WifiContentContainer">
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:orientation="vertical">
+                <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/wifi_recylcer_list_view"
+                            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                            app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="8dp"
+                            app:layout_constraintTop_toTopOf="parent"/>
+                    <TextView
+                            android:text="Add a new Wifi setting:"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:id="@+id/textView"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:layout_marginEnd="8dp"
+                            app:layout_constraintTop_toBottomOf="@+id/wifi_recylcer_list_view"
+                            app:layout_constraintHorizontal_bias="0.498"/>
+                    <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/button_wifi_add_fragment"
+                            android:layout_marginTop="12dp"
+                            app:layout_constraintTop_toBottomOf="@+id/textView"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.498"
+                            android:src="@drawable/ic_add_circle_outline_black_24dp" android:background="@null"/>
+                </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
+        </ScrollView>
+    </android.support.constraint.ConstraintLayout>
+
 
 </android.support.constraint.ConstraintLayout>

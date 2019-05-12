@@ -11,11 +11,17 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDUL
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_SETTING
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_START
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES
-import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.TABLE
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_TABLE
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import android.content.ContentValues
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.model.data.WifiObject
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_WIFI
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_ID
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_SSID
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_TABLE
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_TYPE
 
 
 /**
@@ -53,6 +59,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_ENTRIES)
+        db.execSQL(SQL_CREATE_ENTRIES_WIFI)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -88,7 +95,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val sortOrder = SCHEDULE_ID + " ASC"
 
         val cursor = db.query(
-            TABLE, // The table to query
+            SCHEDULE_TABLE, // The table to query
             projection, // The array of columns to return (pass null to get all)
             selection, // The columns for the WHERE clause
             selectionArgs, // don't group the rows
@@ -132,7 +139,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
 
         val cursor = db.query(
-            TABLE, // The table to query
+            SCHEDULE_TABLE, // The table to query
             projection, // The array of columns to return (pass null to get all)
             selection, // The columns for the WHERE clause
             selectionArgs, // don't group the rows
@@ -162,7 +169,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
      * @param id Switch to delete
      * @return amount of rows affected
      */
-    fun deleteEntry(id: Long): Int {
+    fun deleteScheduleEntry(id: Long): Int {
         val db = writableDatabase
         // Define 'where' part of query.
         val selection = SCHEDULE_ID + " LIKE ?"
@@ -170,7 +177,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val selectionArgs = arrayOf(id.toString())
 
         // Issue SQL statement.
-        val retcode: Int = db.delete(TABLE, selection, selectionArgs)
+        val retcode: Int = db.delete(SCHEDULE_TABLE, selection, selectionArgs)
         db.close()
 
         return retcode
@@ -184,7 +191,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
      * @param so Switch to create
      * @return id
      */
-    fun createEntry(so: ScheduleObject): ScheduleObject {
+    fun createScheduleEntry(so: ScheduleObject): ScheduleObject {
         val db = writableDatabase
 
         val projection = arrayOf<String>(
@@ -205,7 +212,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         values.put(SCHEDULE_SETTING, so.time_setting)
 
         // Insert the new row, returning the primary key value of the new row
-        val newRowId = db.insert(TABLE, null, values)
+        val newRowId = db.insert(SCHEDULE_TABLE, null, values)
         Log.e(APP_NAME,"Database: Create: RowID: $newRowId")
 
         val newObject = ScheduleObject("",0,0,0,newRowId)
@@ -224,7 +231,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
     }
 
-    fun updateEntry(so: ScheduleObject) {
+    fun updateScheduleEntry(so: ScheduleObject) {
         val db = writableDatabase
 
         // Create a new map of values, where column names are the keys
@@ -241,7 +248,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         // Insert the new row, returning the primary key value of the new row
         db.update(
-            TABLE,
+            SCHEDULE_TABLE,
             values,
             SCHEDULE_ID + " = ?",
             idofchangedobject
@@ -252,4 +259,116 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     }
 
 
+    fun getAllWifiEntries(): ArrayList<WifiObject> {
+        val db = readableDatabase
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        val projection = arrayOf<String>(
+            WIFI_ID,
+            WIFI_SSID,
+            WIFI_TYPE
+        )
+
+        // Filter results WHERE "title" = 'My Title'
+        val selection = ""
+        val selectionArgs = arrayOf<String>()
+
+        // How you want the results sorted in the resulting Cursor
+        val sortOrder = WIFI_ID + " ASC"
+
+        val cursor = db.query(
+            WIFI_TABLE, // The table to query
+            projection, // The array of columns to return (pass null to get all)
+            selection, // The columns for the WHERE clause
+            selectionArgs, // don't group the rows
+            null, null, // don't filter by row groups
+            sortOrder                                   // The sort order
+        )// The values for the WHERE clause
+        val results = arrayListOf<WifiObject>()
+        while (cursor.moveToNext()) {
+            val wo = WifiObject(
+                cursor.getLong(0),
+                cursor.getString(1),
+                cursor.getInt(2)
+            )
+
+            results.add(wo)
+        }
+        cursor.close()
+
+        db.close()
+
+
+       /* results.add(WifiObject(
+            0,
+            "eduroam",
+            1
+        ))
+
+        results.add(WifiObject(
+            1,
+            "bob.net",
+            2
+        ))*/
+
+
+        return results
+    }
+
+    /**
+     * Creates a wifi entry
+     * @param wifiObject WifiObject to create
+     * @return id
+     */
+    fun createWifiEntry(wifiObject: WifiObject): WifiObject {
+        val db = writableDatabase
+
+        val projection = arrayOf<String>(
+            WIFI_ID,
+            WIFI_SSID,
+            WIFI_TYPE
+        )
+
+
+        // Create a new map of values, where column names are the keys
+        val values = ContentValues()
+        //values.put(SCHEDULE_ID, so.id)
+        values.put(WIFI_SSID, wifiObject.ssid)
+        values.put(WIFI_TYPE, wifiObject.type)
+
+        // Insert the new row, returning the primary key value of the new row
+        val newRowId = db.insert(WIFI_TABLE, null, values)
+        Log.e(APP_NAME,"Database: CreateWifi: RowID: $newRowId")
+
+        val newObject = WifiObject(newRowId,wifiObject.ssid, wifiObject.type)
+
+        Log.e(APP_NAME,"Database: CreateWifi: Result: ${newObject.ssid}")
+
+        db.close()
+        return newObject
+
+    }
+
+    /**
+     * Deletes WifiEntry with the given id
+     * @param id WifiEntry to delete
+     * @return amount of rows affected
+     */
+    fun deleteWifiEntry(id: Long): Int {
+        val db = writableDatabase
+        // Define 'where' part of query.
+        val selection = WIFI_ID + " LIKE ?"
+        // Specify arguments in placeholder order.
+        val selectionArgs = arrayOf(id.toString())
+
+        // Issue SQL statement.
+        val retcode: Int = db.delete(WIFI_TABLE, selection, selectionArgs)
+        db.close()
+
+        return retcode
+
+
+
+    }
 }

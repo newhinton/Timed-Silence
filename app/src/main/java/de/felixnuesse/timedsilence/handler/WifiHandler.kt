@@ -89,5 +89,13 @@ class WifiHandler {
             }
 
         }
+
+        fun grantedWifiPermission(activity: Activity):Boolean{
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return false
+            }
+            return true
+
+        }
     }
 }

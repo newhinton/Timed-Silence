@@ -15,7 +15,6 @@ import android.text.InputType
 import android.widget.EditText
 import android.app.AlertDialog
 import android.content.Context
-import android.widget.TimePicker
 import android.app.TimePickerDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -24,7 +23,7 @@ import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import de.felixnuesse.timedsilence.ui.MyAdapter
+import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
 import java.text.DateFormat
 import java.util.*
 
@@ -46,12 +45,6 @@ class TimeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
-
-
-
-
 
         return inflater.inflate(R.layout.time_fragment, container, false)
     }
@@ -75,9 +68,9 @@ class TimeFragment : Fragment() {
         Log.e(APP_NAME, "TimeFragment: DatabaseResuluts: Size: "+db.getAllSchedules().size)
 
         viewManager = LinearLayoutManager(view.context)
-        viewAdapter = MyAdapter(db.getAllSchedules())
+        viewAdapter = ScheduleListAdapter(db.getAllSchedules())
 
-        my_recycler_view.apply {
+        time_fragment_recylcer_list_view.apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
@@ -194,10 +187,10 @@ class TimeFragment : Fragment() {
                     Log.e(APP_NAME, "TimeFragment: Schedulebuilder: D: "+selectedItem.toString())
 
                     val db = DatabaseHandler(context)
-                    db.createEntry(ScheduleObject(title,start_Time,end_Time, selectedItem,0))
-                    viewAdapter = MyAdapter(db.getAllSchedules())
+                    db.createScheduleEntry(ScheduleObject(title,start_Time,end_Time, selectedItem,0))
+                    viewAdapter = ScheduleListAdapter(db.getAllSchedules())
 
-                    my_recycler_view.apply {
+                    time_fragment_recylcer_list_view.apply {
                         // use this setting to improve performance if you know that changes
                         // in content do not change the layout size of the RecyclerView
                         setHasFixedSize(true)

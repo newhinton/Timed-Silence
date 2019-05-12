@@ -41,11 +41,9 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
-import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
 import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
-import de.felixnuesse.timedsilence.fragments.WifiSearchingFragment
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import android.content.res.ColorStateList
@@ -57,7 +55,6 @@ import de.felixnuesse.timedsilence.activities.SettingsMainActivity
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.VolumeHandler
-import de.felixnuesse.timedsilence.services.PauseTileService
 import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
@@ -321,15 +318,14 @@ class MainActivity : AppCompatActivity(), TimerInterface {
      * sequence.
      */
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-        override fun getCount(): Int = 4
+        override fun getCount(): Int = 3
 
         override fun getItem(position: Int): Fragment {
 
             when (position) {
                 0 -> return TimeFragment()
                 1 -> return WifiConnectedFragment()
-                2 -> return WifiSearchingFragment()
-                3 -> return CalendarEventFragment()
+                2 -> return CalendarEventFragment()
                 else -> return TimeFragment()
             }
         }

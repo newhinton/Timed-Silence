@@ -177,10 +177,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Wifi Connected" android:id="@+id/tabItem"/>
-        <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wifi Search"/>
 
         <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"

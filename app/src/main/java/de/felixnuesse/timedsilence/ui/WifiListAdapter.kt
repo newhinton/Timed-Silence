@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.Constants.Companion.WIFI_TYPE_CONNECTED
+import de.felixnuesse.timedsilence.Constants.Companion.WIFI_TYPE_SEARCHING
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.model.data.ScheduleObject
+import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import kotlinx.android.synthetic.main.adapter_schedules_list.view.*
-import java.text.DateFormat
-import java.util.*
+import kotlinx.android.synthetic.main.adapter_wifi_list.view.*
 import kotlin.collections.ArrayList
 
 
@@ -40,7 +40,7 @@ import kotlin.collections.ArrayList
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
-class MyAdapter(private val myDataset: ArrayList<ScheduleObject>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class WifiListAdapter(private val myDataset: ArrayList<WifiObject>) : RecyclerView.Adapter<WifiListAdapter.WifiViewHolder>() {
 
         fun removeAt(position: Int) {
                 myDataset.removeAt(position)
@@ -52,45 +52,40 @@ class MyAdapter(private val myDataset: ArrayList<ScheduleObject>) : RecyclerView
 // Complex data items may need more than one view per item, and
 // you provide access to all the views for a data item in a view holder.
 // Each data item is just a string in this case that is shown in a TextView.
-class MyViewHolder(val scheduleView: View) : RecyclerView.ViewHolder(scheduleView)
-
-
+class WifiViewHolder(val wifiView: View) : RecyclerView.ViewHolder(wifiView)
 
         // Create new views (invoked by the layout manager)
         override fun onCreateViewHolder(parent: ViewGroup,
-                                        viewType: Int): MyAdapter.MyViewHolder {
+                                        viewType: Int): WifiListAdapter.WifiViewHolder {
         // create a new view
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_schedules_list, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_wifi_list, parent, false)
         // set the view's size, margins, paddings and layout parameters
-        return MyViewHolder(view)
+        return WifiViewHolder(view)
         }
 
         // Replace the contents of a view (invoked by the layout manager)
-        override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: WifiViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-                val df = DateFormat.getTimeInstance(DateFormat.SHORT)
-                df.timeZone= TimeZone.getTimeZone("UTC")
-
-                holder.scheduleView.textView_schedule_row_title.text = myDataset.get(position).name
-                holder.scheduleView.textView_schedule_row_time_start.text = df.format(myDataset.get(position).time_start)
-                holder.scheduleView.textView_schedule_row_time_end.text =  df.format(myDataset.get(position).time_end)
 
 
-                holder.scheduleView.delete_schedule_element.setOnClickListener {
-                        DatabaseHandler(holder.scheduleView.context).deleteEntry(myDataset.get(position).id)
+                holder.wifiView.textView_wifi_row_title.text = myDataset.get(position).ssid
+                holder.wifiView.textView_wifi_row_time_start.text = myDataset.get(position).type.toString()
+
+
+                holder.wifiView.delete_wifi_element.setOnClickListener {
+                        DatabaseHandler(holder.wifiView.context).deleteWifiEntry(myDataset.get(position).id)
                         removeAt(position)
 
                 }
 
 
-                var imageID=R.drawable.ic_volume_up_black_24dp
-                when (myDataset.get(position).time_setting) {
-                        TIME_SETTING_LOUD -> imageID=R.drawable.ic_volume_up_black_24dp
-                        TIME_SETTING_VIBRATE -> imageID=R.drawable.ic_vibration_black_24dp
-                        TIME_SETTING_SILENT -> imageID=R.drawable.ic_volume_off_black_24dp
+                var imageID=R.drawable.ic_tap_and_play_black_24dp
+                when (myDataset.get(position).type) {
+                        WIFI_TYPE_CONNECTED -> imageID=R.drawable.ic_tap_and_play_black_24dp
+                        WIFI_TYPE_SEARCHING -> imageID=R.drawable.ic_search_black_24dp
                 }
-                holder.scheduleView.imageView_volume_state.setImageDrawable(holder.scheduleView.context.getDrawable(imageID))
+                holder.wifiView.imageView_wifi_type.setImageDrawable(holder.wifiView.context.getDrawable(imageID))
 
 
 

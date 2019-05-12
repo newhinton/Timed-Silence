@@ -36,6 +36,7 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.Constants.Companion.WIFI_TYPE_CONNECTED
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.handler.VolumeHandler
 import de.felixnuesse.timedsilence.handler.WifiHandler
@@ -88,14 +89,22 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             return
         }
 
+        val db = DatabaseHandler(nonNullContext)
 
-        val wifiSSid="\"AndroidWifi\""
+        Log.e(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: "+db.getAllWifiEntries().size)
 
-        if(WifiHandler.getCurrentSsid(nonNullContext).equals(wifiSSid)){
-            VolumeHandler.setSilent(nonNullContext)
-            Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: Set silent, because Connected to $wifiSSid")
-            return
+
+
+        val currentSSID = WifiHandler.getCurrentSsid(nonNullContext);
+
+        db.getAllWifiEntries().forEach{
+            if(currentSSID.equals(it.ssid) && it.type == WIFI_TYPE_CONNECTED){
+                VolumeHandler.setSilent(nonNullContext)
+                Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: Set silent, because Connected to $currentSSID")
+                return
+            }
         }
+
 
         val hour= LocalDateTime.now().hour
         val min= LocalDateTime.now().minute
