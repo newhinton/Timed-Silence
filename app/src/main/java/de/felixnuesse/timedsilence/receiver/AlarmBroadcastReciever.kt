@@ -98,7 +98,10 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         val currentSSID = WifiHandler.getCurrentSsid(nonNullContext);
 
         db.getAllWifiEntries().forEach{
-            if(currentSSID.equals(it.ssid) && it.type == WIFI_TYPE_CONNECTED){
+
+            val ssidit="\""+it.ssid+"\""
+            Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: "+ssidit+": "+it.type)
+            if(currentSSID.equals(ssidit) && it.type == WIFI_TYPE_CONNECTED){
                 VolumeHandler.setSilent(nonNullContext)
                 Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: Set silent, because Connected to $currentSSID")
                 return
