@@ -6,7 +6,6 @@ import android.os.CountDownTimer
 import android.os.IBinder
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.R
 import android.content.Context
 import android.widget.Toast
 import de.felixnuesse.timedsilence.handler.AlarmHandler
@@ -14,6 +13,15 @@ import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import de.felixnuesse.timedsilence.ui.PauseNotification
 import java.text.SimpleDateFormat
 import java.util.*
+import android.app.AlarmManager
+import android.app.PendingIntent
+import de.felixnuesse.timedsilence.MainActivity
+
+
+
+
+
+
 
 
 /**
@@ -53,6 +61,7 @@ class PauseTimerService : Service() {
         var mIsRunning: Boolean = false
 
         var mTimer: CountDownTimer? = null
+        var mTimerStartTime: Long = -1
         var mTimerTimeLeft: Long = -1
         var mTimerTimeInitial: Long = -1
 
@@ -122,13 +131,20 @@ class PauseTimerService : Service() {
          */
         fun cancelTimer(context: Context){
 
+            val intent = Intent(context, PauseTimerService::class.java)
+            intent.putExtra(
+                Constants.SERVICE_INTENT_DELAY_ACTION,
+                Constants.SERVICE_INTENT_STOP_ACTION
+            )
+            context.startService(intent)
+
             for (interfaceElement in mListenerList){
                 interfaceElement.timerFinished(context)
             }
 
 
             mCurentLengthIndex=0
-            mTimer!!.cancel()
+            //mTimer!!.cancel()
             mIsRunning=false
         }
 
@@ -164,11 +180,42 @@ class PauseTimerService : Service() {
 
         var toggle=false
 
+        if (intent?.getStringExtra(Constants.SERVICE_INTENT_DELAY_ACTION).equals(Constants.SERVICE_INTENT_STOP_ACTION)){
+            mTimerTimeLeft=-1
+        }
+
+        if (intent?.getStringExtra(Constants.SERVICE_INTENT_DELAY_ACTION).equals(Constants.SERVICE_INTENT_TICK_ACTION)){
+            Log.e(Constants.APP_NAME,"PauseTileService: service tick!")
+
+
+            //if the timer was already canceled, stop right now
+            if(mTimerTimeLeft<=0){
+                finishTimer(this, mTimerTimeInitial)
+                return super.onStartCommand(intent, flags, startId)
+            }
+
+            val now = now()
+            val sinceStart =  now-mTimerStartTime
+
+            mTimerTimeLeft=mTimerTimeInitial-sinceStart
+
+            if(mTimerTimeLeft>0){
+                tickTimer(this, mTimerTimeLeft)
+                timerAlert(this)
+            }else{
+                finishTimer(this, mTimerTimeInitial)
+            }
+
+
+
+
+        }
+
         if (intent?.getStringExtra(Constants.SERVICE_INTENT_DELAY_ACTION).equals(Constants.SERVICE_INTENT_DELAY_ACTION_TOGGLE)){
             Log.e(Constants.APP_NAME,"PauseTileService: service toggled")
             if(mIsRunning){
                 finishTimer(this)
-                resetTimerSystem()
+                resetTimerSystem(this)
             }else{
                 toggle=true
             }
@@ -206,15 +253,60 @@ class PauseTimerService : Service() {
                 startForeground(PauseNotification.NOTIFICATION_ID, pn.startNotification(applicationContext, getTimestampInProperLength(time)))
             }
 
-            timer(time, this).start()
 
+            //timer(time, this).start()
 
+            mTimerTimeLeft = time
+            mTimerTimeInitial = time
+            mTimerStartTime = now()
+            timerAlert(this)
 
         }
 
         return super.onStartCommand(intent, flags, startId)
 
     }
+
+
+    fun now(): Long{
+        val currentTime = Calendar.getInstance().time
+        return currentTime.time
+    }
+
+
+    private fun tickTimer(context: Context, millisUntilFinished: Long){
+        mIsRunning=true
+        mTimerTimeLeft=millisUntilFinished
+        // Log.e(Constants.APP_NAME, "PauseTimerService: Timer($seconds): running, ${millisUntilFinished/1000} left")
+        for (interfaceElement in mListenerList){
+            //Log.e(Constants.APP_NAME, "PauseTimerService: Timer update interfaces")
+            interfaceElement.timerReduced(context, millisUntilFinished, getTimestampInProperLength(millisUntilFinished))
+        }
+    }
+
+    private fun finishTimer(context: Context, milliseconds: Long){
+        Log.e(Constants.APP_NAME, "PauseTimerService: Timer($milliseconds): ended, restarting checks!")
+        AlarmHandler.createRepeatingTimecheck(applicationContext)
+        for (interfaceElement in mListenerList){
+            interfaceElement.timerFinished(context)
+        }
+        resetTimerSystem(context)
+    }
+
+
+
+    fun resetTimerSystem(context: Context){
+        mIsRunning=false
+        mTimerTimeLeft=-1
+        mTimerTimeInitial=-1
+        mTimerStartTime=0
+        //reset autotimer when finished
+        mCurentLengthIndex=0
+
+        stopForeground(false)
+        PauseNotification().cancelNotification(PauseNotification.NOTIFICATION_ID, this)
+    }
+
 
     fun timer(milliseconds: Long, context: Context) : CountDownTimer{
 
@@ -225,37 +317,33 @@ class PauseTimerService : Service() {
         mTimerTimeInitial=milliseconds
         val timer = object : CountDownTimer(milliseconds, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                mIsRunning=true
-                mTimerTimeLeft=millisUntilFinished
-               // Log.e(Constants.APP_NAME, "PauseTimerService: Timer($seconds): running, ${millisUntilFinished/1000} left")
-                for (interfaceElement in mListenerList){
-                    //Log.e(Constants.APP_NAME, "PauseTimerService: Timer update interfaces")
-                    interfaceElement.timerReduced(context, millisUntilFinished, getTimestampInProperLength(millisUntilFinished))
-                }
+                tickTimer(context, millisUntilFinished)
             }
 
             override fun onFinish() {
-                Log.e(Constants.APP_NAME, "PauseTimerService: Timer($milliseconds): ended, restarting checks!")
-                AlarmHandler.createRepeatingTimecheck(applicationContext)
-                for (interfaceElement in mListenerList){
-                    interfaceElement.timerFinished(context)
-                }
-                resetTimerSystem()
+                finishTimer(context, milliseconds)
             }
         }
         mTimer = timer
         return timer
     }
 
-    private fun resetTimerSystem(){
-        mIsRunning=false
-        mTimerTimeLeft=-1
-        mTimerTimeInitial=-1
-        //reset autotimer when finished
-        mCurentLengthIndex=0
 
-        stopForeground(false)
-        PauseNotification().cancelNotification(PauseNotification.NOTIFICATION_ID, this)
+    private fun timerAlertPendingIntent(context: Context):PendingIntent{
+        val intent = Intent(context, PauseTimerService::class.java)
+        intent.putExtra(
+            Constants.SERVICE_INTENT_DELAY_ACTION,
+            Constants.SERVICE_INTENT_TICK_ACTION
+        )
+
+        val pintent = PendingIntent.getService(context, 0, intent, 0)
+        return pintent
+    }
+
+    fun timerAlert(context: Context){
+        val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+Constants.SEC, timerAlertPendingIntent(context))
+
     }
 
 }
