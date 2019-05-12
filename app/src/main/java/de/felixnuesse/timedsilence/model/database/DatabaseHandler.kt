@@ -22,6 +22,7 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_SSID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_TABLE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_TYPE
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_VOL_MODE
 
 
 /**
@@ -267,7 +268,8 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val projection = arrayOf<String>(
             WIFI_ID,
             WIFI_SSID,
-            WIFI_TYPE
+            WIFI_TYPE,
+            WIFI_VOL_MODE
         )
 
         // Filter results WHERE "title" = 'My Title'
@@ -275,7 +277,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val selectionArgs = arrayOf<String>()
 
         // How you want the results sorted in the resulting Cursor
-        val sortOrder = WIFI_ID + " ASC"
+        val sortOrder = "$WIFI_ID ASC"
 
         val cursor = db.query(
             WIFI_TABLE, // The table to query
@@ -290,7 +292,8 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             val wo = WifiObject(
                 cursor.getLong(0),
                 cursor.getString(1),
-                cursor.getInt(2)
+                cursor.getInt(2),
+                cursor.getInt(3)
             )
 
             results.add(wo)
@@ -298,21 +301,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         cursor.close()
 
         db.close()
-
-
-       /* results.add(WifiObject(
-            0,
-            "eduroam",
-            1
-        ))
-
-        results.add(WifiObject(
-            1,
-            "bob.net",
-            2
-        ))*/
-
-
         return results
     }
 
@@ -327,7 +315,8 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val projection = arrayOf<String>(
             WIFI_ID,
             WIFI_SSID,
-            WIFI_TYPE
+            WIFI_TYPE,
+            WIFI_VOL_MODE
         )
 
 
@@ -336,12 +325,13 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         //values.put(SCHEDULE_ID, so.id)
         values.put(WIFI_SSID, wifiObject.ssid)
         values.put(WIFI_TYPE, wifiObject.type)
+        values.put(WIFI_VOL_MODE, wifiObject.volume)
 
         // Insert the new row, returning the primary key value of the new row
         val newRowId = db.insert(WIFI_TABLE, null, values)
         Log.e(APP_NAME,"Database: CreateWifi: RowID: $newRowId")
 
-        val newObject = WifiObject(newRowId,wifiObject.ssid, wifiObject.type)
+        val newObject = WifiObject(newRowId,wifiObject.ssid, wifiObject.type, wifiObject.volume)
 
         Log.e(APP_NAME,"Database: CreateWifi: Result: ${newObject.ssid}")
 

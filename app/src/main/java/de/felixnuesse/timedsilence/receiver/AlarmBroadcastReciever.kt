@@ -93,17 +93,25 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
         Log.e(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: "+db.getAllWifiEntries().size)
 
-
-
-        val currentSSID = WifiHandler.getCurrentSsid(nonNullContext);
+        val currentSSID = WifiHandler.getCurrentSsid(nonNullContext)
 
         db.getAllWifiEntries().forEach{
 
             val ssidit="\""+it.ssid+"\""
             Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: "+ssidit+": "+it.type)
             if(currentSSID.equals(ssidit) && it.type == WIFI_TYPE_CONNECTED){
-                VolumeHandler.setSilent(nonNullContext)
-                Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: Set silent, because Connected to $currentSSID")
+                if(it.volume == TIME_SETTING_LOUD){
+                    VolumeHandler.setLoud(nonNullContext)
+                    Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: Set lout, because Connected to $currentSSID")
+                }
+                if(it.volume == TIME_SETTING_SILENT){
+                    VolumeHandler.setSilent(nonNullContext)
+                    Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: Set silent, because Connected to $currentSSID")
+                }
+                if(it.volume == TIME_SETTING_VIBRATE){
+                    VolumeHandler.setVibrate(nonNullContext)
+                    Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: Set vibrate, because Connected to $currentSSID")
+                }
                 return
             }
         }

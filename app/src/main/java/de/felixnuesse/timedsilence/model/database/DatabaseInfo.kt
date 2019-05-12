@@ -32,7 +32,7 @@ class DatabaseInfo{
     companion object {
 
         // If you change the database schema, you must increment the database version.
-        const val DATABASE_VERSION = 2
+        const val DATABASE_VERSION = 4
         const val DATABASE_NAME = "TimedSilence.db"
 
         val SCHEDULE_TABLE="timetable"
@@ -61,8 +61,8 @@ class DatabaseInfo{
             "CREATE TABLE ${WIFI_TABLE} (" +
                     "${WIFI_ID} INTEGER PRIMARY KEY," +
                     "${WIFI_SSID} TEXT," +
-                    "${WIFI_VOL_MODE} INT," +
-                    "${WIFI_TYPE} INT)"
+                    "${WIFI_TYPE} INT," +
+                    "${WIFI_VOL_MODE} INT)"
 
     }
 }

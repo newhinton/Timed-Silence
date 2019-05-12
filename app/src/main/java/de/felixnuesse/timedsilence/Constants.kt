@@ -47,7 +47,6 @@ class Constants {
         const val WIFI_TYPE_CONNECTED = 1
         const val WIFI_TYPE_SEARCHING = 2
 
-
         const val RECURRING_INTENT_ID = 123789
 
 

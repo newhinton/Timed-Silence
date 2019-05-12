@@ -28,10 +28,11 @@ package de.felixnuesse.timedsilence.model.data
  *
  */
 
-class WifiObject(id: Long, ssid: String, type: Int) {
+class WifiObject(id: Long, ssid: String, type: Int, volume: Int) {
 
     var ssid: String = ssid
     var type: Int = type
+    var volume: Int = volume
     var id: Long = id
 
 

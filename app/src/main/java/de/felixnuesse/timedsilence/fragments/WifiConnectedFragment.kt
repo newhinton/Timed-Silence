@@ -119,7 +119,7 @@ class WifiConnectedFragment : Fragment() {
         // Set up the buttons
         builder.setPositiveButton(R.string.ok,
             DialogInterface.OnClickListener { dialog, which ->
-                createTypeDialog(context, input.text.toString())
+                createVolumeDialog(context, input.text.toString())
 
             })
         builder.setNegativeButton(R.string.cancel,
@@ -128,7 +128,29 @@ class WifiConnectedFragment : Fragment() {
         builder.show()
     }
 
-    fun createTypeDialog(context: Context, ssid: String){
+    fun createVolumeDialog(context: Context, ssid: String){
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Volume 1,2,3")
+
+        // Set up the input
+        val input = EditText(context)
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        builder.setView(input)
+
+        // Set up the buttons
+        builder.setPositiveButton(R.string.ok,
+            DialogInterface.OnClickListener { dialog, which ->
+                createTypeDialog(context, ssid, Integer.valueOf(input.text.toString()))
+
+            })
+        builder.setNegativeButton(R.string.cancel,
+            DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+
+        builder.show()
+    }
+
+    fun createTypeDialog(context: Context, ssid: String, volume: Int){
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Type 1,2")
 
@@ -145,7 +167,7 @@ class WifiConnectedFragment : Fragment() {
                 val db = DatabaseHandler(context)
                // db.createWifiEntry(WifiObject(0,ssid, Integer.valueOf(input.text.toString())))
                 //todo Add proper ui so that the user can add searching or different stuff to it
-                db.createWifiEntry(WifiObject(0,ssid, 1))
+                db.createWifiEntry(WifiObject(0,ssid, 1, volume))
                 viewAdapter = WifiListAdapter(db.getAllWifiEntries())
 
                 wifi_recylcer_list_view.apply {

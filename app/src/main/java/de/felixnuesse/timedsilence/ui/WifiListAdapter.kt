@@ -70,14 +70,21 @@ class WifiViewHolder(val wifiView: View) : RecyclerView.ViewHolder(wifiView)
 
 
                 holder.wifiView.textView_wifi_row_title.text = myDataset.get(position).ssid
-                holder.wifiView.textView_wifi_row_time_start.text = myDataset.get(position).type.toString()
-
 
                 holder.wifiView.delete_wifi_element.setOnClickListener {
                         DatabaseHandler(holder.wifiView.context).deleteWifiEntry(myDataset.get(position).id)
                         removeAt(position)
 
                 }
+
+                var string=R.string.volume_setting_silent
+                when (myDataset.get(position).volume) {
+                        TIME_SETTING_LOUD -> string=R.string.volume_setting_loud
+                        TIME_SETTING_VIBRATE -> string=R.string.volume_setting_vibrate
+                        TIME_SETTING_SILENT -> string=R.string.volume_setting_silent
+                }
+
+                holder.wifiView.textView_wifi_row_time_start.text = holder.wifiView.context.resources.getString(string)
 
 
                 var imageID=R.drawable.ic_tap_and_play_black_24dp
