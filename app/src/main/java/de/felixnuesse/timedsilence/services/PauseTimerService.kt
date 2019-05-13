@@ -190,8 +190,8 @@ class PauseTimerService : Service() {
 
             //if the timer was already canceled, stop right now
             if(mTimerTimeLeft<=0){
-                finishTimer(this, mTimerTimeInitial)
-                return super.onStartCommand(intent, flags, startId)
+                //finishTimer(this, mTimerTimeInitial)
+                //return super.onStartCommand(intent, flags, startId)
             }
 
             val now = now()
@@ -200,10 +200,10 @@ class PauseTimerService : Service() {
             mTimerTimeLeft=mTimerTimeInitial-sinceStart
 
             if(mTimerTimeLeft>0){
-                tickTimer(this, mTimerTimeLeft)
+                //tickTimer(this, mTimerTimeLeft)
                 timerAlert(this)
             }else{
-                finishTimer(this, mTimerTimeInitial)
+                //finishTimer(this, mTimerTimeInitial)
             }
 
 
@@ -254,7 +254,7 @@ class PauseTimerService : Service() {
             }
 
 
-            //timer(time, this).start()
+            timer(time, this).start()
 
             mTimerTimeLeft = time
             mTimerTimeInitial = time
