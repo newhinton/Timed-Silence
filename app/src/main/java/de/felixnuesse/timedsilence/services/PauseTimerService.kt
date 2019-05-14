@@ -190,20 +190,18 @@ class PauseTimerService : Service() {
 
             //if the timer was already canceled, stop right now
             if(mTimerTimeLeft<=0){
-                //finishTimer(this, mTimerTimeInitial)
-                //return super.onStartCommand(intent, flags, startId)
+                finishTimer(this, mTimerTimeInitial)
+                return super.onStartCommand(intent, flags, startId)
             }
 
-            val now = now()
-            val sinceStart =  now-mTimerStartTime
-
-            mTimerTimeLeft=mTimerTimeInitial-sinceStart
+            calcTime()
 
             if(mTimerTimeLeft>0){
-                //tickTimer(this, mTimerTimeLeft)
+                timerUpdate(60000, this).start()
+                tickTimer(this, mTimerTimeLeft)
                 timerAlert(this)
             }else{
-                //finishTimer(this, mTimerTimeInitial)
+                finishTimer(this, mTimerTimeInitial)
             }
 
 
@@ -254,12 +252,20 @@ class PauseTimerService : Service() {
             }
 
 
-            timer(time, this).start()
+            //timer(time, this).start()
 
             mTimerTimeLeft = time
             mTimerTimeInitial = time
             mTimerStartTime = now()
+
+            if(!AlarmHandler.checkIfNextAlarmExists(this)){
+                Toast.makeText(this, "Restarted Regular Checking in (${getTimestampInProperLength(mTimerTimeInitial)})", Toast.LENGTH_SHORT).show()
+            }
+
+            Log.e("test", "start?")
+
             timerAlert(this)
+            timerUpdate(60000, this).start()
 
         }
 
@@ -310,10 +316,6 @@ class PauseTimerService : Service() {
 
     fun timer(milliseconds: Long, context: Context) : CountDownTimer{
 
-        if(!AlarmHandler.checkIfNextAlarmExists(this)){
-            Toast.makeText(this, "Restarted Regular Checking in (${getTimestampInProperLength(milliseconds)})", Toast.LENGTH_SHORT).show()
-        }
-
         mTimerTimeInitial=milliseconds
         val timer = object : CountDownTimer(milliseconds, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -326,6 +328,27 @@ class PauseTimerService : Service() {
         }
         mTimer = timer
         return timer
+    }
+
+    fun timerUpdate(milliseconds: Long, context: Context) : CountDownTimer{
+        val timer = object : CountDownTimer(milliseconds, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                calcTime()
+                if(mTimerTimeLeft>0){
+                    tickTimer(context, mTimerTimeLeft)
+                }
+            }
+
+            override fun onFinish() {
+            }
+        }
+        return timer
+    }
+
+    fun calcTime(){
+        val now = now()
+        val sinceStart =  now-mTimerStartTime
+        mTimerTimeLeft=mTimerTimeInitial-sinceStart
     }
 
 
@@ -342,7 +365,7 @@ class PauseTimerService : Service() {
 
     fun timerAlert(context: Context){
         val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+Constants.SEC, timerAlertPendingIntent(context))
+        alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+Constants.SEC*45, timerAlertPendingIntent(context))
 
     }
 
