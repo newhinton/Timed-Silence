@@ -31,6 +31,8 @@ package de.felixnuesse.timedsilence.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.location.Location
+import android.support.v4.app.NotificationManagerCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD

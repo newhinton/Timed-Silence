@@ -1,29 +1,5 @@
 package de.felixnuesse.timedsilence.services
 
-import android.app.*
-import android.content.Intent
-import android.os.CountDownTimer
-import android.os.IBinder
-import android.util.Log
-import de.felixnuesse.timedsilence.Constants
-import android.content.Context
-import android.widget.Toast
-import de.felixnuesse.timedsilence.handler.AlarmHandler
-import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
-import de.felixnuesse.timedsilence.ui.PauseNotification
-import java.text.SimpleDateFormat
-import java.util.*
-import android.app.AlarmManager
-import android.app.PendingIntent
-import de.felixnuesse.timedsilence.MainActivity
-
-
-
-
-
-
-
-
 /**
  * Copyright (C) 2019  Felix Nüsse
  * Created on 21.04.19 - 14:22
@@ -49,11 +25,24 @@ import de.felixnuesse.timedsilence.MainActivity
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
 
+import android.app.*
+import android.content.Intent
+import android.os.CountDownTimer
+import android.os.IBinder
+import android.util.Log
+import de.felixnuesse.timedsilence.Constants
+import android.content.Context
+import android.widget.Toast
+import de.felixnuesse.timedsilence.handler.AlarmHandler
+import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
+import de.felixnuesse.timedsilence.ui.PauseNotification
+import java.text.SimpleDateFormat
+import java.util.*
+import android.app.AlarmManager
+import android.app.PendingIntent
+import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 
 class PauseTimerService : Service() {
-
-
-
 
     companion object {
 
@@ -65,11 +54,31 @@ class PauseTimerService : Service() {
         var mTimerTimeLeft: Long = -1
         var mTimerTimeInitial: Long = -1
 
-        var mListenerList= arrayListOf<TimerInterface>()
+        private var mListenerList= arrayListOf<TimerInterface>()
 
+        /**
+         * This delay defines the intent that is fired to restart the service.
+         * If we only use the countdowntimer, the service gets regularly killed by the OS
+         */
+        private val mCheckDelay: Long = (2*Constants.SEC).toLong()
+        /**
+         * This is used to define the length of the countdown timer that updates the ui
+         * this needs to be uneven (uneven in seconds, not an uneven long)
+         *  otherwise the timer may look like it sets out for one or two seconds
+         */
+        private val mCheckDelayUI: Long = (2*mCheckDelay) + Constants.SEC
+        /**
+         * This is used to define the length of the countdown timer. It ticks every mCheckInterval milliseconds
+         */
+        private val mCheckInterval: Long = (Constants.SEC).toLong()
+
+
+        /**
+         * This can be used to register a TimerInterface which can be used to update widgets/uielements with the current pause
+         */
         fun registerListener(listener: TimerInterface){
             if(!mListenerList.contains(listener)){
-                Log.e(Constants.APP_NAME,"PauseTimerService: mListenerList registered")
+                Log.e(APP_NAME,"PauseTimerService: mListenerList registered")
                 mListenerList.add(listener)
             }
         }
@@ -84,7 +93,7 @@ class PauseTimerService : Service() {
         fun startAutoTimer(context: Context){
             val i =Intent(context, PauseTimerService::class.java)
             i.putExtra(Constants.SERVICE_INTENT_DELAY_ACTION,Constants.SERVICE_INTENT_DELAY_ACTION)
-            Log.e(Constants.APP_NAME,"PauseTileService: service started")
+            Log.e(APP_NAME,"PauseTileService: service started")
             context.startForegroundService(i)
         }
 
@@ -95,7 +104,7 @@ class PauseTimerService : Service() {
             val i =Intent(context, PauseTimerService::class.java)
             i.putExtra(Constants.SERVICE_INTENT_DELAY_ACTION,Constants.SERVICE_INTENT_DELAY_ACTION)
             i.putExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, timeInMs)
-            Log.e(Constants.APP_NAME,"PauseTileService: service started with custom time")
+            Log.e(APP_NAME,"PauseTileService: service started with custom time")
             context.startForegroundService(i)
         }
 
@@ -106,7 +115,7 @@ class PauseTimerService : Service() {
             val i =Intent(context, PauseTimerService::class.java)
             i.putExtra(Constants.SERVICE_INTENT_DELAY_ACTION,Constants.SERVICE_INTENT_DELAY_ACTION_TOGGLE)
             i.putExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, timeInMs)
-            Log.e(Constants.APP_NAME,"PauseTileService: service toggled with custom time")
+            Log.e(APP_NAME,"PauseTileService: service toggled with custom time")
             context.startForegroundService(i)
         }
 
@@ -144,7 +153,7 @@ class PauseTimerService : Service() {
 
 
             mCurentLengthIndex=0
-            //mTimer!!.cancel()
+            mTimer!!.cancel()
             mIsRunning=false
         }
 
@@ -197,15 +206,12 @@ class PauseTimerService : Service() {
             calcTime()
 
             if(mTimerTimeLeft>0){
-                timerUpdate(60000, this).start()
+                timerUiUpdater(mCheckDelayUI, this).start()
                 tickTimer(this, mTimerTimeLeft)
-                timerAlert(this)
+                timerWakeServiceAgain(this)
             }else{
                 finishTimer(this, mTimerTimeInitial)
             }
-
-
-
 
         }
 
@@ -264,8 +270,9 @@ class PauseTimerService : Service() {
 
             Log.e("test", "start?")
 
-            timerAlert(this)
-            timerUpdate(60000, this).start()
+            timerWakeServiceAgain(this)
+            timerUiUpdater(mCheckDelayUI, this).start()
+            //timerUiUpdater(60000, this).start()
 
         }
 
@@ -291,7 +298,7 @@ class PauseTimerService : Service() {
     }
 
     private fun finishTimer(context: Context, milliseconds: Long){
-        Log.e(Constants.APP_NAME, "PauseTimerService: Timer($milliseconds): ended, restarting checks!")
+        Log.e(APP_NAME, "PauseTimerService: Timer($milliseconds): ended, restarting checks!")
         AlarmHandler.createRepeatingTimecheck(applicationContext)
         for (interfaceElement in mListenerList){
             interfaceElement.timerFinished(context)
@@ -309,40 +316,36 @@ class PauseTimerService : Service() {
         //reset autotimer when finished
         mCurentLengthIndex=0
 
+        //remove UI afterwards. Only gets removed if thme left is 0 or smaller
+        mTimer?.cancel()
+
         stopForeground(false)
         PauseNotification().cancelNotification(PauseNotification.NOTIFICATION_ID, this)
     }
 
-
-    fun timer(milliseconds: Long, context: Context) : CountDownTimer{
-
-        mTimerTimeInitial=milliseconds
-        val timer = object : CountDownTimer(milliseconds, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                tickTimer(context, millisUntilFinished)
-            }
-
-            override fun onFinish() {
-                finishTimer(context, milliseconds)
-            }
+    fun timerUiUpdater(milliseconds: Long, context: Context) : CountDownTimer{
+        if(mTimer!=null){
+            Log.e(APP_NAME, "PauseTimerService: timerUiUpdater(): Cancel existing timer!")
+            mTimer!!.cancel()
         }
-        mTimer = timer
-        return timer
-    }
-
-    fun timerUpdate(milliseconds: Long, context: Context) : CountDownTimer{
-        val timer = object : CountDownTimer(milliseconds, 1000) {
+        mTimer = object : CountDownTimer(milliseconds, mCheckInterval) {
             override fun onTick(millisUntilFinished: Long) {
-                calcTime()
                 if(mTimerTimeLeft>0){
+                    calcTime()
                     tickTimer(context, mTimerTimeLeft)
                 }
             }
 
             override fun onFinish() {
+                //never do something here, since this countdown only updates the ui, .cancel() or anything like it will immediatly stop the pause after $milliseconds
+                //DONT: finishTimer(context, milliseconds)
+                calcTime()
+                if(mTimerTimeLeft<=0){
+                    finishTimer(context, mTimerTimeInitial)
+                }
             }
         }
-        return timer
+        return mTimer as CountDownTimer
     }
 
     fun calcTime(){
@@ -363,9 +366,9 @@ class PauseTimerService : Service() {
         return pintent
     }
 
-    fun timerAlert(context: Context){
+    fun timerWakeServiceAgain(context: Context){
         val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+Constants.SEC*45, timerAlertPendingIntent(context))
+        alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+mCheckDelay, timerAlertPendingIntent(context))
 
     }
 

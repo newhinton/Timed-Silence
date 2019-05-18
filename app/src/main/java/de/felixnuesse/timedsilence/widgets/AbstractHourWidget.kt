@@ -30,8 +30,7 @@ abstract class AbstractHourWidget : AppWidgetProvider() {
         // There may be multiple widgets active, so update all of them
 
         for (appWidgetId in appWidgetIds) {
-
-            Log.e(Constants.APP_NAME, "AbstractHourWidget: Updated Widgets!")
+            //Log.e(Constants.APP_NAME, "AbstractHourWidget($mWidgetName): Updated Widgets!")
             updateAppWidget(
                 context,
                 appWidgetManager,
@@ -48,7 +47,6 @@ abstract class AbstractHourWidget : AppWidgetProvider() {
         // Enter relevant functionality for when the last widget is disabled
     }
 
-
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (SYNC_CLICKED == intent.action) {
@@ -60,9 +58,7 @@ abstract class AbstractHourWidget : AppWidgetProvider() {
 
             Log.e(Constants.APP_NAME, "AbstractHourWidget($mWidgetName): A widget was clicked!")
 
-
             toggleAction(context)
-
             appWidgetManager.updateAppWidget(watchWidget, remoteViews)
 
         }
