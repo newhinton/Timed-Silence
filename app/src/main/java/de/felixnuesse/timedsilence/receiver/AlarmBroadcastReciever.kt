@@ -38,9 +38,11 @@ import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.Constants.Companion.WIFI_TYPE_CONNECTED
 import de.felixnuesse.timedsilence.handler.AlarmHandler
+import de.felixnuesse.timedsilence.handler.LocationHandler
 import de.felixnuesse.timedsilence.handler.VolumeHandler
 import de.felixnuesse.timedsilence.handler.WifiHandler
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
+import de.felixnuesse.timedsilence.ui.LocationAccessMissingNotification
 import java.time.LocalDateTime
 
 
@@ -51,11 +53,11 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         val current = LocalDateTime.now()
         Log.e(Constants.APP_NAME, "Alarmintent: Recieved Alarmintent at: $current")
 
-        if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)){
+        if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)) {
             Log.e(Constants.APP_NAME, "Alarmintent: Content is to \"check the time\"")
 
             val sharedPref = context?.getSharedPreferences("test", Context.MODE_PRIVATE)
-            with (sharedPref!!.edit()) {
+            with(sharedPref!!.edit()) {
                 putString("last_ExecTime", current.toString())
                 apply()
             }
@@ -65,10 +67,10 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
         }
 
-        if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_DELAY)){
+        if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_DELAY)) {
 
             val extra = intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA)
-            Log.e(Constants.APP_NAME, "Alarmintent: Content is to \""+extra+"\"")
+            Log.e(Constants.APP_NAME, "Alarmintent: Content is to \"" + extra + "\"")
 
             if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
                 Log.e(Constants.APP_NAME, "Alarmintent: Content is to \"Restart recurring alarms\"")
@@ -78,8 +80,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    fun switchVolumeMode(context: Context?){
-
+    fun switchVolumeMode(context: Context?) {
 
 
         val nonNullContext = context
@@ -89,71 +90,92 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             return
         }
 
+
         val db = DatabaseHandler(nonNullContext)
-
-        Log.e(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: "+db.getAllWifiEntries().size)
-
-        val currentSSID = WifiHandler.getCurrentSsid(nonNullContext)
-
-        db.getAllWifiEntries().forEach{
-
-            val ssidit="\""+it.ssid+"\""
-            Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: "+ssidit+": "+it.type)
-            if(currentSSID.equals(ssidit) && it.type == WIFI_TYPE_CONNECTED){
-                if(it.volume == TIME_SETTING_LOUD){
-                    VolumeHandler.setLoud(nonNullContext)
-                    Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: Set lout, because Connected to $currentSSID")
+        Log.e(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: " + db.getAllWifiEntries().size)
+        if (db.getAllWifiEntries().size > 0) {
+            val isLocationEnabled = LocationHandler.checkIfLocationServiceIsEnabled(nonNullContext)
+            if (!isLocationEnabled) {
+                with(NotificationManagerCompat.from(nonNullContext)) {
+                    Log.e(Constants.APP_NAME, "Alarmintent: Locationstate: Disabled!")
+                    notify(
+                        LocationAccessMissingNotification.NOTIFICATION_ID,
+                        LocationAccessMissingNotification.buildNotification(nonNullContext)
+                    )
                 }
-                if(it.volume == TIME_SETTING_SILENT){
-                    VolumeHandler.setSilent(nonNullContext)
-                    Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: Set silent, because Connected to $currentSSID")
+            } else {
+                val currentSSID = WifiHandler.getCurrentSsid(nonNullContext)
+                db.getAllWifiEntries().forEach {
+
+                    val ssidit = "\"" + it.ssid + "\""
+                    Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
+                    if (currentSSID.equals(ssidit) && it.type == WIFI_TYPE_CONNECTED) {
+                        if (it.volume == TIME_SETTING_LOUD) {
+                            VolumeHandler.setLoud(nonNullContext)
+                            Log.e(
+                                Constants.APP_NAME,
+                                "Alarmintent: WifiCheck: Set lout, because Connected to $currentSSID"
+                            )
+                        }
+                        if (it.volume == TIME_SETTING_SILENT) {
+                            VolumeHandler.setSilent(nonNullContext)
+                            Log.e(
+                                Constants.APP_NAME,
+                                "Alarmintent: WifiCheck: Set silent, because Connected to $currentSSID"
+                            )
+                        }
+                        if (it.volume == TIME_SETTING_VIBRATE) {
+                            VolumeHandler.setVibrate(nonNullContext)
+                            Log.e(
+                                Constants.APP_NAME,
+                                "Alarmintent: WifiCheck: Set vibrate, because Connected to $currentSSID"
+                            )
+                        }
+                        return
+                    }
                 }
-                if(it.volume == TIME_SETTING_VIBRATE){
-                    VolumeHandler.setVibrate(nonNullContext)
-                    Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: Set vibrate, because Connected to $currentSSID")
-                }
-                return
             }
         }
-
-
-        val hour= LocalDateTime.now().hour
-        val min= LocalDateTime.now().minute
+        val hour = LocalDateTime.now().hour
+        val min = LocalDateTime.now().minute
 
 
 
-        DatabaseHandler(context).getAllSchedules().forEach{
+        DatabaseHandler(context).getAllSchedules().forEach {
 
-            val time = hour*60*60*1000 + min*60*1000
+            val time = hour * 60 * 60 * 1000 + min * 60 * 1000
 
-            var isInInversedTimeInterval=false
-            if(it.time_end<=it.time_start){
+            var isInInversedTimeInterval = false
+            if (it.time_end <= it.time_start) {
                 Log.e(Constants.APP_NAME, "Alarmintent: End is before or equal start")
 
-                if(time>=it.time_start && time<24*60*60*1000){
-                    Log.e(Constants.APP_NAME, "Alarmintent: Current time is after start time of interval but before 0:00")
-                    isInInversedTimeInterval=true;
+                if (time >= it.time_start && time < 24 * 60 * 60 * 1000) {
+                    Log.e(
+                        Constants.APP_NAME,
+                        "Alarmintent: Current time is after start time of interval but before 0:00"
+                    )
+                    isInInversedTimeInterval = true;
                 }
 
-                if(time<it.time_end && time>= 0){
+                if (time < it.time_end && time >= 0) {
                     Log.e(Constants.APP_NAME, "Alarmintent: Current time is before end time of interval but after 0:00")
-                    isInInversedTimeInterval=true;
+                    isInInversedTimeInterval = true;
                 }
             }
 
-            if(time in it.time_start..it.time_end || isInInversedTimeInterval){
+            if (time in it.time_start..it.time_end || isInInversedTimeInterval) {
 
-                if(it.time_setting==TIME_SETTING_SILENT){
+                if (it.time_setting == TIME_SETTING_SILENT) {
                     VolumeHandler.setSilent(nonNullContext)
                     Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
                 }
 
-                if(it.time_setting== TIME_SETTING_VIBRATE){
+                if (it.time_setting == TIME_SETTING_VIBRATE) {
                     VolumeHandler.setVibrate(nonNullContext)
                     Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
                 }
 
-                if(it.time_setting==TIME_SETTING_LOUD){
+                if (it.time_setting == TIME_SETTING_LOUD) {
                     VolumeHandler.setLoud(nonNullContext)
                     Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
                 }
@@ -162,8 +184,8 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    fun Any?.notNull(f: ()-> Unit){
-        if (this != null){
+    fun Any?.notNull(f: () -> Unit) {
+        if (this != null) {
             f()
         }
     }
