@@ -68,7 +68,7 @@ class LocationAccessMissingNotification {
             return Notification.Builder(context, cid)
                 .setContentTitle(context.getString(R.string.LocationAccessNotification_TITLE))
                 .setContentText(context.getString(R.string.LocationAccessNotification_CONTENT))
-                .setSmallIcon(R.drawable.ic_av_timer_black_24dp)
+                .setSmallIcon(R.drawable.logo_location)
                 .setOnlyAlertOnce(true).build()
         }
 

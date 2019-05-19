@@ -97,7 +97,7 @@ class PauseNotification: TimerInterface{
         return Notification.Builder(context, cid)
             .setContentTitle(title)
             .setContentText(content)
-            .setSmallIcon(R.drawable.ic_av_timer_black_24dp)
+            .setSmallIcon(R.drawable.logo_pause)
             .setOnlyAlertOnce(true)
     }
 

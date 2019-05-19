@@ -25,6 +25,6 @@
     <string name="add_widget">Add widget</string>
     <string name="pause_check_schedule">Pause Timed Silence</string>
     <string name="LocationAccessNotification">LocationAccessNotification</string>
-    <string name="LocationAccessNotification_TITLE">LocationAccessNotification_TITLE</string>
-    <string name="LocationAccessNotification_CONTENT">LocationAccessNotification_CONTENT</string>
+    <string name="LocationAccessNotification_TITLE">Location Service required!</string>
+    <string name="LocationAccessNotification_CONTENT">Because the wifissid can be used to track you, you need to enable Location Services to use Wifinames as profiles!</string>
 </resources>
