@@ -61,11 +61,8 @@ class PauseNotification: TimerInterface{
     }
 
     override fun timerReduced(context: Context, timeAsLong: Long, timeAsString: String) {
-
         var notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(NOTIFICATION_ID, buildNotification(context, mNotfificationTitle, PauseTimerService.getTimestampInProperLength(timeAsLong)).build())
-
-
     }
 
     override fun timerFinished(context: Context) {

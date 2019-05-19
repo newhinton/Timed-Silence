@@ -272,7 +272,6 @@ class PauseTimerService : Service() {
 
             timerWakeServiceAgain(this)
             timerUiUpdater(mCheckDelayUI, this).start()
-            //timerUiUpdater(60000, this).start()
 
         }
 
@@ -290,15 +289,21 @@ class PauseTimerService : Service() {
     private fun tickTimer(context: Context, millisUntilFinished: Long){
         mIsRunning=true
         mTimerTimeLeft=millisUntilFinished
+
+        var nonnullms=millisUntilFinished
+        if(millisUntilFinished<0){
+            nonnullms=0
+        }
         // Log.e(Constants.APP_NAME, "PauseTimerService: Timer($seconds): running, ${millisUntilFinished/1000} left")
         for (interfaceElement in mListenerList){
             //Log.e(Constants.APP_NAME, "PauseTimerService: Timer update interfaces")
-            interfaceElement.timerReduced(context, millisUntilFinished, getTimestampInProperLength(millisUntilFinished))
+            interfaceElement.timerReduced(context, nonnullms, getTimestampInProperLength(nonnullms))
         }
     }
 
     private fun finishTimer(context: Context, milliseconds: Long){
         Log.e(APP_NAME, "PauseTimerService: Timer($milliseconds): ended, restarting checks!")
+
         AlarmHandler.createRepeatingTimecheck(applicationContext)
         for (interfaceElement in mListenerList){
             interfaceElement.timerFinished(context)
@@ -319,8 +324,8 @@ class PauseTimerService : Service() {
         //remove UI afterwards. Only gets removed if thme left is 0 or smaller
         mTimer?.cancel()
 
-        stopForeground(false)
         PauseNotification().cancelNotification(PauseNotification.NOTIFICATION_ID, this)
+        stopForeground(false)
     }
 
     fun timerUiUpdater(milliseconds: Long, context: Context) : CountDownTimer{
