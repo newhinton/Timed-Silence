@@ -51,6 +51,13 @@ class PauseNotification: TimerInterface{
 
     companion object{
         const val NOTIFICATION_ID=11211
+
+        fun cancelNotification(context: Context) {
+            Log.e(APP_NAME, "PauseNotification: Cancel Notification")
+            var notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancel(NOTIFICATION_ID)
+        }
+
     }
 
     var mNotfificationTitle="Paused for:"
@@ -68,16 +75,6 @@ class PauseNotification: TimerInterface{
     override fun timerFinished(context: Context) {
     }
 
-
-    fun cancelNotification(notifyId: Int, context: Context) {
-
-        Log.e(APP_NAME, "PauseNotification: Cancel Notification")
-
-        var notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(notifyId)
-
-
-    }
 
     fun buildNotification(context: Context, title: String, content: String):Notification.Builder{
 

@@ -72,6 +72,14 @@ class LocationAccessMissingNotification {
                 .setOnlyAlertOnce(true).build()
         }
 
+        fun cancelNotification(context: Context) {
+
+            Log.e(APP_NAME, "LocationAccessNotification: Cancel Notification")
+            var notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancel(NOTIFICATION_ID)
+
+
+        }
 
     }
 

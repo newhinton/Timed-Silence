@@ -40,7 +40,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.os.Handler
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.ui.LocationAccessMissingNotification
+
+
 
 class PauseTimerService : Service() {
 
@@ -324,11 +328,21 @@ class PauseTimerService : Service() {
         //remove UI afterwards. Only gets removed if thme left is 0 or smaller
         mTimer?.cancel()
 
-        PauseNotification().cancelNotification(PauseNotification.NOTIFICATION_ID, this)
+        Log.e(APP_NAME, "PauseTimerService: resetTimerSystem: Exit!")
+
+
         stopForeground(false)
+        Handler().postDelayed({
+            PauseNotification.cancelNotification(context)
+        }, 500)
+
+
     }
 
     fun timerUiUpdater(milliseconds: Long, context: Context) : CountDownTimer{
+
+        LocationAccessMissingNotification.cancelNotification(context)
+
         if(mTimer!=null){
             Log.e(APP_NAME, "PauseTimerService: timerUiUpdater(): Cancel existing timer!")
             mTimer!!.cancel()

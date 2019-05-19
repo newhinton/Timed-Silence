@@ -58,6 +58,7 @@ import de.felixnuesse.timedsilence.handler.VolumeHandler
 import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
+import de.felixnuesse.timedsilence.ui.PauseNotification
 import kotlinx.android.synthetic.main.content_main.*
 
 
