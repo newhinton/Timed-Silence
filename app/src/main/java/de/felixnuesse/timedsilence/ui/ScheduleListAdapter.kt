@@ -1,6 +1,7 @@
 package de.felixnuesse.timedsilence.ui;
 
 import android.content.Context
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -84,6 +85,17 @@ class ScheduleViewHolder(val scheduleView: View) : RecyclerView.ViewHolder(sched
                 holder.scheduleView.textView_schedule_row_title.text = myDataset.get(position).name
                 holder.scheduleView.textView_schedule_row_time_start.text = df.format(myDataset.get(position).time_start)
                 holder.scheduleView.textView_schedule_row_time_end.text =  df.format(myDataset.get(position).time_end)
+
+                if(myDataset.get(position).mon){holder.scheduleView.mon.setTextColor(Color.BLACK)}
+                if(myDataset.get(position).tue){holder.scheduleView.tue.setTextColor(Color.BLACK)}
+                if(myDataset.get(position).wed){holder.scheduleView.wed.setTextColor(Color.BLACK)}
+                if(myDataset.get(position).thu){holder.scheduleView.thu.setTextColor(Color.BLACK)}
+                if(myDataset.get(position).fri){holder.scheduleView.fri.setTextColor(Color.BLACK)}
+                if(myDataset.get(position).sat){holder.scheduleView.sat.setTextColor(Color.BLACK)}
+                if(myDataset.get(position).sun){holder.scheduleView.sun.setTextColor(Color.BLACK)}
+
+
+
 
 
                 holder.scheduleView.delete_schedule_element.setOnClickListener {

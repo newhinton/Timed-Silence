@@ -17,6 +17,13 @@ import android.content.ContentValues
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.model.data.WifiObject
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_MON
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_TUE
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_WED
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_THU
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_FRI
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_SAT
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_SUN
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_WIFI
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_SSID
@@ -85,7 +92,14 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             SCHEDULE_NAME,
             SCHEDULE_START,
             SCHEDULE_END,
-            SCHEDULE_SETTING
+            SCHEDULE_SETTING,
+            SCHEDULE_MON,
+            SCHEDULE_TUE,
+            SCHEDULE_WED,
+            SCHEDULE_THU,
+            SCHEDULE_FRI,
+            SCHEDULE_SAT,
+            SCHEDULE_SUN
         )
 
         // Filter results WHERE "title" = 'My Title'
@@ -110,9 +124,15 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
                 cursor.getLong(2),
                 cursor.getLong(3),
                 cursor.getInt(4),
-                cursor.getLong(0)
+                cursor.getLong(0),
+                intToBool(cursor.getInt(5)),
+                intToBool(cursor.getInt(6)),
+                intToBool(cursor.getInt(7)),
+                intToBool(cursor.getInt(8)),
+                intToBool(cursor.getInt(9)),
+                intToBool(cursor.getInt(10)),
+                intToBool(cursor.getInt(11))
             )
-
             results.add(so)
         }
         cursor.close()
@@ -121,6 +141,12 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         return results
     }
 
+    fun intToBool(value: Int): Boolean{
+        if(value==0){
+            return false
+        }
+        return true
+    }
 
     fun getScheduleByID(id: Long): ScheduleObject {
         val db = readableDatabase
@@ -130,7 +156,14 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             SCHEDULE_NAME,
             SCHEDULE_START,
             SCHEDULE_END,
-            SCHEDULE_SETTING
+            SCHEDULE_SETTING,
+            SCHEDULE_MON,
+            SCHEDULE_TUE,
+            SCHEDULE_WED,
+            SCHEDULE_THU,
+            SCHEDULE_FRI,
+            SCHEDULE_SAT,
+            SCHEDULE_SUN
         )
 
         val selection = SCHEDULE_ID + " = ?"
@@ -156,8 +189,16 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
                 cursor.getLong(2),
                 cursor.getLong(3),
                 cursor.getInt(4),
-                cursor.getLong(0)
+                cursor.getLong(0),
+                intToBool(cursor.getInt(5)),
+                intToBool(cursor.getInt(6)),
+                intToBool(cursor.getInt(7)),
+                intToBool(cursor.getInt(8)),
+                intToBool(cursor.getInt(9)),
+                intToBool(cursor.getInt(10)),
+                intToBool(cursor.getInt(11))
             )
+
 
             results.add(so)
         }
@@ -200,7 +241,14 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             SCHEDULE_NAME,
             SCHEDULE_START,
             SCHEDULE_END,
-            SCHEDULE_SETTING
+            SCHEDULE_SETTING,
+            SCHEDULE_MON,
+            SCHEDULE_TUE,
+            SCHEDULE_WED,
+            SCHEDULE_THU,
+            SCHEDULE_FRI,
+            SCHEDULE_SAT,
+            SCHEDULE_SUN
         )
 
 
@@ -211,6 +259,13 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         values.put(SCHEDULE_START, so.time_start)
         values.put(SCHEDULE_END, so.time_end)
         values.put(SCHEDULE_SETTING, so.time_setting)
+        values.put(SCHEDULE_MON, so.mon)
+        values.put(SCHEDULE_TUE, so.tue)
+        values.put(SCHEDULE_WED, so.wed)
+        values.put(SCHEDULE_THU, so.thu)
+        values.put(SCHEDULE_FRI, so.fri)
+        values.put(SCHEDULE_SAT, so.sat)
+        values.put(SCHEDULE_SUN, so.sun)
 
         // Insert the new row, returning the primary key value of the new row
         val newRowId = db.insert(SCHEDULE_TABLE, null, values)
@@ -222,6 +277,13 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         newObject.time_start=so.time_start
         newObject.time_end=so.time_end
         newObject.time_setting=so.time_setting
+        newObject.mon=so.mon
+        newObject.tue=so.tue
+        newObject.wed=so.wed
+        newObject.thu=so.thu
+        newObject.fri=so.fri
+        newObject.sat=so.sat
+        newObject.sun=so.sun
 
 
         Log.e(APP_NAME,"Database: Create: Result: ${newObject.name}")
@@ -242,6 +304,13 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         values.put(SCHEDULE_START, so.time_start)
         values.put(SCHEDULE_END, so.time_end)
         values.put(SCHEDULE_SETTING, so.time_setting)
+        values.put(SCHEDULE_MON, so.mon)
+        values.put(SCHEDULE_TUE, so.tue)
+        values.put(SCHEDULE_WED, so.wed)
+        values.put(SCHEDULE_THU, so.thu)
+        values.put(SCHEDULE_FRI, so.fri)
+        values.put(SCHEDULE_SAT, so.sat)
+        values.put(SCHEDULE_SUN, so.sun)
 
         val idofchangedobject = arrayOf<String>(
             so.id.toString()

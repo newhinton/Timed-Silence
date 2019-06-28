@@ -46,6 +46,7 @@ import de.felixnuesse.timedsilence.handler.WifiHandler
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.LocationAccessMissingNotification
 import java.time.LocalDateTime
+import java.util.*
 
 
 class AlarmBroadcastReceiver : BroadcastReceiver() {
@@ -141,6 +142,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         val hour = LocalDateTime.now().hour
         val min = LocalDateTime.now().minute
 
+        val dayLongName =  Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
 
 
         DatabaseHandler(context).getAllSchedules().forEach {
@@ -148,7 +150,18 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             val time = hour * 60 * 60 * 1000 + min * 60 * 1000
 
             var isInInversedTimeInterval = false
-            if (it.time_end <= it.time_start) {
+            if (it.time_end <= it.time_start && (
+
+                (it.mon && dayLongName.equals(Calendar.MONDAY)) ||
+                (it.tue && dayLongName.equals(Calendar.TUESDAY)) ||
+                (it.wed && dayLongName.equals(Calendar.WEDNESDAY)) ||
+                (it.thu && dayLongName.equals(Calendar.THURSDAY)) ||
+                (it.fri && dayLongName.equals(Calendar.FRIDAY)) ||
+                (it.sat && dayLongName.equals(Calendar.SATURDAY)) ||
+                (it.sun && dayLongName.equals(Calendar.SUNDAY))
+                        )
+
+            ) {
                 Log.e(Constants.APP_NAME, "Alarmintent: End is before or equal start")
 
                 if (time >= it.time_start && time < 24 * 60 * 60 * 1000) {

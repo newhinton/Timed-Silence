@@ -85,32 +85,37 @@
                     android:layout_height="match_parent"
                     android:id="@+id/schedule_days_layout"
                     android:gravity="center">
-                <RadioButton
+                <CheckBox
                         android:text="@string/monday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" android:id="@+id/schedule_dialog_days_monday"
                         android:layout_weight="1"/>
-                <RadioButton
+                <CheckBox
                         android:text="@string/tuesday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" android:id="@+id/schedule_dialog_days_tuesday"
                         android:layout_weight="1"/>
-                <RadioButton
+                <CheckBox
                         android:text="@string/wednesday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" android:id="@+id/schedule_dialog_days_wednesday"
                         android:layout_weight="1"/>
-                <RadioButton
+                <CheckBox
                         android:text="@string/thursday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" android:id="@+id/schedule_dialog_days_thursday"
                         android:layout_weight="1"/>
-                <RadioButton
+                <CheckBox
+                        android:text="@string/friday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/schedule_dialog_days_friday"
+                        android:layout_weight="1"/>
+                <CheckBox
                         android:text="@string/saturday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" android:id="@+id/schedule_dialog_days_saturday"
                         android:layout_weight="1"/>
-                <RadioButton
+                <CheckBox
                         android:text="@string/sunday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" android:id="@+id/schedule_dialog_days_sunday"

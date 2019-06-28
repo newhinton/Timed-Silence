@@ -123,7 +123,15 @@ class ScheduleDialog(context: Context) : Dialog(context) {
                     (schedule_start_timepicker.hour *60*60*1000+schedule_start_timepicker.minute *60*1000).toLong(),
                     (schedule_end_timepicker.hour *60*60*1000+schedule_end_timepicker.minute *60*1000).toLong(),
                     getValueForVolumeRadioGroup(),
-                    0)
+                    0,
+                    schedule_dialog_days_monday.isChecked,
+                    schedule_dialog_days_tuesday.isChecked,
+                    schedule_dialog_days_wednesday.isChecked,
+                    schedule_dialog_days_thursday.isChecked,
+                    schedule_dialog_days_friday.isChecked,
+                    schedule_dialog_days_saturday.isChecked,
+                    schedule_dialog_days_sunday.isChecked
+                    )
                 tfrag?.saveSchedule(context,so)
             }else{
                 val so = ScheduleObject(
@@ -131,7 +139,15 @@ class ScheduleDialog(context: Context) : Dialog(context) {
                     (schedule_start_timepicker.hour *60*60*1000+schedule_start_timepicker.minute *60*1000).toLong(),
                     (schedule_end_timepicker.hour *60*60*1000+schedule_end_timepicker.minute *60*1000).toLong(),
                     getValueForVolumeRadioGroup(),
-                    update_so!!.id)
+                    update_so!!.id,
+                    schedule_dialog_days_monday.isChecked,
+                    schedule_dialog_days_tuesday.isChecked,
+                    schedule_dialog_days_wednesday.isChecked,
+                    schedule_dialog_days_thursday.isChecked,
+                    schedule_dialog_days_friday.isChecked,
+                    schedule_dialog_days_saturday.isChecked,
+                    schedule_dialog_days_sunday.isChecked
+                )
                 svholder?.update(context, so)
             }
 
@@ -179,6 +195,14 @@ class ScheduleDialog(context: Context) : Dialog(context) {
         schedule_end_timepicker.minute = min
 
         setValueForVolumeRadioGroup(so.time_setting)
+
+        schedule_dialog_days_monday.isChecked=so.mon
+        schedule_dialog_days_tuesday.isChecked=so.tue
+        schedule_dialog_days_wednesday.isChecked=so.wed
+        schedule_dialog_days_thursday.isChecked=so.thu
+        schedule_dialog_days_friday.isChecked=so.fri
+        schedule_dialog_days_saturday.isChecked=so.sat
+        schedule_dialog_days_sunday.isChecked=so.sun
     }
 
     private fun decideState() {

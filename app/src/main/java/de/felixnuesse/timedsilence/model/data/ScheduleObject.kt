@@ -27,14 +27,30 @@ package de.felixnuesse.timedsilence.model.data
  *
  *
  */
-class ScheduleObject(name: String, time_start: Long, time_end: Long, time_setting: Int, id: Long) {
+class ScheduleObject(var name: String, var time_start: Long, var time_end: Long, var time_setting: Int, var id: Long) {
 
-    var name: String = name
-    var time_start: Long = time_start
-    var time_end: Long = time_end
-    var time_setting: Int = time_setting
-    var id: Long = id
 
+    constructor(name: String, time_start: Long, time_end: Long, time_setting: Int, id: Long,
+                pmon: Boolean, ptue: Boolean, pwed: Boolean, pthu: Boolean, pfri: Boolean, psat: Boolean, psun: Boolean
+    ) : this(name, time_start, time_end, time_setting, id){
+
+        mon=pmon
+        tue=ptue
+        wed=pwed
+        thu=pthu
+        fri=pfri
+        sat=psat
+        sun=psun
+
+    }
+
+    var mon: Boolean = false
+    var tue: Boolean = false
+    var wed: Boolean = false
+    var thu: Boolean = false
+    var fri: Boolean = false
+    var sat: Boolean = false
+    var sun: Boolean = false
 
 
 }

@@ -32,7 +32,7 @@ class DatabaseInfo{
     companion object {
 
         // If you change the database schema, you must increment the database version.
-        const val DATABASE_VERSION = 4
+        const val DATABASE_VERSION = 5
         const val DATABASE_NAME = "TimedSilence.db"
 
         val SCHEDULE_TABLE="timetable"
@@ -41,6 +41,13 @@ class DatabaseInfo{
         val SCHEDULE_END= "time_end"
         val SCHEDULE_SETTING= "schedule_volume"
         val SCHEDULE_NAME= "schedule_name"
+        val SCHEDULE_MON= "schedule_active_mon"
+        val SCHEDULE_TUE= "schedule_active_tue"
+        val SCHEDULE_WED= "schedule_active_wed"
+        val SCHEDULE_THU= "schedule_active_thu"
+        val SCHEDULE_FRI= "schedule_active_fri"
+        val SCHEDULE_SAT= "schedule_active_sat"
+        val SCHEDULE_SUN= "schedule_active_sun"
 
         val SQL_CREATE_ENTRIES =
             "CREATE TABLE ${SCHEDULE_TABLE} (" +
@@ -48,6 +55,13 @@ class DatabaseInfo{
                     "${SCHEDULE_START} LONG," +
                     "${SCHEDULE_END} LONG," +
                     "${SCHEDULE_SETTING} INT," +
+                    "${SCHEDULE_MON} INT DEFAULT 0," +
+                    "${SCHEDULE_TUE} INT DEFAULT 0," +
+                    "${SCHEDULE_WED} INT DEFAULT 0," +
+                    "${SCHEDULE_THU} INT DEFAULT 0," +
+                    "${SCHEDULE_FRI} INT DEFAULT 0," +
+                    "${SCHEDULE_SAT} INT DEFAULT 0," +
+                    "${SCHEDULE_SUN} INT DEFAULT 0," +
                     "${SCHEDULE_NAME} TEXT)"
 
 
