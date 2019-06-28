@@ -1,5 +1,6 @@
 package de.felixnuesse.timedsilence.ui;
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.dialogs.ScheduleDialog
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import kotlinx.android.synthetic.main.adapter_schedules_list.view.*
@@ -40,12 +42,19 @@ import kotlin.collections.ArrayList
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
-class ScheduleListAdapter(private val myDataset: ArrayList<ScheduleObject>) : RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder>() {
+class ScheduleListAdapter(private var myDataset: ArrayList<ScheduleObject>) : RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder>() {
 
         fun removeAt(position: Int) {
                 myDataset.removeAt(position)
-                notifyItemRemoved(position)
-                notifyItemRangeChanged(position, myDataset.size)
+                notifyDataSetChanged()
+        }
+
+
+        fun update(context: Context, so: ScheduleObject){
+                DatabaseHandler(context).updateScheduleEntry(so)
+                myDataset.clear()
+                myDataset = DatabaseHandler(context).getAllSchedules()
+                notifyDataSetChanged()
         }
 
 // Provide a reference to the views for each data item
@@ -83,6 +92,9 @@ class ScheduleViewHolder(val scheduleView: View) : RecyclerView.ViewHolder(sched
 
                 }
 
+                holder.scheduleView.edit_schedule_element.setOnClickListener {
+                        ScheduleDialog(holder.scheduleView.context, this, myDataset.get(position)).show()
+                }
 
                 var imageID=R.drawable.ic_volume_up_black_24dp
                 when (myDataset.get(position).time_setting) {

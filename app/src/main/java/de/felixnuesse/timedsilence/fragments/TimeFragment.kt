@@ -59,7 +59,7 @@ class TimeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         button_time_fragment.setOnClickListener {
             Log.e(APP_NAME, "TimeFragment: Add new!")
-            ScheduleDialog(view.context, this, true).show()
+            ScheduleDialog(view.context, this).show()
         }
 
 

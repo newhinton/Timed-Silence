@@ -3,21 +3,19 @@ package de.felixnuesse.timedsilence.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.TextView
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
-import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
 import kotlinx.android.synthetic.main.schedule_dialog.*
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -47,10 +45,26 @@ import kotlinx.android.synthetic.main.schedule_dialog.*
  *
  *
  */
-class ScheduleDialog(context: Context, var tfrag: TimeFragment, private var create: Boolean) : Dialog(context) {
+class ScheduleDialog(context: Context) : Dialog(context) {
 
 
-    private var state: Int = 0;
+    private var tfrag: TimeFragment? = null
+    private var svholder: ScheduleListAdapter? = null
+    private var create: Boolean = true
+    private var update_so: ScheduleObject? = null
+
+    constructor(context: Context, tfragment: TimeFragment) : this(context) {
+        tfrag=tfragment
+        create=true
+    }
+
+    constructor(context: Context, sholder: ScheduleListAdapter, so: ScheduleObject) : this(context) {
+        svholder=sholder
+        create=false
+        update_so=so
+    }
+
+    private var state: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +72,11 @@ class ScheduleDialog(context: Context, var tfrag: TimeFragment, private var crea
         setContentView(R.layout.schedule_dialog)
         window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         setCanceledOnTouchOutside(true)
+
+
+        if(!create){
+            prepareUpdate(update_so!!)
+        }
 
 
         hideAll()
@@ -97,17 +116,28 @@ class ScheduleDialog(context: Context, var tfrag: TimeFragment, private var crea
 
         schedule_save.setOnClickListener {
             Log.e(Constants.APP_NAME, "ScheduleDialog: save!")
-            tfrag.saveSchedule(context, ScheduleObject(
-                schedule_title_textfield.text.toString(),
-                (schedule_start_timepicker.hour *60*60*1000+schedule_start_timepicker.minute *60*1000).toLong(),
-                (schedule_end_timepicker.hour *60*60*1000+schedule_end_timepicker.minute *60*1000).toLong(),
-                getValueForVolumeRadioGroup(),
-                0)
-            )
+
+            if(create){
+                val so = ScheduleObject(
+                    schedule_title_textfield.text.toString(),
+                    (schedule_start_timepicker.hour *60*60*1000+schedule_start_timepicker.minute *60*1000).toLong(),
+                    (schedule_end_timepicker.hour *60*60*1000+schedule_end_timepicker.minute *60*1000).toLong(),
+                    getValueForVolumeRadioGroup(),
+                    0)
+                tfrag?.saveSchedule(context,so)
+            }else{
+                val so = ScheduleObject(
+                    schedule_title_textfield.text.toString(),
+                    (schedule_start_timepicker.hour *60*60*1000+schedule_start_timepicker.minute *60*1000).toLong(),
+                    (schedule_end_timepicker.hour *60*60*1000+schedule_end_timepicker.minute *60*1000).toLong(),
+                    getValueForVolumeRadioGroup(),
+                    update_so!!.id)
+                svholder?.update(context, so)
+            }
+
+
             this.cancel()
         }
-
-
     }
 
     private fun hideAll() {
@@ -125,6 +155,30 @@ class ScheduleDialog(context: Context, var tfrag: TimeFragment, private var crea
             R.id.schedule_dialog_rb_vibrate -> return Constants.TIME_SETTING_VIBRATE
         }
         return Constants.TIME_SETTING_VIBRATE;
+    }
+
+    private fun setValueForVolumeRadioGroup(id: Int){
+        when (id) {
+            Constants.TIME_SETTING_LOUD -> schedule_dialog_rb_loud.isChecked = true
+            Constants.TIME_SETTING_SILENT -> schedule_dialog_rb_silent.isChecked = true
+            Constants.TIME_SETTING_VIBRATE -> schedule_dialog_rb_vibrate.isChecked = true
+        }
+    }
+
+    private fun prepareUpdate(so: ScheduleObject){
+        schedule_title_textfield.setText(so.name)
+
+        var hours= TimeUnit.MILLISECONDS.toHours(so.time_start).toInt()
+        var min = TimeUnit.MILLISECONDS.toMinutes(so.time_start-TimeUnit.HOURS.toMillis(hours.toLong())).toInt()
+        schedule_start_timepicker.hour = hours
+        schedule_start_timepicker.minute = min
+
+        hours= TimeUnit.MILLISECONDS.toHours(so.time_end).toInt()
+        min = TimeUnit.MILLISECONDS.toMinutes(so.time_end-TimeUnit.HOURS.toMillis(hours.toLong())).toInt()
+        schedule_end_timepicker.hour = hours
+        schedule_end_timepicker.minute = min
+
+        setValueForVolumeRadioGroup(so.time_setting)
     }
 
     private fun decideState() {
