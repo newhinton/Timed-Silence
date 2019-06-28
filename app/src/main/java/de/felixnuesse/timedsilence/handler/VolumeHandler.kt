@@ -86,7 +86,9 @@ class VolumeHandler {
             }
 
 
-            setMediaVolume(0, context, manager)
+            if(!manager.isMusicActive){
+                setMediaVolume(0, context, manager)
+            }
 
             setStreamToPercent(
                 manager,
@@ -119,7 +121,10 @@ class VolumeHandler {
             mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
 
 
-            setMediaVolume(0, context, manager)
+            if(!manager.isMusicActive){
+                setMediaVolume(0, context, manager)
+            }
+
 
 
             var alarmVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
@@ -163,7 +168,9 @@ class VolumeHandler {
             var ringerVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_RINGER, PrefConstants.PREF_VOLUME_RINGER_DEFAULT)
 
 
-            setMediaVolume(mediaVolume, context, manager)
+            if(!manager.isMusicActive){
+                setMediaVolume(0, context, manager)
+            }
 
             setStreamToPercent(
                 manager,
