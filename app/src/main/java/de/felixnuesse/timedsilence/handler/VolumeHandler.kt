@@ -29,6 +29,7 @@ package de.felixnuesse.timedsilence.handler
  */
 
 import android.app.Activity
+import android.app.AlarmManager
 import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Context

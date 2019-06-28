@@ -27,4 +27,19 @@
     <string name="LocationAccessNotification">LocationAccessNotification</string>
     <string name="LocationAccessNotification_TITLE">Location Service required!</string>
     <string name="LocationAccessNotification_CONTENT">Because the wifissid can be used to track you, you need to enable Location Services to use Wifinames as profiles!</string>
+    <string name="schedule_dialog_title_title">Set the name</string>
+    <string name="schedule_dialog_title_start">Set the Starttime</string>
+    <string name="schedule_dialog_title_end">Set the Endtime</string>
+    <string name="schedule_dialog_title_volume">Set the Volume</string>
+    <string name="schedule_dialog_title_days">Set the Days</string>
+    <string name="sunday">sunday</string>
+    <string name="saturday">saturday</string>
+    <string name="thursday">thursday</string>
+    <string name="tuesday">tuesday</string>
+    <string name="monday">monday</string>
+    <string name="wednesday">wednesday</string>
+    <string name="schedule_dialog_title_textfield_hint">Name</string>
+    <string name="next">Next</string>
+    <string name="back">back</string>
+    <string name="schedule_dialog_save">Save</string>
 </resources>
