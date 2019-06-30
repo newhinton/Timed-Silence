@@ -15,10 +15,10 @@ class HeadsetHandler {
 
             var isConnected = false
 
-            Log.e(Constants.APP_NAME, "HeadsetHandler: Checking devices")
+            Log.d(Constants.APP_NAME, "HeadsetHandler: Checking devices")
             for (deviceInfo in audioManager!!.getDevices(AudioManager.GET_DEVICES_OUTPUTS)) {
 
-                Log.e(Constants.APP_NAME, "HeadsetHandler: Devicetype: "+deviceInfo.type)
+                Log.d(Constants.APP_NAME, "HeadsetHandler: Devicetype: "+deviceInfo.type)
 
                 when (deviceInfo.type) {
                     AudioDeviceInfo.TYPE_WIRED_HEADPHONES -> isConnected = true
@@ -27,7 +27,7 @@ class HeadsetHandler {
                     AudioDeviceInfo.TYPE_BLUETOOTH_A2DP -> isConnected = true
                 }
             }
-            Log.e(Constants.APP_NAME, "HeadsetHandler: Found Headset: $isConnected")
+            Log.d(Constants.APP_NAME, "HeadsetHandler: Found Headset: $isConnected")
             return isConnected
         }
     }

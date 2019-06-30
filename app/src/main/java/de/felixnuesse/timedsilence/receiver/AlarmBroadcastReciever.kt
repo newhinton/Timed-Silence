@@ -57,7 +57,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         Log.e(Constants.APP_NAME, "Alarmintent: Recieved Alarmintent at: $current")
 
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)) {
-            Log.e(Constants.APP_NAME, "Alarmintent: Content is to \"check the time\"")
+            Log.d(Constants.APP_NAME, "Alarmintent: Content is to \"check the time\"")
 
             val sharedPref = context?.getSharedPreferences("test", Context.MODE_PRIVATE)
             with(sharedPref!!.edit()) {
@@ -73,10 +73,10 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_DELAY)) {
 
             val extra = intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA)
-            Log.e(Constants.APP_NAME, "Alarmintent: Content is to \"" + extra + "\"")
+            Log.d(Constants.APP_NAME, "Alarmintent: Content is to \"" + extra + "\"")
 
             if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
-                Log.e(Constants.APP_NAME, "Alarmintent: Content is to \"Restart recurring alarms\"")
+                Log.d(Constants.APP_NAME, "Alarmintent: Content is to \"Restart recurring alarms\"")
                 AlarmHandler.createRepeatingTimecheck(context!!)
             }
 
@@ -95,12 +95,12 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
 
         val db = DatabaseHandler(nonNullContext)
-        Log.e(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: " + db.getAllWifiEntries().size)
+        Log.d(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: " + db.getAllWifiEntries().size)
         if (db.getAllWifiEntries().size > 0) {
             val isLocationEnabled = LocationHandler.checkIfLocationServiceIsEnabled(nonNullContext)
             if (!isLocationEnabled) {
                 with(NotificationManagerCompat.from(nonNullContext)) {
-                    Log.e(Constants.APP_NAME, "Alarmintent: Locationstate: Disabled!")
+                    Log.d(Constants.APP_NAME, "Alarmintent: Locationstate: Disabled!")
                     notify(
                         LocationAccessMissingNotification.NOTIFICATION_ID,
                         LocationAccessMissingNotification.buildNotification(nonNullContext)
@@ -111,25 +111,25 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
                 db.getAllWifiEntries().forEach {
 
                     val ssidit = "\"" + it.ssid + "\""
-                    Log.e(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
+                    Log.d(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
                     if (currentSSID.equals(ssidit) && it.type == WIFI_TYPE_CONNECTED) {
                         if (it.volume == TIME_SETTING_LOUD) {
                             VolumeHandler.setLoud(nonNullContext)
-                            Log.e(
+                            Log.d(
                                 Constants.APP_NAME,
                                 "Alarmintent: WifiCheck: Set lout, because Connected to $currentSSID"
                             )
                         }
                         if (it.volume == TIME_SETTING_SILENT) {
                             VolumeHandler.setSilent(nonNullContext)
-                            Log.e(
+                            Log.d(
                                 Constants.APP_NAME,
                                 "Alarmintent: WifiCheck: Set silent, because Connected to $currentSSID"
                             )
                         }
                         if (it.volume == TIME_SETTING_VIBRATE) {
                             VolumeHandler.setVibrate(nonNullContext)
-                            Log.e(
+                            Log.d(
                                 Constants.APP_NAME,
                                 "Alarmintent: WifiCheck: Set vibrate, because Connected to $currentSSID"
                             )
@@ -142,39 +142,50 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         val hour = LocalDateTime.now().hour
         val min = LocalDateTime.now().minute
 
-        val dayLongName =  Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
+        val dayLongName = Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
+        val dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
 
-
-        DatabaseHandler(context).getAllSchedules().forEach {
-
+        loop@ for (it in DatabaseHandler(context).getAllSchedules()) {
             val time = hour * 60 * 60 * 1000 + min * 60 * 1000
 
+            Log.d(Constants.APP_NAME, "Alarmintent: Current Schedule: ${it.name}")
+            Log.d(Constants.APP_NAME, "Alarmintent: Current Weekday: $dayLongName")
+
+            var isAllowedDay = false
+            when (dayOfWeek){
+                2 -> if (it.mon) { isAllowedDay = true }
+                3 -> if (it.tue) { isAllowedDay = true }
+                4 -> if (it.wed) { isAllowedDay = true }
+                5 -> if (it.thu) { isAllowedDay = true }
+                6 -> if (it.fri) { isAllowedDay = true }
+                0 -> if (it.sat) { isAllowedDay = true }
+                1 -> if (it.sun) { isAllowedDay = true }
+            }
+
+            Log.d(Constants.APP_NAME, "Alarmintent: allowed: $isAllowedDay $dayLongName ${Calendar.MONDAY} ${dayLongName.equals(Calendar.MONDAY)}")
+
+            if (!isAllowedDay) {
+                continue@loop
+            }
+
+
+
+
             var isInInversedTimeInterval = false
-            if (it.time_end <= it.time_start && (
-
-                (it.mon && dayLongName.equals(Calendar.MONDAY)) ||
-                (it.tue && dayLongName.equals(Calendar.TUESDAY)) ||
-                (it.wed && dayLongName.equals(Calendar.WEDNESDAY)) ||
-                (it.thu && dayLongName.equals(Calendar.THURSDAY)) ||
-                (it.fri && dayLongName.equals(Calendar.FRIDAY)) ||
-                (it.sat && dayLongName.equals(Calendar.SATURDAY)) ||
-                (it.sun && dayLongName.equals(Calendar.SUNDAY))
-                        )
-
-            ) {
+            if (it.time_end <= it.time_start) {
                 Log.e(Constants.APP_NAME, "Alarmintent: End is before or equal start")
 
                 if (time >= it.time_start && time < 24 * 60 * 60 * 1000) {
-                    Log.e(
+                    Log.d(
                         Constants.APP_NAME,
                         "Alarmintent: Current time is after start time of interval but before 0:00"
                     )
-                    isInInversedTimeInterval = true;
+                    isInInversedTimeInterval = true
                 }
 
                 if (time < it.time_end && time >= 0) {
-                    Log.e(Constants.APP_NAME, "Alarmintent: Current time is before end time of interval but after 0:00")
-                    isInInversedTimeInterval = true;
+                    Log.d(Constants.APP_NAME, "Alarmintent: Current time is before end time of interval but after 0:00")
+                    isInInversedTimeInterval = true
                 }
             }
 
@@ -198,6 +209,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             }
         }
     }
+
 
     fun Any?.notNull(f: () -> Unit) {
         if (this != null) {

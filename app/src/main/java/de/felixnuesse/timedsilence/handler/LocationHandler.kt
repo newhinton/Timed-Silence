@@ -39,7 +39,7 @@ class LocationHandler {
             val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
             val result = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            Log.e(Constants.APP_NAME, "LocationHandler: State: $result")
+            Log.d(Constants.APP_NAME, "LocationHandler: State: $result")
 
             return result
         }

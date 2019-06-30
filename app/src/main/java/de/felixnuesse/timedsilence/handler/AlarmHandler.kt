@@ -71,7 +71,7 @@ class AlarmHandler {
 
        fun createRepeatingTimecheck(context: Context, intervalInMinutes: Int){
 
-           Log.e(Constants.APP_NAME, "AlarmHandler: CreateRepeatingTimecheck: Precreate")
+           Log.d(Constants.APP_NAME, "AlarmHandler: CreateRepeatingTimecheck: Precreate")
            //todo create inexact version
            val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
            alarms.setRepeating(
@@ -89,7 +89,7 @@ class AlarmHandler {
            createIntentBroadcast(context)?.cancel()
 
            if(!checkIfNextAlarmExists(context)){
-               Log.e(Constants.APP_NAME, "AlarmHandler: Recurring alarm canceled")
+               Log.d(Constants.APP_NAME, "AlarmHandler: Recurring alarm canceled")
                return
            }
            Log.e(Constants.APP_NAME, "AlarmHandler: Error canceling recurring alarm!")
@@ -141,10 +141,10 @@ class AlarmHandler {
            )
 
            if(pIntent == null){
-               Log.e(Constants.APP_NAME, "AlarmHandler: There is no next Alarm set!")
+               Log.d(Constants.APP_NAME, "AlarmHandler: There is no next Alarm set!")
                return false
            }else {
-               Log.e(Constants.APP_NAME, "AlarmHandler: There is an upcoming Alarm!")
+               Log.d(Constants.APP_NAME, "AlarmHandler: There is an upcoming Alarm!")
                return true
            }
        }
@@ -163,7 +163,7 @@ class AlarmHandler {
                 return context.getString(R.string.no_next_time_set)
             }
 
-            Log.e(Constants.APP_NAME, "AlarmHandler: Next Runtime: "+clockInfo.triggerTime)
+            Log.d(Constants.APP_NAME, "AlarmHandler: Next Runtime: "+clockInfo.triggerTime)
             return  DateFormat.getDateInstance().format(Date(clockInfo.triggerTime))
 
         }

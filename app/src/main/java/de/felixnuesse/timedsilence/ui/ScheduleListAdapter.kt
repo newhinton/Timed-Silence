@@ -2,10 +2,12 @@ package de.felixnuesse.timedsilence.ui;
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
@@ -86,13 +88,14 @@ class ScheduleViewHolder(val scheduleView: View) : RecyclerView.ViewHolder(sched
                 holder.scheduleView.textView_schedule_row_time_start.text = df.format(myDataset.get(position).time_start)
                 holder.scheduleView.textView_schedule_row_time_end.text =  df.format(myDataset.get(position).time_end)
 
-                if(myDataset.get(position).mon){holder.scheduleView.mon.setTextColor(Color.BLACK)}
-                if(myDataset.get(position).tue){holder.scheduleView.tue.setTextColor(Color.BLACK)}
-                if(myDataset.get(position).wed){holder.scheduleView.wed.setTextColor(Color.BLACK)}
-                if(myDataset.get(position).thu){holder.scheduleView.thu.setTextColor(Color.BLACK)}
-                if(myDataset.get(position).fri){holder.scheduleView.fri.setTextColor(Color.BLACK)}
-                if(myDataset.get(position).sat){holder.scheduleView.sat.setTextColor(Color.BLACK)}
-                if(myDataset.get(position).sun){holder.scheduleView.sun.setTextColor(Color.BLACK)}
+
+                if(myDataset.get(position).mon){applyTextfieldStyle(holder.scheduleView.mon)}
+                if(myDataset.get(position).tue){applyTextfieldStyle(holder.scheduleView.tue)}
+                if(myDataset.get(position).wed){applyTextfieldStyle(holder.scheduleView.wed)}
+                if(myDataset.get(position).thu){applyTextfieldStyle(holder.scheduleView.thu)}
+                if(myDataset.get(position).fri){applyTextfieldStyle(holder.scheduleView.fri)}
+                if(myDataset.get(position).sat){applyTextfieldStyle(holder.scheduleView.sat)}
+                if(myDataset.get(position).sun){applyTextfieldStyle(holder.scheduleView.sun)}
 
 
 
@@ -118,6 +121,11 @@ class ScheduleViewHolder(val scheduleView: View) : RecyclerView.ViewHolder(sched
 
 
 
+        }
+
+        private fun applyTextfieldStyle(view: TextView){
+                view.setTextColor(Color.BLACK)
+                view.setTypeface(view.typeface, Typeface.BOLD)
         }
 
         // Return the size of your dataset (invoked by the layout manager)

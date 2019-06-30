@@ -50,7 +50,7 @@ class VolumeHandler {
             val notificationManager = activity.baseContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (!notificationManager.isNotificationPolicyAccessGranted) {
 
-                Log.e(Constants.APP_NAME, "VolumeHandler: Ask for DND-Access")
+                Log.d(Constants.APP_NAME, "VolumeHandler: Ask for DND-Access")
 
                 val builder = AlertDialog.Builder(activity)
                 builder.setMessage(R.string.GrantDNDPermissionAccess)
@@ -202,12 +202,12 @@ class VolumeHandler {
         fun setMediaVolume(percentage: Int, context: Context, manager: AudioManager){
 
 
-            Log.e(Constants.APP_NAME, "VolumeHandler: Setting Audio Volume!")
+            Log.d(Constants.APP_NAME, "VolumeHandler: Setting Audio Volume!")
 
             val ignoreCheckWhenConnected=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)
 
             if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
-                Log.e(Constants.APP_NAME, "VolumeHandler: Found headset, skipping...")
+                Log.d(Constants.APP_NAME, "VolumeHandler: Found headset, skipping...")
                 return
             }
 
@@ -216,12 +216,12 @@ class VolumeHandler {
                 AudioManager.STREAM_MUSIC,
                 percentage
             )
-            Log.e(Constants.APP_NAME, "VolumeHandler: Mediavolume set.")
+            Log.d(Constants.APP_NAME, "VolumeHandler: Mediavolume set.")
 
         }
 
         fun isButtonClickAudible(context: Context): Boolean{
-            Log.e(Constants.APP_NAME, "VolumeHandler: Check if Buttonclicks are audible")
+            Log.d(Constants.APP_NAME, "VolumeHandler: Check if Buttonclicks are audible")
             val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
             if(0>=manager.getStreamVolume(AudioManager.STREAM_RING)){
                 return false

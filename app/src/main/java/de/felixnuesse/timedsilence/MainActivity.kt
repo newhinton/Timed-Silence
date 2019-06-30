@@ -55,6 +55,7 @@ import de.felixnuesse.timedsilence.activities.SettingsMainActivity
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.VolumeHandler
+import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
@@ -258,7 +259,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         Log.e(Constants.APP_NAME, "Main: setHandlerState: State: "+button_check.text)
 
         if(button_check.text == getString(R.string.timecheck_start)){
-
             AlarmHandler.createRepeatingTimecheck(this)
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
 
