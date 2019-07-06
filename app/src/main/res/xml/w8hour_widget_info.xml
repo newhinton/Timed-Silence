@@ -3,7 +3,7 @@
                     android:minWidth="40dp"
                     android:minHeight="40dp"
                     android:updatePeriodMillis="86400000"
-                    android:previewImage="@drawable/widget_autohour"
+                    android:previewImage="@drawable/widget_8hour"
                     android:initialLayout="@layout/abstract_hour_pause_widget"
                     android:resizeMode="horizontal|vertical"
                     android:widgetCategory="home_screen"

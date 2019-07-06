@@ -26,7 +26,9 @@
     <string name="pause_check_schedule">Pause Timed Silence</string>
     <string name="LocationAccessNotification">LocationAccessNotification</string>
     <string name="LocationAccessNotification_TITLE">Location Service required!</string>
-    <string name="LocationAccessNotification_CONTENT">Because the wifissid can be used to track you, you need to enable Location Services to use Wifinames as profiles!</string>
+    <string name="LocationAccessNotification_CONTENT">Because the wifissid can be used to track you, you need to enable
+        Location Services to use Wifinames as profiles!
+    </string>
     <string name="schedule_dialog_title_title">Set the name</string>
     <string name="schedule_dialog_title_start">Set the Starttime</string>
     <string name="schedule_dialog_title_end">Set the Endtime</string>
@@ -43,4 +45,8 @@
     <string name="back">back</string>
     <string name="schedule_dialog_save">Save</string>
     <string name="friday">friday</string>
+    <string name="AutoHourWidget">Auto Hour</string>
+    <string name="EightHourWidget">8 Hours</string>
+    <string name="ThreeHourWidget">3 Hours</string>
+    <string name="OneHourWidget">1 Hour</string>
 </resources>

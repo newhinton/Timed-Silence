@@ -156,8 +156,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         // potentially add data to the intent
         i.putExtra("KEY1", "Value to be used by the service");
         startService(i)
-
-
         buttonState()
     }
 
@@ -252,6 +250,9 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             setFabStopped(fab, fabTextView)
         }
         updateTimeCheckDisplay()
+        val i = Intent(this, WidgetService::class.java)
+        i.putExtra(Constants.WIDGET_SERVICE_UPDATE_STATE, true)
+        startService(i)
     }
 
     private fun setHandlerState() {

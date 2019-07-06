@@ -12,9 +12,7 @@
     <uses-permission
             android:name="android.permission.MODIFY_AUDIO_SETTINGS"/> <!-- Needed for headset identification -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
             android:allowBackup="true"
@@ -24,6 +22,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name=".activities.SettingsMainActivity">
         </activity>
         <activity android:name=".activities.SettingsVolumeActivity">
@@ -68,7 +67,38 @@
         <service android:name=".services.PauseTimerService"/>
         <service android:name=".services.WidgetService"/>
 
-        <receiver android:name=".widgets.OneHourWidget">
+        <receiver android:name=".widgets.OneHourWidget"
+                  android:label="@string/OneHourWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/w1hour_widget_info"/>
+        </receiver>
+        <receiver android:name=".widgets.ThreeHourWidget"
+                  android:label="@string/ThreeHourWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/w3hour_widget_info"/>
+        </receiver>
+        <receiver android:name=".widgets.EightHourWidget"
+                  android:label="@string/EightHourWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/w8hour_widget_info"/>
+        </receiver>
+        <receiver android:name=".widgets.AutoHourWidget"
+                  android:label="@string/AutoHourWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
@@ -77,35 +107,15 @@
                     android:name="android.appwidget.provider"
                     android:resource="@xml/ahour_widget_info"/>
         </receiver>
-        <receiver android:name=".widgets.ThreeHourWidget">
+        <receiver android:name=".widgets.StartStopWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                     android:name="android.appwidget.provider"
-                    android:resource="@xml/ahour_widget_info"/>
+                    android:resource="@xml/start_stop_widget_info"/>
         </receiver>
-        <receiver android:name=".widgets.EightHourWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-
-            <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/ahour_widget_info"/>
-        </receiver>
-
-        <receiver android:name=".widgets.AutoHourWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-
-            <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/ahour_widget_info"/>
-        </receiver>
-
     </application>
 
 </manifest>

@@ -162,14 +162,9 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
                 1 -> if (it.sun) { isAllowedDay = true }
             }
 
-            Log.d(Constants.APP_NAME, "Alarmintent: allowed: $isAllowedDay $dayLongName ${Calendar.MONDAY} ${dayLongName.equals(Calendar.MONDAY)}")
-
             if (!isAllowedDay) {
                 continue@loop
             }
-
-
-
 
             var isInInversedTimeInterval = false
             if (it.time_end <= it.time_start) {

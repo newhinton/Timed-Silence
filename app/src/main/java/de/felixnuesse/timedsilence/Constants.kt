@@ -56,6 +56,9 @@ class Constants {
         const val SERVICE_INTENT_TICK_ACTION = "SERVICE_INTENT_TICK_ACTION"
         const val SERVICE_INTENT_STOP_ACTION = "SERVICE_INTENT_STOP_ACTION"
 
+
+        const val WIDGET_SERVICE_UPDATE_STATE = "WIDGET_SERVICE_UPDATE_STATE"
+
         const val SEC = 1000
         const val MIN = 60*SEC
         const val HOUR = 60*MIN

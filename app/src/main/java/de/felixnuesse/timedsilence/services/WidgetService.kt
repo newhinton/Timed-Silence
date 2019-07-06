@@ -60,6 +60,10 @@ class WidgetService : Service(), TimerInterface {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
+        if(intent?.getBooleanExtra(Constants.WIDGET_SERVICE_UPDATE_STATE, false)!!){
+            setStateOnPlayPauseWidget()
+            return super.onStartCommand(intent, flags, startId)
+        }
 
         Log.e(Constants.APP_NAME,"WidgetService: Started and registered service!")
         PauseTimerService.registerListener(this)
@@ -75,8 +79,13 @@ class WidgetService : Service(), TimerInterface {
         sendBroadcast(updateWidgetIntentByName(EightHourWidget::class.java))
         sendBroadcast(updateWidgetIntentByName(AutoHourWidget::class.java))
 
-        Log.e(Constants.APP_NAME,"WidgetService: Updated Widgets!")
+        Log.e(Constants.APP_NAME,"WidgetService: Updated PauseWidgets!")
 
+    }
+
+    fun setStateOnPlayPauseWidget(){
+        sendBroadcast(updateWidgetIntentByName(StartStopWidget::class.java))
+        Log.e(Constants.APP_NAME,"WidgetService: Updated StateWidgets!")
     }
 
 
