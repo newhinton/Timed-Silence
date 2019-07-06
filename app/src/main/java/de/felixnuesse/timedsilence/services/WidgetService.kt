@@ -62,6 +62,7 @@ class WidgetService : Service(), TimerInterface {
 
         if(intent?.getBooleanExtra(Constants.WIDGET_SERVICE_UPDATE_STATE, false)!!){
             setStateOnPlayPauseWidget()
+
             return super.onStartCommand(intent, flags, startId)
         }
 
@@ -106,5 +107,15 @@ class WidgetService : Service(), TimerInterface {
         return intent
     }
 
+
+    companion object{
+
+        fun updateStateWidget(context: Context){
+            val i = Intent(context, WidgetService::class.java)
+            i.putExtra(Constants.WIDGET_SERVICE_UPDATE_STATE, true)
+            context.startService(i)
+        }
+
+    }
 
 }

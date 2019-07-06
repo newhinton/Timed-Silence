@@ -250,9 +250,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             setFabStopped(fab, fabTextView)
         }
         updateTimeCheckDisplay()
-        val i = Intent(this, WidgetService::class.java)
-        i.putExtra(Constants.WIDGET_SERVICE_UPDATE_STATE, true)
-        startService(i)
+        WidgetService.updateStateWidget(this)
     }
 
     private fun setHandlerState() {
