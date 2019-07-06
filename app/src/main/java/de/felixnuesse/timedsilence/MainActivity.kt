@@ -48,6 +48,7 @@ import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import android.content.res.ColorStateList
 import android.support.design.widget.FloatingActionButton
+import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
@@ -61,14 +62,21 @@ import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import de.felixnuesse.timedsilence.ui.PauseNotification
 import kotlinx.android.synthetic.main.content_main.*
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), TimerInterface {
+
+
+    private var button_check : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+
+        button_check = getString(R.string.timecheck_stopped)
 
         //This hidden button is needed because the buttonsound of the main button is supressed because the device is still muted. A click is performed on this button, and when the onClick handler is set,
         //it plays a sound after the volume has changed to loud. Therefore it seems to be the main button who makes the sound
@@ -77,13 +85,14 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             Log.e(APP_NAME,"MainAcitivity: HiddenButton: PerformClick to make sound")
         }
 
+        fab.setOnClickListener { view ->
+            Log.e(Constants.APP_NAME, "Main: fab: Clicked")
+            setHandlerState()
+        }
+
         frameLayout.setOnClickListener { view ->
             Log.e(Constants.APP_NAME, "Main: FabTester: Clicked")
             buttonState()
-        }
-        button_check.setOnClickListener { view ->
-            Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: Clicked")
-            setHandlerState()
         }
 
 
@@ -195,15 +204,15 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     override fun timerStarted(context: Context, timeAsLong: Long, timeAsString: String) {}
 
     override fun timerReduced(context: Context, timeAsLong: Long, timeAsString: String) {
-        textViewPausedTimestamp.visibility= View.VISIBLE
-        label_Paused_until.visibility= View.VISIBLE
-        textViewPausedTimestamp.text=PauseTimerService.getTimestampInProperLength(timeAsLong);
+        //textViewPausedTimestamp.visibility= View.VISIBLE
+        //label_Paused_until.visibility= View.VISIBLE
+        //textViewPausedTimestamp.text=PauseTimerService.getTimestampInProperLength(timeAsLong);
         buttonState()
     }
 
     override fun timerFinished(context: Context) {
-        textViewPausedTimestamp.visibility= View.INVISIBLE
-        label_Paused_until.visibility= View.INVISIBLE
+        //textViewPausedTimestamp.visibility= View.INVISIBLE
+        //label_Paused_until.visibility= View.INVISIBLE
         buttonState()
     }
 
@@ -230,9 +239,28 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         //nextCheckDisplayTextView.text=AlarmHandler.getNextAlarmTimestamp(this)
 
         val sharedPref = this?.getSharedPreferences("test", Context.MODE_PRIVATE) ?: return
-        val highScore = sharedPref.getString("last_ExecTime", "notset")
+        val lasttime = sharedPref.getLong("last_ExecTime", 0)
 
-        nextCheckDisplayTextView.text=highScore
+        val current =System.currentTimeMillis()
+        val date = Date(current)
+
+
+        //val df = DateFormat.
+        val date1 = Date(current)
+        val date2 = Date(lasttime)
+
+        var difference = date1.time - date2.time
+
+        val days = (difference / (1000 * 60 * 60 * 24));
+        val hours = ((difference - 1000 * 60 * 60 * 24 * days) / (1000 * 60 * 60))
+        val min = (difference - 1000 * 60 * 60 * 24 * days - 1000 * 60 * 60 * hours) / (1000 * 60)
+
+        var highScore =  DateFormat.getTimeFormat(this)
+        if(hours>24){
+            highScore =  DateFormat.getDateFormat(this)
+        }
+
+        nextCheckDisplayTextView.text=highScore.format(date)
     }
 
 
@@ -240,7 +268,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     private fun buttonState() {
         val fabTextView = findViewById<TextView>(R.id.fab_textview)
 
-        Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: "+button_check.text)
+        Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: "+button_check)
 
         if(AlarmHandler.checkIfNextAlarmExists(this)){
             setFabStarted(fab, fabTextView)
@@ -255,14 +283,14 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     private fun setHandlerState() {
 
-        Log.e(Constants.APP_NAME, "Main: setHandlerState: State: "+button_check.text)
+        Log.e(Constants.APP_NAME, "Main: setHandlerState: State: "+button_check)
 
-        if(button_check.text == getString(R.string.timecheck_start)){
+        if(button_check == getString(R.string.timecheck_start)){
             AlarmHandler.createRepeatingTimecheck(this)
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
 
 
-        }else if(button_check.text == getString(R.string.timecheck_paused)){
+        }else if(button_check == getString(R.string.timecheck_paused)){
 
             AlarmHandler.createRepeatingTimecheck(this)
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
@@ -280,22 +308,25 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     fun setFabStarted(fab: FloatingActionButton, text: TextView){
         text.text = getString(R.string.timecheck_running)
+        fab.setImageResource(R.drawable.ic_play_arrow_white_24dp)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_started))
-        button_check.text=getString(R.string.timecheck_stop)
+        button_check=getString(R.string.timecheck_stop)
 
     }
 
     fun setFabStopped(fab: FloatingActionButton, text: TextView){
         text.text = getString(R.string.timecheck_stopped)
+        fab.setImageResource(R.drawable.ic_pause_white_24dp)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
         AlarmHandler.removeRepeatingTimecheck(this)
-        button_check.text=getString(R.string.timecheck_start)
+        button_check=getString(R.string.timecheck_start)
     }
 
     fun setFabPaused(fab: FloatingActionButton, text: TextView){
         text.text = getString(R.string.timecheck_paused)
+        fab.setImageResource(R.drawable.ic_fast_forward_white_24dp)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_paused))
-        button_check.text=getString(R.string.timecheck_paused)
+        button_check=getString(R.string.timecheck_paused)
     }
 
     @Deprecated("replace by callback")

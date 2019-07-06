@@ -31,7 +31,6 @@ package de.felixnuesse.timedsilence.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.location.Location
 import android.support.v4.app.NotificationManagerCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
@@ -49,19 +48,25 @@ import java.time.LocalDateTime
 import java.util.*
 
 
+
+
 class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        val current = LocalDateTime.now()
-        Log.e(Constants.APP_NAME, "Alarmintent: Recieved Alarmintent at: $current")
+        val current =System.currentTimeMillis()
+        val date = Date(current)
+        val dateFormat = android.text.format.DateFormat.getDateFormat(context)
+        val currentformatted = dateFormat.format(date)
+
+        Log.e(Constants.APP_NAME, "Alarmintent: Recieved Alarmintent at: $currentformatted")
 
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)) {
             Log.d(Constants.APP_NAME, "Alarmintent: Content is to \"check the time\"")
 
             val sharedPref = context?.getSharedPreferences("test", Context.MODE_PRIVATE)
             with(sharedPref!!.edit()) {
-                putString("last_ExecTime", current.toString())
+                putLong("last_ExecTime", current)
                 apply()
             }
 

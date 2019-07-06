@@ -9,164 +9,18 @@
         tools:showIn="@layout/activity_main"
         tools:context=".MainActivity">
 
-    <TextView
-            android:text="TextView"
+    <Button
+            android:text="DONOTDELETE"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textview_waittime_content" app:layout_constraintEnd_toStartOf="@+id/textView4"
-            android:layout_marginEnd="8dp" android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"/>
-    <TextView
-            android:text="Interval between Checks:"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            android:id="@+id/interval_text_view"/>
-    <TextView
-            android:text="Minutes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" android:id="@+id/textView4"/>
-    <SeekBar
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/seekBar_waittime"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/interval_text_view"/>
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="17dp"
-            tools:layout_editor_absoluteX="140dp"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="center_vertical"
-            app:layout_constraintTop_toBottomOf="@+id/seekBar_waittime" android:id="@+id/linearLayout">
-
-        <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_weight="1"/>
-        <TextView
-                android:text="Last Check:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView2"
-                android:layout_marginEnd="8dp"
-                tools:layout_editor_absoluteX="8dp"/>
-        <TextView
-                android:text="Not Set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="66dp" android:id="@+id/nextCheckDisplay"/>
-        <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_weight="1"/>
-    </LinearLayout>
-
-    <android.support.constraint.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            android:id="@+id/constraintLayout" android:visibility="gone">
-
-        <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-                android:id="@+id/linearLayout2" app:layout_constraintHorizontal_bias="1.0"
-                android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/textView3">
-
-            <Button
-                    android:text="HIDDEN"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/button_buttonsound_fix"
-                    android:layout_weight="1"
-                    android:visibility="gone"/>
-            <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:layout_weight="1"/>
-            <Button
-                    android:text="Loud"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/button_set_loud"
-                    android:layout_marginEnd="20dp"/>
-            <Button
-                    android:text="Vibrate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/button_set_vibrate"
-            />
-            <Button
-                    android:text="Silent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/button_set_silent"
-                    android:layout_marginStart="20dp"
-            />
-            <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:layout_weight="1"/>
-        </LinearLayout>
-        <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:id="@+id/linearLayout3" app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"
-                app:layout_constraintHorizontal_bias="1.0" android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/textView5">
-            <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:layout_weight="1"/>
-            <Button
-                    android:text="1 Hour"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/button_delay_one"
-                    android:layout_marginEnd="20dp"
-            />
-            <Button
-                    android:text="3 Hours"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/button_delay_three"
-            />
-            <Button
-                    android:text="8 Hours"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/button_delay_eight"
-                    android:layout_marginStart="20dp"/>
-            <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:layout_weight="1"/>
-        </LinearLayout>
-        <TextView
-                android:text="Set Manually:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView3" android:layout_marginTop="8dp"
-                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"
-        />
-        <TextView
-                android:text="Pause for:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView5"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
-    </android.support.constraint.ConstraintLayout>
+            android:layout_height="wrap_content" android:id="@+id/button_buttonsound_fix" tools:visibility="gone"
+            android:visibility="gone"/>
     <android.support.design.widget.TabLayout
             android:layout_width="395dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:id="@+id/tabLayout"
-            android:layout_marginTop="32dp"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" app:layout_constraintHorizontal_bias="0.0">
+            app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent">
 
         <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
@@ -190,34 +44,101 @@
             android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/viewPager"
             android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/tabLayout"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"/>
+            app:layout_constraintBottom_toTopOf="@+id/view"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/view" android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/viewPager" android:layout_marginTop="8dp"/>
+
     <android.support.constraint.ConstraintLayout
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="8dp" android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
-            android:id="@+id/constraintLayout2">
-        <Button
-                android:text="@string/timecheck_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/button_check"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"/>
-        <FrameLayout
+            android:id="@+id/constraintLayout2"
+    >
+        <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:id="@+id/frameLayout" app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                android:id="@+id/textview_waittime_content" app:layout_constraintEnd_toStartOf="@+id/textView4"
+                android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+                android:text="Interval between Checks:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                android:id="@+id/interval_text_view"/>
+        <TextView
+                android:text="Minutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent" android:id="@+id/textView4"
+                app:layout_constraintEnd_toStartOf="@+id/frameLayout"/>
+        <SeekBar
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBar_waittime"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/interval_text_view"
+                app:layout_constraintEnd_toStartOf="@+id/frameLayout"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_vertical"
+                app:layout_constraintTop_toBottomOf="@+id/seekBar_waittime" android:id="@+id/linearLayout"
+                android:layout_marginEnd="8dp" app:layout_constraintEnd_toStartOf="@+id/frameLayout"
+                android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent">
+
+            <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:layout_weight="1"/>
+            <TextView
+                    android:text="Last Check:"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView2"
+                    android:layout_marginEnd="8dp"
+                    tools:layout_editor_absoluteX="8dp"/>
+            <TextView
+                    android:text="Not Set"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:layout_editor_absoluteX="66dp" android:id="@+id/nextCheckDisplay"/>
+            <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/frameLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:orientation="vertical">
 
             <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/fab_margin"
-                    android:src="@android:color/transparent"/>
+                    android:src="@drawable/ic_fast_forward_white_24dp"/>
 
             <TextView
                     android:id="@+id/fab_textview"
@@ -225,33 +146,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/timecheck_start"
-                    android:elevation="16dp"
-                    android:textColor="@android:color/white"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </FrameLayout>
-        <TextView
-                android:text="State:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textViewStateAlarms" app:layout_constraintEnd_toStartOf="@+id/frameLayout"
-                android:layout_marginEnd="16dp" android:layout_marginTop="16dp"
-                app:layout_constraintTop_toTopOf="parent"/>
-        <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textViewPausedTimestamp"
-                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/frameLayout" android:layout_marginEnd="8dp"
-                tools:visibility="invisible" android:visibility="invisible"/>
-        <TextView
-                android:text="Paused for:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/label_Paused_until" android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textViewPausedTimestamp"
-                android:layout_marginEnd="8dp" android:visibility="invisible"/>
+                    android:elevation="2dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" android:textSize="12sp"/>
+        </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
