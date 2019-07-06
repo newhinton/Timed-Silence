@@ -15,8 +15,7 @@ class BootReciever : BroadcastReceiver(){
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.e(APP_NAME, "BootReciever: Started Device!")
-        val t = AlarmBroadcastReceiver()
-        t.switchVolumeMode(context)
+        AlarmBroadcastReceiver().switchVolumeMode(context)
 
         val restartOnBoot= SharedPreferencesHandler.getPref(
             context,

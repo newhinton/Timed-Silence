@@ -1,43 +1,11 @@
 package de.felixnuesse.timedsilence.receiver
 
-/**
- * Copyright (C) 2019  Felix Nüsse
- * Created on 10.04.19 - 18:07
- *
- * Edited by: Felix Nüsse felix.nuesse(at)t-online.de
- *
- *
- * This program is released under the GPLv3 license
- *
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
- *
- *
- *
- */
-
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.NotificationManagerCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
-import de.felixnuesse.timedsilence.Constants.Companion.WIFI_TYPE_CONNECTED
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.handler.LocationHandler
 import de.felixnuesse.timedsilence.handler.VolumeHandler
@@ -46,9 +14,6 @@ import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.LocationAccessMissingNotification
 import java.time.LocalDateTime
 import java.util.*
-
-
-
 
 class AlarmBroadcastReceiver : BroadcastReceiver() {
 
@@ -117,22 +82,22 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
                     val ssidit = "\"" + it.ssid + "\""
                     Log.d(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
-                    if (currentSSID.equals(ssidit) && it.type == WIFI_TYPE_CONNECTED) {
-                        if (it.volume == TIME_SETTING_LOUD) {
+                    if (currentSSID.equals(ssidit) && it.type == Constants.WIFI_TYPE_CONNECTED) {
+                        if (it.volume == Constants.TIME_SETTING_LOUD) {
                             VolumeHandler.setLoud(nonNullContext)
                             Log.d(
                                 Constants.APP_NAME,
                                 "Alarmintent: WifiCheck: Set lout, because Connected to $currentSSID"
                             )
                         }
-                        if (it.volume == TIME_SETTING_SILENT) {
+                        if (it.volume == Constants.TIME_SETTING_SILENT) {
                             VolumeHandler.setSilent(nonNullContext)
                             Log.d(
                                 Constants.APP_NAME,
                                 "Alarmintent: WifiCheck: Set silent, because Connected to $currentSSID"
                             )
                         }
-                        if (it.volume == TIME_SETTING_VIBRATE) {
+                        if (it.volume == Constants.TIME_SETTING_VIBRATE) {
                             VolumeHandler.setVibrate(nonNullContext)
                             Log.d(
                                 Constants.APP_NAME,
@@ -150,11 +115,12 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         val dayLongName = Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
         val dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
 
+        Calendar.SATURDAY
         loop@ for (it in DatabaseHandler(context).getAllSchedules()) {
             val time = hour * 60 * 60 * 1000 + min * 60 * 1000
 
             Log.d(Constants.APP_NAME, "Alarmintent: Current Schedule: ${it.name}")
-            Log.d(Constants.APP_NAME, "Alarmintent: Current Weekday: $dayLongName")
+            Log.d(Constants.APP_NAME, "Alarmintent: Current Weekday: $dayLongName ($dayOfWeek)")
 
             var isAllowedDay = false
             when (dayOfWeek){
@@ -163,10 +129,11 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
                 4 -> if (it.wed) { isAllowedDay = true }
                 5 -> if (it.thu) { isAllowedDay = true }
                 6 -> if (it.fri) { isAllowedDay = true }
-                0 -> if (it.sat) { isAllowedDay = true }
+                7 -> if (it.sat) { isAllowedDay = true }
                 1 -> if (it.sun) { isAllowedDay = true }
             }
 
+            Log.d(Constants.APP_NAME, "Alarmintent: isAllowedDay: $isAllowedDay")
             if (!isAllowedDay) {
                 continue@loop
             }
@@ -191,29 +158,22 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
             if (time in it.time_start..it.time_end || isInInversedTimeInterval) {
 
-                if (it.time_setting == TIME_SETTING_SILENT) {
+                if (it.time_setting == Constants.TIME_SETTING_SILENT) {
                     VolumeHandler.setSilent(nonNullContext)
                     Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
                 }
 
-                if (it.time_setting == TIME_SETTING_VIBRATE) {
+                if (it.time_setting == Constants.TIME_SETTING_VIBRATE) {
                     VolumeHandler.setVibrate(nonNullContext)
                     Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
                 }
 
-                if (it.time_setting == TIME_SETTING_LOUD) {
+                if (it.time_setting == Constants.TIME_SETTING_LOUD) {
                     VolumeHandler.setLoud(nonNullContext)
                     Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
                 }
 
             }
-        }
-    }
-
-
-    fun Any?.notNull(f: () -> Unit) {
-        if (this != null) {
-            f()
         }
     }
 }

@@ -86,12 +86,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         }
 
         fab.setOnClickListener { view ->
-            Log.e(Constants.APP_NAME, "Main: fab: Clicked")
+            Log.e(APP_NAME, "Main: fab: Clicked")
             setHandlerState()
         }
 
         frameLayout.setOnClickListener { view ->
-            Log.e(Constants.APP_NAME, "Main: FabTester: Clicked")
+            Log.e(APP_NAME, "Main: FabTester: Clicked")
             buttonState()
         }
 
@@ -125,8 +125,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         })
 
 
-        val tabs = findViewById<TabLayout>(R.id.tabLayout)
-        val mPager = findViewById<ViewPager>(R.id.viewPager)
+        val tabs = tabLayout
+        val mPager = viewPager
 
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -288,19 +288,15 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         if(button_check == getString(R.string.timecheck_start)){
             AlarmHandler.createRepeatingTimecheck(this)
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
-
-
+            AlarmBroadcastReceiver().switchVolumeMode(this)
         }else if(button_check == getString(R.string.timecheck_paused)){
-
             AlarmHandler.createRepeatingTimecheck(this)
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
             PauseTimerService.cancelTimer(this)
-
+            AlarmBroadcastReceiver().switchVolumeMode(this)
         }else{
-
             AlarmHandler.removeRepeatingTimecheck(this)
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,false)
-
         }
         buttonState()
     }
