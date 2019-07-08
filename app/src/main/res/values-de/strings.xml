@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Timed Silence</string>
+    <string name="GrantDND">Erlauben!</string>
+    <string name="GrantDNDPermissionAccess">Diese Anwendung benötigt Zugriff auf die \"Nicht Stören\" Einstellung um das
+        Telefon stummzuschalten
+    </string>
+    <string name="LocationAccessNotification_CONTENT">Weil Wlan zum tracken genutzt werden kann, muss hierfür der
+        Ortungsdienst eingeschaltet sein. Wir tracken dich aber nicht, sondern fragen nur den Wlan-Namen ab.
+    </string>
+    <string name="LocationAccessNotification_TITLE">Ortungsdienst benötigt!</string>
+    <string name="OneHourWidget">1 Stunde</string>
+    <string name="ThreeHourWidget">2 Stunden</string>
+    <string name="action_set_manual_loud">Auf Laut stellen</string>
+    <string name="action_set_manual_silent">Auf Tonlos stellen</string>
+    <string name="action_set_manual_vibrate">Auf Vibration stellen</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="add_widget">Widget hinzufügen</string>
+    <string name="back">Zurück</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="friday">Freitag</string>
+    <string name="monday">Montag</string>
+    <string name="next">Weiter</string>
+    <string name="no_next_time_set">Nicht gesetzt</string>
+    <string name="ok">OK</string>
+    <string name="pause_check_schedule">Pausiere Timed Silence</string>
+    <string name="qs_tile_label">Pausiere Timed Silence</string>
+    <string name="saturday">Samstag</string>
+    <string name="schedule_dialog_save">Speichern</string>
+    <string name="schedule_dialog_title_days">Setze die Wochentage</string>
+    <string name="schedule_dialog_title_end">Setze die Endzeit</string>
+    <string name="schedule_dialog_title_start">Setze die Startzeit</string>
+    <string name="schedule_dialog_title_textfield_hint">Name</string>
+    <string name="schedule_dialog_title_title">Setze den Namen</string>
+    <string name="schedule_dialog_title_volume">Setze die Lautstärke</string>
+    <string name="sunday">Sonntag</string>
+    <string name="thursday">Donnerstag</string>
+    <string name="timecheck_paused">Pausiert</string>
+    <string name="timecheck_running">Laufend</string>
+    <string name="timecheck_start">Start</string>
+    <string name="timecheck_stop">Stop</string>
+    <string name="timecheck_stopped">Gestoppt</string>
+    <string name="title_activity_add_schedule">Zeitplan hinzufügen</string>
+    <string name="tuesday">Dienstag</string>
+    <string name="volume_setting_loud">Laut</string>
+    <string name="volume_setting_silent">Leise</string>
+    <string name="volume_setting_vibrate">Vibrieren</string>
+    <string name="wednesday">Mittwoch</string>
+    <string name="LocationAccessNotification">LocationAccessNotification</string>
+    <string name="EightHourWidget">8 Stunden</string>
+    <string name="AutoHourWidget">Dynamische Pause</string>
+</resources>

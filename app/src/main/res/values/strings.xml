@@ -21,7 +21,6 @@
     </string>
     <string name="GrantDND">Grant!</string>
     <string name="qs_tile_label">Pause Timed Silence</string>
-    <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="pause_check_schedule">Pause Timed Silence</string>
     <string name="LocationAccessNotification">LocationAccessNotification</string>
@@ -45,8 +44,9 @@
     <string name="back">back</string>
     <string name="schedule_dialog_save">Save</string>
     <string name="friday">friday</string>
-    <string name="AutoHourWidget">Auto Hour</string>
+    <string name="AutoHourWidget">8 Hours</string>
     <string name="EightHourWidget">8 Hours</string>
     <string name="ThreeHourWidget">3 Hours</string>
     <string name="OneHourWidget">1 Hour</string>
+    <string name="appwidget_text">donotdelete-placeholder</string>
 </resources>
