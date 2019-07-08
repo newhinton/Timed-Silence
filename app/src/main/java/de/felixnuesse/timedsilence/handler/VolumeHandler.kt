@@ -170,7 +170,7 @@ class VolumeHandler {
 
 
             if(!manager.isMusicActive){
-                setMediaVolume(0, context, manager)
+                setMediaVolume(mediaVolume, context, manager)
             }
 
             setStreamToPercent(
