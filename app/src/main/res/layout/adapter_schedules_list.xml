@@ -71,37 +71,37 @@
             app:layout_constraintStart_toEndOf="@+id/imageView_volume_state"
             app:layout_constraintEnd_toStartOf="@+id/edit_schedule_element" android:layout_marginEnd="8dp">
         <TextView
-                android:text="mon"
+                android:text="@string/mon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/mon" android:layout_weight="1"
                 android:textSize="10sp"/>
         <TextView
-                android:text="tue"
+                android:text="@string/tue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/tue" android:layout_weight="1"
                 android:textSize="10sp"/>
         <TextView
-                android:text="wed"
+                android:text="@string/wed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/wed" android:layout_weight="1"
                 android:textSize="10sp"/>
         <TextView
-                android:text="thu"
+                android:text="@string/thu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/thu" android:layout_weight="1"
                 android:textSize="10sp"/>
         <TextView
-                android:text="fri"
+                android:text="@string/fri"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/fri" android:layout_weight="1"
                 android:textSize="10sp"/>
         <TextView
-                android:text="sat"
+                android:text="@string/sat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/sat" android:layout_weight="1"
                 android:textSize="10sp"/>
         <TextView
-                android:text="sun"
+                android:text="@string/sun"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/sun" android:layout_weight="1"
                 android:textSize="10sp"/>

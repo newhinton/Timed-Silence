@@ -16,7 +16,7 @@
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent">
         <TextView
-                android:text="Volume Settings"
+                android:text="@string/volume_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
         />
@@ -30,7 +30,7 @@
                 android:background="@null"/>
     </LinearLayout>
     <Switch
-            android:text="Dont change volume while Headset connected"
+            android:text="@string/volume_while_headset_connected"
             android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/switchHeadsetIgnoreChange" android:layout_weight="1"
             app:layout_constraintEnd_toEndOf="parent"

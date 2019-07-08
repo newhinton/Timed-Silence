@@ -8,7 +8,7 @@
         tools:context=".activities.SettingsVolumeActivity">
 
     <TextView
-            android:text="Volume: Notifications"
+            android:text="@string/volume_settings_notifications"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textViewLabelSliderVolumeNotifications"
@@ -48,14 +48,14 @@
             app:layout_constraintEnd_toStartOf="@+id/textViewPercentVolumeNotifications"
             android:layout_marginEnd="8dp"/>
     <TextView
-            android:text="Volume: Music"
+            android:text="@string/volume_settings_music"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textViewLabelSliderVolumeMusic" android:layout_marginTop="16dp"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="16dp"/>
     <TextView
-            android:text="Volume: Alarm"
+            android:text="@string/volume_settings_alarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textViewLabelSliderVolumeAlarm"
@@ -79,7 +79,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewLabelSliderVolumeAlarm"
             app:layout_constraintEnd_toStartOf="@+id/textViewPercentVolumeAlarm" android:layout_marginEnd="8dp"/>
     <TextView
-            android:text="Volume: Ringer"
+            android:text="@string/volume_settings_ringer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textViewLabelSliderVolumeRinger"

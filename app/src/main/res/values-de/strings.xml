@@ -2,12 +2,8 @@
 <resources>
     <string name="app_name">Timed Silence</string>
     <string name="GrantDND">Erlauben!</string>
-    <string name="GrantDNDPermissionAccess">Diese Anwendung benötigt Zugriff auf die \"Nicht Stören\" Einstellung um das
-        Telefon stummzuschalten
-    </string>
-    <string name="LocationAccessNotification_CONTENT">Weil Wlan zum tracken genutzt werden kann, muss hierfür der
-        Ortungsdienst eingeschaltet sein. Wir tracken dich aber nicht, sondern fragen nur den Wlan-Namen ab.
-    </string>
+    <string name="GrantDNDPermissionAccess">Diese Anwendung benötigt Zugriff auf die \"Nicht Stören\" Einstellung um das Telefon stummzuschalten</string>
+    <string name="LocationAccessNotification_CONTENT">Weil Wlan zum tracken genutzt werden kann, muss hierfür der Ortungsdienst eingeschaltet sein. Wir tracken dich aber nicht, sondern fragen nur den Wlan-Namen ab.</string>
     <string name="LocationAccessNotification_TITLE">Ortungsdienst benötigt!</string>
     <string name="OneHourWidget">1 Stunde</string>
     <string name="ThreeHourWidget">2 Stunden</string>
@@ -49,4 +45,29 @@
     <string name="LocationAccessNotification">LocationAccessNotification</string>
     <string name="EightHourWidget">8 Stunden</string>
     <string name="AutoHourWidget">Dynamische Pause</string>
+    <string name="appwidget_text">donotdelete-placeholder</string>
+    <string name="fri">Fr</string>
+    <string name="main_interval_between_checks">Intervall zwischen Checks:</string>
+    <string name="main_last_check">Letzter Check:</string>
+    <string name="main_minutes">Minuten</string>
+    <string name="main_tab_calendar">Kalender</string>
+    <string name="main_tab_time">Zeit</string>
+    <string name="main_tab_wifi_connected">Wlan</string>
+    <string name="mon">Mo</string>
+    <string name="sat">Sa</string>
+    <string name="sun">So</string>
+    <string name="thu">Do</string>
+    <string name="tue">Di</string>
+    <string name="volume_settings">Lautstärkeeinstellungen</string>
+    <string name="volume_settings_alarm">Lautstärke: Alarm</string>
+    <string name="volume_settings_music">Lautstärke: Musik</string>
+    <string name="volume_settings_notifications">Lautstärke: Benachrichtigungen</string>
+    <string name="volume_settings_ringer">Lautstärke: Klingelton</string>
+    <string name="volume_while_headset_connected">Musiklautstärke nicht verändern wenn Kopfhörer verbunden sind.</string>
+    <string name="wed">Mi</string>
+    <string name="wifi_add_new">Neue Wlan-Einstellung hinzufügen:</string>
+    <string name="wifi_permission_hint">"Du benötigst Ortungsdienstzugriff da Wlan genutzt werden kann um dich zu tracken. "
+    </string>
+    <string name="wifi_request">Anfordern!</string>
+    <string name="schedule_add_new">Füge neuen Zeitplan hinzu</string>
 </resources>

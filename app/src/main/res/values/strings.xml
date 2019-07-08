@@ -16,18 +16,14 @@
     <string name="timecheck_stopped">Stopped</string>
     <string name="timecheck_running">Running</string>
     <string name="timecheck_paused">Paused</string>
-    <string name="GrantDNDPermissionAccess">This app requires access to the \"Do not Disturb\" Permission to mute
-        and unmute the device. Please Grant the permission and press return to get back to this app.
-    </string>
+    <string name="GrantDNDPermissionAccess">This app requires access to the \"Do not Disturb\" Permission to mute and unmute the device. Please Grant the permission and press return to get back to this app.</string>
     <string name="GrantDND">Grant!</string>
     <string name="qs_tile_label">Pause Timed Silence</string>
     <string name="add_widget">Add widget</string>
     <string name="pause_check_schedule">Pause Timed Silence</string>
     <string name="LocationAccessNotification">LocationAccessNotification</string>
     <string name="LocationAccessNotification_TITLE">Location Service required!</string>
-    <string name="LocationAccessNotification_CONTENT">Because the wifissid can be used to track you, you need to enable
-        Location Services to use Wifinames as profiles!
-    </string>
+    <string name="LocationAccessNotification_CONTENT">Because the wifissid can be used to track you, you need to enable Location Services to use wifinames as profiles!</string>
     <string name="schedule_dialog_title_title">Set the name</string>
     <string name="schedule_dialog_title_start">Set the Starttime</string>
     <string name="schedule_dialog_title_end">Set the Endtime</string>
@@ -49,4 +45,27 @@
     <string name="ThreeHourWidget">3 Hours</string>
     <string name="OneHourWidget">1 Hour</string>
     <string name="appwidget_text">donotdelete-placeholder</string>
+    <string name="volume_while_headset_connected">Dont change volume while Headset connected</string>
+    <string name="volume_settings">Volume Settings</string>
+    <string name="volume_settings_music">Volume: Music</string>
+    <string name="volume_settings_notifications">Volume: Notifications</string>
+    <string name="volume_settings_alarm">Volume: Alarm</string>
+    <string name="volume_settings_ringer">Volume: Ringer</string>
+    <string name="mon">mon</string>
+    <string name="tue">tue</string>
+    <string name="wed">wed</string>
+    <string name="thu">thu</string>
+    <string name="fri">fri</string>
+    <string name="sat">sat</string>
+    <string name="sun">sun</string>
+    <string name="main_tab_time">Time</string>
+    <string name="main_tab_wifi_connected">Wifi Connected</string>
+    <string name="main_tab_calendar">Calendar</string>
+    <string name="main_last_check">Last Check:</string>
+    <string name="main_interval_between_checks">Interval between Checks:</string>
+    <string name="main_minutes">Minutes</string>
+    <string name="wifi_request">Request</string>
+    <string name="wifi_add_new">Add a new Wifi setting:</string>
+    <string name="schedule_add_new">Add a new schedule:</string>
+    <string name="wifi_permission_hint">You need location access because wifi can be used to identify a location. We are not doing that, see X</string>
 </resources>
