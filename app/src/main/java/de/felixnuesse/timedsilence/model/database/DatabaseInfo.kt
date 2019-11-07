@@ -78,5 +78,16 @@ class DatabaseInfo{
                     "${WIFI_TYPE} INT," +
                     "${WIFI_VOL_MODE} INT)"
 
+        val CALENDAR_TABLE="calendar_timetable"
+        val CALENDAR_ID= "calendar_id"
+        val CALENDAR_ANDROID_ID= "calendar_android_id"
+        val CALENDAR_VOL_MODE= "calendar_volume_mode"
+
+        val SQL_CREATE_ENTRIES_CALENDAR =
+            "CREATE TABLE ${CALENDAR_TABLE} (" +
+                    "${CALENDAR_ID} INTEGER PRIMARY KEY," +
+                    "${CALENDAR_ANDROID_ID} INTEGER," +
+                    "${CALENDAR_VOL_MODE} INT)"
+
     }
 }

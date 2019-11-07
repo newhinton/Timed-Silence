@@ -16,7 +16,12 @@ import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import android.content.ContentValues
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.data.WifiObject
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ANDROID_ID
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ID
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_TABLE
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_VOL_MODE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_MON
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_TUE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_WED
@@ -24,6 +29,7 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDUL
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_FRI
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_SAT
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_SUN
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_CALENDAR
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_WIFI
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_SSID
@@ -68,6 +74,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_ENTRIES)
         db.execSQL(SQL_CREATE_ENTRIES_WIFI)
+        db.execSQL(SQL_CREATE_ENTRIES_CALENDAR)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -429,5 +436,51 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
 
 
+    }
+
+
+    fun getAllCalendarEntries(): ArrayList<CalendarObject> {
+        val db = readableDatabase
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        val projection = arrayOf<String>(
+            CALENDAR_ID,
+            CALENDAR_ANDROID_ID,
+            CALENDAR_VOL_MODE
+        )
+
+        // Filter results WHERE "title" = 'My Title'
+        val selection = ""
+        val selectionArgs = arrayOf<String>()
+
+        // How you want the results sorted in the resulting Cursor
+        val sortOrder = "$CALENDAR_ID ASC"
+
+        val cursor = db.query(
+            CALENDAR_TABLE, // The table to query
+            projection, // The array of columns to return (pass null to get all)
+            selection, // The columns for the WHERE clause
+            selectionArgs, // don't group the rows
+            null, null, // don't filter by row groups
+            sortOrder                                   // The sort order
+        )// The values for the WHERE clause
+        val results = arrayListOf<CalendarObject>()
+        while (cursor.moveToNext()) {
+            val co = CalendarObject(
+                cursor.getLong(0),
+                cursor.getLong(1),
+                cursor.getInt(2)
+            )
+
+            results.add(co)
+        }
+
+        results.add(CalendarObject(1,0,0))
+        results.add(CalendarObject(2,1,1))
+        results.add(CalendarObject(3,2,2))
+
+        db.close()
+        return results
     }
 }
