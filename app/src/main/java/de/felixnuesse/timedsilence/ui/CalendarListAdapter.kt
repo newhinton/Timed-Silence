@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.CalendarHandler
 import de.felixnuesse.timedsilence.model.data.CalendarObject
@@ -50,8 +53,8 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, var 
         }
 
 
-        fun update(context: Context, so: ScheduleObject){
-                DatabaseHandler(context).updateScheduleEntry(so)
+        fun update(context: Context, co: CalendarObject){
+                DatabaseHandler(context).updateCalendarEntry(co)
                 myDataset.clear()
                 myDataset = DatabaseHandler(context).getAllCalendarEntries()
                 notifyDataSetChanged()
@@ -85,20 +88,20 @@ class CalendarViewHolder(val calendarView: View, var calHandler: CalendarHandler
                 holder.calendarView.textView_calendar_row_title.text = calHandler.getCalendarName(calObject.ext_id)
 
                 holder.calendarView.delete_calendar_element.setOnClickListener {
-                       // DatabaseHandler(holder.scheduleView.context).deleteScheduleEntry(myDataset.get(position).id)
-                       // removeAt(position)
-
+                        DatabaseHandler(holder.calendarView.context).deleteCalendarEntry(calObject.id)
+                        removeAt(position)
                 }
 
+                applyTextfieldStyle(holder.calendarView.textView_calendar_row_title)
 
                 holder.calendarView.imageView_calendar_color.setColorFilter(calHandler.getCalendarColor(calObject.ext_id))
 
                 var imageID=R.drawable.ic_volume_up_black_24dp
-               /* when (myDataset.get(position).time_setting) {
+                when (calObject.volume) {
                         TIME_SETTING_LOUD -> imageID=R.drawable.ic_volume_up_black_24dp
                         TIME_SETTING_VIBRATE -> imageID=R.drawable.ic_vibration_black_24dp
                         TIME_SETTING_SILENT -> imageID=R.drawable.ic_volume_off_black_24dp
-                }*/
+                }
                 holder.calendarView.imageView_volume_state.setImageDrawable(holder.calendarView.context.getDrawable(imageID))
 
 

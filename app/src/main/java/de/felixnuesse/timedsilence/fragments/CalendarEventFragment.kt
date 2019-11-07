@@ -20,8 +20,10 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.method.TextKeyListener.clear
+import de.felixnuesse.timedsilence.dialogs.CalendarDialog
 import de.felixnuesse.timedsilence.dialogs.ScheduleDialog
 import de.felixnuesse.timedsilence.handler.CalendarHandler
+import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.CalendarListAdapter
 import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
@@ -65,16 +67,18 @@ class CalendarEventFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val calHandler = CalendarHandler(view.context)
+
         button_calendar_fragment.setOnClickListener {
             Log.e(Constants.APP_NAME, "CalendarFragment: Add new!")
-            //ScheduleDialog(view.context, this).show()
+            CalendarDialog(view.context, this, calHandler).show()
         }
 
         val db = DatabaseHandler(view.context)
 
         Log.e(Constants.APP_NAME, "CalendarFragment: DatabaseResuluts: Size: "+db.getAllCalendarEntries().size)
 
-        val calHandler = CalendarHandler(view.context)
+
 
         viewManager = LinearLayoutManager(view.context)
         viewAdapter = CalendarListAdapter(db.getAllCalendarEntries(), calHandler)
@@ -94,4 +98,22 @@ class CalendarEventFragment : Fragment() {
 
     }
 
+    fun saveCalendar(context: Context, co: CalendarObject){
+        val db = DatabaseHandler(context)
+        db.createCalendarEntry(co)
+        viewAdapter = CalendarListAdapter(db.getAllCalendarEntries(), CalendarHandler(context))
+
+        calendar_fragment_recylcer_list_view.apply {
+            // use this setting to improve performance if you know that changes
+            // in content do not change the layout size of the RecyclerView
+            setHasFixedSize(true)
+
+            // use a linear layout manager
+            layoutManager = viewManager
+
+            // specify an viewAdapter (see also next example)
+            adapter = viewAdapter
+
+        }
+    }
 }

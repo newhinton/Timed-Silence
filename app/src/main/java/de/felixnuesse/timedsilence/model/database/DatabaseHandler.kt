@@ -395,14 +395,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     fun createWifiEntry(wifiObject: WifiObject): WifiObject {
         val db = writableDatabase
 
-        val projection = arrayOf<String>(
-            WIFI_ID,
-            WIFI_SSID,
-            WIFI_TYPE,
-            WIFI_VOL_MODE
-        )
-
-
         // Create a new map of values, where column names are the keys
         val values = ContentValues()
         //values.put(SCHEDULE_ID, so.id)
@@ -483,11 +475,74 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             results.add(co)
         }
 
-        results.add(CalendarObject(1,0,0))
-        results.add(CalendarObject(2,1,1))
-        results.add(CalendarObject(7,7,2))
-
         db.close()
         return results
+    }
+
+    /**
+     * Deletes CalendarEntry with the given id
+     * @param id WifiEntry to delete
+     * @return amount of rows affected
+     */
+    fun deleteCalendarEntry(id: Long): Int {
+        val db = writableDatabase
+        // Define 'where' part of query.
+        val selection = CALENDAR_ID + " LIKE ?"
+        // Specify arguments in placeholder order.
+        val selectionArgs = arrayOf(id.toString())
+
+        // Issue SQL statement.
+        val retcode: Int = db.delete(CALENDAR_TABLE, selection, selectionArgs)
+        db.close()
+
+        return retcode
+    }
+    /**
+     * Creates a calendar entry
+     * @param wifiObject WifiObject to create
+     * @return id
+     */
+    fun createCalendarEntry(calendarObject: CalendarObject): CalendarObject {
+        val db = writableDatabase
+
+        // Create a new map of values, where column names are the keys
+        val values = ContentValues()
+        values.put(CALENDAR_ANDROID_ID, calendarObject.ext_id)
+        values.put(CALENDAR_VOL_MODE, calendarObject.volume)
+
+        // Insert the new row, returning the primary key value of the new row
+        val newRowId = db.insert(CALENDAR_TABLE, null, values)
+        Log.e(APP_NAME,"Database: CreateCalendar: RowID     : $newRowId")
+
+        val newObject = CalendarObject(newRowId,calendarObject.ext_id, calendarObject.volume)
+
+        db.close()
+        return newObject
+
+    }
+
+    fun updateCalendarEntry(co: CalendarObject) {
+        val db = writableDatabase
+
+        // Create a new map of values, where column names are the keys
+        val values = ContentValues()
+        values.put(CALENDAR_ANDROID_ID, co.ext_id)
+        values.put(CALENDAR_VOL_MODE, co.volume)
+
+
+        val idofchangedobject = arrayOf<String>(
+            co.id.toString()
+        )
+
+        // Insert the new row, returning the primary key value of the new row
+        db.update(
+            CALENDAR_TABLE,
+            values,
+            CALENDAR_ID + " = ?",
+            idofchangedobject
+        )
+
+        db.close()
+
     }
 }

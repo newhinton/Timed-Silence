@@ -72,6 +72,11 @@ class CalendarHandler(context: Context) {
         return "NOTSET"
     }
 
+    fun getCalendars(): ArrayList<CalendarObject>{
+        getCalendars(context)
+        return cachedCalendars
+    }
+
     private fun getCalendars(context: Context){
         if(!alreadyCached){
             cachedCalendars = ArrayList()
