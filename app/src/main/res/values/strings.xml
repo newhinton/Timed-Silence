@@ -68,4 +68,5 @@
     <string name="wifi_add_new">Add a new Wifi setting:</string>
     <string name="schedule_add_new">Add a new schedule:</string>
     <string name="wifi_permission_hint">You need location access because wifi can be used to identify a location. We are not doing that, see X</string>
+    <string name="calendar_add_new">calendar new</string>
 </resources>

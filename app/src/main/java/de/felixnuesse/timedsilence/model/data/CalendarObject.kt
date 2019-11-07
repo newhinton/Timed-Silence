@@ -30,5 +30,8 @@ class CalendarObject(id: Long, ext_id: Long, volume: Int) {
         var id: Long = id
         var ext_id: Long = id
         var volume: Int = volume
+        var name: String = "NOTSET"
+        var color: Int = 0
+
 
 }

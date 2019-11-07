@@ -81,7 +81,14 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
         //db.execSQL(SQL_DELETE_ENTRIES)
-        onCreate(db)
+        if(newVersion<6){
+            if(newVersion>=6){
+                db.execSQL(SQL_CREATE_ENTRIES_CALENDAR)
+            }
+        }
+        if(newVersion>=6){
+            db.execSQL(SQL_CREATE_ENTRIES_CALENDAR)
+        }
     }
 
     override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -478,7 +485,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         results.add(CalendarObject(1,0,0))
         results.add(CalendarObject(2,1,1))
-        results.add(CalendarObject(3,2,2))
+        results.add(CalendarObject(7,7,2))
 
         db.close()
         return results
