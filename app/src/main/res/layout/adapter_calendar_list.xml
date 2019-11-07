@@ -18,11 +18,14 @@
         android:id="@+id/textView_calendar_row_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="18dp"
         android:text="title"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView_volume_state"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.333" />
 
     <ImageButton
             android:layout_width="wrap_content"
@@ -47,8 +50,8 @@
         android:id="@+id/imageView_calendar_color"
         android:layout_width="0dp"
         android:layout_height="6dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="55dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

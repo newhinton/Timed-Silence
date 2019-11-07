@@ -24,12 +24,12 @@
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
                     android:text="@string/calendar_add_new"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/calendar_fragment_recylcer_list_view"
-                    tools:layout_editor_absoluteX="167dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/calendar_fragment_recylcer_list_view" />
 
                 <ImageButton
                     android:id="@+id/button_calendar_fragment"
@@ -47,14 +47,15 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/calendar_fragment_recylcer_list_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    tools:layout_editor_absoluteX="146dp"
-                    tools:layout_editor_absoluteY="0dp" />
+                    app:layout_constraintTop_toTopOf="parent" />
             </android.support.constraint.ConstraintLayout>
         </LinearLayout>
     </ScrollView>

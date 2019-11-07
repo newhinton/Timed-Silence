@@ -14,28 +14,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/button_buttonsound_fix" tools:visibility="gone"
             android:visibility="gone"/>
+
     <android.support.design.widget.TabLayout
-            android:layout_width="395dp"
+        android:id="@+id/tabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:id="@+id/tabLayout"
-            app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent">
+            android:text="@string/main_tab_time" />
 
         <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_tab_time"/>
+            android:id="@+id/tabItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_tab_wifi_connected" />
 
         <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_tab_wifi_connected" android:id="@+id/tabItem"/>
-
-        <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_tab_calendar"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_tab_calendar" />
     </android.support.design.widget.TabLayout>
     <android.support.v4.view.ViewPager
             android:layout_width="0dp"

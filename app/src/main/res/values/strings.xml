@@ -29,17 +29,17 @@
     <string name="schedule_dialog_title_end">Set the Endtime</string>
     <string name="schedule_dialog_title_volume">Set the Volume</string>
     <string name="schedule_dialog_title_days">Set the Days</string>
-    <string name="sunday">sunday</string>
-    <string name="saturday">saturday</string>
-    <string name="thursday">thursday</string>
-    <string name="tuesday">tuesday</string>
-    <string name="monday">monday</string>
-    <string name="wednesday">wednesday</string>
+    <string name="sunday">Sunday</string>
+    <string name="saturday">Saturday</string>
+    <string name="thursday">Thursday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="monday">Monday</string>
+    <string name="wednesday">Wednesday</string>
     <string name="schedule_dialog_title_textfield_hint">Name</string>
     <string name="next">Next</string>
     <string name="back">back</string>
     <string name="schedule_dialog_save">Save</string>
-    <string name="friday">friday</string>
+    <string name="friday">Friday</string>
     <string name="AutoHourWidget">8 Hours</string>
     <string name="EightHourWidget">8 Hours</string>
     <string name="ThreeHourWidget">3 Hours</string>
@@ -68,8 +68,7 @@
     <string name="wifi_add_new">Add a new Wifi setting:</string>
     <string name="schedule_add_new">Add a new schedule:</string>
     <string name="wifi_permission_hint">You need location access because wifi can be used to identify a location. We are not doing that, see X</string>
-    <string name="calendar_add_new">calendar new</string>
+    <string name="calendar_add_new">Add new Calendar Setting:</string>
     <string name="calendar_dialog_title_title">Select Calendar</string>
-    <string name="calendar_dialog_title_textfield_hint">text hint</string>
-    <string name="calendar_dialog_save">save</string>
+    <string name="calendar_dialog_save">Save</string>
 </resources>
