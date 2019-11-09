@@ -14,6 +14,7 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.model.data.CalendarObject
+import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -51,6 +52,23 @@ class CalendarHandler(context: Context) {
 
     private lateinit var cachedCalendars: ArrayList<CalendarObject>
     private var alreadyCached: Boolean=false
+
+    fun getCalendarVolumeSetting(externalId: Long):Int{
+        getCalendars(context)
+        for (calObject in cachedCalendars){
+            if(calObject.ext_id==externalId){
+                val db = DatabaseHandler(context)
+
+                var calObject = db.getCalendarEntryByExtId(calObject.ext_id.toString())
+
+                if(calObject==null){
+                    return -1
+                }
+                return calObject.volume
+            }
+        }
+        return -1
+    }
 
     fun getCalendarColor(externalId: Long): Int{
         getCalendars(context)
@@ -118,7 +136,7 @@ class CalendarHandler(context: Context) {
 
             for (i in 0 until cursor.count) {
 
-                var calentry = CalendarObject(0, 0, 0)
+                var calentry = CalendarObject(0, 0, Constants.TIME_SETTING_SILENT)
 
                 calentry.ext_id=cursor.getInt(0).toLong()
                 calentry.color=cursor.getInt(2)
@@ -145,41 +163,81 @@ class CalendarHandler(context: Context) {
     }
 
 
-    private fun readCalendarEvent(context: Context): ArrayList<String> {
+    /*fun getNextOrCurrent(context: Context): ArrayList<String> {
+        getCalendars(context)
+        //readCalendarEvent()
+
+    }*/
+
+    fun readCalendarEvent(): ArrayList<Map<String, String>> {
         val cursor = context.getContentResolver()
             .query(
                 Uri.parse("content://com.android.calendar/events"),
-                arrayOf("calendar_id", "title", "description", "dtstart", "dtend", "eventLocation"),
+                arrayOf("calendar_id", CalendarContract.Events.TITLE, CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND,CalendarContract.Events.ALL_DAY, CalendarContract.Events.DURATION ),
                 null,
                 null,
                 null
             )
         cursor.moveToFirst()
         // fetching calendars name
-        val CNames = arrayOfNulls<String>(cursor.getCount())
+
+        val retval: ArrayList<Map<String, String>> = ArrayList()
+        val lengthDummyArray = arrayOfNulls<String>(cursor.count)
 
         // fetching calendars id
         CalendarEventFragment.nameOfEvent.clear()
         CalendarEventFragment.startDates.clear()
         CalendarEventFragment.endDates.clear()
         CalendarEventFragment.descriptions.clear()
-        for (i in CNames.indices) {
 
-            CalendarEventFragment.nameOfEvent.add(cursor.getString(1))
-            CalendarEventFragment.startDates.add(getDate(java.lang.Long.parseLong(cursor.getString(3))))
-            //endDates.add(getDate(java.lang.Long.parseLong(cursor.getString(4))))
-            CalendarEventFragment.descriptions.add(cursor.getString(2))
-            CNames[i] = cursor.getString(1)
+
+        for (i in lengthDummyArray) {
+
+
+
+            val map = HashMap<String, String>()
+            map.put("calendar_id",cursor.getString(0))
+            map.put("name_of_event",cursor.getString(1))
+            map.put("start_date",cursor.getString(3))
+            map.put("end_date",cursor.getString(4))
+            map.put("description",cursor.getString(1))
+            map.put("duration",cursor.getString(5))
+            map.put("all_day",cursor.getString(6))
+            retval.add(map)
             cursor.moveToNext()
 
         }
-        return CalendarEventFragment.nameOfEvent
+
+        Collections.sort(retval, this.MyMapComparator())
+        return retval
     }
 
-    private fun getDate(milliSeconds: Long): String {
+    fun getDate(milliSeconds: Long): String {
         val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm:ss a")
         val calendar = Calendar.getInstance()
         calendar.setTimeInMillis(milliSeconds)
         return formatter.format(calendar.getTime())
+    }
+
+    internal inner class MyMapComparator : Comparator<Map<String, String>> {
+        override fun compare(o1: Map<String, String>, o2: Map<String, String>): Int {
+
+            val s1 = o1["start_date"]!!.toLong()
+            val s2 = o2["start_date"]!!.toLong()
+
+            if(s1>s2){
+                return -1
+            }
+
+            if(s1<s2){
+                return 1
+            }
+
+            if(s1==s2){
+                return 0
+            }
+            return 0
+
+        }
     }
 }

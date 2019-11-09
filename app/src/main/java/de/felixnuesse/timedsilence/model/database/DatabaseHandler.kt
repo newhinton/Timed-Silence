@@ -545,4 +545,13 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         db.close()
 
     }
+
+    fun getCalendarEntryByExtId(extID:String): CalendarObject? {
+        for(elem in this.getAllCalendarEntries()){
+            if(elem.ext_id.toString().equals(extID)){
+                return elem
+            }
+        }
+        return null
+    }
 }
