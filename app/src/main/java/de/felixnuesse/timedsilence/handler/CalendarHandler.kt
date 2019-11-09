@@ -2,16 +2,22 @@ package de.felixnuesse.timedsilence.handler
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.NotificationManager
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.provider.CalendarContract
+import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
@@ -47,6 +53,23 @@ import kotlin.collections.ArrayList
  *
  */
 class CalendarHandler(context: Context) {
+
+    companion object {
+        fun getCalendarReadPermission(context: Context) {
+            var permissions = true
+            permissions = permissions && ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
+
+            val permissionsList = Array(1) {Manifest.permission.ACCESS_FINE_LOCATION}
+
+            if (!permissions)
+                ActivityCompat.requestPermissions(context as Activity,permissionsList , Constants.CALENDAR_PERMISSION_REQUEST_ID)
+
+        }
+
+        fun hasCalendarReadPermission(context: Context):Boolean{
+            return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
+        }
+    }
 
     var context: Context = context
 
@@ -92,17 +115,18 @@ class CalendarHandler(context: Context) {
 
     fun getCalendars(): ArrayList<CalendarObject>{
         getCalendars(context)
-        return cachedCalendars
+        if (::cachedCalendars.isInitialized) { return cachedCalendars }
+        return ArrayList<CalendarObject>()
     }
 
     private fun getCalendars(context: Context){
-        if(!alreadyCached){
+        if(!alreadyCached && hasCalendarReadPermission(context)){
             cachedCalendars = ArrayList()
         }else{
             return
         }
 
-        this.getCalendarPermission(42, context, Manifest.permission.READ_CALENDAR)
+        getCalendarReadPermission(context)
 
         Log.e(Constants.APP_NAME, "test")
         val cursor: Cursor
@@ -149,17 +173,6 @@ class CalendarHandler(context: Context) {
         } else {
             Log.e(APP_NAME,"No calendar found in the device")
         }
-    }
-
-    private fun getCalendarPermission(callbackId: Int, context: Context, vararg permissionsId: String) {
-        var permissions = true
-        for (p in permissionsId) {
-            permissions =
-                permissions && ContextCompat.checkSelfPermission(context, p) == PackageManager.PERMISSION_GRANTED
-        }
-
-        if (!permissions)
-            ActivityCompat.requestPermissions(context as Activity, permissionsId, callbackId)
     }
 
 

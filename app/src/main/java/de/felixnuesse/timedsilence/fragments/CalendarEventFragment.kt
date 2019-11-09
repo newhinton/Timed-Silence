@@ -23,12 +23,14 @@ import android.text.method.TextKeyListener.clear
 import de.felixnuesse.timedsilence.dialogs.CalendarDialog
 import de.felixnuesse.timedsilence.dialogs.ScheduleDialog
 import de.felixnuesse.timedsilence.handler.CalendarHandler
+import de.felixnuesse.timedsilence.handler.WifiHandler
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.CalendarListAdapter
 import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
 import kotlinx.android.synthetic.main.calendar_event_fragment.*
 import kotlinx.android.synthetic.main.time_fragment.*
+import kotlinx.android.synthetic.main.wifi_connected_fragment.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -69,6 +71,9 @@ class CalendarEventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val calHandler = CalendarHandler(view.context)
 
+
+        checkContainer(calHandler, view.context)
+
         button_calendar_fragment.setOnClickListener {
             Log.e(Constants.APP_NAME, "CalendarFragment: Add new!")
             CalendarDialog(view.context, this, calHandler).show()
@@ -96,6 +101,37 @@ class CalendarEventFragment : Fragment() {
 
         }
 
+    }
+
+    private fun checkContainer(calHandler: CalendarHandler, context: Context){
+
+        val emtpyMessage = CalendarEmptyContainer
+        val permissionMessage = CalendarPermissionContainer
+        val listContainer = CalendarListContainer
+
+
+
+
+        emtpyMessage.visibility = View.GONE
+        permissionMessage.visibility = View.GONE
+        listContainer.visibility = View.GONE
+
+        val allowed = CalendarHandler.hasCalendarReadPermission(context)
+        val size =calHandler.getCalendars().size
+
+        if(allowed && size!=0){
+            emtpyMessage.visibility = View.GONE
+            permissionMessage.visibility = View.GONE
+            listContainer.visibility = View.VISIBLE
+        }else if(size==0){
+            emtpyMessage.visibility = View.VISIBLE
+            permissionMessage.visibility = View.GONE
+            listContainer.visibility = View.GONE
+        }else if(!CalendarHandler.hasCalendarReadPermission(context)) {
+            emtpyMessage.visibility = View.GONE
+            permissionMessage.visibility = View.VISIBLE
+            listContainer.visibility = View.GONE
+        }
     }
 
     fun saveCalendar(context: Context, co: CalendarObject){

@@ -50,17 +50,16 @@ import android.content.res.ColorStateList
 import android.support.design.widget.FloatingActionButton
 import android.text.format.DateFormat
 import android.util.Log
-import android.view.View
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.activities.SettingsMainActivity
 import de.felixnuesse.timedsilence.handler.AlarmHandler
+import de.felixnuesse.timedsilence.handler.CalendarHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.VolumeHandler
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
-import de.felixnuesse.timedsilence.ui.PauseNotification
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 
@@ -75,6 +74,10 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+
+
+        VolumeHandler.getVolumePermission(this)
+        CalendarHandler.getCalendarReadPermission(this)
 
         button_check = getString(R.string.timecheck_stopped)
 
@@ -154,9 +157,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
         SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(getSharedPreferencesListener())
-
-
-        VolumeHandler.getVolumePermission(this)
 
         PauseTimerService.registerListener(this)
 
@@ -357,6 +357,5 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             }
         }
     }
-
 
 }

@@ -76,4 +76,6 @@
     <string name="wifi_type_one">type one</string>
     <string name="wifi_type_connected">When Connected</string>
     <string name="wifi_type_searching">When Searching</string>
+    <string name="calendar_list_empty">You do not have calendars.</string>
+    <string name="calendar_missing_permissions">Permissions not granted.</string>
 </resources>
