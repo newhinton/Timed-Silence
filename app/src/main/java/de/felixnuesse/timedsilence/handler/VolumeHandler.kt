@@ -40,6 +40,7 @@ import android.provider.Settings
 import android.support.v4.app.ActivityCompat.finishAffinity
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 
@@ -81,6 +82,7 @@ class VolumeHandler {
             val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
             mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
             mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
+
 
             if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
                 manager.ringerMode=AudioManager.RINGER_MODE_SILENT

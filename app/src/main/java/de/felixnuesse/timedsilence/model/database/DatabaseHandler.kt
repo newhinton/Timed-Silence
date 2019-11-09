@@ -408,7 +408,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         val newObject = WifiObject(newRowId,wifiObject.ssid, wifiObject.type, wifiObject.volume)
 
-        Log.e(APP_NAME,"Database: CreateWifi: Result: ${newObject.ssid}")
+        Log.e(APP_NAME,"Database: CreateWifi: Result: ${newObject.type}")
 
         db.close()
         return newObject

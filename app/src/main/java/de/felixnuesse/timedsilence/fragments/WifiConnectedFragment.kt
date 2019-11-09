@@ -18,10 +18,14 @@ import android.widget.EditText
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.dialogs.WifiDialog
+import de.felixnuesse.timedsilence.handler.CalendarHandler
 import de.felixnuesse.timedsilence.handler.WifiHandler
 import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
+import de.felixnuesse.timedsilence.ui.CalendarListAdapter
 import de.felixnuesse.timedsilence.ui.WifiListAdapter
+import kotlinx.android.synthetic.main.calendar_event_fragment.*
 import kotlinx.android.synthetic.main.wifi_connected_fragment.*
 
 
@@ -61,8 +65,11 @@ class WifiConnectedFragment : Fragment() {
 
         button_wifi_add_fragment.setOnClickListener {
             Log.e(APP_NAME, "WifiFragment: Add new!")
-            createSSIDDialog(view.context)
+            //createSSIDDialog(view.context)
+            WifiDialog(view.context, this).show()
+
         }
+
 
         val db = DatabaseHandler(view.context)
 
@@ -86,8 +93,6 @@ class WifiConnectedFragment : Fragment() {
 
     }
 
-
-
     private fun checkContainer(){
 
         //val a = activity.findViewById(R.id.WifiContentContainer) as ConstraintLayout
@@ -105,89 +110,22 @@ class WifiConnectedFragment : Fragment() {
         }
     }
 
+    fun saveWifi(context: Context, wifiObj: WifiObject) {
+        val db = DatabaseHandler(context)
+        db.createWifiEntry(wifiObj)
+        viewAdapter = WifiListAdapter(db.getAllWifiEntries())
 
-    fun createSSIDDialog(context: Context){
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("SSID")
+        wifi_recylcer_list_view.apply {
+            // use this setting to improve performance if you know that changes
+            // in content do not change the layout size of the RecyclerView
+            setHasFixedSize(true)
 
-        // Set up the input
-        val input = EditText(context)
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.inputType = InputType.TYPE_CLASS_TEXT
-        builder.setView(input)
+            // use a linear layout manager
+            layoutManager = viewManager
 
-        // Set up the buttons
-        builder.setPositiveButton(R.string.ok,
-            DialogInterface.OnClickListener { dialog, which ->
-                createVolumeDialog(context, input.text.toString())
+            // specify an viewAdapter (see also next example)
+            adapter = viewAdapter
 
-            })
-        builder.setNegativeButton(R.string.cancel,
-            DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
-
-        builder.show()
-    }
-
-    fun createVolumeDialog(context: Context, ssid: String){
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Volume 1,2,3")
-
-        // Set up the input
-        val input = EditText(context)
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.inputType = InputType.TYPE_CLASS_NUMBER
-        builder.setView(input)
-
-        // Set up the buttons
-        builder.setPositiveButton(R.string.ok,
-            DialogInterface.OnClickListener { dialog, which ->
-                createTypeDialog(context, ssid, Integer.valueOf(input.text.toString()))
-
-            })
-        builder.setNegativeButton(R.string.cancel,
-            DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
-
-        builder.show()
-    }
-
-    fun createTypeDialog(context: Context, ssid: String, volume: Int){
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Type 1,2")
-
-        // Set up the input
-        val input = EditText(context)
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.inputType = InputType.TYPE_CLASS_NUMBER
-        builder.setView(input)
-
-        // Set up the buttons
-        builder.setPositiveButton(R.string.ok,
-            DialogInterface.OnClickListener { dialog, which ->
-
-                val db = DatabaseHandler(context)
-               // db.createWifiEntry(WifiObject(0,ssid, Integer.valueOf(input.text.toString())))
-                //todo Add proper ui so that the user can add searching or different stuff to it
-                db.createWifiEntry(WifiObject(0,ssid, 1, volume))
-                viewAdapter = WifiListAdapter(db.getAllWifiEntries())
-
-                wifi_recylcer_list_view.apply {
-                    // use this setting to improve performance if you know that changes
-                    // in content do not change the layout size of the RecyclerView
-                    setHasFixedSize(true)
-
-                    // use a linear layout manager
-                    layoutManager = viewManager
-
-                    // specify an viewAdapter (see also next example)
-                    adapter = viewAdapter
-
-                }
-
-
-            })
-        builder.setNegativeButton(R.string.cancel,
-            DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
-
-        builder.show()
+        }
     }
 }
