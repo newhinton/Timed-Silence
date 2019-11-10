@@ -71,9 +71,7 @@
     <string name="calendar_add_new">Add new Calendar Setting:</string>
     <string name="calendar_dialog_title_title">Select Calendar</string>
     <string name="calendar_dialog_save">Save</string>
-    <string name="wifi_dialog_ssid_textfield_hint">wifissd</string>
-    <string name="wifi_type_two">type two</string>
-    <string name="wifi_type_one">type one</string>
+    <string name="wifi_dialog_ssid_textfield_hint">Wifiname</string>
     <string name="wifi_type_connected">When Connected</string>
     <string name="wifi_type_searching">When Searching</string>
     <string name="calendar_list_empty">You do not have calendars.</string>

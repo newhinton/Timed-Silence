@@ -38,9 +38,8 @@
                     android:id="@+id/wifi_ssid_textfield"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints=""
-                    android:inputType=""
-                    android:text="@string/wifi_dialog_ssid_textfield_hint" />
+                    android:hint="@string/wifi_dialog_ssid_textfield_hint"
+                    android:inputType="" />
             </LinearLayout>
 
             <LinearLayout

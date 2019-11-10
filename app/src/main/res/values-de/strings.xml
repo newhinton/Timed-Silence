@@ -73,4 +73,9 @@
     <string name="calendar_add_new">Füge neue Kalendereinstellugn hinzu:</string>
     <string name="calendar_dialog_save">Speichern</string>
     <string name="calendar_dialog_title_title">Kalender auswählen</string>
+    <string name="calendar_list_empty">Sie haben keine Kalender.</string>
+    <string name="calendar_missing_permissions">Auf die Kalender wurde kein Zugriff gewährt.</string>
+    <string name="wifi_dialog_ssid_textfield_hint">Wlan-Name</string>
+    <string name="wifi_type_connected">Wenn Verbunden</string>
+    <string name="wifi_type_searching">Wenn Suchend</string>
 </resources>
