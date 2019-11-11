@@ -185,19 +185,24 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
+        val voLHandler = VolumeHandler()
+
         when (item.itemId) {
             R.id.action_settings -> openSettings()
             R.id.action_set_manual_loud -> {
-                val makeSound=!VolumeHandler.isButtonClickAudible(this)
 
-                VolumeHandler.setLoud(applicationContext)
+                val makeSound=!voLHandler.isButtonClickAudible(this)
+
+                voLHandler.setLoud()
+
                 if(makeSound){
                     button_buttonsound_fix.performClick()
                 }
             }
-            R.id.action_set_manual_vibrate -> VolumeHandler.setVibrate(applicationContext)
-            R.id.action_set_manual_silent -> VolumeHandler.setSilent(applicationContext)
+            R.id.action_set_manual_vibrate -> voLHandler.setVibrate()
+            R.id.action_set_manual_silent -> voLHandler.setSilent()
         }
+        voLHandler.applyVolume(applicationContext)
         return true;
     }
 

@@ -46,7 +46,6 @@ import de.felixnuesse.timedsilence.R
 
 class VolumeHandler {
     companion object {
-
         fun getVolumePermission(activity: Activity) {
             val notificationManager = activity.baseContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (!notificationManager.isNotificationPolicyAccessGranted) {
@@ -72,164 +71,192 @@ class VolumeHandler {
             }
         }
 
+        private const val SILENT = 0
+        private const val VIBRATE = 1
+        private const val LOUD = 2
+    }
 
+    var volumeSetting = SILENT
 
+    fun setSilent(){
+        volumeSetting = SILENT
+    }
 
-        fun setSilent(context: Context) {
-
-            val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-            val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-            mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
-            mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
-
-
-            if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
-                manager.ringerMode=AudioManager.RINGER_MODE_SILENT
-            }
-
-
-            if(!manager.isMusicActive){
-                setMediaVolume(0, context, manager)
-            }
-
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_ALARM,
-                SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
-            )
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_NOTIFICATION,
-                0
-            )
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_RING,
-                0
-            )
-
+    fun setVibrate(){
+        if(volumeSetting != SILENT){
+            volumeSetting = VIBRATE
         }
+    }
 
-        fun setVibrate(context: Context) {
-
-            val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-            if(manager.ringerMode!= AudioManager.RINGER_MODE_VIBRATE){
-                manager.ringerMode=AudioManager.RINGER_MODE_VIBRATE
-            }
-
-
-            val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-            mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
-
-
-            if(!manager.isMusicActive){
-                setMediaVolume(0, context, manager)
-            }
-
-
-
-            var alarmVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
-            if(false){
-                alarmVolume=0;
-            }
-
-
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_ALARM,
-                alarmVolume
-            )
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_NOTIFICATION,
-                0
-            )
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_RING,
-                0
-            )
-
+    fun setLoud(){
+        if(volumeSetting != SILENT && volumeSetting != VIBRATE){
+            volumeSetting = LOUD
         }
+    }
 
-        fun setLoud(context: Context) {
+    private fun applySilent(context: Context) {
 
-            val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-            val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-            mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
-
-            if(manager.ringerMode!= AudioManager.RINGER_MODE_NORMAL){
-                manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-            }
-
-            var alarmVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
-            var mediaVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_MUSIC, PrefConstants.PREF_VOLUME_MUSIC_DEFAULT)
-            var notifcationVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_NOTIFICATION, PrefConstants.PREF_VOLUME_NOTIFICATION_DEFAULT)
-            var ringerVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_RINGER, PrefConstants.PREF_VOLUME_RINGER_DEFAULT)
+        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+        mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
+        mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
 
 
-            if(!manager.isMusicActive){
-                setMediaVolume(mediaVolume, context, manager)
-            }
-
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_ALARM,
-                alarmVolume
-            )
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_NOTIFICATION,
-                notifcationVolume
-            )
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_RING,
-                ringerVolume
-            )
-
-        }
-
-        fun setStreamToPercent(manager: AudioManager, stream: Int, percentage: Int) {
-            val maxVol = manager.getStreamMaxVolume(stream)*100
-            val onePercent = maxVol / 100
-            val vol = (onePercent * percentage)/100
-            manager.setStreamVolume(stream, vol, 0)
+        if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
+            manager.ringerMode=AudioManager.RINGER_MODE_SILENT
         }
 
 
-        fun setMediaVolume(percentage: Int, context: Context, manager: AudioManager){
-
-
-            Log.d(Constants.APP_NAME, "VolumeHandler: Setting Audio Volume!")
-
-            val ignoreCheckWhenConnected=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)
-
-            if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
-                Log.d(Constants.APP_NAME, "VolumeHandler: Found headset, skipping...")
-                return
-            }
-
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_MUSIC,
-                percentage
-            )
-            Log.d(Constants.APP_NAME, "VolumeHandler: Mediavolume set.")
-
+        if(!manager.isMusicActive){
+            setMediaVolume(0, context, manager)
         }
 
-        fun isButtonClickAudible(context: Context): Boolean{
-            Log.d(Constants.APP_NAME, "VolumeHandler: Check if Buttonclicks are audible")
-            val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-            if(0>=manager.getStreamVolume(AudioManager.STREAM_RING)){
-                return false
-            }
-            return true
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_ALARM,
+            SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
+        )
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_NOTIFICATION,
+            0
+        )
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_RING,
+            0
+        )
+
+    }
+
+    private fun applyLoud(context: Context) {
+
+    val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+    val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+    mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+
+    if(manager.ringerMode!= AudioManager.RINGER_MODE_NORMAL){
+        manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+    }
+
+    var alarmVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
+    var mediaVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_MUSIC, PrefConstants.PREF_VOLUME_MUSIC_DEFAULT)
+    var notifcationVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_NOTIFICATION, PrefConstants.PREF_VOLUME_NOTIFICATION_DEFAULT)
+    var ringerVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_RINGER, PrefConstants.PREF_VOLUME_RINGER_DEFAULT)
+
+
+    if(!manager.isMusicActive){
+        setMediaVolume(mediaVolume, context, manager)
+    }
+
+    setStreamToPercent(
+        manager,
+        AudioManager.STREAM_ALARM,
+        alarmVolume
+    )
+    setStreamToPercent(
+        manager,
+        AudioManager.STREAM_NOTIFICATION,
+        notifcationVolume
+    )
+    setStreamToPercent(
+        manager,
+        AudioManager.STREAM_RING,
+        ringerVolume
+    )
+
+}
+
+    private fun applyVibrate(context: Context) {
+
+        val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        if(manager.ringerMode!= AudioManager.RINGER_MODE_VIBRATE){
+            manager.ringerMode=AudioManager.RINGER_MODE_VIBRATE
         }
 
+
+        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+        mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+
+
+        if(!manager.isMusicActive){
+            setMediaVolume(0, context, manager)
+        }
+
+
+
+        var alarmVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
+        if(false){
+            alarmVolume=0;
+        }
+
+
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_ALARM,
+            alarmVolume
+        )
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_NOTIFICATION,
+            0
+        )
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_RING,
+            0
+        )
+
+    }
+
+    private fun setStreamToPercent(manager: AudioManager, stream: Int, percentage: Int) {
+    val maxVol = manager.getStreamMaxVolume(stream)*100
+    val onePercent = maxVol / 100
+    val vol = (onePercent * percentage)/100
+    manager.setStreamVolume(stream, vol, 0)
+}
+
+    private fun setMediaVolume(percentage: Int, context: Context, manager: AudioManager){
+
+
+    Log.d(Constants.APP_NAME, "VolumeHandler: Setting Audio Volume!")
+
+    val ignoreCheckWhenConnected=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)
+
+    if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
+        Log.d(Constants.APP_NAME, "VolumeHandler: Found headset, skipping...")
+        return
+    }
+
+    setStreamToPercent(
+        manager,
+        AudioManager.STREAM_MUSIC,
+        percentage
+    )
+    Log.d(Constants.APP_NAME, "VolumeHandler: Mediavolume set.")
+
+}
+
+    fun isButtonClickAudible(context: Context): Boolean{
+    Log.d(Constants.APP_NAME, "VolumeHandler: Check if Buttonclicks are audible")
+    val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    if(0>=manager.getStreamVolume(AudioManager.STREAM_RING)){
+        return false
+    }
+    return true
+}
+
+    fun applyVolume(context: Context){
+        when (volumeSetting) {
+            SILENT -> applySilent(context)
+            VIBRATE -> applyVibrate(context)
+            LOUD -> applyLoud(context)
+            else -> {
+                applySilent(context)
+            }
+        }
     }
 }

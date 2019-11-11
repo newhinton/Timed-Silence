@@ -16,6 +16,8 @@ import java.util.*
 
 class AlarmBroadcastReceiver : BroadcastReceiver() {
 
+    val volumeHandler = VolumeHandler()
+
     override fun onReceive(context: Context?, intent: Intent?) {
 
         val current =System.currentTimeMillis()
@@ -69,6 +71,8 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         switchBasedOnWifi(context)
         switchBasedOnTime(context)
         switchBasedOnCalendar(context)
+
+        volumeHandler.applyVolume(context);
     }
 
     fun switchBasedOnCalendar(nonNullContext: Context){
@@ -98,17 +102,17 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
                     println(elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("calendar_id")+" "+volume)
 
                     if (volume == Constants.TIME_SETTING_SILENT) {
-                        VolumeHandler.setSilent(nonNullContext)
+                        volumeHandler.setSilent()
                         Log.e(Constants.APP_NAME, "Alarmintent: Calendar: (${elem.get("calendar_id")}): Set silent!")
                     }
 
                     if (volume == Constants.TIME_SETTING_VIBRATE) {
-                        VolumeHandler.setVibrate(nonNullContext)
+                        volumeHandler.setVibrate()
                         Log.e(Constants.APP_NAME, "Alarmintent: Calendar: (${elem.get("calendar_id")}): Set vibrate!")
                     }
 
                     if (volume == Constants.TIME_SETTING_LOUD) {
-                        VolumeHandler.setLoud(nonNullContext)
+                        volumeHandler.setLoud()
                         Log.e(Constants.APP_NAME, "Alarmintent: Calendar: (${elem.get("calendar_id")}): Set loud!")
                     }
                 }
@@ -172,17 +176,17 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             if (time in it.time_start..it.time_end || isInInversedTimeInterval) {
 
                 if (it.time_setting == Constants.TIME_SETTING_SILENT) {
-                    VolumeHandler.setSilent(nonNullContext)
+                    volumeHandler.setSilent()
                     Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
                 }
 
                 if (it.time_setting == Constants.TIME_SETTING_VIBRATE) {
-                    VolumeHandler.setVibrate(nonNullContext)
+                    volumeHandler.setVibrate()
                     Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
                 }
 
                 if (it.time_setting == Constants.TIME_SETTING_LOUD) {
-                    VolumeHandler.setLoud(nonNullContext)
+                    volumeHandler.setLoud()
                     Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
                 }
 
@@ -211,21 +215,21 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
                     Log.d(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
                     if (currentSSID.equals(ssidit) && it.type == Constants.WIFI_TYPE_CONNECTED) {
                         if (it.volume == Constants.TIME_SETTING_LOUD) {
-                            VolumeHandler.setLoud(nonNullContext)
+                            volumeHandler.setLoud()
                             Log.d(
                                 Constants.APP_NAME,
                                 "Alarmintent: WifiCheck: Set lout, because Connected to $currentSSID"
                             )
                         }
                         if (it.volume == Constants.TIME_SETTING_SILENT) {
-                            VolumeHandler.setSilent(nonNullContext)
+                            volumeHandler.setSilent()
                             Log.d(
                                 Constants.APP_NAME,
                                 "Alarmintent: WifiCheck: Set silent, because Connected to $currentSSID"
                             )
                         }
                         if (it.volume == Constants.TIME_SETTING_VIBRATE) {
-                            VolumeHandler.setVibrate(nonNullContext)
+                            volumeHandler.setVibrate()
                             Log.d(
                                 Constants.APP_NAME,
                                 "Alarmintent: WifiCheck: Set vibrate, because Connected to $currentSSID"
