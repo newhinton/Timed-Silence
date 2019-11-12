@@ -71,12 +71,13 @@ class VolumeHandler {
             }
         }
 
+        private const val UNSET = -1
         private const val SILENT = 0
         private const val VIBRATE = 1
         private const val LOUD = 2
     }
 
-    var volumeSetting = SILENT
+    var volumeSetting = UNSET
 
     fun setSilent(){
         volumeSetting = SILENT
@@ -250,12 +251,15 @@ class VolumeHandler {
 }
 
     fun applyVolume(context: Context){
+
+        Log.d(Constants.APP_NAME, "VolumeHandler: VolumeSetting: $volumeSetting")
+
         when (volumeSetting) {
             SILENT -> applySilent(context)
             VIBRATE -> applyVibrate(context)
             LOUD -> applyLoud(context)
             else -> {
-                applySilent(context)
+               // applySilent(context)
             }
         }
     }
