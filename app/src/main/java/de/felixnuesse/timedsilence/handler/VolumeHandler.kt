@@ -80,23 +80,30 @@ class VolumeHandler {
     var volumeSetting = UNSET
 
     fun setSilent(){
+        Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Silent!")
         volumeSetting = SILENT
     }
 
     fun setVibrate(){
         if(volumeSetting != SILENT){
+            Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Vibrate!")
             volumeSetting = VIBRATE
+        }else{
+            Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Vibrate! Ignored because: $volumeSetting ")
         }
     }
 
     fun setLoud(){
         if(volumeSetting != SILENT && volumeSetting != VIBRATE){
+            Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Loud!")
             volumeSetting = LOUD
+        }else{
+            Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Loud! Ignored because: $volumeSetting ")
         }
     }
 
     private fun applySilent(context: Context) {
-
+        Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Silent!")
         val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
@@ -132,7 +139,7 @@ class VolumeHandler {
     }
 
     private fun applyLoud(context: Context) {
-
+        Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Loud!")
     val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
     val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
@@ -171,7 +178,7 @@ class VolumeHandler {
 }
 
     private fun applyVibrate(context: Context) {
-
+        Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Vibrate!")
         val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         if(manager.ringerMode!= AudioManager.RINGER_MODE_VIBRATE){
@@ -262,5 +269,14 @@ class VolumeHandler {
                // applySilent(context)
             }
         }
+    }
+
+    fun getVolume(): Int{
+        when (volumeSetting) {
+            SILENT -> return SILENT
+            VIBRATE -> return VIBRATE
+            LOUD -> return LOUD
+        }
+        return SILENT
     }
 }
