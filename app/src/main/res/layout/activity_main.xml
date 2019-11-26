@@ -30,17 +30,25 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <android.support.design.widget.TabItem
+                android:id="@+id/graph_tab_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_tab_graph" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/time_tab_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_tab_time" />
 
             <android.support.design.widget.TabItem
-                android:id="@+id/tabItem"
+                android:id="@+id/wifi_tab_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_tab_wifi_connected" />
 
             <android.support.design.widget.TabItem
+                android:id="@+id/calendar_tab_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_tab_calendar" />

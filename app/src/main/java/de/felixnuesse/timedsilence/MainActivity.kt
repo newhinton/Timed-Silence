@@ -52,6 +52,7 @@ import android.text.format.DateFormat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.activities.SettingsMainActivity
+import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.handler.CalendarHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
@@ -89,12 +90,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         }
 
         fab.setOnClickListener { view ->
-            Log.e(APP_NAME, "Main: fab: Clicked")
+            //Log.e(APP_NAME, "Main: fab: Clicked")
             setHandlerState()
         }
 
         frameLayout.setOnClickListener { view ->
-            Log.e(APP_NAME, "Main: FabTester: Clicked")
+            //Log.e(APP_NAME, "Main: FabTester: Clicked")
             buttonState()
         }
 
@@ -166,6 +167,9 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         i.putExtra("KEY1", "Value to be used by the service");
         startService(i)
         buttonState()
+
+
+        AlarmBroadcastReceiver().switchVolumeMode(this)
     }
 
     override fun onResume() {
@@ -333,8 +337,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     @Deprecated("replace by callback")
     fun getSharedPreferencesListener(): SharedPreferences.OnSharedPreferenceChangeListener {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
-            Log.e(Constants.APP_NAME, "Main: SharedPrefs: prefs: "+prefs)
-            Log.e(Constants.APP_NAME, "Main: SharedPrefs: key:   "+key)
+            //Log.e(Constants.APP_NAME, "Main: SharedPrefs: prefs: "+prefs)
+            //Log.e(Constants.APP_NAME, "Main: SharedPrefs: key:   "+key)
 
 
             if(key==PrefConstants.PREFS_LAST_KEY_EXEC){
@@ -350,14 +354,15 @@ class MainActivity : AppCompatActivity(), TimerInterface {
      * sequence.
      */
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-        override fun getCount(): Int = 3
+        override fun getCount(): Int = 4
 
         override fun getItem(position: Int): Fragment {
 
             when (position) {
-                0 -> return TimeFragment()
-                1 -> return WifiConnectedFragment()
-                2 -> return CalendarEventFragment()
+                0 -> return GraphFragment()
+                1 -> return TimeFragment()
+                2 -> return WifiConnectedFragment()
+                3 -> return CalendarEventFragment()
                 else -> return TimeFragment()
             }
         }
