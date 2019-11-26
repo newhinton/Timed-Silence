@@ -2,28 +2,32 @@ package de.felixnuesse.timedsilence.handler
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
-import android.app.NotificationManager
 import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.provider.CalendarContract
-import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
+import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.descriptions
+import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.endDates
+import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.nameOfEvent
+import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.startDates
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import android.text.format.DateUtils
+import android.content.ContentUris
+import java.time.Duration
+import java.time.format.DateTimeParseException
+import java.util.regex.Pattern
+
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -72,6 +76,11 @@ class CalendarHandler(context: Context) {
     }
 
     var context: Context = context
+    val db = DatabaseHandler(context)
+
+    fun enableCaching(caching: Boolean){
+        db.setCaching(caching)
+    }
 
     private lateinit var cachedCalendars: ArrayList<CalendarObject>
     private var alreadyCached: Boolean=false
@@ -79,9 +88,8 @@ class CalendarHandler(context: Context) {
     fun getCalendarVolumeSetting(externalId: Long):Int{
         getCalendars(context)
         for (calObject in cachedCalendars){
+            //Log.d(APP_NAME, "CalendarHandler: getCalendarVolumeSetting:" + externalId + " | " + calObject.name+ " | " + calObject.id+ " | " + calObject.ext_id)
             if(calObject.ext_id==externalId){
-                val db = DatabaseHandler(context)
-
                 var calObject = db.getCalendarEntryByExtId(calObject.ext_id.toString())
 
                 if(calObject==null){
@@ -128,7 +136,6 @@ class CalendarHandler(context: Context) {
 
         getCalendarReadPermission(context)
 
-        Log.e(Constants.APP_NAME, "test")
         val cursor: Cursor
         val contentResolver = context.contentResolver
 
@@ -154,7 +161,6 @@ class CalendarHandler(context: Context) {
         }
 
         // Get calendars name
-        Log.i(Constants.APP_NAME,"Cursor count " + cursor.count)
         if (cursor.count > 0) {
             cursor.moveToFirst()
 
@@ -171,64 +177,160 @@ class CalendarHandler(context: Context) {
             }
             alreadyCached=true
         } else {
-            Log.e(APP_NAME,"No calendar found in the device")
+            Log.e(APP_NAME,"CalendarHandler: No calendar found in the device")
         }
     }
 
+    fun readCalendarEvent(timeInMilliseconds: Long): ArrayList<Map<String, String>> {
 
-    /*fun getNextOrCurrent(context: Context): ArrayList<String> {
-        getCalendars(context)
-        //readCalendarEvent()
 
-    }*/
+        Log.e(APP_NAME, "CalendarHandler: CurrentTime in MS:"+getDate(timeInMilliseconds.toString()))
+        val startTime = Calendar.getInstance()
 
-    fun readCalendarEvent(): ArrayList<Map<String, String>> {
-        val cursor = context.getContentResolver()
+        startTime.set(Calendar.HOUR_OF_DAY, 0)
+        startTime.set(Calendar.MINUTE, 0)
+        startTime.set(Calendar.SECOND, 0)
+
+        val endTime = Calendar.getInstance()
+        endTime.add(Calendar.DATE, 1)
+
+        val projection = arrayOf(
+            CalendarContract.Events.CALENDAR_ID,
+            CalendarContract.Events.TITLE,
+            CalendarContract.Events.DESCRIPTION,
+            CalendarContract.Events.DTSTART,
+            CalendarContract.Events.DTEND,
+            CalendarContract.Events.ALL_DAY,
+            CalendarContract.Events.DURATION,
+            CalendarContract.Events.EVENT_LOCATION
+        )
+
+        var cursor = context.contentResolver
             .query(
                 Uri.parse("content://com.android.calendar/events"),
-                arrayOf("calendar_id", CalendarContract.Events.TITLE, CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND,CalendarContract.Events.ALL_DAY, CalendarContract.Events.DURATION ),
+                projection, // arrayOf("calendar_id", "title", "description", "dtstart", "dtend", "eventLocation"),
                 null,
                 null,
                 null
             )
-        cursor.moveToFirst()
-        // fetching calendars name
+        cursor!!.moveToFirst()
 
-        val retval: ArrayList<Map<String, String>> = ArrayList()
-        val lengthDummyArray = arrayOfNulls<String>(cursor.count)
+
+        var retval: ArrayList<Map<String, String>> = ArrayList()
+        var lengthDummyArray = arrayOfNulls<String>(cursor.count)
 
         // fetching calendars id
-        CalendarEventFragment.nameOfEvent.clear()
-        CalendarEventFragment.startDates.clear()
-        CalendarEventFragment.endDates.clear()
-        CalendarEventFragment.descriptions.clear()
+        nameOfEvent.clear()
+        startDates.clear()
+        endDates.clear()
+        descriptions.clear()
 
 
         for (i in lengthDummyArray) {
-
-
-
             val map = HashMap<String, String>()
             map.put("calendar_id",cursor.getString(0))
             map.put("name_of_event",cursor.getString(1))
+            map.put("description",cursor.getString(2))
             map.put("start_date",cursor.getString(3))
             map.put("end_date",cursor.getString(4))
-            map.put("description",cursor.getString(1))
-            map.put("duration",cursor.getString(5))
-            map.put("all_day",cursor.getString(6))
-            retval.add(map)
+            map.put("all_day",cursor.getString(5))
+            map.put("duration",cursor.getString(6))
+            map.put("recurring","false")
+            //retval.add(map)
             cursor.moveToNext()
 
         }
+        cursor.close()
+
+
+        // Construct the query with the desired date range.
+        val builder = Uri.parse("content://com.android.calendar/instances/when").buildUpon()
+        val now = Date().time // - (DateUtils.HOUR_IN_MILLIS + DateUtils.MINUTE_IN_MILLIS*30)
+        val range =  DateUtils.HOUR_IN_MILLIS*12
+        ContentUris.appendId(builder, now - range)
+        ContentUris.appendId(builder, now + range)
+
+        cursor = context.getContentResolver().query(
+            builder.build(),
+            projection,
+            null,
+            null,
+            CalendarContract.Events.DTEND + " ASC"
+        )
+
+        cursor.moveToFirst()
+        // fetching calendars name
+
+        lengthDummyArray = arrayOfNulls<String>(cursor.count)
+
+        // fetching calendars id
+        nameOfEvent.clear()
+        startDates.clear()
+        endDates.clear()
+        descriptions.clear()
+
+
+        for (i in lengthDummyArray) {
+            val map = HashMap<String, String>()
+            map.put("calendar_id",cursor.getString(0))
+            map.put("name_of_event",cursor.getString(1))
+            map.put("description",cursor.getString(2))
+
+            val start= cursor.getString(3).toLong()
+            //the start time is from the FIRST time the event happens, so adjust it
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = start
+            calendar.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+            val newStart = calendar.timeInMillis
+            map.put("start_date",newStart.toString())
+
+
+
+            map.put("end_date",cursor.getString(4))
+            map.put("all_day",cursor.getString(5))
+
+            var recurring = cursor.getString(6) ?: ""
+
+            //Log.d(APP_NAME, "CalendarHandler: RecurringPattern: "+recurring)
+            if(recurring.equals("")){
+                map.put("duration",cursor.getString(6))
+                map.put("recurring","false")
+            }else{
+
+                //First, fix the damn issue with the missing T for seconds
+                val sPattern = Pattern.compile("P\\d+S")
+                if(sPattern.matcher(recurring).matches()){
+                    val sb = StringBuffer(recurring)
+                    sb.insert(recurring.indexOf("P")+1, "T")
+                    recurring = sb.toString()
+                    //Log.d(APP_NAME, "CalendarHandler: Fixed RecurringPattern: "+recurring)
+                }
+
+                try{
+                    val msEnd= Duration.parse(recurring).toMillis()
+                    val t = newStart+msEnd
+                    map.put("duration",msEnd.toString())
+                    map.put("end_date",t.toString())
+                }catch (e : DateTimeParseException){
+
+                }
+                map.put("recurring","true")
+            }
+
+            retval.add(map)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
 
         Collections.sort(retval, this.MyMapComparator())
         return retval
     }
 
-    fun getDate(milliSeconds: Long): String {
+    fun getDate(milliSeconds: String): String {
         val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm:ss a")
         val calendar = Calendar.getInstance()
-        calendar.setTimeInMillis(milliSeconds)
+        calendar.setTimeInMillis(milliSeconds.toLong())
         return formatter.format(calendar.getTime())
     }
 
@@ -238,11 +340,11 @@ class CalendarHandler(context: Context) {
             val s1 = o1["start_date"]!!.toLong()
             val s2 = o2["start_date"]!!.toLong()
 
-            if(s1>s2){
+            if(s1<s2){
                 return -1
             }
 
-            if(s1<s2){
+            if(s1>s2){
                 return 1
             }
 

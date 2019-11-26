@@ -8,8 +8,13 @@ import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.LocationAccessMissingNotification
+import java.time.Instant
 import java.time.LocalDateTime
 import java.util.*
+import java.time.ZoneId.systemDefault
+import java.time.Instant.ofEpochMilli
+import java.time.ZoneId
+
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -45,32 +50,65 @@ class VolumeCalculator {
 
     var nonNullContext: Context
     var volumeHandler: VolumeHandler
+    var dbHandler: DatabaseHandler
+    var cached: Boolean = false
 
 
-    constructor(context: Context, volumeHandler: VolumeHandler) {
+    constructor(context: Context) {
         nonNullContext = context
-        this.volumeHandler = volumeHandler
+        this.volumeHandler = VolumeHandler()
+        dbHandler = DatabaseHandler(nonNullContext)
+    }
+
+    constructor(context: Context, cached: Boolean) {
+        nonNullContext = context
+        this.volumeHandler = VolumeHandler()
+        this.cached=cached
+
+        dbHandler = DatabaseHandler(nonNullContext)
+        dbHandler.setCaching(cached)
     }
 
 
-    fun calcAndApply(){
+    fun calculateAllAndApply(){
+        volumeHandler= VolumeHandler()
         switchBasedOnWifi()
         switchBasedOnTime()
         switchBasedOnCalendar()
         volumeHandler.applyVolume(nonNullContext)
     }
 
-
-    fun switchBasedOnCalendar(){
-        switchBasedOnCalendar(Date().getTime())
+    fun getState(): Int{
+        return getStateAt(Date().time)
     }
 
-    fun switchBasedOnCalendar(timeInMilliseconds: Long){
-        val ch = CalendarHandler(nonNullContext)
+    fun getStateAt(timeInMilliseconds: Long): Int{
+        volumeHandler= VolumeHandler()
 
-        Log.e(APP_NAME, "switch based on cal")
-        for (elem in ch.readCalendarEvent()){
-            //println(elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("description")+" ")
+        switchBasedOnTime(timeInMilliseconds)
+        switchBasedOnCalendar(timeInMilliseconds)
+
+        return volumeHandler.getVolume()
+
+    }
+
+    fun switchBasedOnCalendar(){
+        switchBasedOnCalendar(Date().time)
+    }
+
+    private fun switchBasedOnCalendar(timeInMilliseconds: Long){
+        val ch = CalendarHandler(nonNullContext)
+        ch.enableCaching(cached)
+
+        Log.d(APP_NAME, "VolumeCalculator: Start CalendarCheck")
+        for (elem in ch.readCalendarEvent(timeInMilliseconds)){
+
+            val x = ch.getDate(elem.get("start_date") ?: "0")
+            val y = ch.getDate(elem.get("end_date") ?: "0")
+
+
+            //Log.i(APP_NAME, x+ " | " + elem["duration"] + " | " +y+" | "+ elem.get("name_of_event")+ " | recurring:" + elem["recurring"]  + " | "+elem.get("calendar_id"))
+            Log.i(APP_NAME, x+ " | " + timeInMilliseconds + " | " +y+" | "+ elem["duration"] + " | " + elem.get("name_of_event")+ " | recurring:" + elem["recurring"]  + " | "+elem.get("calendar_id"))
 
             try {
                 val currentMilliseconds =  timeInMilliseconds
@@ -83,51 +121,59 @@ class VolumeCalculator {
                     endtime = starttime+elem.get("duration")!!.toLong()
                 }
                 val volume = ch.getCalendarVolumeSetting(elem.get("calendar_id")!!.toLong())
-                //println(elem.get("name_of_event")+" "+volume)
-
+                Log.i(APP_NAME, elem.get("name_of_event")+ " | " + volume  + " ")
                 if(volume==-1){
                     continue
                 }else{
-                    if (currentMilliseconds in (starttime + 1)..(endtime - 1)){
-                        println(elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("calendar_id")+" "+volume)
+                    if (currentMilliseconds in (starttime + 1) until endtime-1){
+                        //println(elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("calendar_id")+" "+volume)
 
                         if (volume == Constants.TIME_SETTING_SILENT) {
                             volumeHandler.setSilent()
-                            Log.e(Constants.APP_NAME, "Alarmintent: Calendar: (${elem.get("calendar_id")}): Set silent!")
+                            Log.d(APP_NAME, "Alarmintent: Calendar: (${elem.get("calendar_id")}): Set silent!")
                         }
 
                         if (volume == Constants.TIME_SETTING_VIBRATE) {
                             volumeHandler.setVibrate()
-                            Log.e(Constants.APP_NAME, "Alarmintent: Calendar: (${elem.get("calendar_id")}): Set vibrate!")
+                            Log.d(Constants.APP_NAME, "Alarmintent: Calendar: (${elem.get("calendar_id")}): Set vibrate!")
                         }
 
                         if (volume == Constants.TIME_SETTING_LOUD) {
                             volumeHandler.setLoud()
-                            Log.e(Constants.APP_NAME, "Alarmintent: Calendar: (${elem.get("calendar_id")}): Set loud!")
+                            Log.d(Constants.APP_NAME, "Alarmintent: Calendar: (${elem.get("calendar_id")}): Set loud!")
                         }
                     }
                 }
             }catch (e:Exception ){
                 //e.printStackTrace()
-                println("ERROR: "+elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("description")+" ")
+                System.err.println("ERROR: "+elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("description")+" ")
             }
 
         }
     }
 
     fun switchBasedOnTime(){
-        val hour = LocalDateTime.now().hour
-        val min = LocalDateTime.now().minute
+        switchBasedOnTime(Date().time)
+    }
+
+    private fun switchBasedOnTime(timeInMilliseconds: Long){
+
+        Log.d(APP_NAME, "VolumeCalculator: Start TimeCheck")
+
+        val time =  ofEpochMilli(timeInMilliseconds).atZone(systemDefault()).toLocalDateTime()
+
+        val hour =time.hour
+        val min = time.minute
 
         val dayLongName = Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
         val dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
 
         Calendar.SATURDAY
-        loop@ for (it in DatabaseHandler(nonNullContext).getAllSchedules()) {
+        loop@ for (it in dbHandler.getAllSchedules()) {
             val time = hour * 60 * 60 * 1000 + min * 60 * 1000
 
-            Log.d(Constants.APP_NAME, "Alarmintent: Current Schedule: ${it.name}")
-            Log.d(Constants.APP_NAME, "Alarmintent: Current Weekday: $dayLongName ($dayOfWeek)")
+            //Log.d(Constants.APP_NAME, "Alarmintent: Current Schedule: ${it.name}")
+            //Log.d(Constants.APP_NAME, "Alarmintent: Current Weekday: $dayLongName ($dayOfWeek)")
 
             var isAllowedDay = false
             when (dayOfWeek){
@@ -140,25 +186,22 @@ class VolumeCalculator {
                 1 -> if (it.sun) { isAllowedDay = true }
             }
 
-            Log.d(Constants.APP_NAME, "Alarmintent: isAllowedDay: $isAllowedDay")
+            //Log.d(Constants.APP_NAME, "Alarmintent: isAllowedDay: $isAllowedDay")
             if (!isAllowedDay) {
                 continue@loop
             }
 
             var isInInversedTimeInterval = false
             if (it.time_end <= it.time_start) {
-                Log.e(Constants.APP_NAME, "Alarmintent: End is before or equal start")
+                //Log.e(Constants.APP_NAME, "Alarmintent: End is before or equal start")
 
                 if (time >= it.time_start && time < 24 * 60 * 60 * 1000) {
-                    Log.d(
-                        Constants.APP_NAME,
-                        "Alarmintent: Current time is after start time of interval but before 0:00"
-                    )
+                    //Log.d(Constants.APP_NAME, "Alarmintent: Current time is after start time of interval but before 0:00" )
                     isInInversedTimeInterval = true
                 }
 
                 if (time < it.time_end && time >= 0) {
-                    Log.d(Constants.APP_NAME, "Alarmintent: Current time is before end time of interval but after 0:00")
+                    //Log.d(Constants.APP_NAME, "Alarmintent: Current time is before end time of interval but after 0:00")
                     isInInversedTimeInterval = true
                 }
             }
@@ -167,17 +210,17 @@ class VolumeCalculator {
 
                 if (it.time_setting == Constants.TIME_SETTING_SILENT) {
                     volumeHandler.setSilent()
-                    Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
+                    Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
                 }
 
                 if (it.time_setting == Constants.TIME_SETTING_VIBRATE) {
                     volumeHandler.setVibrate()
-                    Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
+                    Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
                 }
 
                 if (it.time_setting == Constants.TIME_SETTING_LOUD) {
                     volumeHandler.setLoud()
-                    Log.e(Constants.APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
+                    Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
                 }
 
             }
@@ -185,13 +228,14 @@ class VolumeCalculator {
     }
 
     fun switchBasedOnWifi(){
-        val db = DatabaseHandler(nonNullContext)
-        Log.d(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: " + db.getAllWifiEntries().size)
-        if (db.getAllWifiEntries().size > 0) {
+
+        Log.d(APP_NAME, "VolumeCalculator: Start WifiCheck")
+        //Log.d(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: " + dbHandler.getAllWifiEntries().size)
+        if (dbHandler.getAllWifiEntries().size > 0) {
             val isLocationEnabled = LocationHandler.checkIfLocationServiceIsEnabled(nonNullContext)
             if (!isLocationEnabled) {
                 with(NotificationManagerCompat.from(nonNullContext)) {
-                    Log.d(Constants.APP_NAME, "Alarmintent: Locationstate: Disabled!")
+                    //Log.d(Constants.APP_NAME, "Alarmintent: Locationstate: Disabled!")
                     notify(
                         LocationAccessMissingNotification.NOTIFICATION_ID,
                         LocationAccessMissingNotification.buildNotification(nonNullContext)
@@ -199,31 +243,22 @@ class VolumeCalculator {
                 }
             } else {
                 val currentSSID = WifiHandler.getCurrentSsid(nonNullContext)
-                db.getAllWifiEntries().forEach {
+                dbHandler.getAllWifiEntries().forEach {
 
                     val ssidit = "\"" + it.ssid + "\""
-                    Log.d(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
+                    //Log.d(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
                     if (currentSSID.equals(ssidit) && it.type == Constants.WIFI_TYPE_CONNECTED) {
                         if (it.volume == Constants.TIME_SETTING_LOUD) {
                             volumeHandler.setLoud()
-                            Log.d(
-                                Constants.APP_NAME,
-                                "Alarmintent: WifiCheck: Set lout, because Connected to $currentSSID"
-                            )
+                            //Log.d(Constants.APP_NAME,"Alarmintent: WifiCheck: Set lout, because Connected to $currentSSID")
                         }
                         if (it.volume == Constants.TIME_SETTING_SILENT) {
                             volumeHandler.setSilent()
-                            Log.d(
-                                Constants.APP_NAME,
-                                "Alarmintent: WifiCheck: Set silent, because Connected to $currentSSID"
-                            )
+                            //Log.d(Constants.APP_NAME,"Alarmintent: WifiCheck: Set silent, because Connected to $currentSSID")
                         }
                         if (it.volume == Constants.TIME_SETTING_VIBRATE) {
                             volumeHandler.setVibrate()
-                            Log.d(
-                                Constants.APP_NAME,
-                                "Alarmintent: WifiCheck: Set vibrate, because Connected to $currentSSID"
-                            )
+                            //Log.d(Constants.APP_NAME, "Alarmintent: WifiCheck: Set vibrate, because Connected to $currentSSID")
                         }
                         return
                     }

@@ -71,6 +71,16 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_VO
 class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
 
+    var cachingEnabled=false
+
+    lateinit var cachedSchedules: ArrayList<ScheduleObject>
+    lateinit var cachedCalendars: ArrayList<CalendarObject>
+    lateinit var cachedWifi: ArrayList<WifiObject>
+
+    fun setCaching(caching: Boolean){
+        cachingEnabled=caching
+    }
+
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_ENTRIES)
         db.execSQL(SQL_CREATE_ENTRIES_WIFI)
@@ -97,6 +107,10 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
 
     fun getAllSchedules(): ArrayList<ScheduleObject> {
+        if (::cachedSchedules.isInitialized && cachingEnabled) {
+            return cachedSchedules
+        }
+
         val db = readableDatabase
 
         // Define a projection that specifies which columns from the database
@@ -152,7 +166,8 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         cursor.close()
 
         db.close()
-        return results
+        cachedSchedules=results
+        return cachedSchedules
     }
 
     fun intToBool(value: Int): Boolean{
@@ -162,6 +177,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         return true
     }
 
+    @Deprecated("This is not cached!")
     fun getScheduleByID(id: Long): ScheduleObject {
         val db = readableDatabase
 
@@ -344,6 +360,10 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
 
     fun getAllWifiEntries(): ArrayList<WifiObject> {
+        if (::cachedWifi.isInitialized && cachingEnabled) {
+            return cachedWifi
+        }
+
         val db = readableDatabase
 
         // Define a projection that specifies which columns from the database
@@ -384,7 +404,8 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         cursor.close()
 
         db.close()
-        return results
+        cachedWifi=results
+        return cachedWifi
     }
 
     /**
@@ -439,6 +460,11 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
 
     fun getAllCalendarEntries(): ArrayList<CalendarObject> {
+        if (::cachedCalendars.isInitialized && cachingEnabled) {
+            return cachedCalendars
+        }
+
+
         val db = readableDatabase
 
         // Define a projection that specifies which columns from the database
@@ -476,7 +502,8 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         }
 
         db.close()
-        return results
+        cachedCalendars=results
+        return cachedCalendars
     }
 
     /**

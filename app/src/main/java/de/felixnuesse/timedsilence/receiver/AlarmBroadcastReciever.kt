@@ -61,8 +61,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             return
         }
 
-        val volHandler = VolumeHandler()
-        VolumeCalculator(nonNullContext, volHandler).calcAndApply()
+        VolumeCalculator(nonNullContext).calculateAllAndApply()
     }
 
 
