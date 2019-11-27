@@ -53,6 +53,7 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.activities.SettingsMainActivity
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
+import de.felixnuesse.timedsilence.fragments.graph.GraphFragmentThread
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.handler.CalendarHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
@@ -62,6 +63,7 @@ import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.graph_fragment.*
 import java.util.*
 
 

@@ -53,20 +53,23 @@ class VolumeCalculator {
     var dbHandler: DatabaseHandler
     var cached: Boolean = false
 
+    lateinit var calendarHandler:CalendarHandler
+
 
     constructor(context: Context) {
         nonNullContext = context
         this.volumeHandler = VolumeHandler()
         dbHandler = DatabaseHandler(nonNullContext)
+        calendarHandler= CalendarHandler(nonNullContext)
     }
 
     constructor(context: Context, cached: Boolean) {
         nonNullContext = context
         this.volumeHandler = VolumeHandler()
         this.cached=cached
-
         dbHandler = DatabaseHandler(nonNullContext)
         dbHandler.setCaching(cached)
+        calendarHandler= CalendarHandler(nonNullContext)
     }
 
 
@@ -83,8 +86,8 @@ class VolumeCalculator {
     }
 
     fun getStateAt(timeInMilliseconds: Long): Int{
-        volumeHandler= VolumeHandler()
 
+        volumeHandler= VolumeHandler()
         switchBasedOnTime(timeInMilliseconds)
         switchBasedOnCalendar(timeInMilliseconds)
 
@@ -97,14 +100,13 @@ class VolumeCalculator {
     }
 
     private fun switchBasedOnCalendar(timeInMilliseconds: Long){
-        val ch = CalendarHandler(nonNullContext)
-        ch.enableCaching(cached)
+        calendarHandler.enableCaching(cached)
 
         Log.d(APP_NAME, "VolumeCalculator: Start CalendarCheck")
-        for (elem in ch.readCalendarEvent(timeInMilliseconds)){
+        for (elem in calendarHandler.readCalendarEvent(timeInMilliseconds)){
 
-            val x = ch.getDate(elem.get("start_date") ?: "0")
-            val y = ch.getDate(elem.get("end_date") ?: "0")
+            val x = ""//calendarHandler.getDate(elem.get("start_date") ?: "0")
+            val y = ""//calendarHandler.getDate(elem.get("end_date") ?: "0")
 
 
             //Log.i(APP_NAME, x+ " | " + elem["duration"] + " | " +y+" | "+ elem.get("name_of_event")+ " | recurring:" + elem["recurring"]  + " | "+elem.get("calendar_id"))
@@ -120,7 +122,7 @@ class VolumeCalculator {
                 }else if (elem.get("duration")!=null){
                     endtime = starttime+elem.get("duration")!!.toLong()
                 }
-                val volume = ch.getCalendarVolumeSetting(elem.get("calendar_id")!!.toLong())
+                val volume = calendarHandler.getCalendarVolumeSetting(elem.get("calendar_id")!!.toLong())
                 Log.i(APP_NAME, elem.get("name_of_event")+ " | " + volume  + " ")
                 if(volume==-1){
                     continue

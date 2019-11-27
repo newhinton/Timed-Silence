@@ -40,10 +40,17 @@ class GraphFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //val thread = GraphFragmentThread(context!!, bar_list)
-        //thread.start() // Will output: Thread[Thread-0,5,main] has run.    val runnable = SimpleRunnable()
-        //val thread1 = Thread(GraphFragmentThread.SimpleRunnable(context!!, bar_list))
-        //thread1.start() // Will output: Thread[Thread-1,5,main] has
+
+
+        val thread = GraphFragmentThread(context!!, bar_list)
+        thread.doIt(context!!,bar_list)
+
+       //val thread = GraphFragmentThread(context!!, bar_list)
+       // thread.start() // Will output: Thread[Thread-0,5,main] has run.    val runnable = SimpleRunnable()
+       // val thread1 = Thread(GraphFragmentThread.SimpleRunnable(context!!, bar_list))
+       // thread1.start() // Will output: Thread[Thread-1,5,main] has
+
+        //thread.doIt(context!!,bar_list)
     }
 
 }

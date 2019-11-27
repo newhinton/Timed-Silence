@@ -45,6 +45,7 @@ class GraphFragmentThread(context: Context, ll: LinearLayout): Thread() {
 
     public override fun run() {
         println("${Thread.currentThread()} has run.")
+
     }
 
     // Implementing the Runnable interface to implement threads.
@@ -67,7 +68,7 @@ class GraphFragmentThread(context: Context, ll: LinearLayout): Thread() {
             val s = 1000
             val m = 60*s
 
-            for(elem in 1..1440){
+            for(elem in 1..144){
 
                 val time =  Instant.ofEpochMilli((elem*m).toLong()).atZone(ZoneId.systemDefault()).toLocalDateTime()
                 Log.e("app", "run $elem");
@@ -76,14 +77,31 @@ class GraphFragmentThread(context: Context, ll: LinearLayout): Thread() {
 
                 val text: TextView = TextView(context)
                 text.text = "t- ${time.hour}:${time.minute} "+volCalc.getStateAt((elem*m).toLong())
-                //barList.addView(text)
+                barList.addView(text)
             }
 
         }
 
     }
 
+    fun doIt(context:Context, barList: LinearLayout){
+        var volCalc = VolumeCalculator(context!!, true)
+        val s = 1000
+        val m = 60*s
 
+        for(elem in 1..1440){
+
+            val time =  Instant.ofEpochMilli((elem*m).toLong()).atZone(ZoneId.systemDefault()).toLocalDateTime()
+            Log.e("app", "run $elem");
+            val hour =time.hour
+            val min = time.minute
+
+            val text: TextView = TextView(context)
+            text.text = "t- ${time.hour}:${time.minute} "+volCalc.getStateAt((elem*m).toLong())
+            barList.addView(text)
+        }
+
+    }
 
 
 }
