@@ -94,6 +94,9 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         fab.setOnClickListener { view ->
             //Log.e(APP_NAME, "Main: fab: Clicked")
             setHandlerState()
+
+            val thread = GraphFragmentThread(applicationContext!!, bar_list)
+            thread.doIt(applicationContext!!,bar_list)
         }
 
         frameLayout.setOnClickListener { view ->
@@ -363,8 +366,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             when (position) {
                 0 -> return GraphFragment()
                 1 -> return TimeFragment()
-                2 -> return WifiConnectedFragment()
-                3 -> return CalendarEventFragment()
+                2 -> return CalendarEventFragment()
+                3 -> return WifiConnectedFragment()
                 else -> return TimeFragment()
             }
         }

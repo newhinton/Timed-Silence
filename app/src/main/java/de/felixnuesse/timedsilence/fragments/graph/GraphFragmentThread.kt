@@ -4,10 +4,12 @@ import android.content.Context
 import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
+import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.handler.VolumeCalculator
 import kotlinx.android.synthetic.main.graph_fragment.*
-import java.time.Instant
-import java.time.ZoneId
+import java.text.SimpleDateFormat
+import java.time.*
+import java.util.*
 import kotlin.contracts.contract
 
 /**
@@ -85,20 +87,58 @@ class GraphFragmentThread(context: Context, ll: LinearLayout): Thread() {
     }
 
     fun doIt(context:Context, barList: LinearLayout){
+
+        barList.removeAllViews()
+
         var volCalc = VolumeCalculator(context!!, true)
-        val s = 1000
-        val m = 60*s
 
-        for(elem in 1..1440){
+        val midnight: LocalTime = LocalTime.MIDNIGHT
+        val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
+        var todayMidnight = LocalDateTime.of(today, midnight)
 
-            val time =  Instant.ofEpochMilli((elem*m).toLong()).atZone(ZoneId.systemDefault()).toLocalDateTime()
-            Log.e("app", "run $elem");
-            val hour =time.hour
-            val min = time.minute
+        var lastState = Constants.TIME_SETTING_UNSET
+        val lastElem = 1439 //start by 0:00 end by 23:59
+        for(elem in 0..lastElem){
 
-            val text: TextView = TextView(context)
-            text.text = "t- ${time.hour}:${time.minute} "+volCalc.getStateAt((elem*m).toLong())
-            barList.addView(text)
+
+            val hoursFromInt = Math.floorDiv(elem, 60)
+            val minutesFromInt = elem - (60*hoursFromInt)
+
+            var localMidnight = todayMidnight.plusHours(hoursFromInt.toLong())
+            localMidnight = localMidnight.plusMinutes(minutesFromInt.toLong())
+
+            val text = TextView(context)
+
+            val state = volCalc.getStateAt(localMidnight.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+
+            //Log.e("app", "run $elem : $state")
+
+            if(lastState!=state || elem == lastElem){// || true){ //
+                var volume = "--"
+                when (state) {
+                    Constants.TIME_SETTING_SILENT -> volume =  "SILENT"
+                    Constants.TIME_SETTING_VIBRATE -> volume = "VIBRATE"
+                    Constants.TIME_SETTING_LOUD -> volume =    "LOUD"
+                    else -> {
+                        // applySilent(context)
+                    }
+                }
+
+                var hour = hoursFromInt.toString()//time.hour.toString()
+                var minute = minutesFromInt.toString()//time.minute.toString()
+
+                if(hour.length!=2){
+                    hour = "0$hour"
+                }
+                if(minute.length!=2){
+                    minute = "0$minute"
+                }
+
+                text.text = "$hour:$minute | $localMidnight | $volume" ///+ " |\n " +todayMidnights.toString()
+                barList.addView(text)
+                lastState=state
+            }
+
         }
 
     }
