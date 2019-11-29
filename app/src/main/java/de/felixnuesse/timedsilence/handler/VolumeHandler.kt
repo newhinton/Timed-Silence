@@ -41,6 +41,10 @@ import android.support.v4.app.ActivityCompat.finishAffinity
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 
@@ -70,33 +74,28 @@ class VolumeHandler {
                 builder.create().show()
             }
         }
-
-        private const val UNSET = -1
-        private const val SILENT = 0
-        private const val VIBRATE = 1
-        private const val LOUD = 2
     }
 
-    var volumeSetting = UNSET
+    var volumeSetting = TIME_SETTING_UNSET
 
     fun setSilent(){
         Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Silent!")
-        volumeSetting = SILENT
+        volumeSetting = TIME_SETTING_SILENT
     }
 
     fun setVibrate(){
-        if(volumeSetting != SILENT){
+        if(volumeSetting != TIME_SETTING_SILENT){
             Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Vibrate!")
-            volumeSetting = VIBRATE
+            volumeSetting = TIME_SETTING_VIBRATE
         }else{
             Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Vibrate! Ignored because: $volumeSetting ")
         }
     }
 
     fun setLoud(){
-        if(volumeSetting != SILENT && volumeSetting != VIBRATE){
+        if(volumeSetting != TIME_SETTING_SILENT && volumeSetting != TIME_SETTING_VIBRATE){
             Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Loud!")
-            volumeSetting = LOUD
+            volumeSetting = TIME_SETTING_LOUD
         }else{
             Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Loud! Ignored because: $volumeSetting ")
         }
@@ -262,9 +261,9 @@ class VolumeHandler {
         Log.d(Constants.APP_NAME, "VolumeHandler: VolumeSetting: $volumeSetting")
 
         when (volumeSetting) {
-            SILENT -> applySilent(context)
-            VIBRATE -> applyVibrate(context)
-            LOUD -> applyLoud(context)
+            TIME_SETTING_SILENT -> applySilent(context)
+            TIME_SETTING_VIBRATE -> applyVibrate(context)
+            TIME_SETTING_LOUD -> applyLoud(context)
             else -> {
                // applySilent(context)
             }
@@ -273,10 +272,10 @@ class VolumeHandler {
 
     fun getVolume(): Int{
         when (volumeSetting) {
-            SILENT -> return SILENT
-            VIBRATE -> return VIBRATE
-            LOUD -> return LOUD
+            TIME_SETTING_SILENT -> return TIME_SETTING_SILENT
+            TIME_SETTING_VIBRATE -> return TIME_SETTING_VIBRATE
+            TIME_SETTING_LOUD -> return TIME_SETTING_LOUD
         }
-        return SILENT
+        return TIME_SETTING_SILENT
     }
 }

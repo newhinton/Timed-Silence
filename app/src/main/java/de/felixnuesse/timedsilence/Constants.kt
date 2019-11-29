@@ -42,6 +42,7 @@ class Constants {
         const val TIME_SETTING_SILENT = 1
         const val TIME_SETTING_VIBRATE = 2
         const val TIME_SETTING_LOUD = 3
+        const val TIME_SETTING_UNSET = -1
 
 
         const val WIFI_TYPE_CONNECTED = 1
@@ -66,4 +67,5 @@ class Constants {
 
         var TIME_PAUSE_SERVICE_LENGTH_ARRAY: IntArray = intArrayOf(5*MIN, 15*MIN, 30*MIN, HOUR, 3*HOUR, 8*HOUR, 0)
     }
+
 }

@@ -17,7 +17,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="@android:color/primary_text_dark"
+                android:textStyle="bold" />
+        </android.support.v7.widget.Toolbar>
+
+
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
@@ -42,16 +54,16 @@
                 android:text="@string/main_tab_time" />
 
             <android.support.design.widget.TabItem
-                android:id="@+id/wifi_tab_item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_tab_wifi_connected" />
-
-            <android.support.design.widget.TabItem
                 android:id="@+id/calendar_tab_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_tab_calendar" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/wifi_tab_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_tab_wifi_connected" />
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
 

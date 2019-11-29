@@ -59,7 +59,7 @@
     <string name="sat">sat</string>
     <string name="sun">sun</string>
     <string name="main_tab_time">Time</string>
-    <string name="main_tab_wifi_connected">Wifi Connected</string>
+    <string name="main_tab_wifi_connected">Wifi</string>
     <string name="main_tab_calendar">Calendar</string>
     <string name="main_last_check">Last Check:</string>
     <string name="main_interval_between_checks">Interval between Checks:</string>
