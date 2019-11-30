@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.graph_fragment.*
 import java.text.SimpleDateFormat
 import java.time.*
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.contracts.contract
 
 /**
@@ -86,9 +87,11 @@ class GraphFragmentThread(context: Context, ll: LinearLayout): Thread() {
 
     }
 
-    fun doIt(context:Context, barList: LinearLayout){
+    fun doIt(context:Context, barList: LinearLayout): List<GraphBarVolumeSwitchElement>{
 
-        barList.removeAllViews()
+        var list = ArrayList<GraphBarVolumeSwitchElement>()
+
+        //barList.removeAllViews()
 
         var volCalc = VolumeCalculator(context!!, true)
 
@@ -107,7 +110,7 @@ class GraphFragmentThread(context: Context, ll: LinearLayout): Thread() {
             var localMidnight = todayMidnight.plusHours(hoursFromInt.toLong())
             localMidnight = localMidnight.plusMinutes(minutesFromInt.toLong())
 
-            val text = TextView(context)
+            //val text = TextView(context)
 
             val state = volCalc.getStateAt(localMidnight.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
 
@@ -134,13 +137,16 @@ class GraphFragmentThread(context: Context, ll: LinearLayout): Thread() {
                     minute = "0$minute"
                 }
 
-                text.text = "$hour:$minute | $localMidnight | $volume" ///+ " |\n " +todayMidnights.toString()
-                barList.addView(text)
+                //text.text = "$hour:$minute | $localMidnight | $volume" ///+ " |\n " +todayMidnights.toString()
+                //barList.addView(text)
+
+                list.add(GraphBarVolumeSwitchElement(elem, lastState,localMidnight.toString()))
+
                 lastState=state
             }
 
         }
-
+        return list
     }
 
 
