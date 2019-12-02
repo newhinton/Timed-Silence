@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-
+        getSupportActionBar()?.setDisplayShowTitleEnabled(false)
 
         VolumeHandler.getVolumePermission(this)
         CalendarHandler.getCalendarReadPermission(this)
