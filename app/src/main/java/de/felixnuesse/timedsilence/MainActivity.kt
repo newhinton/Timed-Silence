@@ -47,7 +47,9 @@ import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import android.content.res.ColorStateList
+import android.os.Handler
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.app.FragmentPagerAdapter
 import android.text.format.DateFormat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
@@ -63,8 +65,9 @@ import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.graph_fragment.*
 import java.util.*
+
+
 
 
 class MainActivity : AppCompatActivity(), TimerInterface {
@@ -94,9 +97,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         fab.setOnClickListener { view ->
             //Log.e(APP_NAME, "Main: fab: Clicked")
             setHandlerState()
-
-            val thread = GraphFragmentThread(applicationContext!!, bar_list)
-            thread.doIt(applicationContext!!,bar_list)
         }
 
         frameLayout.setOnClickListener { view ->
@@ -181,6 +181,16 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         super.onResume()
         buttonState()
         SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(getSharedPreferencesListener())
+
+
+        //This handler is needed. Otherwise the state is not beeing restored
+        Handler().postDelayed({
+            if(viewPager.adapter != null){
+                viewPager.adapter = ScreenSlidePagerAdapter(supportFragmentManager)
+                Log.e("134", "qwertz")
+            }
+        }, 0)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
