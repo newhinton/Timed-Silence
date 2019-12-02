@@ -100,7 +100,8 @@ class GraphFragmentThread(context: Context, ll: LinearLayout): Thread() {
         var todayMidnight = LocalDateTime.of(today, midnight)
 
         var lastState = Constants.TIME_SETTING_UNSET
-        val lastElem = 1439 //start by 0:00 end by 23:59
+        val lastElem = 1440 //start by 0:00 end by 23:59
+
         for(elem in 0..lastElem){
 
 
@@ -140,8 +141,9 @@ class GraphFragmentThread(context: Context, ll: LinearLayout): Thread() {
                 //text.text = "$hour:$minute | $localMidnight | $volume" ///+ " |\n " +todayMidnights.toString()
                 //barList.addView(text)
 
-                list.add(GraphBarVolumeSwitchElement(elem, lastState,localMidnight.toString()))
+                Log.e("app", "run ${elem}: ${state}")
 
+                list.add(GraphBarVolumeSwitchElement(elem, lastState,localMidnight.toString()))
                 lastState=state
             }
 

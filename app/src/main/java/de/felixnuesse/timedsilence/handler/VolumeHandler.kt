@@ -265,7 +265,7 @@ class VolumeHandler {
             TIME_SETTING_VIBRATE -> applyVibrate(context)
             TIME_SETTING_LOUD -> applyLoud(context)
             else -> {
-               // applySilent(context)
+                Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Nothing, because no volume was selecteds!")
             }
         }
     }
@@ -275,7 +275,8 @@ class VolumeHandler {
             TIME_SETTING_SILENT -> return TIME_SETTING_SILENT
             TIME_SETTING_VIBRATE -> return TIME_SETTING_VIBRATE
             TIME_SETTING_LOUD -> return TIME_SETTING_LOUD
+            TIME_SETTING_UNSET -> return TIME_SETTING_UNSET
         }
-        return TIME_SETTING_SILENT
+        return TIME_SETTING_UNSET
     }
 }

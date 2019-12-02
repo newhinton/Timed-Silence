@@ -10,6 +10,11 @@
     <color name="colorFab_stopped">#E53935</color>
 
 
+    <color name="color_graph_silent">#4359A0</color>
+    <color name="color_graph_vibrate">#FFC107</color>
+    <color name="color_graph_loud">#4CAF50</color>
+    <color name="color_graph_unset">#00BCD4</color>
+    <color name="color_graph_transparent">#00FFFFFF</color>
 
     <color name="text_warning">#E91E1E</color>
 </resources>

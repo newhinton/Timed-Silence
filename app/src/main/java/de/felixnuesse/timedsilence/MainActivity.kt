@@ -367,8 +367,10 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
+     * FragmentStatePagerAdapter
      */
-    private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+    private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+
         override fun getCount(): Int = 4
 
         override fun getItem(position: Int): Fragment {
