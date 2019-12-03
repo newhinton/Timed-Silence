@@ -77,4 +77,5 @@
     <string name="calendar_list_empty">You do not have calendars.</string>
     <string name="calendar_missing_permissions">Permissions not granted.</string>
     <string name="main_tab_graph">Graph</string>
+    <string name="volume_setting_unset">Undefiniert</string>
 </resources>

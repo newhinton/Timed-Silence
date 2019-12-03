@@ -12,6 +12,7 @@ import android.widget.ImageView
 import kotlinx.android.synthetic.main.graph_fragment.*
 import de.felixnuesse.timedsilence.R
 import android.content.res.ColorStateList
+import android.graphics.Typeface
 import android.util.Log
 import android.widget.TextView
 import android.widget.RelativeLayout
@@ -27,9 +28,6 @@ class GraphFragment : Fragment() {
     private lateinit var viewObject: View
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
-
-    private var barList = ArrayList<Map<String, Any>>()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,8 +50,8 @@ class GraphFragment : Fragment() {
 
     fun buildGraph(context:Context, relLayout: RelativeLayout){
 
-        val thread = GraphFragmentThread(context!!, bar_list)
-        val list = thread.doIt(context!!,bar_list)
+        val thread = GraphFragmentThread(context!!)
+        val list = thread.doIt(context!!)
 
         //isFirst and isLast is reversed because we traverse the list backwards!
         var isLastElem=false
@@ -77,44 +75,33 @@ class GraphFragment : Fragment() {
 
 
             var id= R.color.color_graph_unset
-            var text_addition = "-2"
             when (state) {
                 Constants.TIME_SETTING_SILENT -> id= R.color.color_graph_silent
                 Constants.TIME_SETTING_VIBRATE -> id= R.color.color_graph_vibrate
                 Constants.TIME_SETTING_LOUD -> id= R.color.color_graph_loud
             }
 
-            when (stateNext) {
-                Constants.TIME_SETTING_SILENT -> text_addition = "Silent"
-                Constants.TIME_SETTING_VIBRATE -> text_addition = "Vibrate"
-                Constants.TIME_SETTING_LOUD -> text_addition = "Loud"
-                Constants.TIME_SETTING_UNSET -> text_addition = "Unset"
-            }
-
-            Log.e("app", "run ${elem.text}: ${elem.getBarLenght()}")
 
             if(isLastElem){
                 id=R.color.color_graph_transparent
             }
 
-            createBarElem(context, relLayout, resources.getColor(id), elem.getBarLenght(),  elem.text+" "+text_addition, isFirstElem)
+            createBarElem(context, relLayout, resources.getColor(id), elem.getBarLenght(),  elem.text, elem.Volume, isFirstElem)
             isLastElem=false
             isFirstElem=false
         }
+
+        setLegendColor(context, R.color.color_graph_unset, imageView_legend_unset)
+        setLegendColor(context, R.color.color_graph_silent, imageView_legend_silent)
+        setLegendColor(context, R.color.color_graph_vibrate, imageView_legend_vibrate)
+        setLegendColor(context, R.color.color_graph_loud, imageView_legend_loud)
     }
 
 
-    private fun createBarElem(context: Context, relativeLayout: RelativeLayout, color: Int, len: Float, text: String, isFirst: Boolean){
+    private fun createBarElem(context: Context, relativeLayout: RelativeLayout, color: Int, len: Float, text: String, volume: Int, isFirst: Boolean){
         val viewid=View.generateViewId()
         val shapeview = getShape(context,color, len, viewid)
-        val text= getTextForShape(context, text, viewid)
-
-
-        val map = HashMap<String, Any>()
-        map.put("ID", viewid)
-        map.put("COLOR", color)
-        map.put("LENGTH", len)
-        barList.add(map)
+        val text= getTextForShape(context, text, volume, viewid)
 
         relativeLayout.addView(shapeview)
         //remember, this is actually the last element!
@@ -124,10 +111,21 @@ class GraphFragment : Fragment() {
         }
     }
 
-    private fun getTextForShape(context: Context, text: String, setTo: Int):View{
+    private fun getTextForShape(context: Context, text: String, volume: Int,  setTo: Int):View{
+
 
         val textView = TextView(context)
-        textView.setText(text)
+
+        var text_addition=""
+        when (volume) {
+            Constants.TIME_SETTING_SILENT -> text_addition = "Silent"
+            Constants.TIME_SETTING_VIBRATE -> text_addition = "Vibrate"
+            Constants.TIME_SETTING_LOUD -> text_addition = "Loud"
+            Constants.TIME_SETTING_UNSET -> text_addition = "Unset"
+        }
+
+        textView.setText(" - $text: $text_addition")
+        textView.setTypeface(null, Typeface.ITALIC)
 
         val imageViewParam = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -136,7 +134,7 @@ class GraphFragment : Fragment() {
 
         imageViewParam.setMargins(getSizeInDP(20),0,0,getSizeInDP(-8))
 
-        textView.setLayoutParams(imageViewParam)
+        textView.layoutParams = imageViewParam
         imageViewParam.addRule(RelativeLayout.RIGHT_OF, setTo)
         imageViewParam.addRule(RelativeLayout.ALIGN_BOTTOM, setTo)
 
@@ -151,18 +149,7 @@ class GraphFragment : Fragment() {
         val shapeDrawable = resources.getDrawable(R.drawable.drawable_bar) as GradientDrawable
         shapeDrawable.color = csl
 
-
-        //https://www.mysamplecode.com/2011/10/android-set-padding-programmatically-in.html
-
-
-
-
         var lengthOfBar=len
-        /*if(lengthOfBar>=0){
-            //set the lenght to minimal 1%
-            lengthOfBar=0.01F
-        }*/
-
 
         var barlen = (lengthOfBar*getSizeInDP(500)).toInt()
 
@@ -171,9 +158,8 @@ class GraphFragment : Fragment() {
         }
 
         shapeDrawable.setSize(getSizeInDP(12),barlen)
-        //shapeDrawable.setSize(getSizeInDP(12),0)
 
-        val image: ImageView = ImageView(context)
+        val image = ImageView(context)
         image.setImageDrawable(shapeDrawable)
 
         image.id=id
@@ -181,7 +167,15 @@ class GraphFragment : Fragment() {
     }
 
     private fun getSizeInDP(size: Int): Int{
-       // return size*5
+        //https://www.mysamplecode.com/2011/10/android-set-padding-programmatically-in.html
         return (size * resources.displayMetrics.density + 0.5f).toInt()
+    }
+
+    private fun setLegendColor(context: Context, color: Int, image: ImageView): View {
+        val shapeDrawable = resources.getDrawable(R.drawable.drawable_bar_legend) as GradientDrawable
+        shapeDrawable.color = ColorStateList.valueOf(resources.getColor(color))
+        image.setImageDrawable(shapeDrawable)
+
+        return image
     }
 }

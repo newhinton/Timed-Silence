@@ -1,6 +1,8 @@
 package de.felixnuesse.timedsilence.fragments.graph
 
 import android.content.Context
+import android.text.format.DateFormat
+import android.text.format.DateUtils
 import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -9,6 +11,8 @@ import de.felixnuesse.timedsilence.handler.VolumeCalculator
 import kotlinx.android.synthetic.main.graph_fragment.*
 import java.text.SimpleDateFormat
 import java.time.*
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.contracts.contract
@@ -40,54 +44,11 @@ import kotlin.contracts.contract
  *
  *
  */
-class GraphFragmentThread(context: Context, ll: LinearLayout): Thread() {
+class GraphFragmentThread(context: Context): Thread() {
 
     val context:Context =context
-    val ll: LinearLayout= ll
 
-
-    public override fun run() {
-        println("${Thread.currentThread()} has run.")
-
-    }
-
-    // Implementing the Runnable interface to implement threads.
-    class SimpleRunnable: Runnable {
-        val context:Context
-        val ll: LinearLayout
-
-        constructor(context: Context, ll: LinearLayout){
-            this.context=context
-            this.ll=ll
-        }
-
-        public override fun run() {
-            println("${Thread.currentThread()} has run.")
-            doIt(context,ll)
-        }
-
-        fun doIt(context:Context, barList: LinearLayout){
-            var volCalc = VolumeCalculator(context!!, true)
-            val s = 1000
-            val m = 60*s
-
-            for(elem in 1..144){
-
-                val time =  Instant.ofEpochMilli((elem*m).toLong()).atZone(ZoneId.systemDefault()).toLocalDateTime()
-                Log.e("app", "run $elem");
-                val hour =time.hour
-                val min = time.minute
-
-                val text: TextView = TextView(context)
-                text.text = "t- ${time.hour}:${time.minute} "+volCalc.getStateAt((elem*m).toLong())
-                barList.addView(text)
-            }
-
-        }
-
-    }
-
-    fun doIt(context:Context, barList: LinearLayout): List<GraphBarVolumeSwitchElement>{
+    fun doIt(context:Context): List<GraphBarVolumeSwitchElement>{
 
         var list = ArrayList<GraphBarVolumeSwitchElement>()
 
@@ -143,7 +104,13 @@ class GraphFragmentThread(context: Context, ll: LinearLayout): Thread() {
 
                 Log.e("app", "run ${elem}: ${state}")
 
-                list.add(GraphBarVolumeSwitchElement(elem, lastState,localMidnight.toString()))
+                //var shortFormat = DateTimeFormatter.ISO_LOCAL_TIME
+                var shortFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+
+                var dt = localMidnight.toLocalTime().format(shortFormat)
+                //var text= DateFormat.format("yyyy-MM-dd hh:mm:ss a", dt).toString()
+                //DateUtils.formatDateTime(context, localMidnight.toEpochSecond(ZoneOffset.UTC)!!, 0)
+                list.add(GraphBarVolumeSwitchElement(elem, lastState,dt))
                 lastState=state
             }
 
