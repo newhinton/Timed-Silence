@@ -50,29 +50,33 @@ import de.felixnuesse.timedsilence.R
 
 class VolumeHandler {
     companion object {
-        fun getVolumePermission(activity: Activity) {
-            val notificationManager = activity.baseContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        fun getVolumePermission(context: Context) {
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (!notificationManager.isNotificationPolicyAccessGranted) {
 
                 Log.d(Constants.APP_NAME, "VolumeHandler: Ask for DND-Access")
 
-                val builder = AlertDialog.Builder(activity)
+                val builder = AlertDialog.Builder(context)
                 builder.setMessage(R.string.GrantDNDPermissionAccess)
                     .setPositiveButton(R.string.GrantDND,
                         DialogInterface.OnClickListener { dialog, id ->
                             val intent = Intent(
                                 Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS
                             )
-                            activity.baseContext.startActivity(intent)
+                            context.startActivity(intent)
                         })
                     .setNegativeButton(R.string.cancel,
                         DialogInterface.OnClickListener { dialog, id ->
                             Log.e(Constants.APP_NAME, "VolumeHandler: Did not get 'Do not Disturb'-Access, quitting...")
-                            finishAffinity(activity)
+                            finishAffinity(context as Activity)
                         })
                 // Create the AlertDialog object and return it
                 builder.create().show()
             }
+        }
+        fun hasVolumePermission(context: Context):Boolean{
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            return notificationManager.isNotificationPolicyAccessGranted
         }
     }
 
@@ -257,6 +261,11 @@ class VolumeHandler {
 }
 
     fun applyVolume(context: Context){
+
+        if(!hasVolumePermission(context)){
+            Log.d(APP_NAME, "VolumeHandler: VolumeSetting: Do not disturb not granted! Not changing Volume!")
+            return
+        }
 
         Log.d(Constants.APP_NAME, "VolumeHandler: VolumeSetting: $volumeSetting")
 
