@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.VolumeCalculator
 import kotlinx.android.synthetic.main.graph_fragment.*
 import java.text.SimpleDateFormat
@@ -63,6 +64,8 @@ class GraphFragmentThread(context: Context): Thread() {
         var lastState = Constants.TIME_SETTING_UNSET
         val lastElem = 1440 //start by 0:00 end by 23:59
 
+        var lastGraphElement= "-1"
+
         for(elem in 0..lastElem){
 
 
@@ -77,6 +80,11 @@ class GraphFragmentThread(context: Context): Thread() {
             val state = volCalc.getStateAt(localMidnight.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
 
             //Log.e("app", "run $elem : $state")
+
+
+            var shortFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+            var dt = localMidnight.toLocalTime().format(shortFormat)
+            lastGraphElement=dt
 
             if(lastState!=state || elem == lastElem){// || true){ //
                 var volume = "--"
@@ -105,9 +113,6 @@ class GraphFragmentThread(context: Context): Thread() {
                 Log.e("app", "run ${elem}: ${state}")
 
                 //var shortFormat = DateTimeFormatter.ISO_LOCAL_TIME
-                var shortFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
-
-                var dt = localMidnight.toLocalTime().format(shortFormat)
                 //var text= DateFormat.format("yyyy-MM-dd hh:mm:ss a", dt).toString()
                 //DateUtils.formatDateTime(context, localMidnight.toEpochSecond(ZoneOffset.UTC)!!, 0)
                 list.add(GraphBarVolumeSwitchElement(elem, lastState,dt))
@@ -115,6 +120,11 @@ class GraphFragmentThread(context: Context): Thread() {
             }
 
         }
+
+        if(list.size==1){
+            list.add(GraphBarVolumeSwitchElement(lastElem, TIME_SETTING_UNSET,lastGraphElement))
+        }
+
         return list
     }
 
