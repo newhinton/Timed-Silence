@@ -13,10 +13,14 @@ import kotlinx.android.synthetic.main.graph_fragment.*
 import de.felixnuesse.timedsilence.R
 import android.content.res.ColorStateList
 import android.graphics.Typeface
+import android.opengl.Visibility
 import android.util.Log
 import android.widget.TextView
 import android.widget.RelativeLayout
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.PrefConstants
+import de.felixnuesse.timedsilence.handler.HeadsetHandler
+import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 
 
 class GraphFragment : Fragment() {
@@ -45,6 +49,17 @@ class GraphFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewObject = view
         buildGraph(view.context, view!!.findViewById(R.id.rel_layout))
+
+
+        if(!HeadsetHandler.headphonesConnected(view.context)){
+            imageview_headphones_connected.visibility=View.INVISIBLE
+            textfield_headset_connected.visibility=View.INVISIBLE
+        }
+
+        if(!SharedPreferencesHandler.getPref(view.context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)){
+            imageview_headphones_connected.visibility=View.INVISIBLE
+            textfield_headset_connected.visibility=View.INVISIBLE
+        }
 
     }
 

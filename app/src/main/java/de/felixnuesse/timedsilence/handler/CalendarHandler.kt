@@ -189,6 +189,13 @@ class CalendarHandler(context: Context) {
 
     fun readCalendarEvent(timeInMilliseconds: Long, cached: Boolean): ArrayList<Map<String, String>> {
 
+
+
+        /*if(!hasCalendarReadPermission(context)){
+            getCalendarReadPermission(context)
+            return ArrayList<Map<String, String>>()
+        }*/
+
         if(cached && alreadyCachedEvents){
             return cachedCalendarEvents
         }

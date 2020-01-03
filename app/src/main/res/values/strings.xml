@@ -78,4 +78,6 @@
     <string name="calendar_missing_permissions">Permissions not granted.</string>
     <string name="main_tab_graph">Graph</string>
     <string name="volume_setting_unset">Undefiniert</string>
+    <string name="export">Export</string>
+    <string name="import_button">Import</string>
 </resources>

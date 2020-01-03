@@ -66,6 +66,13 @@ class GraphFragmentThread(context: Context): Thread() {
 
         var lastGraphElement= "-1"
 
+
+        val rightNow = Calendar.getInstance()
+        var currentHour = rightNow.get(Calendar.HOUR_OF_DAY)*60
+        currentHour += rightNow.get(Calendar.MINUTE)
+
+
+
         for(elem in 0..lastElem){
 
 
@@ -86,7 +93,13 @@ class GraphFragmentThread(context: Context): Thread() {
             var dt = localMidnight.toLocalTime().format(shortFormat)
             lastGraphElement=dt
 
-            if(lastState!=state || elem == lastElem){// || true){ //
+
+            var isnow = false
+            if(currentHour==elem){
+                isnow=true
+            }
+
+            if(lastState!=state || elem == lastElem || isnow){// || true){ //
                 var volume = "--"
                 when (state) {
                     Constants.TIME_SETTING_SILENT -> volume =  "SILENT"

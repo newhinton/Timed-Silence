@@ -231,25 +231,29 @@ class VolumeHandler {
 }
 
     private fun setMediaVolume(percentage: Int, context: Context, manager: AudioManager){
-
-
-    Log.d(Constants.APP_NAME, "VolumeHandler: Setting Audio Volume!")
-
-    val ignoreCheckWhenConnected=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)
-
-    if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
-        Log.d(Constants.APP_NAME, "VolumeHandler: Found headset, skipping...")
-        return
+        setMediaVolume(percentage, context, manager, false)
     }
 
-    setStreamToPercent(
-        manager,
-        AudioManager.STREAM_MUSIC,
-        percentage
-    )
-    Log.d(Constants.APP_NAME, "VolumeHandler: Mediavolume set.")
+    private fun setMediaVolume(percentage: Int, context: Context, manager: AudioManager, ignoreHeadset: Boolean){
 
-}
+
+        Log.d(APP_NAME, "VolumeHandler: Setting Audio Volume!")
+
+        val ignoreCheckWhenConnected=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)
+
+        if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
+            Log.d(APP_NAME, "VolumeHandler: Found headset, skipping...")
+            return
+        }
+
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_MUSIC,
+            percentage
+        )
+        Log.d(APP_NAME, "VolumeHandler: Mediavolume set.")
+
+    }
 
     fun isButtonClickAudible(context: Context): Boolean{
     Log.d(Constants.APP_NAME, "VolumeHandler: Check if Buttonclicks are audible")

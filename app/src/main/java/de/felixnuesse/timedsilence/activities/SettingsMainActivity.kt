@@ -6,6 +6,8 @@ import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import de.felixnuesse.timedintenttrigger.database.xml.Exporter
+import de.felixnuesse.timedintenttrigger.database.xml.Importer
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
@@ -28,6 +30,16 @@ class SettingsMainActivity : AppCompatActivity() {
         switchHeadsetIgnoreChange.setOnCheckedChangeListener { _, checked ->
                 writeSwitchSetting(this, checked)
         }
+
+        export_button.setOnClickListener {
+            Log.e(Constants.APP_NAME, "SettingsMain: Click export")
+            Exporter.export(this)
+        }
+
+        import_button.setOnClickListener {
+            Log.e(Constants.APP_NAME, "SettingsMain: Click import")
+            Importer.importFile(this)
+        }
     }
 
 
@@ -40,5 +52,14 @@ class SettingsMainActivity : AppCompatActivity() {
     fun writeSwitchSetting(context: Context, value: Boolean) {
        SharedPreferencesHandler.setPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, value)
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        Exporter.onRequestPermissionsResult(this, requestCode, permissions, grantResults)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Importer.onActivityResult(this, requestCode, resultCode, data)
+    }
+
 
 }
