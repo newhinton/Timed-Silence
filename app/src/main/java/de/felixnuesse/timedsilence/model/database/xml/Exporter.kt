@@ -4,7 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Environment
-import android.support.v4.app.ActivityCompat
+import androidx.core.app.ActivityCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler

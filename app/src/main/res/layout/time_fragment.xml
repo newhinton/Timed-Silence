@@ -10,7 +10,7 @@
             android:layout_height="match_parent">
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                       android:orientation="vertical">
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -33,7 +33,7 @@
                         android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
                         android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.498"
                         android:src="@drawable/ic_add_circle_outline_black_24dp" android:background="@null"/>
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/time_fragment_recylcer_list_view"
@@ -41,7 +41,7 @@
                         app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"/>
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

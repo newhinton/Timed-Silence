@@ -7,8 +7,8 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.provider.CalendarContract
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME

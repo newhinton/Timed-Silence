@@ -31,16 +31,16 @@ package de.felixnuesse.timedsilence
 
 import android.content.*
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.view.ViewPager
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.ViewPager
 import android.widget.SeekBar
 import android.widget.TextView
 import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
@@ -48,8 +48,8 @@ import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import android.content.res.ColorStateList
 import android.os.Handler
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.FragmentPagerAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.fragment.app.FragmentPagerAdapter
 import android.text.format.DateFormat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME

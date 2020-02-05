@@ -37,7 +37,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.media.AudioManager
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat.finishAffinity
+import androidx.core.app.ActivityCompat.finishAffinity
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME

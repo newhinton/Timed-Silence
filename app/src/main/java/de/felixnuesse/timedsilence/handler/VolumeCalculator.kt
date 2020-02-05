@@ -1,7 +1,7 @@
 package de.felixnuesse.timedsilence.handler
 
 import android.content.Context
-import android.support.v4.app.NotificationManagerCompat
+import androidx.core.app.NotificationManagerCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
