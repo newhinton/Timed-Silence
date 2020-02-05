@@ -119,6 +119,13 @@ class GraphFragment : Fragment() {
         val text= getTextForShape(context, text, volume, viewid)
 
         relativeLayout.addView(shapeview)
+
+
+        val t = relativeLayout.getChildAt(relativeLayout.childCount-1)
+        if(isViewOverlapping(text, t)){
+            text.visibility=View.GONE
+        }
+
         //remember, this is actually the last element!
         if(!isFirst){
             relativeLayout.addView(text)
@@ -192,5 +199,19 @@ class GraphFragment : Fragment() {
         image.setImageDrawable(shapeDrawable)
 
         return image
+    }
+
+    private fun isViewOverlapping(firstView: View, secondView: View): Boolean {
+        val firstPosition = IntArray(2)
+        val secondPosition = IntArray(2)
+        firstView.measure(
+            View.MeasureSpec.UNSPECIFIED,
+            View.MeasureSpec.UNSPECIFIED
+        )
+        firstView.getLocationOnScreen(firstPosition)
+        secondView.getLocationOnScreen(secondPosition)
+        val r = firstView.measuredWidth + firstPosition[0]
+        val l = secondPosition[0]
+        return r >= l && r != 0 && l != 0
     }
 }
