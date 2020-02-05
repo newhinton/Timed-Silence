@@ -39,7 +39,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import com.google.android.material.tabs.TabLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import android.widget.SeekBar
 import android.widget.TextView
@@ -55,7 +54,6 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.activities.SettingsMainActivity
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
-import de.felixnuesse.timedsilence.fragments.graph.GraphFragmentThread
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.handler.CalendarHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
@@ -78,9 +76,9 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(bottom_app_bar)
 
-        getSupportActionBar()?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         VolumeHandler.getVolumePermission(this)
         CalendarHandler.getCalendarReadPermission(this)
@@ -260,7 +258,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     fun updateTimeCheckDisplay(){
         val nextCheckDisplayTextView= findViewById<TextView>(R.id.nextCheckDisplay)
-        //nextCheckDisplayTextView.text=AlarmHandler.getNextAlarmTimestamp(this)
+        nextCheckDisplayTextView.text=AlarmHandler.getNextAlarmTimestamp(this)
 
         val sharedPref = this?.getSharedPreferences("test", Context.MODE_PRIVATE) ?: return
         val lasttime = sharedPref.getLong("last_ExecTime", 0)
