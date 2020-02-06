@@ -288,16 +288,17 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
     private fun buttonState() {
-        val fabTextView = findViewById<TextView>(R.id.fab_textview)
+
 
         Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: "+button_check)
 
+        //Todo remove dummy textview
         if(AlarmHandler.checkIfNextAlarmExists(this)){
-            setFabStarted(fab, fabTextView)
+            setFabStarted(fab, TextView(this))
         }else if(PauseTimerService.isTimerRunning()){
-            setFabPaused(fab, fabTextView)
+            setFabPaused(fab, TextView(this))
         }else{
-            setFabStopped(fab, fabTextView)
+            setFabStopped(fab, TextView(this))
         }
         updateTimeCheckDisplay()
         WidgetService.updateStateWidget(this)
