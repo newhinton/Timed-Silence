@@ -5,6 +5,9 @@
     <color name="colorAccent">#FDD835</color>
 
 
+    <color name="colorIcons">@color/colorPrimary</color>
+
+
     <color name="colorFab_started">#43A047</color>
     <color name="colorFab_paused">#FFC107</color>
     <color name="colorFab_stopped">#E53935</color>
@@ -17,4 +20,5 @@
     <color name="color_graph_transparent">#00FFFFFF</color>
 
     <color name="text_warning">#E91E1E</color>
+    <color name="transparent">#00000000</color>
 </resources>

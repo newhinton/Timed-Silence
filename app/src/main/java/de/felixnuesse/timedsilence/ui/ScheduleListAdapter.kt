@@ -88,14 +88,15 @@ class ScheduleViewHolder(val scheduleView: View) : RecyclerView.ViewHolder(sched
                 holder.scheduleView.textView_schedule_row_time_start.text = df.format(myDataset.get(position).time_start)
                 holder.scheduleView.textView_schedule_row_time_end.text =  df.format(myDataset.get(position).time_end)
 
+                val c = holder.scheduleView.context;
 
-                if(myDataset.get(position).mon){applyTextfieldStyle(holder.scheduleView.mon)}
-                if(myDataset.get(position).tue){applyTextfieldStyle(holder.scheduleView.tue)}
-                if(myDataset.get(position).wed){applyTextfieldStyle(holder.scheduleView.wed)}
-                if(myDataset.get(position).thu){applyTextfieldStyle(holder.scheduleView.thu)}
-                if(myDataset.get(position).fri){applyTextfieldStyle(holder.scheduleView.fri)}
-                if(myDataset.get(position).sat){applyTextfieldStyle(holder.scheduleView.sat)}
-                if(myDataset.get(position).sun){applyTextfieldStyle(holder.scheduleView.sun)}
+                if(myDataset.get(position).mon){applyTextfieldStyle(holder.scheduleView.mon, c)}
+                if(myDataset.get(position).tue){applyTextfieldStyle(holder.scheduleView.tue, c)}
+                if(myDataset.get(position).wed){applyTextfieldStyle(holder.scheduleView.wed, c)}
+                if(myDataset.get(position).thu){applyTextfieldStyle(holder.scheduleView.thu, c)}
+                if(myDataset.get(position).fri){applyTextfieldStyle(holder.scheduleView.fri, c)}
+                if(myDataset.get(position).sat){applyTextfieldStyle(holder.scheduleView.sat, c)}
+                if(myDataset.get(position).sun){applyTextfieldStyle(holder.scheduleView.sun, c)}
 
 
 
@@ -123,8 +124,8 @@ class ScheduleViewHolder(val scheduleView: View) : RecyclerView.ViewHolder(sched
 
         }
 
-        private fun applyTextfieldStyle(view: TextView){
-                view.setTextColor(Color.BLACK)
+        private fun applyTextfieldStyle(view: TextView, context: Context){
+                view.setTextColor(context.getColor(R.color.colorIcons))
                 view.setTypeface(view.typeface, Typeface.BOLD)
         }
 

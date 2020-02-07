@@ -33,14 +33,19 @@
                         android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
                         android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.498"
                         android:src="@drawable/ic_add_circle_outline_black_24dp" android:background="@null"/>
+
                 <androidx.recyclerview.widget.RecyclerView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/time_fragment_recylcer_list_view"
-                        app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-                        app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"/>
+                    android:id="@+id/time_fragment_recylcer_list_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>

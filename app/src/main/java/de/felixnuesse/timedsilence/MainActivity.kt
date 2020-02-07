@@ -29,30 +29,33 @@ package de.felixnuesse.timedsilence
  *
  */
 
-import android.content.*
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-
-import kotlinx.android.synthetic.main.activity_main.*
-import com.google.android.material.tabs.TabLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.viewpager.widget.ViewPager
-import android.widget.SeekBar
-import android.widget.TextView
-import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
-import de.felixnuesse.timedsilence.fragments.TimeFragment
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.ColorStateList
+import android.content.res.Configuration
+import android.os.Bundle
 import android.os.Handler
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import androidx.fragment.app.FragmentPagerAdapter
 import android.text.format.DateFormat
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.SeekBar
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.tabs.TabLayout
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.activities.SettingsMainActivity
+import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
+import de.felixnuesse.timedsilence.fragments.TimeFragment
+import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.handler.CalendarHandler
@@ -66,8 +69,6 @@ import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 
 
-
-
 class MainActivity : AppCompatActivity(), TimerInterface {
 
 
@@ -75,6 +76,18 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if(true){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            var flags = window.decorView.systemUiVisibility
+            flags = flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            window.decorView.systemUiVisibility=flags
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
+
+
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(bottom_app_bar)
 
@@ -170,7 +183,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         i.putExtra("KEY1", "Value to be used by the service");
         startService(i)
         buttonState()
-
 
         AlarmBroadcastReceiver().switchVolumeMode(this)
     }

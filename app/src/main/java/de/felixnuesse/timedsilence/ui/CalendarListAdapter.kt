@@ -109,7 +109,7 @@ class CalendarViewHolder(val calendarView: View, var calHandler: CalendarHandler
         }
 
         private fun applyTextfieldStyle(view: TextView){
-                view.setTextColor(Color.BLACK)
+                //view.setTextColor(Color.BLACK)
                 view.setTypeface(view.typeface, Typeface.BOLD)
         }
 
