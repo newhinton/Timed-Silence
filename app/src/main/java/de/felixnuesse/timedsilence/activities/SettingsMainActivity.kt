@@ -61,6 +61,11 @@ class SettingsMainActivity : AppCompatActivity() {
             writeThemeSwitchSetting(this, checked)
             ThemeHandler.setTheme(window, checked)
         }
+
+        switchPauseNotification.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_PAUSE_NOTIFICATION, PrefConstants.PREF_PAUSE_NOTIFICATION_DEFAULT)
+        switchPauseNotification.setOnCheckedChangeListener { _, checked ->
+            writePauseNotificationSwitchSetting(this, checked)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -84,6 +89,10 @@ class SettingsMainActivity : AppCompatActivity() {
 
     fun writeThemeSwitchSetting(context: Context, value: Boolean) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_DARKMODE, value)
+    }
+
+    fun writePauseNotificationSwitchSetting(context: Context, value: Boolean) {
+        SharedPreferencesHandler.setPref(context, PrefConstants.PREF_PAUSE_NOTIFICATION, value)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

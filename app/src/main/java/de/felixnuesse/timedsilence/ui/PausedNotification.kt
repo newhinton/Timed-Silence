@@ -39,6 +39,8 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.MainActivity
+import de.felixnuesse.timedsilence.PrefConstants
+import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
 import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
@@ -63,7 +65,10 @@ class PausedNotification : BroadcastReceiver(){
         fun show(context: Context){
             Log.e(APP_NAME, "PausedNotification: Show Notification")
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.notify(NOTIFICATION_ID, buildNotification(context))
+
+            if(SharedPreferencesHandler.getPref(context, PrefConstants.PREF_PAUSE_NOTIFICATION, PrefConstants.PREF_PAUSE_NOTIFICATION_DEFAULT)){
+                notificationManager.notify(NOTIFICATION_ID, buildNotification(context))
+            }
         }
 
         fun buildNotification(context: Context): Notification {
@@ -89,6 +94,7 @@ class PausedNotification : BroadcastReceiver(){
                 .setContentText(context.getString(R.string.PausedNotification_CONTENT))
                 .setSmallIcon(R.drawable.logo_pause)
                 .setOnlyAlertOnce(true)
+                .setOngoing(true)
                 .addAction(0,context.getString(R.string.PausedNotification_RESUME), snoozePendingIntent)
                 .build()
         }

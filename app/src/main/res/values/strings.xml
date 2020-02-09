@@ -92,4 +92,5 @@
     <string name="PausedNotification_TITLE">Paused!</string>
     <string name="PausedNotification_CONTENT">The volumecheck is paused.</string>
     <string name="PausedNotification_RESUME">Resume</string>
+    <string name="enablePauseNotification">Enable notification when paused</string>
 </resources>

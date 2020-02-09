@@ -52,21 +52,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/volumeSettingsLayout" />
 
-    <Switch
-        android:id="@+id/switchTheme"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_settings"
-        android:layout_marginTop="@dimen/margin_settings"
-        android:layout_marginEnd="@dimen/margin_settings"
-        android:layout_weight="1"
-        android:text="@string/darkmode"
-        android:textColor="@color/secondary_material_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/importLayout" />
-
     <LinearLayout
         android:id="@+id/exportLayout"
         android:layout_width="match_parent"
@@ -132,5 +117,35 @@
             android:padding="@dimen/padding_settings_imagebutton"
             android:src="@drawable/ic_file_upload_black_24dp" />
     </LinearLayout>
+
+    <Switch
+        android:id="@+id/switchTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_settings"
+        android:layout_marginTop="@dimen/margin_settings"
+        android:layout_marginEnd="@dimen/margin_settings"
+        android:layout_weight="1"
+        android:text="@string/darkmode"
+        android:textColor="@color/secondary_material_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/importLayout" />
+
+    <Switch
+        android:id="@+id/switchPauseNotification"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_settings"
+        android:layout_marginEnd="@dimen/margin_settings"
+        android:layout_marginTop="@dimen/margin_settings"
+        android:layout_weight="1"
+        android:text="@string/enablePauseNotification"
+        android:textColor="@color/secondary_material_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchTheme" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
