@@ -37,66 +37,69 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.media.AudioManager
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat.finishAffinity
+import androidx.core.app.ActivityCompat.finishAffinity
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 
 class VolumeHandler {
     companion object {
-        fun getVolumePermission(activity: Activity) {
-            val notificationManager = activity.baseContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        fun getVolumePermission(context: Context) {
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (!notificationManager.isNotificationPolicyAccessGranted) {
 
                 Log.d(Constants.APP_NAME, "VolumeHandler: Ask for DND-Access")
 
-                val builder = AlertDialog.Builder(activity)
+                val builder = AlertDialog.Builder(context)
                 builder.setMessage(R.string.GrantDNDPermissionAccess)
                     .setPositiveButton(R.string.GrantDND,
                         DialogInterface.OnClickListener { dialog, id ->
                             val intent = Intent(
                                 Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS
                             )
-                            activity.baseContext.startActivity(intent)
+                            context.startActivity(intent)
                         })
                     .setNegativeButton(R.string.cancel,
                         DialogInterface.OnClickListener { dialog, id ->
                             Log.e(Constants.APP_NAME, "VolumeHandler: Did not get 'Do not Disturb'-Access, quitting...")
-                            finishAffinity(activity)
+                            finishAffinity(context as Activity)
                         })
                 // Create the AlertDialog object and return it
                 builder.create().show()
             }
         }
-
-        private const val UNSET = -1
-        private const val SILENT = 0
-        private const val VIBRATE = 1
-        private const val LOUD = 2
+        fun hasVolumePermission(context: Context):Boolean{
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            return notificationManager.isNotificationPolicyAccessGranted
+        }
     }
 
-    var volumeSetting = UNSET
+    var volumeSetting = TIME_SETTING_UNSET
 
     fun setSilent(){
         Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Silent!")
-        volumeSetting = SILENT
+        volumeSetting = TIME_SETTING_SILENT
     }
 
     fun setVibrate(){
-        if(volumeSetting != SILENT){
+        if(volumeSetting != TIME_SETTING_SILENT){
             Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Vibrate!")
-            volumeSetting = VIBRATE
+            volumeSetting = TIME_SETTING_VIBRATE
         }else{
             Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Vibrate! Ignored because: $volumeSetting ")
         }
     }
 
     fun setLoud(){
-        if(volumeSetting != SILENT && volumeSetting != VIBRATE){
+        if(volumeSetting != TIME_SETTING_SILENT && volumeSetting != TIME_SETTING_VIBRATE){
             Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Loud!")
-            volumeSetting = LOUD
+            volumeSetting = TIME_SETTING_LOUD
         }else{
             Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Loud! Ignored because: $volumeSetting ")
         }
@@ -228,25 +231,29 @@ class VolumeHandler {
 }
 
     private fun setMediaVolume(percentage: Int, context: Context, manager: AudioManager){
-
-
-    Log.d(Constants.APP_NAME, "VolumeHandler: Setting Audio Volume!")
-
-    val ignoreCheckWhenConnected=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)
-
-    if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
-        Log.d(Constants.APP_NAME, "VolumeHandler: Found headset, skipping...")
-        return
+        setMediaVolume(percentage, context, manager, false)
     }
 
-    setStreamToPercent(
-        manager,
-        AudioManager.STREAM_MUSIC,
-        percentage
-    )
-    Log.d(Constants.APP_NAME, "VolumeHandler: Mediavolume set.")
+    private fun setMediaVolume(percentage: Int, context: Context, manager: AudioManager, ignoreHeadset: Boolean){
 
-}
+
+        Log.d(APP_NAME, "VolumeHandler: Setting Audio Volume!")
+
+        val ignoreCheckWhenConnected=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)
+
+        if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
+            Log.d(APP_NAME, "VolumeHandler: Found headset, skipping...")
+            return
+        }
+
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_MUSIC,
+            percentage
+        )
+        Log.d(APP_NAME, "VolumeHandler: Mediavolume set.")
+
+    }
 
     fun isButtonClickAudible(context: Context): Boolean{
     Log.d(Constants.APP_NAME, "VolumeHandler: Check if Buttonclicks are audible")
@@ -259,24 +266,30 @@ class VolumeHandler {
 
     fun applyVolume(context: Context){
 
+        if(!hasVolumePermission(context)){
+            Log.d(APP_NAME, "VolumeHandler: VolumeSetting: Do not disturb not granted! Not changing Volume!")
+            return
+        }
+
         Log.d(Constants.APP_NAME, "VolumeHandler: VolumeSetting: $volumeSetting")
 
         when (volumeSetting) {
-            SILENT -> applySilent(context)
-            VIBRATE -> applyVibrate(context)
-            LOUD -> applyLoud(context)
+            TIME_SETTING_SILENT -> applySilent(context)
+            TIME_SETTING_VIBRATE -> applyVibrate(context)
+            TIME_SETTING_LOUD -> applyLoud(context)
             else -> {
-               // applySilent(context)
+                Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Nothing, because no volume was selecteds!")
             }
         }
     }
 
     fun getVolume(): Int{
         when (volumeSetting) {
-            SILENT -> return SILENT
-            VIBRATE -> return VIBRATE
-            LOUD -> return LOUD
+            TIME_SETTING_SILENT -> return TIME_SETTING_SILENT
+            TIME_SETTING_VIBRATE -> return TIME_SETTING_VIBRATE
+            TIME_SETTING_LOUD -> return TIME_SETTING_LOUD
+            TIME_SETTING_UNSET -> return TIME_SETTING_UNSET
         }
-        return SILENT
+        return TIME_SETTING_UNSET
     }
 }

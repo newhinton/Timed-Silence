@@ -3,7 +3,7 @@ package de.felixnuesse.timedsilence.ui;
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -109,7 +109,7 @@ class CalendarViewHolder(val calendarView: View, var calHandler: CalendarHandler
         }
 
         private fun applyTextfieldStyle(view: TextView){
-                view.setTextColor(Color.BLACK)
+                //view.setTextColor(Color.BLACK)
                 view.setTypeface(view.typeface, Typeface.BOLD)
         }
 

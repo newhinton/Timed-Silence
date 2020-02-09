@@ -51,6 +51,10 @@ class PrefConstants {
         const val PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT = true
 
 
+        const val PREF_DARKMODE= "PREF_DARKMODE"
+        const val PREF_DARKMODE_DEFAULT = true
+
+
 
         const val VOLUME_LOW_WARNING_THRESHOLD = 15
 

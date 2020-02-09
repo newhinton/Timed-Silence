@@ -1,8 +1,7 @@
 package de.felixnuesse.timedsilence.fragments
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,23 +9,13 @@ import android.view.ViewGroup
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
 import kotlinx.android.synthetic.main.time_fragment.*
-import android.content.DialogInterface
-import android.text.InputType
-import android.widget.EditText
-import android.app.AlertDialog
 import android.content.Context
-import android.app.TimePickerDialog
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.dialogs.ScheduleDialog
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
-import java.text.DateFormat
-import java.util.*
 
 
 
@@ -36,7 +25,6 @@ class TimeFragment : Fragment() {
         fun newInstance() = TimeFragment()
     }
 
-    private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 

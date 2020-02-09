@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
        android:shape="oval">
-    <solid android:color="@color/colorFab_started"/>
-    <stroke android:width="3dp" android:color="@color/colorFab_started" />
+    <solid android:color="@color/colorFab_running"/>
+    <stroke android:width="3dp" android:color="@color/colorFab_running" />
     <size android:width="120dp" android:height="120dp"/>
     <padding android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="0dp" />
 </shape>

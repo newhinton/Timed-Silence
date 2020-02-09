@@ -59,7 +59,7 @@
     <string name="sat">sat</string>
     <string name="sun">sun</string>
     <string name="main_tab_time">Time</string>
-    <string name="main_tab_wifi_connected">Wifi Connected</string>
+    <string name="main_tab_wifi_connected">Wifi</string>
     <string name="main_tab_calendar">Calendar</string>
     <string name="main_last_check">Last Check:</string>
     <string name="main_interval_between_checks">Interval between Checks:</string>
@@ -76,4 +76,16 @@
     <string name="wifi_type_searching">When Searching</string>
     <string name="calendar_list_empty">You do not have calendars.</string>
     <string name="calendar_missing_permissions">Permissions not granted.</string>
+    <string name="main_tab_graph">Graph</string>
+    <string name="volume_setting_unset">Undefiniert</string>
+    <string name="export">Export</string>
+    <string name="import_button">Import</string>
+    <string name="darkmode">Darkmode</string>
+    <string name="actionbar_title_settings">Settings</string>
+    <string name="actionbar_title_settings_volume">Volumesettings</string>
+    <string name="export_file_success">Exported file:</string>
+    <string name="import_file_success">Success!</string>
+    <string name="vibrate">Vibration only!</string>
+    <string name="silent">Silent!</string>
+    <string name="loud">Loud!</string>
 </resources>

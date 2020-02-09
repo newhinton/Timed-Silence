@@ -29,33 +29,37 @@ package de.felixnuesse.timedsilence
  *
  */
 
-import android.content.*
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-
-import kotlinx.android.synthetic.main.activity_main.*
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.view.ViewPager
-import android.widget.SeekBar
-import android.widget.TextView
-import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
-import de.felixnuesse.timedsilence.fragments.TimeFragment
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.ColorStateList
-import android.support.design.widget.FloatingActionButton
+import android.content.res.Configuration
+import android.graphics.PorterDuff
+import android.os.Bundle
+import android.os.Handler
 import android.text.format.DateFormat
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.SeekBar
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.tabs.TabLayout
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.activities.SettingsMainActivity
-import de.felixnuesse.timedsilence.handler.AlarmHandler
-import de.felixnuesse.timedsilence.handler.CalendarHandler
-import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
-import de.felixnuesse.timedsilence.handler.VolumeHandler
+import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
+import de.felixnuesse.timedsilence.fragments.TimeFragment
+import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
+import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
+import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
@@ -71,10 +75,13 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        ThemeHandler.setTheme(this, window)
+
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(bottom_app_bar)
 
-
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         VolumeHandler.getVolumePermission(this)
         CalendarHandler.getCalendarReadPermission(this)
@@ -89,12 +96,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         }
 
         fab.setOnClickListener { view ->
-            Log.e(APP_NAME, "Main: fab: Clicked")
+            //Log.e(APP_NAME, "Main: fab: Clicked")
             setHandlerState()
         }
 
         frameLayout.setOnClickListener { view ->
-            Log.e(APP_NAME, "Main: FabTester: Clicked")
+            //Log.e(APP_NAME, "Main: FabTester: Clicked")
             buttonState()
         }
 
@@ -166,12 +173,23 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         i.putExtra("KEY1", "Value to be used by the service");
         startService(i)
         buttonState()
+
+        AlarmBroadcastReceiver().switchVolumeMode(this)
     }
 
     override fun onResume() {
         super.onResume()
         buttonState()
         SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(getSharedPreferencesListener())
+
+
+        //This handler is needed. Otherwise the state is not beeing restored
+        Handler().postDelayed({
+            if(viewPager.adapter != null){
+                viewPager.adapter = ScreenSlidePagerAdapter(supportFragmentManager)
+            }
+        }, 0)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -190,34 +208,27 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         when (item.itemId) {
             R.id.action_settings -> openSettings()
             R.id.action_set_manual_loud -> {
-
                 val makeSound=!voLHandler.isButtonClickAudible(this)
-
                 voLHandler.setLoud()
-
                 if(makeSound){
                     button_buttonsound_fix.performClick()
                 }
+                Toast.makeText(this, getString(R.string.loud), Toast.LENGTH_LONG).show()
             }
-            R.id.action_set_manual_vibrate -> voLHandler.setVibrate()
-            R.id.action_set_manual_silent -> voLHandler.setSilent()
+            R.id.action_set_manual_vibrate -> {voLHandler.setVibrate(); Toast.makeText(this, getString(R.string.vibrate), Toast.LENGTH_LONG).show()}
+            R.id.action_set_manual_silent -> {voLHandler.setSilent(); Toast.makeText(this, getString(R.string.silent), Toast.LENGTH_LONG).show()}
         }
         voLHandler.applyVolume(applicationContext)
-        return true;
+        return true
     }
 
     override fun timerStarted(context: Context, timeAsLong: Long, timeAsString: String) {}
 
     override fun timerReduced(context: Context, timeAsLong: Long, timeAsString: String) {
-        //textViewPausedTimestamp.visibility= View.VISIBLE
-        //label_Paused_until.visibility= View.VISIBLE
-        //textViewPausedTimestamp.text=PauseTimerService.getTimestampInProperLength(timeAsLong);
         buttonState()
     }
 
     override fun timerFinished(context: Context) {
-        //textViewPausedTimestamp.visibility= View.INVISIBLE
-        //label_Paused_until.visibility= View.INVISIBLE
         buttonState()
     }
 
@@ -241,7 +252,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     fun updateTimeCheckDisplay(){
         val nextCheckDisplayTextView= findViewById<TextView>(R.id.nextCheckDisplay)
-        //nextCheckDisplayTextView.text=AlarmHandler.getNextAlarmTimestamp(this)
+        nextCheckDisplayTextView.text=AlarmHandler.getNextAlarmTimestamp(this)
 
         val sharedPref = this?.getSharedPreferences("test", Context.MODE_PRIVATE) ?: return
         val lasttime = sharedPref.getLong("last_ExecTime", 0)
@@ -271,16 +282,17 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
     private fun buttonState() {
-        val fabTextView = findViewById<TextView>(R.id.fab_textview)
+
 
         Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: "+button_check)
 
+        //Todo remove dummy textview
         if(AlarmHandler.checkIfNextAlarmExists(this)){
-            setFabStarted(fab, fabTextView)
+            setFabStarted(fab, TextView(this))
         }else if(PauseTimerService.isTimerRunning()){
-            setFabPaused(fab, fabTextView)
+            setFabPaused(fab, TextView(this))
         }else{
-            setFabStopped(fab, fabTextView)
+            setFabStopped(fab, TextView(this))
         }
         updateTimeCheckDisplay()
         WidgetService.updateStateWidget(this)
@@ -309,34 +321,41 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     fun setFabStarted(fab: FloatingActionButton, text: TextView){
         text.text = getString(R.string.timecheck_running)
-        fab.setImageResource(R.drawable.ic_play_arrow_white_24dp)
-        fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_started))
+        fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_running))
+       // fab.setImageResource(R.drawable.ic_play_arrow_white_24dp)
+
+        val d = getDrawable(R.drawable.ic_play_arrow_white_24dp)
+        d?.mutate()?.setColorFilter(resources.getColor(R.color.colorStateButtonIcon), PorterDuff.Mode.SRC_IN)
+
+        fab.setImageDrawable(d)
+
         button_check=getString(R.string.timecheck_stop)
 
     }
 
     fun setFabStopped(fab: FloatingActionButton, text: TextView){
         text.text = getString(R.string.timecheck_stopped)
-        fab.setImageResource(R.drawable.ic_pause_white_24dp)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
+
+
+        val d = getDrawable(R.drawable.ic_pause_black_24dp)
+        d?.mutate()?.setColorFilter(resources.getColor(R.color.colorStateButtonIcon), PorterDuff.Mode.SRC_IN)
+
+        fab.setImageDrawable(d)
         AlarmHandler.removeRepeatingTimecheck(this)
         button_check=getString(R.string.timecheck_start)
     }
 
     fun setFabPaused(fab: FloatingActionButton, text: TextView){
         text.text = getString(R.string.timecheck_paused)
-        fab.setImageResource(R.drawable.ic_fast_forward_white_24dp)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_paused))
+        fab.setImageResource(R.drawable.ic_fast_forward_white_24dp)
         button_check=getString(R.string.timecheck_paused)
     }
 
     @Deprecated("replace by callback")
     fun getSharedPreferencesListener(): SharedPreferences.OnSharedPreferenceChangeListener {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
-            Log.e(Constants.APP_NAME, "Main: SharedPrefs: prefs: "+prefs)
-            Log.e(Constants.APP_NAME, "Main: SharedPrefs: key:   "+key)
-
-
             if(key==PrefConstants.PREFS_LAST_KEY_EXEC){
                 updateTimeCheckDisplay()
             }
@@ -348,16 +367,19 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
+     * FragmentStatePagerAdapter
      */
-    private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-        override fun getCount(): Int = 3
+    private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+
+        override fun getCount(): Int = 4
 
         override fun getItem(position: Int): Fragment {
 
             when (position) {
-                0 -> return TimeFragment()
-                1 -> return WifiConnectedFragment()
+                0 -> return GraphFragment()
+                1 -> return TimeFragment()
                 2 -> return CalendarEventFragment()
+                3 -> return WifiConnectedFragment()
                 else -> return TimeFragment()
             }
         }

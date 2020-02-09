@@ -7,12 +7,11 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.provider.CalendarContract
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.descriptions
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.endDates
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.nameOfEvent
@@ -75,6 +74,7 @@ class CalendarHandler(context: Context) {
         }
     }
 
+
     var context: Context = context
     val db = DatabaseHandler(context)
 
@@ -83,7 +83,9 @@ class CalendarHandler(context: Context) {
     }
 
     private lateinit var cachedCalendars: ArrayList<CalendarObject>
-    private var alreadyCached: Boolean=false
+    private lateinit var cachedCalendarEvents: ArrayList<Map<String, String>>
+    private var alreadyCachedCalendars: Boolean=false
+    private var alreadyCachedEvents: Boolean=false
 
     fun getCalendarVolumeSetting(externalId: Long):Int{
         getCalendars(context)
@@ -128,7 +130,7 @@ class CalendarHandler(context: Context) {
     }
 
     private fun getCalendars(context: Context){
-        if(!alreadyCached && hasCalendarReadPermission(context)){
+        if(!alreadyCachedCalendars && hasCalendarReadPermission(context)){
             cachedCalendars = ArrayList()
         }else{
             return
@@ -175,14 +177,28 @@ class CalendarHandler(context: Context) {
                 cachedCalendars.add(calentry)
                 cursor.moveToNext()
             }
-            alreadyCached=true
+            alreadyCachedCalendars=true
         } else {
             Log.e(APP_NAME,"CalendarHandler: No calendar found in the device")
         }
     }
 
     fun readCalendarEvent(timeInMilliseconds: Long): ArrayList<Map<String, String>> {
+        return readCalendarEvent(timeInMilliseconds, true)
+    }
 
+    fun readCalendarEvent(timeInMilliseconds: Long, cached: Boolean): ArrayList<Map<String, String>> {
+
+
+
+        /*if(!hasCalendarReadPermission(context)){
+            getCalendarReadPermission(context)
+            return ArrayList<Map<String, String>>()
+        }*/
+
+        if(cached && alreadyCachedEvents){
+            return cachedCalendarEvents
+        }
 
         Log.e(APP_NAME, "CalendarHandler: CurrentTime in MS:"+getDate(timeInMilliseconds.toString()))
         val startTime = Calendar.getInstance()
@@ -324,6 +340,9 @@ class CalendarHandler(context: Context) {
         cursor.close()
 
         Collections.sort(retval, this.MyMapComparator())
+
+        cachedCalendarEvents=retval
+        alreadyCachedEvents=true
         return retval
     }
 

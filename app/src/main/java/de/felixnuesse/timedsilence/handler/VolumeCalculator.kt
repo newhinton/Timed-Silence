@@ -1,7 +1,7 @@
 package de.felixnuesse.timedsilence.handler
 
 import android.content.Context
-import android.support.v4.app.NotificationManagerCompat
+import androidx.core.app.NotificationManagerCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
@@ -48,25 +48,29 @@ import java.time.ZoneId
 class VolumeCalculator {
 
 
+    private lateinit var cachedTime: LocalDateTime
     var nonNullContext: Context
     var volumeHandler: VolumeHandler
     var dbHandler: DatabaseHandler
     var cached: Boolean = false
+
+    lateinit var calendarHandler:CalendarHandler
 
 
     constructor(context: Context) {
         nonNullContext = context
         this.volumeHandler = VolumeHandler()
         dbHandler = DatabaseHandler(nonNullContext)
+        calendarHandler= CalendarHandler(nonNullContext)
     }
 
     constructor(context: Context, cached: Boolean) {
         nonNullContext = context
         this.volumeHandler = VolumeHandler()
         this.cached=cached
-
         dbHandler = DatabaseHandler(nonNullContext)
         dbHandler.setCaching(cached)
+        calendarHandler= CalendarHandler(nonNullContext)
     }
 
 
@@ -83,8 +87,8 @@ class VolumeCalculator {
     }
 
     fun getStateAt(timeInMilliseconds: Long): Int{
-        volumeHandler= VolumeHandler()
 
+        volumeHandler= VolumeHandler()
         switchBasedOnTime(timeInMilliseconds)
         switchBasedOnCalendar(timeInMilliseconds)
 
@@ -97,18 +101,17 @@ class VolumeCalculator {
     }
 
     private fun switchBasedOnCalendar(timeInMilliseconds: Long){
-        val ch = CalendarHandler(nonNullContext)
-        ch.enableCaching(cached)
+        calendarHandler.enableCaching(cached)
 
         Log.d(APP_NAME, "VolumeCalculator: Start CalendarCheck")
-        for (elem in ch.readCalendarEvent(timeInMilliseconds)){
+        for (elem in calendarHandler.readCalendarEvent(timeInMilliseconds)){
 
-            val x = ch.getDate(elem.get("start_date") ?: "0")
-            val y = ch.getDate(elem.get("end_date") ?: "0")
+            val x = ""//calendarHandler.getDate(elem.get("start_date") ?: "0")
+            val y = ""//calendarHandler.getDate(elem.get("end_date") ?: "0")
 
 
             //Log.i(APP_NAME, x+ " | " + elem["duration"] + " | " +y+" | "+ elem.get("name_of_event")+ " | recurring:" + elem["recurring"]  + " | "+elem.get("calendar_id"))
-            Log.i(APP_NAME, x+ " | " + timeInMilliseconds + " | " +y+" | "+ elem["duration"] + " | " + elem.get("name_of_event")+ " | recurring:" + elem["recurring"]  + " | "+elem.get("calendar_id"))
+            //Log.i(APP_NAME, x+ " | " + timeInMilliseconds + " | " +y+" | "+ elem["duration"] + " | " + elem.get("name_of_event")+ " | recurring:" + elem["recurring"]  + " | "+elem.get("calendar_id"))
 
             try {
                 val currentMilliseconds =  timeInMilliseconds
@@ -120,13 +123,13 @@ class VolumeCalculator {
                 }else if (elem.get("duration")!=null){
                     endtime = starttime+elem.get("duration")!!.toLong()
                 }
-                val volume = ch.getCalendarVolumeSetting(elem.get("calendar_id")!!.toLong())
-                Log.i(APP_NAME, elem.get("name_of_event")+ " | " + volume  + " ")
+                val volume = calendarHandler.getCalendarVolumeSetting(elem.get("calendar_id")!!.toLong())
+                //Log.i(APP_NAME, elem.get("name_of_event")+ " | " + volume  + " ")
                 if(volume==-1){
                     continue
                 }else{
                     if (currentMilliseconds in (starttime + 1) until endtime-1){
-                        //println(elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("calendar_id")+" "+volume)
+                        Log.i(APP_NAME, elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("calendar_id")+" "+volume)
 
                         if (volume == Constants.TIME_SETTING_SILENT) {
                             volumeHandler.setSilent()
@@ -157,10 +160,25 @@ class VolumeCalculator {
     }
 
     private fun switchBasedOnTime(timeInMilliseconds: Long){
+        switchBasedOnTime(timeInMilliseconds, false)
+    }
+
+    private fun switchBasedOnTime(timeInMilliseconds: Long, useCachedTime: Boolean){
 
         Log.d(APP_NAME, "VolumeCalculator: Start TimeCheck")
 
-        val time =  ofEpochMilli(timeInMilliseconds).atZone(systemDefault()).toLocalDateTime()
+        val time: LocalDateTime
+        if (::cachedTime.isInitialized && useCachedTime) {
+            time=cachedTime
+        }else{
+            time = ofEpochMilli(timeInMilliseconds).atZone(systemDefault()).toLocalDateTime()
+            if(useCachedTime){
+                cachedTime=time
+            }
+        }
+
+
+        Log.d(APP_NAME, "VolumeCalculator: Start TimeCheck: "+time.toString())
 
         val hour =time.hour
         val min = time.minute
