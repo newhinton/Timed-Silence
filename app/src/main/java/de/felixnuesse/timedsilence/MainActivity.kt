@@ -325,7 +325,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_running))
        // fab.setImageResource(R.drawable.ic_play_arrow_white_24dp)
 
-        val d = getDrawable(R.drawable.ic_play_arrow_white_24dp)
+        val d = getDrawable(R.drawable.ic_pause_black_24dp)
         d?.mutate()?.setColorFilter(resources.getColor(R.color.colorStateButtonIcon), PorterDuff.Mode.SRC_IN)
 
         fab.setImageDrawable(d)
@@ -339,7 +339,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
 
 
-        val d = getDrawable(R.drawable.ic_pause_black_24dp)
+        val d = getDrawable(R.drawable.ic_play_arrow_white_24dp)
         d?.mutate()?.setColorFilter(resources.getColor(R.color.colorStateButtonIcon), PorterDuff.Mode.SRC_IN)
 
         fab.setImageDrawable(d)

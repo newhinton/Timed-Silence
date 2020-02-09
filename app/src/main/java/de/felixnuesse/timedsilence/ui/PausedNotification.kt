@@ -89,7 +89,7 @@ class PausedNotification : BroadcastReceiver(){
                 .setContentText(context.getString(R.string.PausedNotification_CONTENT))
                 .setSmallIcon(R.drawable.logo_pause)
                 .setOnlyAlertOnce(true)
-                .addAction(0,context.getString(R.string.PausedNotification_TITLE), snoozePendingIntent)
+                .addAction(0,context.getString(R.string.PausedNotification_RESUME), snoozePendingIntent)
                 .build()
         }
 

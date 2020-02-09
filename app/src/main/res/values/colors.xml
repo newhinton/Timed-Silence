@@ -6,9 +6,9 @@
     <color name="colorIcons">@color/colorPrimary</color>
 
 
-    <color name="colorFab_running">#E53935</color>
+    <color name="colorFab_running">#43A047</color>
     <color name="colorFab_paused">#FFC107</color>
-    <color name="colorFab_stopped">#43A047</color>
+    <color name="colorFab_stopped">#E53935</color>
     <color name="colorStateButtonIcon">@android:color/black</color>
 
 
