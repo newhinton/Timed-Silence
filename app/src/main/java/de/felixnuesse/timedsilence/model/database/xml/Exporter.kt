@@ -6,7 +6,9 @@ import android.content.pm.PackageManager
 import android.os.Environment
 import androidx.core.app.ActivityCompat
 import android.util.Log
+import android.widget.Toast
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -131,6 +133,8 @@ class Exporter {
 
             try {
                 myOutWriter.append(content)
+                val text = a.getString(R.string.export_file_success) + file.absolutePath
+                Toast.makeText(a, text, Toast.LENGTH_LONG).show()
             } finally {
                 myOutWriter.close()
                 stream.close()

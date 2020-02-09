@@ -80,4 +80,12 @@
     <string name="volume_setting_unset">Undefiniert</string>
     <string name="export">Export</string>
     <string name="import_button">Import</string>
+    <string name="darkmode">Darkmode</string>
+    <string name="actionbar_title_settings">Settings</string>
+    <string name="actionbar_title_settings_volume">Volumesettings</string>
+    <string name="export_file_success">Exported file:</string>
+    <string name="import_file_success">Success!</string>
+    <string name="vibrate">Vibration only!</string>
+    <string name="silent">Silent!</string>
+    <string name="loud">Loud!</string>
 </resources>

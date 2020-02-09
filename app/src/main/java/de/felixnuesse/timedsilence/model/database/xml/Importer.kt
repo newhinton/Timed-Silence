@@ -9,8 +9,10 @@ import android.net.Uri
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.util.Log
+import android.widget.Toast
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.data.WifiObject
@@ -110,6 +112,10 @@ class Importer {
                 Log.e(APP_NAME, "Create Wifi: ${wifiObject.ssid}")
                 db.createWifiEntry(wifiObject)
             }
+
+
+            val text = a.getString(R.string.import_file_success)
+            Toast.makeText(a, text, Toast.LENGTH_LONG).show()
 
         }
 

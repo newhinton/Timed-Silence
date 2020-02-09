@@ -2,16 +2,17 @@
 <resources>
     <color name="colorPrimary">#039BE5</color>
     <color name="colorPrimaryDark">#1E88E5</color>
-    <color name="colorAccent">#FDD835</color>
-
-
+    <color name="colorAccent">#FFA726</color>
     <color name="colorIcons">@color/colorPrimary</color>
 
 
-    <color name="colorFab_started">#43A047</color>
+    <color name="colorFab_running">#E53935</color>
     <color name="colorFab_paused">#FFC107</color>
-    <color name="colorFab_stopped">#E53935</color>
+    <color name="colorFab_stopped">#43A047</color>
+    <color name="colorStateButtonIcon">@android:color/black</color>
 
+
+    <color name="colorTextSettingbar">#97000000</color>
 
     <color name="color_graph_silent">#4359A0</color>
     <color name="color_graph_vibrate">#FFC107</color>
@@ -21,4 +22,8 @@
 
     <color name="text_warning">#E91E1E</color>
     <color name="transparent">#00000000</color>
+
+
+    <color name="material_light">#de000000</color>
+    <color name="secondary_material_light">#8a000000</color>
 </resources>

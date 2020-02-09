@@ -34,6 +34,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
 import android.text.format.DateFormat
@@ -43,6 +44,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
@@ -57,10 +59,7 @@ import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
-import de.felixnuesse.timedsilence.handler.AlarmHandler
-import de.felixnuesse.timedsilence.handler.CalendarHandler
-import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
-import de.felixnuesse.timedsilence.handler.VolumeHandler
+import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
@@ -77,16 +76,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(true){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            var flags = window.decorView.systemUiVisibility
-            flags = flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            window.decorView.systemUiVisibility=flags
-        }else{
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
-
-
+        ThemeHandler.setTheme(this, window)
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(bottom_app_bar)
@@ -197,7 +187,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         Handler().postDelayed({
             if(viewPager.adapter != null){
                 viewPager.adapter = ScreenSlidePagerAdapter(supportFragmentManager)
-                Log.e("134", "qwertz")
             }
         }, 0)
 
@@ -219,34 +208,27 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         when (item.itemId) {
             R.id.action_settings -> openSettings()
             R.id.action_set_manual_loud -> {
-
                 val makeSound=!voLHandler.isButtonClickAudible(this)
-
                 voLHandler.setLoud()
-
                 if(makeSound){
                     button_buttonsound_fix.performClick()
                 }
+                Toast.makeText(this, getString(R.string.loud), Toast.LENGTH_LONG).show()
             }
-            R.id.action_set_manual_vibrate -> voLHandler.setVibrate()
-            R.id.action_set_manual_silent -> voLHandler.setSilent()
+            R.id.action_set_manual_vibrate -> {voLHandler.setVibrate(); Toast.makeText(this, getString(R.string.vibrate), Toast.LENGTH_LONG).show()}
+            R.id.action_set_manual_silent -> {voLHandler.setSilent(); Toast.makeText(this, getString(R.string.silent), Toast.LENGTH_LONG).show()}
         }
         voLHandler.applyVolume(applicationContext)
-        return true;
+        return true
     }
 
     override fun timerStarted(context: Context, timeAsLong: Long, timeAsString: String) {}
 
     override fun timerReduced(context: Context, timeAsLong: Long, timeAsString: String) {
-        //textViewPausedTimestamp.visibility= View.VISIBLE
-        //label_Paused_until.visibility= View.VISIBLE
-        //textViewPausedTimestamp.text=PauseTimerService.getTimestampInProperLength(timeAsLong);
         buttonState()
     }
 
     override fun timerFinished(context: Context) {
-        //textViewPausedTimestamp.visibility= View.INVISIBLE
-        //label_Paused_until.visibility= View.INVISIBLE
         buttonState()
     }
 
@@ -339,34 +321,41 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     fun setFabStarted(fab: FloatingActionButton, text: TextView){
         text.text = getString(R.string.timecheck_running)
-        fab.setImageResource(R.drawable.ic_play_arrow_white_24dp)
-        fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_started))
+        fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_running))
+       // fab.setImageResource(R.drawable.ic_play_arrow_white_24dp)
+
+        val d = getDrawable(R.drawable.ic_play_arrow_white_24dp)
+        d?.mutate()?.setColorFilter(resources.getColor(R.color.colorStateButtonIcon), PorterDuff.Mode.SRC_IN)
+
+        fab.setImageDrawable(d)
+
         button_check=getString(R.string.timecheck_stop)
 
     }
 
     fun setFabStopped(fab: FloatingActionButton, text: TextView){
         text.text = getString(R.string.timecheck_stopped)
-        fab.setImageResource(R.drawable.ic_pause_white_24dp)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
+
+
+        val d = getDrawable(R.drawable.ic_pause_black_24dp)
+        d?.mutate()?.setColorFilter(resources.getColor(R.color.colorStateButtonIcon), PorterDuff.Mode.SRC_IN)
+
+        fab.setImageDrawable(d)
         AlarmHandler.removeRepeatingTimecheck(this)
         button_check=getString(R.string.timecheck_start)
     }
 
     fun setFabPaused(fab: FloatingActionButton, text: TextView){
         text.text = getString(R.string.timecheck_paused)
-        fab.setImageResource(R.drawable.ic_fast_forward_white_24dp)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_paused))
+        fab.setImageResource(R.drawable.ic_fast_forward_white_24dp)
         button_check=getString(R.string.timecheck_paused)
     }
 
     @Deprecated("replace by callback")
     fun getSharedPreferencesListener(): SharedPreferences.OnSharedPreferenceChangeListener {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
-            //Log.e(Constants.APP_NAME, "Main: SharedPrefs: prefs: "+prefs)
-            //Log.e(Constants.APP_NAME, "Main: SharedPrefs: key:   "+key)
-
-
             if(key==PrefConstants.PREFS_LAST_KEY_EXEC){
                 updateTimeCheckDisplay()
             }

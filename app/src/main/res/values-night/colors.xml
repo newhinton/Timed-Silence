@@ -5,4 +5,9 @@
 
 
     <color name="colorIcons">@color/colorPrimary</color>
+
+    <color name="colorStateButtonIcon">@android:color/white</color>
+
+    <color name="material_light">#de000000</color>
+    <color name="secondary_material_light">#D2F3F0F0</color>
 </resources>

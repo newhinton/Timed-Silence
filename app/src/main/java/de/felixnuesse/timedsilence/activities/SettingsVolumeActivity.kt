@@ -12,14 +12,22 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import de.felixnuesse.timedsilence.handler.ThemeHandler
 import kotlinx.android.synthetic.main.activity_settings_volume.*
+import androidx.core.app.NavUtils
+import android.view.MenuItem
+
 
 class SettingsVolumeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeHandler.setTheme(this, window)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setContentView(R.layout.activity_settings_volume)
 
+        //sets the actionbartitle
+        title = resources.getString(R.string.actionbar_title_settings_volume)
 
         seekBarVolumeAlarm.max=100
         seekBarVolumeAlarm.progress=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
@@ -145,5 +153,15 @@ class SettingsVolumeActivity : AppCompatActivity() {
     fun setMusicVol(context: Context, value: Int) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_VOLUME_MUSIC, value)
         Log.e(Constants.APP_NAME, "SettingsVolume: Setting Music Volume: "+value)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

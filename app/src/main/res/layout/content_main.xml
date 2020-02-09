@@ -129,7 +129,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="TextView"
+            android:text=""
+            android:textColor="@color/colorTextSettingbar"
             app:layout_constraintEnd_toStartOf="@+id/textView4"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -140,6 +141,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/main_interval_between_checks"
+            android:textColor="@color/colorTextSettingbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -150,6 +152,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="@string/main_minutes"
+            android:textColor="@color/colorTextSettingbar"
             app:layout_constraintEnd_toStartOf="@+id/frameLayout"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -189,13 +192,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@string/main_last_check"
+                android:textColor="@color/colorTextSettingbar"
                 tools:layout_editor_absoluteX="8dp" />
 
             <TextView
                 android:id="@+id/nextCheckDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Not Set"
+                android:text=""
+                android:textColor="@color/colorTextSettingbar"
                 tools:layout_editor_absoluteX="66dp" />
 
             <Space
