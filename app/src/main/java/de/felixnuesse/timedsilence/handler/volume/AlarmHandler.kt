@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.handler
+package de.felixnuesse.timedsilence.handler.volume
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -11,6 +11,8 @@ import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import de.felixnuesse.timedsilence.ui.PausedNotification
 
 
 /**
@@ -53,20 +55,24 @@ class AlarmHandler {
              alarms.set(
                  AlarmManager.RTC_WAKEUP,
                  System.currentTimeMillis() + delayInMs,
-                 createRestartBroadcast(context)
+                 createRestartBroadcast(
+                     context
+                 )
              )
 
        }
 
        fun createRepeatingTimecheck(context: Context){
-
-
-           val interval= SharedPreferencesHandler.getPref(
+           val interval=
+               SharedPreferencesHandler.getPref(
+                   context,
+                   PrefConstants.PREF_INTERVAL_CHECK,
+                   PrefConstants.PREF_INTERVAL_CHECK_DEFAULT
+               )
+           createRepeatingTimecheck(
                context,
-               PrefConstants.PREF_INTERVAL_CHECK,
-               PrefConstants.PREF_INTERVAL_CHECK_DEFAULT
+               interval
            )
-           createRepeatingTimecheck(context, interval)
        }
 
        fun createRepeatingTimecheck(context: Context, intervalInMinutes: Int){
@@ -78,17 +84,28 @@ class AlarmHandler {
                AlarmManager.RTC_WAKEUP,
                System.currentTimeMillis() + 100,
                (1000 * 60 * intervalInMinutes).toLong(),
-               createIntentBroadcast(context)
+               createIntentBroadcast(
+                   context
+               )
            )
        }
 
        fun removeRepeatingTimecheck(context: Context){
 
            val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-           alarms.cancel(createIntentBroadcast(context))
-           createIntentBroadcast(context)?.cancel()
+           alarms.cancel(
+               createIntentBroadcast(
+                   context
+               )
+           )
+           createIntentBroadcast(
+               context
+           )?.cancel()
 
-           if(!checkIfNextAlarmExists(context)){
+           if(!checkIfNextAlarmExists(
+                   context
+               )
+           ){
                Log.d(Constants.APP_NAME, "AlarmHandler: Recurring alarm canceled")
                return
            }
@@ -135,16 +152,19 @@ class AlarmHandler {
        }
 
        fun checkIfNextAlarmExists(context: Context): Boolean{
-           val pIntent = createIntentBroadcast(
-               context,
-               PendingIntent.FLAG_NO_CREATE
-           )
+           val pIntent =
+               createIntentBroadcast(
+                   context,
+                   PendingIntent.FLAG_NO_CREATE
+               )
 
            if(pIntent == null){
                Log.d(Constants.APP_NAME, "AlarmHandler: There is no next Alarm set!")
+               PausedNotification.show(context)
                return false
            }else {
                Log.d(Constants.APP_NAME, "AlarmHandler: There is an upcoming Alarm!")
+               PausedNotification.cancelNotification(context)
                return true
            }
        }
@@ -153,13 +173,7 @@ class AlarmHandler {
             val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val clockInfo =  alarms.nextAlarmClock
 
-  //          val pIntent = createIntentBroadcast(context,PendingIntent.FLAG_NO_CREATE) as PendingIntent
-
-
-//            Log.e(Constants.APP_NAME, "AlarmHandler: Next Runtime: "+pIntent.intentSender.)
-
             if(clockInfo==null){
-
                 return context.getString(R.string.no_next_time_set)
             }
 

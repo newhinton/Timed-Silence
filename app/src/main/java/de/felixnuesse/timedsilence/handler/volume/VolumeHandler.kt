@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.handler
+package de.felixnuesse.timedsilence.handler.volume
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -29,7 +29,6 @@ package de.felixnuesse.timedsilence.handler
  */
 
 import android.app.Activity
-import android.app.AlarmManager
 import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Context
@@ -47,6 +46,8 @@ import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
+import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 
 class VolumeHandler {
     companion object {
@@ -126,7 +127,11 @@ class VolumeHandler {
         setStreamToPercent(
             manager,
             AudioManager.STREAM_ALARM,
-            SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
+            SharedPreferencesHandler.getPref(
+                context,
+                PrefConstants.PREF_VOLUME_ALARM,
+                PrefConstants.PREF_VOLUME_ALARM_DEFAULT
+            )
         )
         setStreamToPercent(
             manager,
@@ -152,10 +157,28 @@ class VolumeHandler {
         manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
     }
 
-    var alarmVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
-    var mediaVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_MUSIC, PrefConstants.PREF_VOLUME_MUSIC_DEFAULT)
-    var notifcationVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_NOTIFICATION, PrefConstants.PREF_VOLUME_NOTIFICATION_DEFAULT)
-    var ringerVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_RINGER, PrefConstants.PREF_VOLUME_RINGER_DEFAULT)
+    var alarmVolume= SharedPreferencesHandler.getPref(
+        context,
+        PrefConstants.PREF_VOLUME_ALARM,
+        PrefConstants.PREF_VOLUME_ALARM_DEFAULT
+    )
+    var mediaVolume= SharedPreferencesHandler.getPref(
+        context,
+        PrefConstants.PREF_VOLUME_MUSIC,
+        PrefConstants.PREF_VOLUME_MUSIC_DEFAULT
+    )
+    var notifcationVolume=
+        SharedPreferencesHandler.getPref(
+            context,
+            PrefConstants.PREF_VOLUME_NOTIFICATION,
+            PrefConstants.PREF_VOLUME_NOTIFICATION_DEFAULT
+        )
+    var ringerVolume=
+        SharedPreferencesHandler.getPref(
+            context,
+            PrefConstants.PREF_VOLUME_RINGER,
+            PrefConstants.PREF_VOLUME_RINGER_DEFAULT
+        )
 
 
     if(!manager.isMusicActive){
@@ -199,7 +222,12 @@ class VolumeHandler {
 
 
 
-        var alarmVolume=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
+        var alarmVolume=
+            SharedPreferencesHandler.getPref(
+                context,
+                PrefConstants.PREF_VOLUME_ALARM,
+                PrefConstants.PREF_VOLUME_ALARM_DEFAULT
+            )
         if(false){
             alarmVolume=0;
         }
@@ -239,7 +267,12 @@ class VolumeHandler {
 
         Log.d(APP_NAME, "VolumeHandler: Setting Audio Volume!")
 
-        val ignoreCheckWhenConnected=SharedPreferencesHandler.getPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)
+        val ignoreCheckWhenConnected=
+            SharedPreferencesHandler.getPref(
+                context,
+                PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET,
+                PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT
+            )
 
         if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
             Log.d(APP_NAME, "VolumeHandler: Found headset, skipping...")
@@ -266,7 +299,10 @@ class VolumeHandler {
 
     fun applyVolume(context: Context){
 
-        if(!hasVolumePermission(context)){
+        if(!hasVolumePermission(
+                context
+            )
+        ){
             Log.d(APP_NAME, "VolumeHandler: VolumeSetting: Do not disturb not granted! Not changing Volume!")
             return
         }

@@ -1,6 +1,5 @@
 package de.felixnuesse.timedsilence.dialogs
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
@@ -12,11 +11,10 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.model.data.CalendarObject
-import de.felixnuesse.timedsilence.ui.CalendarListAdapter
 import kotlinx.android.synthetic.main.calendar_dialog.*
 import android.widget.RadioGroup
 import android.widget.RadioButton
-import de.felixnuesse.timedsilence.handler.CalendarHandler
+import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import android.widget.TextView
 import android.text.Html
 

@@ -13,13 +13,11 @@ import kotlinx.android.synthetic.main.graph_fragment.*
 import de.felixnuesse.timedsilence.R
 import android.content.res.ColorStateList
 import android.graphics.Typeface
-import android.opengl.Visibility
-import android.util.Log
 import android.widget.TextView
 import android.widget.RelativeLayout
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.handler.HeadsetHandler
+import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 
 

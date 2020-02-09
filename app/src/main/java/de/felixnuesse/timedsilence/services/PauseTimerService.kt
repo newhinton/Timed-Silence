@@ -33,7 +33,7 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import android.content.Context
 import android.widget.Toast
-import de.felixnuesse.timedsilence.handler.AlarmHandler
+import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import de.felixnuesse.timedsilence.ui.PauseNotification
 import java.text.SimpleDateFormat

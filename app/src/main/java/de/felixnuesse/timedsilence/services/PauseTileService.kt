@@ -7,13 +7,7 @@ import android.service.quicksettings.TileService
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
-import android.content.Intent
-import android.widget.Toast
-import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.handler.AlarmHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 /**

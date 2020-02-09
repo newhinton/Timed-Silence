@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.handler
+package de.felixnuesse.timedsilence.handler.calculator
 
 import android.Manifest
 import android.app.Activity

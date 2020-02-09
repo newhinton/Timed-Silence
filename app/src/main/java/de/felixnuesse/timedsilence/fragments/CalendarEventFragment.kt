@@ -1,11 +1,6 @@
 package de.felixnuesse.timedsilence.fragments
 
-import android.Manifest
-import android.app.Activity
-import androidx.lifecycle.ViewModelProviders
 import android.content.Context
-import android.content.pm.PackageManager
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.util.Log
@@ -13,26 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import de.felixnuesse.timedsilence.Constants
-import android.database.Cursor
-import android.net.Uri
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.text.method.TextKeyListener.clear
 import de.felixnuesse.timedsilence.dialogs.CalendarDialog
-import de.felixnuesse.timedsilence.dialogs.ScheduleDialog
-import de.felixnuesse.timedsilence.handler.CalendarHandler
-import de.felixnuesse.timedsilence.handler.WifiHandler
+import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.CalendarListAdapter
-import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
 import kotlinx.android.synthetic.main.calendar_event_fragment.*
-import kotlinx.android.synthetic.main.time_fragment.*
-import kotlinx.android.synthetic.main.wifi_connected_fragment.*
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -67,7 +50,8 @@ class CalendarEventFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val calHandler = CalendarHandler(view.context)
+        val calHandler =
+            CalendarHandler(view.context)
 
 
         checkContainer(calHandler, view.context)
@@ -135,7 +119,9 @@ class CalendarEventFragment : Fragment() {
     fun saveCalendar(context: Context, co: CalendarObject){
         val db = DatabaseHandler(context)
         db.createCalendarEntry(co)
-        viewAdapter = CalendarListAdapter(db.getAllCalendarEntries(), CalendarHandler(context))
+        viewAdapter = CalendarListAdapter(db.getAllCalendarEntries(),
+            CalendarHandler(context)
+        )
 
         calendar_fragment_recylcer_list_view.apply {
             // use this setting to improve performance if you know that changes

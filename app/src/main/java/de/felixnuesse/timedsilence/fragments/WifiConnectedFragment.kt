@@ -1,31 +1,23 @@
 package de.felixnuesse.timedsilence.fragments
 
 import android.app.Activity
-import android.app.AlertDialog
-import androidx.lifecycle.ViewModelProviders
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.dialogs.WifiDialog
-import de.felixnuesse.timedsilence.handler.CalendarHandler
-import de.felixnuesse.timedsilence.handler.WifiHandler
+import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
 import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import de.felixnuesse.timedsilence.ui.CalendarListAdapter
 import de.felixnuesse.timedsilence.ui.WifiListAdapter
-import kotlinx.android.synthetic.main.calendar_event_fragment.*
 import kotlinx.android.synthetic.main.wifi_connected_fragment.*
 
 

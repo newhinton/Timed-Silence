@@ -1,19 +1,19 @@
-package de.felixnuesse.timedsilence.handler
+package de.felixnuesse.timedsilence.handler.volume
 
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.fragments.TimeFragment
+import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
+import de.felixnuesse.timedsilence.handler.calculator.LocationHandler
+import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.LocationAccessMissingNotification
-import java.time.Instant
 import java.time.LocalDateTime
 import java.util.*
 import java.time.ZoneId.systemDefault
 import java.time.Instant.ofEpochMilli
-import java.time.ZoneId
 
 
 /**
@@ -54,14 +54,15 @@ class VolumeCalculator {
     var dbHandler: DatabaseHandler
     var cached: Boolean = false
 
-    lateinit var calendarHandler:CalendarHandler
+    lateinit var calendarHandler: CalendarHandler
 
 
     constructor(context: Context) {
         nonNullContext = context
         this.volumeHandler = VolumeHandler()
         dbHandler = DatabaseHandler(nonNullContext)
-        calendarHandler= CalendarHandler(nonNullContext)
+        calendarHandler=
+            CalendarHandler(nonNullContext)
     }
 
     constructor(context: Context, cached: Boolean) {
@@ -70,7 +71,8 @@ class VolumeCalculator {
         this.cached=cached
         dbHandler = DatabaseHandler(nonNullContext)
         dbHandler.setCaching(cached)
-        calendarHandler= CalendarHandler(nonNullContext)
+        calendarHandler=
+            CalendarHandler(nonNullContext)
     }
 
 
@@ -250,7 +252,10 @@ class VolumeCalculator {
         Log.d(APP_NAME, "VolumeCalculator: Start WifiCheck")
         //Log.d(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: " + dbHandler.getAllWifiEntries().size)
         if (dbHandler.getAllWifiEntries().size > 0) {
-            val isLocationEnabled = LocationHandler.checkIfLocationServiceIsEnabled(nonNullContext)
+            val isLocationEnabled =
+                LocationHandler.checkIfLocationServiceIsEnabled(
+                    nonNullContext
+                )
             if (!isLocationEnabled) {
                 with(NotificationManagerCompat.from(nonNullContext)) {
                     //Log.d(Constants.APP_NAME, "Alarmintent: Locationstate: Disabled!")
@@ -260,7 +265,10 @@ class VolumeCalculator {
                     )
                 }
             } else {
-                val currentSSID = WifiHandler.getCurrentSsid(nonNullContext)
+                val currentSSID =
+                    WifiHandler.getCurrentSsid(
+                        nonNullContext
+                    )
                 dbHandler.getAllWifiEntries().forEach {
 
                     val ssidit = "\"" + it.ssid + "\""

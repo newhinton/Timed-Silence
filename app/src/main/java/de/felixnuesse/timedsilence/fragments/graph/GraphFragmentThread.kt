@@ -1,22 +1,15 @@
 package de.felixnuesse.timedsilence.fragments.graph
 
 import android.content.Context
-import android.text.format.DateFormat
-import android.text.format.DateUtils
 import android.util.Log
-import android.widget.LinearLayout
-import android.widget.TextView
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
-import de.felixnuesse.timedsilence.handler.VolumeCalculator
-import kotlinx.android.synthetic.main.graph_fragment.*
-import java.text.SimpleDateFormat
+import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.contracts.contract
 
 /**
  * Copyright (C) 2019  Felix Nüsse

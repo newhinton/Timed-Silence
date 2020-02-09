@@ -1,7 +1,6 @@
 package de.felixnuesse.timedsilence.ui;
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -12,9 +11,8 @@ import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.handler.CalendarHandler
+import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.model.data.CalendarObject
-import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import kotlinx.android.synthetic.main.adapter_calendar_list.view.*
 import kotlinx.android.synthetic.main.adapter_schedules_list.view.imageView_volume_state

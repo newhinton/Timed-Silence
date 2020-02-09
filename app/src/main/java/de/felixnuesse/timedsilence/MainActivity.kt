@@ -33,7 +33,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
-import android.content.res.Configuration
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
@@ -41,12 +40,10 @@ import android.text.format.DateFormat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -60,10 +57,14 @@ import de.felixnuesse.timedsilence.fragments.TimeFragment
 import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.*
+import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
+import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
+import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
+import de.felixnuesse.timedsilence.ui.PausedNotification
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 
@@ -252,7 +253,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     fun updateTimeCheckDisplay(){
         val nextCheckDisplayTextView= findViewById<TextView>(R.id.nextCheckDisplay)
-        nextCheckDisplayTextView.text=AlarmHandler.getNextAlarmTimestamp(this)
+        nextCheckDisplayTextView.text= AlarmHandler.getNextAlarmTimestamp(this)
 
         val sharedPref = this?.getSharedPreferences("test", Context.MODE_PRIVATE) ?: return
         val lasttime = sharedPref.getLong("last_ExecTime", 0)

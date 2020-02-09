@@ -7,7 +7,7 @@ import android.service.quicksettings.TileService
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.handler.AlarmHandler
+import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
 
 /**
  * Copyright (C) 2019  Felix Nüsse

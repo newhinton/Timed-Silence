@@ -11,7 +11,7 @@ import android.view.View
 import android.widget.RemoteViews
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.handler.AlarmHandler
+import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
 import de.felixnuesse.timedsilence.services.PauseTimerService
 
 

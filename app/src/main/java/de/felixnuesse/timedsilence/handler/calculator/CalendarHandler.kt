@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.handler
+package de.felixnuesse.timedsilence.handler.calculator
 
 import android.Manifest
 import android.app.Activity
@@ -130,13 +130,18 @@ class CalendarHandler(context: Context) {
     }
 
     private fun getCalendars(context: Context){
-        if(!alreadyCachedCalendars && hasCalendarReadPermission(context)){
+        if(!alreadyCachedCalendars && hasCalendarReadPermission(
+                context
+            )
+        ){
             cachedCalendars = ArrayList()
         }else{
             return
         }
 
-        getCalendarReadPermission(context)
+        getCalendarReadPermission(
+            context
+        )
 
         val cursor: Cursor
         val contentResolver = context.contentResolver

@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.handler
+package de.felixnuesse.timedsilence.handler.calculator
 
 /**
  * Copyright (C) 2019  Felix Nüsse

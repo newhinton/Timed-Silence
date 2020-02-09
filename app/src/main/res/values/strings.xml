@@ -88,4 +88,7 @@
     <string name="vibrate">Vibration only!</string>
     <string name="silent">Silent!</string>
     <string name="loud">Loud!</string>
+    <string name="PausedNotification">Paused Notification</string>
+    <string name="PausedNotification_TITLE">Timed Silence: Paused!</string>
+    <string name="PausedNotification_CONTENT">The volumecheck is paused.</string>
 </resources>

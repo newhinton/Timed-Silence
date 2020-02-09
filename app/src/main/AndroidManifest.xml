@@ -55,6 +55,8 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".ui.PausedNotification"/>
+
         <service
                 android:name=".services.PauseTileService"
                 android:icon="@drawable/ic_delete_black_24dp"

@@ -3,15 +3,11 @@ package de.felixnuesse.timedsilence.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.core.app.NotificationManagerCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.handler.*
-import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import de.felixnuesse.timedsilence.ui.LocationAccessMissingNotification
-import java.lang.Exception
-import java.time.LocalDateTime
+import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
+import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import java.util.*
 
 class AlarmBroadcastReceiver : BroadcastReceiver() {
