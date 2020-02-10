@@ -1,37 +1,38 @@
 package de.felixnuesse.timedsilence.fragments.graph
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import kotlinx.android.synthetic.main.graph_fragment.*
-import de.felixnuesse.timedsilence.R
-import android.content.res.ColorStateList
-import android.graphics.Typeface
-import android.opengl.Visibility
-import android.util.Log
-import android.widget.TextView
 import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
+import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import kotlinx.android.synthetic.main.graph_fragment.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.absoluteValue
 
 
 class GraphFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = GraphFragment()
-    }
-
     private lateinit var viewObject: View
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
+
+
+
+    private lateinit var last_text: GraphBarVolumeSwitchElement
+    private lateinit var current_text: GraphBarVolumeSwitchElement
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,11 +40,6 @@ class GraphFragment : Fragment() {
     ): View? {
 
         return  inflater.inflate(R.layout.graph_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        // TODO: Use the ViewModel
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,13 +62,13 @@ class GraphFragment : Fragment() {
     fun buildGraph(context:Context, relLayout: RelativeLayout){
 
         val thread = GraphFragmentThread(context!!)
-        val list = thread.doIt(context!!)
+        val list = thread.doIt(context!!) as ArrayList
 
         //isFirst and isLast is reversed because we traverse the list backwards!
         var isLastElem=false
         var isFirstElem=true
-
-        for (elem in list.asReversed()){
+        val revL=list.asReversed()
+        for (elem in revL){
 
 
             var stateNext = -2
@@ -98,9 +94,11 @@ class GraphFragment : Fragment() {
 
 
             if(isLastElem){
-                id=R.color.color_graph_transparent
+               id=R.color.color_graph_transparent
             }
 
+
+            setLastTextview(elem)
             createBarElem(context, relLayout, resources.getColor(id), elem.getBarLenght(),  elem.text, elem.Volume, isFirstElem)
             isLastElem=false
             isFirstElem=false
@@ -122,7 +120,7 @@ class GraphFragment : Fragment() {
 
 
         val t = relativeLayout.getChildAt(relativeLayout.childCount-1)
-        if(isViewOverlapping(text, t)){
+        if(isViewOverlapping()){
             text.visibility=View.GONE
         }
 
@@ -159,6 +157,7 @@ class GraphFragment : Fragment() {
         textView.layoutParams = imageViewParam
         imageViewParam.addRule(RelativeLayout.RIGHT_OF, setTo)
         imageViewParam.addRule(RelativeLayout.ALIGN_BOTTOM, setTo)
+
 
         return textView
 
@@ -201,17 +200,23 @@ class GraphFragment : Fragment() {
         return image
     }
 
-    private fun isViewOverlapping(firstView: View, secondView: View): Boolean {
-        val firstPosition = IntArray(2)
-        val secondPosition = IntArray(2)
-        firstView.measure(
-            View.MeasureSpec.UNSPECIFIED,
-            View.MeasureSpec.UNSPECIFIED
-        )
-        firstView.getLocationOnScreen(firstPosition)
-        secondView.getLocationOnScreen(secondPosition)
-        val r = firstView.measuredWidth + firstPosition[0]
-        val l = secondPosition[0]
-        return r >= l && r != 0 && l != 0
+    private fun setLastTextview(time: GraphBarVolumeSwitchElement){
+        if(::current_text.isInitialized){
+            last_text=current_text
+        }
+        current_text=time
+    }
+
+    private fun isViewOverlapping(): Boolean {
+
+        if(!::last_text.isInitialized){
+            return false
+        }
+        if((last_text.minuteOfDay-current_text.minuteOfDay).absoluteValue>30){
+
+            return false
+        }
+
+        return true
     }
 }
