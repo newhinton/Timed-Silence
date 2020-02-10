@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="colorControlNormal">@color/colorTextSettingbar</item>
+        <item name="android:navigationBarColor">@color/colorAccentDark</item>
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
