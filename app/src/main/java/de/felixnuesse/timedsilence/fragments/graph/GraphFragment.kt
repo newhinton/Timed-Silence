@@ -20,6 +20,7 @@ import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import kotlin.collections.ArrayList
+import kotlin.math.absoluteValue
 
 
 class GraphFragment : Fragment() {
