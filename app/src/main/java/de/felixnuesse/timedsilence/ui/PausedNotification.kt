@@ -77,9 +77,9 @@ class PausedNotification : BroadcastReceiver(){
             val cname = context.getString(R.string.PausedNotification)
 
             //NotificationManager.IMPORTANCE_NONE does not update
-            val chan = NotificationChannel(cid, cname, NotificationManager.IMPORTANCE_DEFAULT)
+            val chan = NotificationChannel(cid, cname, NotificationManager.IMPORTANCE_LOW)
 
-            chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+            chan.lockscreenVisibility = Notification.VISIBILITY_SECRET
 
             val service = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             service.createNotificationChannel(chan)
