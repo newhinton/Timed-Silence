@@ -30,13 +30,8 @@ class StartStopWidget : AppWidgetProvider() {
     }
 
     override fun onEnabled(context: Context) {
-        // Enter relevant functionality for when the first widget is created
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-
-        var remoteViews = RemoteViews(context.packageName, R.layout.start_stop_widget)
+        val remoteViews = RemoteViews(context.packageName, R.layout.start_stop_widget)
         updateIcon(remoteViews, context)
-
-
     }
 
     override fun onDisabled(context: Context) {

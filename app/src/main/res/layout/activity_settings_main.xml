@@ -26,7 +26,7 @@
             android:textColor="@color/secondary_material_light" />
 
         <Space
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
@@ -36,7 +36,8 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:padding="@dimen/padding_settings_imagebutton"
-            android:src="@drawable/ic_chevron_right_black_24dp" />
+            android:src="@drawable/ic_chevron_right_black_24dp"
+            android:contentDescription="@string/open_volume_settings" />
     </LinearLayout>
 
     <Switch
@@ -72,7 +73,7 @@
             android:textColor="@color/secondary_material_light" />
 
         <Space
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
@@ -82,7 +83,8 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:padding="@dimen/padding_settings_imagebutton"
-            android:src="@drawable/ic_file_download_black_24dp" />
+            android:src="@drawable/ic_file_download_black_24dp"
+            android:contentDescription="@string/export" />
     </LinearLayout>
 
     <LinearLayout
@@ -105,7 +107,7 @@
             android:textColor="@color/secondary_material_light" />
 
         <Space
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
@@ -115,7 +117,8 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:padding="@dimen/padding_settings_imagebutton"
-            android:src="@drawable/ic_file_upload_black_24dp" />
+            android:src="@drawable/ic_file_upload_black_24dp"
+            android:contentDescription="@string/import_button" />
     </LinearLayout>
 
     <Switch

@@ -21,34 +21,5 @@
 
     </RelativeLayout>
 
-    <de.felixnuesse.timedsilence.ui.ResizableLayout
-        android:id="@+id/testlayout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_underbar"
-        android:background="#3F7E57C2"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="0dp"
-            android:text="a" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="10dp"
-            android:text="b" />
-    </de.felixnuesse.timedsilence.ui.ResizableLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

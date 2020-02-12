@@ -1,5 +1,6 @@
 package de.felixnuesse.timedsilence.fragments.graph
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Typeface
@@ -129,7 +130,8 @@ class GraphFragment : Fragment() {
         }
     }
 
-    private fun getTextForShape(context: Context, text: String, volume: Int,  setTo: Int):View{
+    @SuppressLint("SetTextI18n")
+    private fun getTextForShape(context: Context, text: String, volume: Int, setTo: Int):View{
 
 
         val textView = TextView(context)

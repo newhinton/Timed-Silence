@@ -110,8 +110,8 @@ class WifiDialog(context: Context) : Dialog(context) {
 
     private fun hideAll() {
         wifi_ssid_layout.visibility = View.GONE
-        wifi_volume_layout.visibility = View.GONE
-        wifi_type_layout.visibility = View.GONE
+        wifi_dialog_rb_volume.visibility = View.GONE
+        wifi_dialog_rb_type.visibility = View.GONE
     }
 
     private fun getValueForVolumeRadioGroup(): Int{
@@ -154,12 +154,12 @@ class WifiDialog(context: Context) : Dialog(context) {
             }
             1 -> {
                 wifi_dialog_title.text = context.getText(R.string.schedule_dialog_title_volume)
-                wifi_type_layout.visibility = View.VISIBLE
+                wifi_dialog_rb_type.visibility = View.VISIBLE
 
             }
             2 -> {
                 wifi_dialog_title.text = context.getText(R.string.schedule_dialog_title_volume)
-                wifi_volume_layout.visibility = View.VISIBLE
+                wifi_dialog_rb_volume.visibility = View.VISIBLE
 
             }
 

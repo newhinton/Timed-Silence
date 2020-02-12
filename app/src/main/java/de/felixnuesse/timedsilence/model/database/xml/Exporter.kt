@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.Toast
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.Utils
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -120,8 +121,7 @@ class Exporter {
                 return
             }
 
-            val sdf = SimpleDateFormat("yyyyMMdd_HHmmss")
-            val currentDateandTime = sdf.format(Date())
+            val currentDateandTime = Utils.getDate(Date().time)
 
             val filename = "${APP_NAME}_$currentDateandTime.xml"
 

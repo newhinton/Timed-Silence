@@ -489,7 +489,10 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             selectionArgs, // don't group the rows
             null, null, // don't filter by row groups
             sortOrder                                   // The sort order
-        )// The values for the WHERE clause
+        )
+
+
+        // The values for the WHERE clause
         val results = arrayListOf<CalendarObject>()
         while (cursor.moveToNext()) {
             val co = CalendarObject(
@@ -501,6 +504,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             results.add(co)
         }
 
+        cursor.close()
         db.close()
         cachedCalendars=results
         return cachedCalendars

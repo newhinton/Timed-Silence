@@ -12,21 +12,23 @@ import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 class BootReciever : BroadcastReceiver(){
 
     override fun onReceive(context: Context, intent: Intent) {
-        Log.e(APP_NAME, "BootReciever: Started Device!")
-        AlarmBroadcastReceiver().switchVolumeMode(context)
+        if(intent.action==Intent.ACTION_BOOT_COMPLETED){
+            Log.e(APP_NAME, "BootReciever: Started Device!")
+            AlarmBroadcastReceiver().switchVolumeMode(context)
 
-        val restartOnBoot= SharedPreferencesHandler.getPref(
-            context,
-            PrefConstants.PREF_BOOT_RESTART,
-            PrefConstants.PREF_BOOT_RESTART_DEFAULT
-        )
+            val restartOnBoot= SharedPreferencesHandler.getPref(
+                context,
+                PrefConstants.PREF_BOOT_RESTART,
+                PrefConstants.PREF_BOOT_RESTART_DEFAULT
+            )
 
-        if(restartOnBoot){
-            Log.e(APP_NAME, "BootReciever: Started Checks!")
-            AlarmHandler.createRepeatingTimecheck(context)
-            return
+            if(restartOnBoot){
+                Log.e(APP_NAME, "BootReciever: Started Checks!")
+                AlarmHandler.createRepeatingTimecheck(context)
+                return
+            }
+            Log.e(APP_NAME, "BootReciever: Dont check.")
         }
-        Log.e(APP_NAME, "BootReciever: Dont check.")
     }
 
 

@@ -1,28 +1,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/widget_margin">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/layout_background_rounded_corners"
+    android:padding="@dimen/widget_margin">
 
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@drawable/layout_background_rounded_corners"
-    >
-        <ImageButton
-                android:id="@+id/widget_abstracthour_imagebutton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="@string/appwidget_text"
-                android:background="@null"
-                android:src="@drawable/ic_av_timer_black_24dp"/>
-        <TextView
-                android:text="@string/pause_check_schedule"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/widget_abstracthour_textview" android:textAlignment="center"/>
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/widget_abstracthour_imagebutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@null"
+        android:contentDescription="@string/appwidget_text"
+        android:src="@drawable/ic_av_timer_black_24dp" />
+
+    <TextView
+        android:id="@+id/widget_abstracthour_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pause_check_schedule"
+        android:textAlignment="center" />
 
 </RelativeLayout>

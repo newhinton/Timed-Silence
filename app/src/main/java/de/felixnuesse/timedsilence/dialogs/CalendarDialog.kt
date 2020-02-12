@@ -145,7 +145,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
 
     private fun hideAll() {
         calendar_id_layout.visibility = View.GONE
-        calendar_volume_layout.visibility = View.GONE
+        calendar_dialog_rb_volume.visibility = View.GONE
     }
 
     private fun getValueForVolumeRadioGroup(): Int{
@@ -190,7 +190,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
             }
             1 -> {
                 calendar_dialog_title.text = context.getText(R.string.schedule_dialog_title_volume)
-                calendar_volume_layout.visibility = View.VISIBLE
+                calendar_dialog_rb_volume.visibility = View.VISIBLE
 
             }
 

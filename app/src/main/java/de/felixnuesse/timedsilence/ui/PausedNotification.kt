@@ -32,18 +32,13 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import androidx.core.app.NotificationManagerCompat
 import android.util.Log
-import de.felixnuesse.timedsilence.Constants
+import androidx.core.app.NotificationCompat
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.MainActivity
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
-import de.felixnuesse.timedsilence.services.PauseTimerService
-import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 
 class PausedNotification : BroadcastReceiver(){
 
@@ -88,14 +83,19 @@ class PausedNotification : BroadcastReceiver(){
                 action = ACTION_END_PAUSE
             }
             val snoozePendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, snoozeIntent, 0)
+            val action = NotificationCompat.Action.Builder(
+                0,
+                context.getString(R.string.PausedNotification_RESUME),
+                snoozePendingIntent
+            ).build()
 
-            return Notification.Builder(context, cid)
+            return NotificationCompat.Builder(context, cid)
                 .setContentTitle(context.getString(R.string.PausedNotification_TITLE))
                 .setContentText(context.getString(R.string.PausedNotification_CONTENT))
                 .setSmallIcon(R.drawable.logo_pause)
                 .setOnlyAlertOnce(true)
                 .setOngoing(true)
-                .addAction(0,context.getString(R.string.PausedNotification_RESUME), snoozePendingIntent)
+                .addAction(action)
                 .build()
         }
 

@@ -1,5 +1,6 @@
 package de.felixnuesse.timedsilence.activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -101,6 +102,7 @@ class SettingsVolumeActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     fun updateTextViewPercentage(textView: TextView, percent: Int){
         textView.text= "$percent %"
         textView.setTextColor(textViewLabelSliderVolumeMusic.textColors)

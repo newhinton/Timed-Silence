@@ -24,7 +24,5 @@
     <color name="text_warning">#E91E1E</color>
     <color name="transparent">#00000000</color>
 
-
-    <color name="material_light">#de000000</color>
     <color name="secondary_material_light">#8a000000</color>
 </resources>

@@ -15,7 +15,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="TITLE"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 android:textStyle="bold"/>
@@ -39,18 +38,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/wifi_dialog_ssid_textfield_hint"
-                    android:inputType="" />
+                    android:importantForAutofill="no"
+                    android:inputType="text" />
             </LinearLayout>
 
-            <LinearLayout
-                    android:padding="10dp"
-                    android:layout_margin="0dp"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" android:id="@+id/wifi_type_layout"
-                    android:gravity="center">
 
                 <RadioGroup
+                    android:padding="10dp"
+                    android:layout_margin="0dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" android:id="@+id/wifi_dialog_rb_type">
                     <RadioButton
@@ -64,19 +59,11 @@
                             android:layout_height="wrap_content" android:id="@+id/wifi_dialog_type_connected"
                             android:layout_weight="1"/>
                 </RadioGroup>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/wifi_volume_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="0dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="10dp">
 
                 <RadioGroup
                     android:id="@+id/wifi_dialog_rb_volume"
+                    android:padding="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -102,7 +89,6 @@
                         android:checked="true"
                         android:text="@string/volume_setting_vibrate" />
                 </RadioGroup>
-            </LinearLayout>
 
         </LinearLayout>
 

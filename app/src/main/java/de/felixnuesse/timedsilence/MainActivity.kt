@@ -96,12 +96,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             Log.e(APP_NAME,"MainAcitivity: HiddenButton: PerformClick to make sound")
         }
 
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener {
             //Log.e(APP_NAME, "Main: fab: Clicked")
             setHandlerState()
         }
 
-        frameLayout.setOnClickListener { view ->
+        frameLayout.setOnClickListener {
             //Log.e(APP_NAME, "Main: FabTester: Clicked")
             buttonState()
         }
