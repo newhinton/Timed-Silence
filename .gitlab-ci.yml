@@ -35,7 +35,7 @@ lintDebug:
     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
   artifacts:
     paths:
-    - app/build/reports/
+    - app/lint/reports/
 assembleDebug:
   stage: build
   script:
