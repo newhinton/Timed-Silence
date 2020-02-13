@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,14 +17,11 @@ import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
 import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.WifiListAdapter
+import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 import kotlinx.android.synthetic.main.wifi_connected_fragment.*
 
 
 class WifiConnectedFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = WifiConnectedFragment()
-    }
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -42,7 +38,6 @@ class WifiConnectedFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        // TODO: Use the ViewModel
         checkContainer()
     }
 
@@ -65,7 +60,7 @@ class WifiConnectedFragment : Fragment() {
 
         Log.e(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: "+db.getAllWifiEntries().size)
 
-        viewManager = LinearLayoutManager(view.context)
+        viewManager = NestedRecyclerManager(view.context)
         viewAdapter = WifiListAdapter(db.getAllWifiEntries())
 
         wifi_recylcer_list_view.apply {
