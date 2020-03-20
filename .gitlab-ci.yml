@@ -27,10 +27,11 @@ before_script:
 
 stages:
   - build
+  - lint
   - test
 
 lintDebug:
-  stage: build
+  stage: lint
   script:
     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
   artifacts:
