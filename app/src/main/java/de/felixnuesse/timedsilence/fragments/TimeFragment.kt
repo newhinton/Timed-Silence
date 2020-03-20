@@ -10,20 +10,15 @@ import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
 import kotlinx.android.synthetic.main.time_fragment.*
 import android.content.Context
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.dialogs.ScheduleDialog
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
-
+import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 
 
 class TimeFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = TimeFragment()
-    }
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -54,7 +49,7 @@ class TimeFragment : Fragment() {
 
         Log.e(APP_NAME, "TimeFragment: DatabaseResuluts: Size: "+db.getAllSchedules().size)
 
-        viewManager = LinearLayoutManager(view.context)
+        viewManager = NestedRecyclerManager(view.context)
         viewAdapter = ScheduleListAdapter(db.getAllSchedules())
 
         time_fragment_recylcer_list_view.apply {

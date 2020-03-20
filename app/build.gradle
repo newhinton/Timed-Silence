@@ -20,6 +20,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            //TimedSilence 2020-02-11-12_32
+            def project = "TimedSilence"
+            def SEP = " "
+            //def flavor = variant.productFlavors[0].name
+            def buildType = variant.variantData.variantConfiguration.buildType.name
+            //def version = variant.versionName
+            def date = new Date()
+            def formattedDate = date.format('yyyy-mm-dd_HH:mm')
+
+            def newApkName = project + SEP + buildType + SEP + formattedDate + ".apk"
+
+            outputFileName = new File(newApkName)
+        }
+    }
 }
 
 // Running 'gradle wrapper' will generate gradlew - Getting gradle wrapper working and using it will save you a lot of pain.

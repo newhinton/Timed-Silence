@@ -16,7 +16,6 @@
             android:layout_marginStart="16dp" android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@+id/seekBarVolumeMusic"/>
     <TextView
-            android:text="100 %"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:textAlignment="textEnd"
@@ -31,7 +30,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewLabelSliderVolumeMusic" android:layout_marginTop="12dp"
             app:layout_constraintEnd_toStartOf="@+id/textViewPercentVolumeMusic" android:layout_marginEnd="8dp"/>
     <TextView
-            android:text="100 %"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:textAlignment="textEnd"
@@ -63,7 +61,6 @@
             android:layout_marginStart="16dp" android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@+id/seekBarVolumeNotifications"/>
     <TextView
-            android:text="100 %"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:textAlignment="textEnd"
@@ -87,7 +84,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/seekBarVolumeAlarm"/>
     <TextView
-            android:text="100 %"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:textAlignment="textEnd"
@@ -103,7 +99,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewLabelSliderVolumeRinger"
             app:layout_constraintEnd_toStartOf="@+id/textViewPercentVolumeRinger" android:layout_marginEnd="8dp"/>
     <TextView
-            android:text="One of your Volumes is below 15%. Depending on your device, it may not be audible."
+            android:text="@string/volume_low_warning"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/warning_low_volume" app:layout_constraintStart_toStartOf="parent"

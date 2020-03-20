@@ -2,9 +2,7 @@
     <string name="app_name">Timed Silence</string>
     <string name="action_settings">Settings</string>
     <string name="no_next_time_set">Not Set</string>
-    <string name="title_activity_add_schedule">AddScheduleActivity</string>
     <string name="cancel">Cancel</string>
-    <string name="ok">OK</string>
     <string name="volume_setting_silent">Silent</string>
     <string name="volume_setting_loud">Loud</string>
     <string name="volume_setting_vibrate">Vibrate</string>
@@ -19,7 +17,6 @@
     <string name="GrantDNDPermissionAccess">This app requires access to the \"Do not Disturb\" Permission to mute and unmute the device. Please Grant the permission and press return to get back to this app.</string>
     <string name="GrantDND">Grant!</string>
     <string name="qs_tile_label">Pause Timed Silence</string>
-    <string name="add_widget">Add widget</string>
     <string name="pause_check_schedule">Pause Timed Silence</string>
     <string name="LocationAccessNotification">LocationAccessNotification</string>
     <string name="LocationAccessNotification_TITLE">Location Service required!</string>
@@ -77,9 +74,9 @@
     <string name="calendar_list_empty">You do not have calendars.</string>
     <string name="calendar_missing_permissions">Permissions not granted.</string>
     <string name="main_tab_graph">Graph</string>
-    <string name="volume_setting_unset">Undefiniert</string>
-    <string name="export">Export</string>
-    <string name="import_button">Import</string>
+    <string name="volume_setting_unset">Undefined</string>
+    <string name="export">Export settings</string>
+    <string name="import_button">Import settings</string>
     <string name="darkmode">Darkmode</string>
     <string name="actionbar_title_settings">Settings</string>
     <string name="actionbar_title_settings_volume">Volumesettings</string>
@@ -93,4 +90,6 @@
     <string name="PausedNotification_CONTENT">The volumecheck is paused.</string>
     <string name="PausedNotification_RESUME">Resume</string>
     <string name="enablePauseNotification">Enable notification when paused</string>
+    <string name="open_volume_settings">Open Volume Settings</string>
+    <string name="volume_low_warning">One of your Volumes is below 15%. Depending on your device, it may be inaudible.</string>
 </resources>

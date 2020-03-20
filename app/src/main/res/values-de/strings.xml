@@ -11,14 +11,12 @@
     <string name="action_set_manual_silent">Auf Tonlos stellen</string>
     <string name="action_set_manual_vibrate">Auf Vibration stellen</string>
     <string name="action_settings">Einstellungen</string>
-    <string name="add_widget">Widget hinzufügen</string>
     <string name="back">Zurück</string>
     <string name="cancel">Abbrechen</string>
     <string name="friday">Freitag</string>
     <string name="monday">Montag</string>
     <string name="next">Weiter</string>
     <string name="no_next_time_set">Nicht gesetzt</string>
-    <string name="ok">OK</string>
     <string name="pause_check_schedule">Pausiere Timed Silence</string>
     <string name="qs_tile_label">Pausiere Timed Silence</string>
     <string name="saturday">Samstag</string>
@@ -36,7 +34,6 @@
     <string name="timecheck_start">Start</string>
     <string name="timecheck_stop">Stop</string>
     <string name="timecheck_stopped">Gestoppt</string>
-    <string name="title_activity_add_schedule">Zeitplan hinzufügen</string>
     <string name="tuesday">Dienstag</string>
     <string name="volume_setting_loud">Laut</string>
     <string name="volume_setting_silent">Leise</string>
@@ -78,4 +75,23 @@
     <string name="wifi_dialog_ssid_textfield_hint">Wlan-Name</string>
     <string name="wifi_type_connected">Wenn Verbunden</string>
     <string name="wifi_type_searching">Wenn Suchend</string>
+    <string name="PausedNotification">Pausiert-Benachrichtigung</string>
+    <string name="PausedNotification_CONTENT">Die Lautstärkeprüfung ist unterbrochen</string>
+    <string name="PausedNotification_RESUME">Pause beenden</string>
+    <string name="PausedNotification_TITLE">Pausiert!</string>
+    <string name="actionbar_title_settings">Einstellungen</string>
+    <string name="actionbar_title_settings_volume">Lautstärke</string>
+    <string name="darkmode">Dunkles Thema</string>
+    <string name="enablePauseNotification">Zeige Benachrichtigung wenn Prüfung pausiert ist</string>
+    <string name="export">Einstellungen exportieren</string>
+    <string name="export_file_success">Exportierte Datei:</string>
+    <string name="import_button">Einstellungen importieren</string>
+    <string name="import_file_success">Erfolgreich!</string>
+    <string name="loud">Laut!</string>
+    <string name="main_tab_graph">Graph</string>
+    <string name="silent">Lautlos!</string>
+    <string name="vibrate">Nur Vibrieren!</string>
+    <string name="volume_setting_unset">Undefiniert</string>
+    <string name="open_volume_settings">Öffne Lautstärkeeinstellungen</string>
+    <string name="volume_low_warning">Eine Lautstärkeeinstellung ist unter 15%: Dies könnte zu leise sein</string>
 </resources>

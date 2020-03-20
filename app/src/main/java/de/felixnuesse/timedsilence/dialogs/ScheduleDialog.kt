@@ -160,7 +160,7 @@ class ScheduleDialog(context: Context) : Dialog(context) {
         schedule_title_layout.visibility = View.GONE
         schedule_start_timepicker.visibility = View.GONE
         schedule_end_timepicker.visibility = View.GONE
-        schedule_volume_layout.visibility = View.GONE
+        schedule_dialog_rb_volume.visibility = View.GONE
         schedule_days_layout.visibility = View.GONE
     }
 
@@ -227,8 +227,7 @@ class ScheduleDialog(context: Context) : Dialog(context) {
             }
             1 -> {
                 schedule_dialog_title.text = context.getText(R.string.schedule_dialog_title_volume)
-                schedule_volume_layout.visibility = View.VISIBLE
-
+                schedule_dialog_rb_volume.visibility = View.VISIBLE
             }
             2 -> {
                 schedule_dialog_title.text = context.getText(R.string.schedule_dialog_title_start)

@@ -8,13 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import de.felixnuesse.timedsilence.Constants
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.dialogs.CalendarDialog
 import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.CalendarListAdapter
+import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 import kotlinx.android.synthetic.main.calendar_event_fragment.*
 import kotlin.collections.ArrayList
 
@@ -22,8 +22,6 @@ import kotlin.collections.ArrayList
 class CalendarEventFragment : Fragment() {
 
     companion object {
-        fun newInstance() = CalendarEventFragment()
-
         var nameOfEvent = ArrayList<String>()
         var startDates = ArrayList<String>()
         var endDates = ArrayList<String>()
@@ -31,7 +29,6 @@ class CalendarEventFragment : Fragment() {
 
     }
 
-    private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
@@ -41,12 +38,6 @@ class CalendarEventFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(de.felixnuesse.timedsilence.R.layout.calendar_event_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        // TODO: Use the ViewModel
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,7 +58,7 @@ class CalendarEventFragment : Fragment() {
 
 
 
-        viewManager = LinearLayoutManager(view.context)
+        viewManager = NestedRecyclerManager(view.context)
         viewAdapter = CalendarListAdapter(db.getAllCalendarEntries(), calHandler)
 
         calendar_fragment_recylcer_list_view.apply {

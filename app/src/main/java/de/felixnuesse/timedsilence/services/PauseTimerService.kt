@@ -165,11 +165,11 @@ class PauseTimerService : Service() {
             val date = Date(timeAsLong)
             val format: SimpleDateFormat?
 
+            var template = "mm:ss"
             if(timeAsLong>=Constants.HOUR){
-                format = SimpleDateFormat("HH:mm:ss")
-            }else {
-                format = SimpleDateFormat("mm:ss")
+                template = "HH:mm:ss"
             }
+            format = SimpleDateFormat(template, Locale.US)
 
             format.timeZone = TimeZone.getTimeZone("UTC")
             return format.format(date)

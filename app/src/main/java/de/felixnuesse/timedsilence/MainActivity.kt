@@ -64,7 +64,6 @@ import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
-import de.felixnuesse.timedsilence.ui.PausedNotification
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 
@@ -73,6 +72,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
     private var button_check : String = ""
+    private var lastTabPosition = 0
+    private lateinit var mPager : ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,12 +97,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             Log.e(APP_NAME,"MainAcitivity: HiddenButton: PerformClick to make sound")
         }
 
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener {
             //Log.e(APP_NAME, "Main: fab: Clicked")
             setHandlerState()
         }
 
-        frameLayout.setOnClickListener { view ->
+        frameLayout.setOnClickListener {
             //Log.e(APP_NAME, "Main: FabTester: Clicked")
             buttonState()
         }
@@ -137,11 +138,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
         val tabs = tabLayout
-        val mPager = viewPager
+        mPager = viewPager
 
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                mPager.currentItem = tab.position
+                lastTabPosition = tab.position
+                mPager.currentItem = lastTabPosition
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -188,6 +190,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         Handler().postDelayed({
             if(viewPager.adapter != null){
                 viewPager.adapter = ScreenSlidePagerAdapter(supportFragmentManager)
+                mPager.currentItem = lastTabPosition
             }
         }, 0)
 

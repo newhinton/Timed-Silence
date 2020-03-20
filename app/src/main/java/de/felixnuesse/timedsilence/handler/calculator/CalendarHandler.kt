@@ -18,11 +18,11 @@ import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.nam
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.startDates
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import android.text.format.DateUtils
 import android.content.ContentUris
+import de.felixnuesse.timedsilence.Utils
 import java.time.Duration
 import java.time.format.DateTimeParseException
 import java.util.regex.Pattern
@@ -143,29 +143,15 @@ class CalendarHandler(context: Context) {
             context
         )
 
-        val cursor: Cursor
         val contentResolver = context.contentResolver
-
-
-        if (android.os.Build.VERSION.SDK_INT <= 7) {
-            cursor = contentResolver!!.query(
-                Uri.parse("content://calendar/calendars"),
-                arrayOf("_id", "displayName",  "eventColor"),
-                null,
-                null,
-                null
-            )
-
-        } else if (android.os.Build.VERSION.SDK_INT <= 14) {
-            cursor = contentResolver!!.query(
-                Uri.parse("content://com.android.calendar/calendars"),
-                arrayOf("_id", "displayName",  CalendarContract.Calendars.CALENDAR_COLOR), null, null, null
-            )
-
-        } else {
-            cursor = contentResolver!!.query(Uri.parse("content://com.android.calendar/calendars"), arrayOf("_id", "calendar_displayName",  CalendarContract.Calendars.CALENDAR_COLOR), null, null, null)
-
-        }
+        val cursor = contentResolver!!.query(
+            Uri.parse("content://com.android.calendar/calendars"),
+            arrayOf("_id", "calendar_displayName",
+                CalendarContract.Calendars.CALENDAR_COLOR),
+            null,
+            null,
+            null
+        )
 
         // Get calendars name
         if (cursor.count > 0) {
@@ -186,6 +172,8 @@ class CalendarHandler(context: Context) {
         } else {
             Log.e(APP_NAME,"CalendarHandler: No calendar found in the device")
         }
+
+        cursor.close()
     }
 
     fun readCalendarEvent(timeInMilliseconds: Long): ArrayList<Map<String, String>> {
@@ -205,7 +193,7 @@ class CalendarHandler(context: Context) {
             return cachedCalendarEvents
         }
 
-        Log.e(APP_NAME, "CalendarHandler: CurrentTime in MS:"+getDate(timeInMilliseconds.toString()))
+        Log.e(APP_NAME, "CalendarHandler: CurrentTime in MS:"+ Utils.getDate(timeInMilliseconds.toString()))
         val startTime = Calendar.getInstance()
 
         startTime.set(Calendar.HOUR_OF_DAY, 0)
@@ -271,7 +259,7 @@ class CalendarHandler(context: Context) {
         ContentUris.appendId(builder, now - range)
         ContentUris.appendId(builder, now + range)
 
-        cursor = context.getContentResolver().query(
+        cursor = context.contentResolver.query(
             builder.build(),
             projection,
             null,
@@ -279,6 +267,10 @@ class CalendarHandler(context: Context) {
             CalendarContract.Events.DTEND + " ASC"
         )
 
+        if(cursor==null){
+            Log.e(APP_NAME, "CalendarHandler: readCalendarEvent: no results!")
+            return retval;
+        }
         cursor.moveToFirst()
         // fetching calendars name
 
@@ -293,9 +285,9 @@ class CalendarHandler(context: Context) {
 
         for (i in lengthDummyArray) {
             val map = HashMap<String, String>()
-            map.put("calendar_id",cursor.getString(0))
-            map.put("name_of_event",cursor.getString(1))
-            map.put("description",cursor.getString(2))
+            map["calendar_id"] = cursor.getString(0)
+            map["name_of_event"] = cursor.getString(1)
+            map["description"] = cursor.getString(2)
 
             val start= cursor.getString(3).toLong()
             //the start time is from the FIRST time the event happens, so adjust it
@@ -303,19 +295,19 @@ class CalendarHandler(context: Context) {
             calendar.timeInMillis = start
             calendar.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
             val newStart = calendar.timeInMillis
-            map.put("start_date",newStart.toString())
+            map["start_date"] = newStart.toString()
 
 
 
-            map.put("end_date",cursor.getString(4))
-            map.put("all_day",cursor.getString(5))
+            map["end_date"] = cursor.getString(4)
+            map["all_day"] = cursor.getString(5)
 
             var recurring = cursor.getString(6) ?: ""
 
             //Log.d(APP_NAME, "CalendarHandler: RecurringPattern: "+recurring)
             if(recurring.equals("")){
-                map.put("duration",cursor.getString(6))
-                map.put("recurring","false")
+                map["duration"] = cursor?.getString(6) ?: "0"
+                map["recurring"] = "false"
             }else{
 
                 //First, fix the damn issue with the missing T for seconds
@@ -327,15 +319,12 @@ class CalendarHandler(context: Context) {
                     //Log.d(APP_NAME, "CalendarHandler: Fixed RecurringPattern: "+recurring)
                 }
 
-                try{
-                    val msEnd= Duration.parse(recurring).toMillis()
-                    val t = newStart+msEnd
-                    map.put("duration",msEnd.toString())
-                    map.put("end_date",t.toString())
-                }catch (e : DateTimeParseException){
+                val msEnd= Duration.parse(recurring).toMillis()
+                val t = newStart+msEnd
+                map["duration"] = msEnd.toString()
+                map["end_date"] = t.toString()
 
-                }
-                map.put("recurring","true")
+                map["recurring"] = "true"
             }
 
             retval.add(map)
@@ -351,18 +340,11 @@ class CalendarHandler(context: Context) {
         return retval
     }
 
-    fun getDate(milliSeconds: String): String {
-        val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm:ss a")
-        val calendar = Calendar.getInstance()
-        calendar.setTimeInMillis(milliSeconds.toLong())
-        return formatter.format(calendar.getTime())
-    }
-
     internal inner class MyMapComparator : Comparator<Map<String, String>> {
         override fun compare(o1: Map<String, String>, o2: Map<String, String>): Int {
 
-            val s1 = o1["start_date"]!!.toLong()
-            val s2 = o2["start_date"]!!.toLong()
+            val s1 = o1["start_date"]?.toLong() ?: 0
+            val s2 = o2["start_date"]?.toLong() ?: 0
 
             if(s1<s2){
                 return -1
