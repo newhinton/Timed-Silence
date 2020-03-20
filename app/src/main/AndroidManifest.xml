@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
 
+    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- Needed for statechange of icon in graphview -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/> <!-- Needed for headset identification -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
@@ -46,6 +47,15 @@
             <intent-filter>
                 <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
                 <!-- This does not work. Needs to be registered from code. Needs workaround, maybe a service -->
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.BluetoothBroadcastReciever">
+            <intent-filter>
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
+                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
+                <action android:name="android.bluetooth.device.action.ACL_DISCONNECT_REQUESTED" />
+                <action android:name="android.bluetooth.adapter.action.CONNECTION_STATE_CHANGED" />
+                <action android:name="android.bluetooth.adapter.action.DISCOVERY_STARTED" />
             </intent-filter>
         </receiver>
         <receiver android:name=".receiver.BootReciever">

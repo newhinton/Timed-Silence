@@ -287,7 +287,7 @@ class CalendarHandler(context: Context) {
             val map = HashMap<String, String>()
             map["calendar_id"] = cursor.getString(0)
             map["name_of_event"] = cursor.getString(1)
-            map["description"] = cursor.getString(2)
+            map["description"] = cursor?.getString(2) ?: "unset"
 
             val start= cursor.getString(3).toLong()
             //the start time is from the FIRST time the event happens, so adjust it
@@ -299,7 +299,7 @@ class CalendarHandler(context: Context) {
 
 
 
-            map["end_date"] = cursor.getString(4)
+            map["end_date"] = cursor?.getString(4) ?: map["start_date"] as String
             map["all_day"] = cursor.getString(5)
 
             var recurring = cursor.getString(6) ?: ""
