@@ -1,7 +1,7 @@
 package de.felixnuesse.timedsilence.handler
 
 import android.app.Activity
-import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
@@ -61,6 +61,18 @@ class ThemeHandler {
 
             if (android.os.Build.VERSION.SDK_INT >= 29) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+
+                var isLight=true;
+                when ((window.context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_NO -> {isLight=true;}
+                    Configuration.UI_MODE_NIGHT_YES -> {isLight=false;}
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {isLight=true;}
+                }
+                if(isLight){
+                    var flags = window.decorView.systemUiVisibility
+                    flags = flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    window.decorView.systemUiVisibility=flags
+                }
                 return
             }
 
