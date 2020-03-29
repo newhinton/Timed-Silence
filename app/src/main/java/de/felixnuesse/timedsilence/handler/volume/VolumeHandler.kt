@@ -110,39 +110,43 @@ class VolumeHandler {
         Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Silent!")
         val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-        mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
-        mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
-
-
-        if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
-            manager.ringerMode=AudioManager.RINGER_MODE_SILENT
-        }
-
 
         if(!manager.isMusicActive){
             setMediaVolume(0, context, manager)
         }
 
-        setStreamToPercent(
-            manager,
-            AudioManager.STREAM_ALARM,
-            SharedPreferencesHandler.getPref(
-                context,
-                PrefConstants.PREF_VOLUME_ALARM,
-                PrefConstants.PREF_VOLUME_ALARM_DEFAULT
+
+        //supress annoying vibration on Q
+        //maybe this is nessessary on P, but idk
+        if (android.os.Build.VERSION.SDK_INT < 29) {
+            if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
+                manager.ringerMode=AudioManager.RINGER_MODE_SILENT
+            }
+
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_ALARM,
+                SharedPreferencesHandler.getPref(
+                    context,
+                    PrefConstants.PREF_VOLUME_ALARM,
+                    PrefConstants.PREF_VOLUME_ALARM_DEFAULT
+                )
             )
-        )
-        setStreamToPercent(
-            manager,
-            AudioManager.STREAM_NOTIFICATION,
-            0
-        )
-        setStreamToPercent(
-            manager,
-            AudioManager.STREAM_RING,
-            0
-        )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_NOTIFICATION,
+                0
+            )
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_RING,
+                0
+            )
+        }
+
+        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+        mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
+        mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
 
     }
 
@@ -299,17 +303,20 @@ class VolumeHandler {
 
     fun applyVolume(context: Context){
 
-        if(!hasVolumePermission(
-                context
-            )
-        ){
+        if(context!=null){
+            Log.d(APP_NAME, "VolumeHandler: Testskip")
+            //return
+        }
+        Log.d(APP_NAME, "VolumeHandler: Testskip skipped")
+
+        if(!hasVolumePermission(context)){
             Log.d(APP_NAME, "VolumeHandler: VolumeSetting: Do not disturb not granted! Not changing Volume!")
             return
         }
 
         Log.d(Constants.APP_NAME, "VolumeHandler: VolumeSetting: $volumeSetting")
 
-        when (volumeSetting) {
+        when (getVolume()) {
             TIME_SETTING_SILENT -> applySilent(context)
             TIME_SETTING_VIBRATE -> applyVibrate(context)
             TIME_SETTING_LOUD -> applyLoud(context)

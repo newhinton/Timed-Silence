@@ -228,21 +228,20 @@ class VolumeCalculator {
 
             if (time in it.time_start..it.time_end || isInInversedTimeInterval) {
 
-                if (it.time_setting == Constants.TIME_SETTING_SILENT) {
-                    volumeHandler.setSilent()
-                    Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
+                when (it.time_setting) {
+                    Constants.TIME_SETTING_LOUD -> {
+                        volumeHandler.setLoud()
+                        Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
+                    }
+                    Constants.TIME_SETTING_VIBRATE -> {
+                        volumeHandler.setVibrate()
+                        Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
+                    }
+                    Constants.TIME_SETTING_SILENT -> {
+                        volumeHandler.setSilent()
+                        Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
+                    }
                 }
-
-                if (it.time_setting == Constants.TIME_SETTING_VIBRATE) {
-                    volumeHandler.setVibrate()
-                    Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
-                }
-
-                if (it.time_setting == Constants.TIME_SETTING_LOUD) {
-                    volumeHandler.setLoud()
-                    Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
-                }
-
             }
         }
     }
