@@ -58,6 +58,12 @@ class ThemeHandler {
         }
 
         fun setTheme(window: Window, dark: Boolean){
+
+            if (android.os.Build.VERSION.SDK_INT >= 29) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                return
+            }
+
             if(dark){
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }else{
