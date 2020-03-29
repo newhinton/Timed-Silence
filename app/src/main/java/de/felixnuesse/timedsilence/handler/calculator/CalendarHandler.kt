@@ -62,7 +62,8 @@ class CalendarHandler(context: Context) {
             var permissions = true
             permissions = permissions && ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
 
-            val permissionsList = Array(1) {Manifest.permission.ACCESS_FINE_LOCATION}
+            //val permissionsList = Array(1) {Manifest.permission.ACCESS_FINE_LOCATION}
+            val permissionsList = Array(1) {Manifest.permission.READ_CALENDAR}
 
             if (!permissions)
                 ActivityCompat.requestPermissions(context as Activity,permissionsList , Constants.CALENDAR_PERMISSION_REQUEST_ID)
@@ -185,7 +186,6 @@ class CalendarHandler(context: Context) {
 
 
         if(!hasCalendarReadPermission(context)) {
-            getCalendarReadPermission(context)
             return ArrayList<Map<String, String>>()
         }
 
