@@ -184,10 +184,10 @@ class CalendarHandler(context: Context) {
 
 
 
-        /*if(!hasCalendarReadPermission(context)){
+        if(!hasCalendarReadPermission(context)) {
             getCalendarReadPermission(context)
             return ArrayList<Map<String, String>>()
-        }*/
+        }
 
         if(cached && alreadyCachedEvents){
             return cachedCalendarEvents
