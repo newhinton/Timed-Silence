@@ -2,10 +2,14 @@ package de.felixnuesse.timedsilence.activities
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NavUtils
 import de.felixnuesse.timedintenttrigger.database.xml.Exporter
 import de.felixnuesse.timedintenttrigger.database.xml.Importer
@@ -22,9 +26,14 @@ class SettingsMainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeHandler.setTheme(this, window, supportActionBar)
+
+        ThemeHandler.setTheme(this, window)
+        ThemeHandler.setSupportActionBarTheme(this, supportActionBar)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setContentView(R.layout.activity_settings_main)
+
+
 
         //sets the actionbartitle
         title = resources.getString(R.string.actionbar_title_settings)
@@ -56,10 +65,17 @@ class SettingsMainActivity : AppCompatActivity() {
             Importer.importFile(this)
         }
 
-        switchTheme.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_DARKMODE, PrefConstants.PREF_DARKMODE_DEFAULT)
-        switchTheme.setOnCheckedChangeListener { _, checked ->
-            writeThemeSwitchSetting(this, checked)
-            ThemeHandler.setTheme(window, checked)
+        setSwitches()
+        switchThemeDark.setOnCheckedChangeListener { _, checked ->
+            if(checked) applyTheme(PrefConstants.PREF_DARKMODE_DARK)
+        }
+
+        switchThemeLight.setOnCheckedChangeListener { _, checked ->
+            if(checked) applyTheme(PrefConstants.PREF_DARKMODE_LIGHT)
+        }
+
+        switchThemeAuto.setOnCheckedChangeListener { _, checked ->
+            if(checked) applyTheme(PrefConstants.PREF_DARKMODE_AUTO)
         }
 
         switchPauseNotification.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_PAUSE_NOTIFICATION, PrefConstants.PREF_PAUSE_NOTIFICATION_DEFAULT)
@@ -87,7 +103,7 @@ class SettingsMainActivity : AppCompatActivity() {
        SharedPreferencesHandler.setPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, value)
     }
 
-    fun writeThemeSwitchSetting(context: Context, value: Boolean) {
+    fun writeThemeSwitchSetting(context: Context, value: Int) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_DARKMODE, value)
     }
 
@@ -104,5 +120,25 @@ class SettingsMainActivity : AppCompatActivity() {
         Importer.onActivityResult(this, requestCode, resultCode, data)
     }
 
+    fun applyTheme(mode: Int){
+        writeThemeSwitchSetting(this, mode)
+        ThemeHandler.setSupportActionBarTheme(this, supportActionBar)
+        setSwitches()
+    }
 
+    fun setSwitches(){
+        switchThemeDark.isChecked=false
+        switchThemeLight.isChecked=false
+        switchThemeAuto.isChecked=false
+        switchThemeDark.isClickable = true;
+        switchThemeLight.isClickable=true
+        switchThemeAuto.isClickable=true
+
+        when(SharedPreferencesHandler.getPref(this, PrefConstants.PREF_DARKMODE, PrefConstants.PREF_DARKMODE_DEFAULT)) {
+            PrefConstants.PREF_DARKMODE_DARK -> {switchThemeDark.isChecked=true;switchThemeDark.isClickable=false}
+            PrefConstants.PREF_DARKMODE_LIGHT -> {switchThemeLight.isChecked=true;switchThemeLight.isClickable=false}
+            PrefConstants.PREF_DARKMODE_AUTO-> {switchThemeAuto.isChecked=true;switchThemeAuto.isClickable=false}
+            else -> switchThemeLight.isChecked=true
+        }
+    }
 }

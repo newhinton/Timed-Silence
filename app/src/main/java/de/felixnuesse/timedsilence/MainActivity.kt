@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         super.onCreate(savedInstanceState)
 
         ThemeHandler.setTheme(this, window)
+        ThemeHandler.setTabLayoutTheme(this, tabLayout)
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(bottom_app_bar)

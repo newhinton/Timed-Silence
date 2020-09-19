@@ -52,7 +52,10 @@ class PrefConstants {
 
 
         const val PREF_DARKMODE= "PREF_DARKMODE"
-        const val PREF_DARKMODE_DEFAULT = false
+        const val PREF_DARKMODE_DEFAULT = 0
+        const val PREF_DARKMODE_LIGHT = 0
+        const val PREF_DARKMODE_DARK = 1
+        const val PREF_DARKMODE_AUTO = 2
 
 
         const val PREF_PAUSE_NOTIFICATION= "PREF_PAUSE_NOTIFICATION"

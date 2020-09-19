@@ -121,34 +121,71 @@
             android:contentDescription="@string/import_button" />
     </LinearLayout>
 
-    <Switch
-        android:id="@+id/switchTheme"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_settings"
         android:layout_marginTop="@dimen/margin_settings"
         android:layout_marginEnd="@dimen/margin_settings"
-        android:layout_weight="1"
-        android:text="@string/darkmode"
-        android:textColor="@color/secondary_material_light"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/importLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/importLayout">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:singleLine="false"
+            android:text="@string/darkmode"
+            android:textStyle="bold" />
+
+        <Switch
+            android:id="@+id/switchThemeLight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_settings"
+            android:layout_weight="1"
+            android:text="@string/darkmode_light"
+            android:textColor="@color/secondary_material_light" />
+
+        <Switch
+            android:id="@+id/switchThemeDark"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_settings"
+            android:layout_weight="1"
+            android:text="@string/darkmode_dark"
+            android:textColor="@color/secondary_material_light" />
+
+        <Switch
+            android:id="@+id/switchThemeAuto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_settings"
+            android:layout_weight="1"
+            android:text="@string/darkmode_auto"
+            android:textColor="@color/secondary_material_light" />
+    </LinearLayout>
 
     <Switch
         android:id="@+id/switchPauseNotification"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_settings"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/margin_settings"
-        android:layout_marginTop="@dimen/margin_settings"
         android:layout_weight="1"
         android:text="@string/enablePauseNotification"
         android:textColor="@color/secondary_material_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchTheme" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

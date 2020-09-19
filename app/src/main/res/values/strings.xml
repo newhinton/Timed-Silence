@@ -78,6 +78,9 @@
     <string name="export">Export settings</string>
     <string name="import_button">Import settings</string>
     <string name="darkmode">Darkmode</string>
+    <string name="darkmode_light">Light</string>
+    <string name="darkmode_dark">Dark</string>
+    <string name="darkmode_auto">Same as Device</string>
     <string name="actionbar_title_settings">Settings</string>
     <string name="actionbar_title_settings_volume">Volumesettings</string>
     <string name="export_file_success">Exported file:</string>

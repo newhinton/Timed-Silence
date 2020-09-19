@@ -9,6 +9,8 @@
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="colorControlNormal">@color/colorTextSettingbar</item>
         <item name="android:navigationBarColor">@color/colorAccentDark</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:textColor">@color/secondary_material_light</item>
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
