@@ -122,6 +122,7 @@ class SettingsMainActivity : AppCompatActivity() {
 
     fun applyTheme(mode: Int){
         writeThemeSwitchSetting(this, mode)
+        ThemeHandler.setTheme(this, window)
         ThemeHandler.setSupportActionBarTheme(this, supportActionBar)
         setSwitches()
     }
