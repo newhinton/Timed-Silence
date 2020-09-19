@@ -1,6 +1,7 @@
 package de.felixnuesse.timedsilence.handler
 
 import android.app.Activity
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
@@ -60,42 +61,42 @@ class ThemeHandler {
         }
 
         fun setTheme(context: Activity, window: Window, mode: Int){
-
-            Log.e("THEMES", "set! mode $mode")
-
             window.navigationBarColor = ContextCompat.getColor(context, R.color.colorAccentDark)
 
             when(mode) {
-                PrefConstants.PREF_DARKMODE_DARK -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                PrefConstants.PREF_DARKMODE_DARK -> setDark()
+                PrefConstants.PREF_DARKMODE_LIGHT -> setLight(window)
+                PrefConstants.PREF_DARKMODE_AUTO-> {
+                    if (android.os.Build.VERSION.SDK_INT >= 29) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 
+                        var isLight=true;
+                        when ((window.context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK)) {
+                            Configuration.UI_MODE_NIGHT_NO -> {isLight=true;}
+                            Configuration.UI_MODE_NIGHT_YES -> {isLight=false;}
+                            Configuration.UI_MODE_NIGHT_UNDEFINED -> {isLight=true;}
+                        }
+                        if(isLight){
+                            setLight(window)
+                        }else{
+                            setDark()
+                        }
+                        return
+                    }
                 }
-                PrefConstants.PREF_DARKMODE_LIGHT -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    var flags = window.decorView.systemUiVisibility
-                    flags = flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                    window.decorView.systemUiVisibility=flags
-                }
-                PrefConstants.PREF_DARKMODE_AUTO-> println("Invalid number")
-                else -> println("Number too high")
+                else -> setLight(window)
             }
-            /*
-                       if (android.os.Build.VERSION.SDK_INT >= 29) {
-                           AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
 
-                           var isLight=true;
-                           when ((window.context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK)) {
-                               Configuration.UI_MODE_NIGHT_NO -> {isLight=true;}
-                               Configuration.UI_MODE_NIGHT_YES -> {isLight=false;}
-                               Configuration.UI_MODE_NIGHT_UNDEFINED -> {isLight=true;}
-                           }
-                           if(isLight){
-                               var flags = window.decorView.systemUiVisibility
-                               flags = flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                               window.decorView.systemUiVisibility=flags
-                           }
-                           return
-                       }*/
+        private fun setLight(window: Window){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            var flags = window.decorView.systemUiVisibility
+            flags = flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            window.decorView.systemUiVisibility=flags
+        }
+
+        private fun setDark(){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
     }
 }
