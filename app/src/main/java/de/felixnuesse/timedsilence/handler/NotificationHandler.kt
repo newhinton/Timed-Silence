@@ -75,20 +75,20 @@ class NotificationHandler {
 
 
         val notificationIntent = Intent(c, MainActivity::class.java)
-        notificationIntent.putExtra(Constants.MAIN_ACTIVITY_LOAD_CALENDAR, 1)
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+        notificationIntent.putExtra(Constants.MAIN_ACTIVITY_LOAD_CALENDAR, Constants.MAIN_ACTIVITY_LOAD_CALENDAR_FORCE)
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
         val intent = PendingIntent.getActivity(
             c, 0,
-            notificationIntent, 0
+            notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT
         )
+
 
         builder.setContentIntent(intent)
 
         with(NotificationManagerCompat.from(c)) {
             // notificationId is a unique int for each notification that you must define
-            notify(5614468, builder.build())
+            notify(5614468+Math.random().toInt(), builder.build())
         }
 
     }

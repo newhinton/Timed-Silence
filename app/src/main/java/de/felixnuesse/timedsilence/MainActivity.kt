@@ -51,6 +51,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.Constants.Companion.MAIN_ACTIVITY_LOAD_CALENDAR_FORCE
 import de.felixnuesse.timedsilence.activities.SettingsMainActivity
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
@@ -71,6 +72,7 @@ import java.util.*
 class MainActivity : AppCompatActivity(), TimerInterface {
 
 
+    private var mDontCheckGraph = false
     private var button_check : String = ""
     private var lastTabPosition = 0
     private lateinit var mPager : ViewPager
@@ -190,21 +192,23 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         startService(i)
         buttonState()
 
-        AlarmBroadcastReceiver().switchVolumeMode(this)
-
-        var bundle = intent.extras
-        if (bundle != null) {
-            val intentFragment = intent?.extras?.getInt(Constants.MAIN_ACTIVITY_LOAD_CALENDAR)
-            if(intentFragment==1){
-                //mPager.setCurrentItem(2);
-
-            }
-            mPager.currentItem =2
+        loadCalendarFragment()
+        if(mDontCheckGraph){
+            AlarmBroadcastReceiver().switchVolumeMode(this)
         }
     }
 
+    fun loadCalendarFragment(){
+        val intentFragment = intent?.extras?.getInt(Constants.MAIN_ACTIVITY_LOAD_CALENDAR)
+        if(intentFragment == MAIN_ACTIVITY_LOAD_CALENDAR_FORCE){
+            mPager.currentItem = 2
+            mDontCheckGraph=true
+        }
+    }
     override fun onResume() {
         super.onResume()
+
+        loadCalendarFragment()
         buttonState()
         SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
             getSharedPreferencesListener()
