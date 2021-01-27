@@ -84,25 +84,25 @@ class VolumeHandler {
     var volumeSetting = TIME_SETTING_UNSET
 
     fun setSilent(){
-        Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Silent!")
+        //Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Silent!")
         volumeSetting = TIME_SETTING_SILENT
     }
 
     fun setVibrate(){
         if(volumeSetting != TIME_SETTING_SILENT){
-            Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Vibrate!")
+            //Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Vibrate!")
             volumeSetting = TIME_SETTING_VIBRATE
         }else{
-            Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Vibrate! Ignored because: $volumeSetting ")
+            //Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Vibrate! Ignored because: $volumeSetting ")
         }
     }
 
     fun setLoud(){
         if(volumeSetting != TIME_SETTING_SILENT && volumeSetting != TIME_SETTING_VIBRATE){
-            Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Loud!")
+            //Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Loud!")
             volumeSetting = TIME_SETTING_LOUD
         }else{
-            Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Loud! Ignored because: $volumeSetting ")
+            //Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Loud! Ignored because: $volumeSetting ")
         }
     }
 
@@ -152,60 +152,60 @@ class VolumeHandler {
 
     private fun applyLoud(context: Context) {
         Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Loud!")
-    val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-    val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-    mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+        mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
 
-    if(manager.ringerMode!= AudioManager.RINGER_MODE_NORMAL){
-        manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-    }
+        if(manager.ringerMode!= AudioManager.RINGER_MODE_NORMAL){
+            manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+        }
 
-    var alarmVolume= SharedPreferencesHandler.getPref(
-        context,
-        PrefConstants.PREF_VOLUME_ALARM,
-        PrefConstants.PREF_VOLUME_ALARM_DEFAULT
-    )
-    var mediaVolume= SharedPreferencesHandler.getPref(
-        context,
-        PrefConstants.PREF_VOLUME_MUSIC,
-        PrefConstants.PREF_VOLUME_MUSIC_DEFAULT
-    )
-    var notifcationVolume=
-        SharedPreferencesHandler.getPref(
+        var alarmVolume= SharedPreferencesHandler.getPref(
             context,
-            PrefConstants.PREF_VOLUME_NOTIFICATION,
-            PrefConstants.PREF_VOLUME_NOTIFICATION_DEFAULT
+            PrefConstants.PREF_VOLUME_ALARM,
+            PrefConstants.PREF_VOLUME_ALARM_DEFAULT
         )
-    var ringerVolume=
-        SharedPreferencesHandler.getPref(
+        var mediaVolume= SharedPreferencesHandler.getPref(
             context,
-            PrefConstants.PREF_VOLUME_RINGER,
-            PrefConstants.PREF_VOLUME_RINGER_DEFAULT
+            PrefConstants.PREF_VOLUME_MUSIC,
+            PrefConstants.PREF_VOLUME_MUSIC_DEFAULT
+        )
+        var notifcationVolume=
+            SharedPreferencesHandler.getPref(
+                context,
+                PrefConstants.PREF_VOLUME_NOTIFICATION,
+                PrefConstants.PREF_VOLUME_NOTIFICATION_DEFAULT
+            )
+        var ringerVolume=
+            SharedPreferencesHandler.getPref(
+                context,
+                PrefConstants.PREF_VOLUME_RINGER,
+                PrefConstants.PREF_VOLUME_RINGER_DEFAULT
+            )
+
+
+        if(!manager.isMusicActive){
+            setMediaVolume(mediaVolume, context, manager)
+        }
+
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_ALARM,
+            alarmVolume
+        )
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_NOTIFICATION,
+            notifcationVolume
+        )
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_RING,
+            ringerVolume
         )
 
-
-    if(!manager.isMusicActive){
-        setMediaVolume(mediaVolume, context, manager)
     }
-
-    setStreamToPercent(
-        manager,
-        AudioManager.STREAM_ALARM,
-        alarmVolume
-    )
-    setStreamToPercent(
-        manager,
-        AudioManager.STREAM_NOTIFICATION,
-        notifcationVolume
-    )
-    setStreamToPercent(
-        manager,
-        AudioManager.STREAM_RING,
-        ringerVolume
-    )
-
-}
 
     private fun applyVibrate(context: Context) {
         Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Vibrate!")

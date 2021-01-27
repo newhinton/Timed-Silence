@@ -91,6 +91,7 @@ class CalendarHandler(context: Context) {
     private lateinit var cachedCalendarEntry: HashMap<Long, CalendarObject>
     private var alreadyCachedCalendars: Boolean=false
     private var alreadyCachedEvents: Boolean=false
+    private var alreadyCachedCalendarPermission: Boolean=false
     private var cachedCalendarPermission: Boolean=false
     private var alreadyCachedCalendarEntry: Boolean=false
 
@@ -178,12 +179,11 @@ class CalendarHandler(context: Context) {
     }
 
     private fun getCalendarEntries(context: Context){
-        if(!alreadyCachedCalendarEntry){
-            cachedCalendarEntry = HashMap<Long, CalendarObject>()
-        }else{
+        if(alreadyCachedCalendarEntry){
             return
+        }else{
+            cachedCalendarEntry = HashMap<Long, CalendarObject>()
         }
-
         var dbEntries = db.getAllCalendarEntries()
         verifyCalendars(dbEntries)
         for(e in dbEntries){
@@ -198,8 +198,9 @@ class CalendarHandler(context: Context) {
 
     fun readCalendarEvent(timeInMilliseconds: Long, cached: Boolean): ArrayList<Map<String, String>> {
 
-        if(alreadyCachedEvents){
+        if(!alreadyCachedCalendarPermission){
             cachedCalendarPermission = hasCalendarReadPermission(context)
+            alreadyCachedCalendarPermission=true;
         }
 
         if(!cachedCalendarPermission) {

@@ -3,6 +3,7 @@ package de.felixnuesse.timedsilence.fragments.graph
 import android.content.Context
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import java.time.*
@@ -116,7 +117,7 @@ class GraphFragmentThread(context: Context): Thread() {
                 //text.text = "$hour:$minute | $localMidnight | $volume" ///+ " |\n " +todayMidnights.toString()
                 //barList.addView(text)
 
-                Log.e("app", "run ${elem}: ${state}")
+                Log.e(APP_NAME, "GraphFragmentThread: Run Minute: ${elem}; State: ${state}")
 
                 //var shortFormat = DateTimeFormatter.ISO_LOCAL_TIME
                 //var text= DateFormat.format("yyyy-MM-dd hh:mm:ss a", dt).toString()
