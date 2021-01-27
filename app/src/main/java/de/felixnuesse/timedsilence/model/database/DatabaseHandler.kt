@@ -16,10 +16,12 @@ import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import android.content.ContentValues
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.handler.NotificationHandler
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ANDROID_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ID
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_NAME
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_TABLE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_VOL_MODE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_MON
@@ -31,6 +33,7 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDUL
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_SUN
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_CALENDAR
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_WIFI
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_UPDATE_CALENDAR_ADD_NAME
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_SSID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_TABLE
@@ -85,19 +88,20 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         db.execSQL(SQL_CREATE_ENTRIES)
         db.execSQL(SQL_CREATE_ENTRIES_WIFI)
         db.execSQL(SQL_CREATE_ENTRIES_CALENDAR)
+        db.execSQL(SQL_UPDATE_CALENDAR_ADD_NAME)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
         //db.execSQL(SQL_DELETE_ENTRIES)
-        if(newVersion<6){
-            if(newVersion>=6){
-                db.execSQL(SQL_CREATE_ENTRIES_CALENDAR)
-            }
-        }
-        if(newVersion>=6){
+
+        if(oldVersion<6){
             db.execSQL(SQL_CREATE_ENTRIES_CALENDAR)
+        }
+
+        if(oldVersion<7){
+            db.execSQL(SQL_UPDATE_CALENDAR_ADD_NAME)
         }
     }
 
@@ -459,7 +463,9 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     }
 
 
+
     fun getAllCalendarEntries(): ArrayList<CalendarObject> {
+
         if (::cachedCalendars.isInitialized && cachingEnabled) {
             return cachedCalendars
         }
@@ -472,7 +478,8 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val projection = arrayOf<String>(
             CALENDAR_ID,
             CALENDAR_ANDROID_ID,
-            CALENDAR_VOL_MODE
+            CALENDAR_VOL_MODE,
+            CALENDAR_NAME
         )
 
         // Filter results WHERE "title" = 'My Title'
@@ -500,6 +507,12 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
                 cursor.getLong(1),
                 cursor.getInt(2)
             )
+
+            if(cursor.getString(3)!=null){
+                if(cursor.getString(3) != ""){
+                    co.name=cursor.getString(3);
+                }
+            }
 
             results.add(co)
         }
@@ -540,13 +553,19 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val values = ContentValues()
         values.put(CALENDAR_ANDROID_ID, calendarObject.ext_id)
         values.put(CALENDAR_VOL_MODE, calendarObject.volume)
+        if(!calendarObject.name.equals("NOTSET")){
+            values.put(CALENDAR_NAME, calendarObject.name)
+        }
+
 
         // Insert the new row, returning the primary key value of the new row
         val newRowId = db.insert(CALENDAR_TABLE, null, values)
         Log.e(APP_NAME,"Database: CreateCalendar: RowID     : $newRowId")
 
         val newObject = CalendarObject(newRowId,calendarObject.ext_id, calendarObject.volume)
-
+        if(!calendarObject.name.equals("NOTSET")){
+            newObject.name=calendarObject.name
+        }
         db.close()
         return newObject
 
@@ -559,7 +578,9 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val values = ContentValues()
         values.put(CALENDAR_ANDROID_ID, co.ext_id)
         values.put(CALENDAR_VOL_MODE, co.volume)
-
+        if(!co.name.equals("NOTSET")){
+            values.put(CALENDAR_NAME, co.name)
+        }
 
         val idofchangedobject = arrayOf<String>(
             co.id.toString()
@@ -577,6 +598,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
     }
 
+    @Deprecated("This is inefficient. Use getAllCalendarEntries and cache in a map!")
     fun getCalendarEntryByExtId(extID:String): CalendarObject? {
         for(elem in this.getAllCalendarEntries()){
             if(elem.ext_id.toString().equals(extID)){

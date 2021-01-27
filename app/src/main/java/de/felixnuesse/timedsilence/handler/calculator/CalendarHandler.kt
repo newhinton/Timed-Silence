@@ -23,9 +23,11 @@ import kotlin.collections.ArrayList
 import android.text.format.DateUtils
 import android.content.ContentUris
 import de.felixnuesse.timedsilence.Utils
+import de.felixnuesse.timedsilence.handler.NotificationHandler
 import java.time.Duration
 import java.time.format.DateTimeParseException
 import java.util.regex.Pattern
+import kotlin.collections.HashMap
 
 
 /**
@@ -78,6 +80,7 @@ class CalendarHandler(context: Context) {
 
     var context: Context = context
     val db = DatabaseHandler(context)
+    val NOTSET = "NOTSET"
 
     fun enableCaching(caching: Boolean){
         db.setCaching(caching)
@@ -85,23 +88,18 @@ class CalendarHandler(context: Context) {
 
     private lateinit var cachedCalendars: ArrayList<CalendarObject>
     private lateinit var cachedCalendarEvents: ArrayList<Map<String, String>>
+    private lateinit var cachedCalendarEntry: HashMap<Long, CalendarObject>
     private var alreadyCachedCalendars: Boolean=false
     private var alreadyCachedEvents: Boolean=false
+    private var cachedCalendarPermission: Boolean=false
+    private var alreadyCachedCalendarEntry: Boolean=false
 
     fun getCalendarVolumeSetting(externalId: Long):Int{
         getCalendars(context)
-        for (calObject in cachedCalendars){
-            //Log.d(APP_NAME, "CalendarHandler: getCalendarVolumeSetting:" + externalId + " | " + calObject.name+ " | " + calObject.id+ " | " + calObject.ext_id)
-            if(calObject.ext_id==externalId){
-                var calObject = db.getCalendarEntryByExtId(calObject.ext_id.toString())
+        getCalendarEntries(context)
 
-                if(calObject==null){
-                    return -1
-                }
-                return calObject.volume
-            }
-        }
-        return -1
+        val calObject = cachedCalendarEntry.get(externalId)
+        return calObject?.volume ?: -1
     }
 
     fun getCalendarColor(externalId: Long): Int{
@@ -114,14 +112,21 @@ class CalendarHandler(context: Context) {
         return 0
     }
 
-    fun getCalendarName(externalId: Long): String{
+    fun getCalendarName(externalId: Long, name: String): String{
         getCalendars(context)
         for (calObject in cachedCalendars){
             if(calObject.ext_id==externalId){
                 return calObject.name
             }
         }
-        return "NOTSET"
+
+        Log.e(APP_NAME,"CalendarHandler: getCalendarName did not find name! Try by name, not by id.")
+        for (calObject in cachedCalendars) {
+            if (calObject.name == name) {
+                return calObject.name
+            }
+        }
+        return NOTSET
     }
 
     fun getCalendars(): ArrayList<CalendarObject>{
@@ -131,10 +136,7 @@ class CalendarHandler(context: Context) {
     }
 
     private fun getCalendars(context: Context){
-        if(!alreadyCachedCalendars && hasCalendarReadPermission(
-                context
-            )
-        ){
+        if(!alreadyCachedCalendars && hasCalendarReadPermission(context)){
             cachedCalendars = ArrayList()
         }else{
             return
@@ -159,7 +161,6 @@ class CalendarHandler(context: Context) {
             cursor.moveToFirst()
 
             for (i in 0 until cursor.count) {
-
                 var calentry = CalendarObject(0, 0, Constants.TIME_SETTING_SILENT)
 
                 calentry.ext_id=cursor.getInt(0).toLong()
@@ -173,8 +174,22 @@ class CalendarHandler(context: Context) {
         } else {
             Log.e(APP_NAME,"CalendarHandler: No calendar found in the device")
         }
-
         cursor.close()
+    }
+
+    private fun getCalendarEntries(context: Context){
+        if(!alreadyCachedCalendarEntry){
+            cachedCalendarEntry = HashMap<Long, CalendarObject>()
+        }else{
+            return
+        }
+
+        var dbEntries = db.getAllCalendarEntries()
+        verifyCalendars(dbEntries)
+        for(e in dbEntries){
+            cachedCalendarEntry[e.ext_id] = e
+        }
+        alreadyCachedCalendarEntry=true
     }
 
     fun readCalendarEvent(timeInMilliseconds: Long): ArrayList<Map<String, String>> {
@@ -183,9 +198,11 @@ class CalendarHandler(context: Context) {
 
     fun readCalendarEvent(timeInMilliseconds: Long, cached: Boolean): ArrayList<Map<String, String>> {
 
+        if(alreadyCachedEvents){
+            cachedCalendarPermission = hasCalendarReadPermission(context)
+        }
 
-
-        if(!hasCalendarReadPermission(context)) {
+        if(!cachedCalendarPermission) {
             return ArrayList<Map<String, String>>()
         }
 
@@ -338,6 +355,26 @@ class CalendarHandler(context: Context) {
         cachedCalendarEvents=retval
         alreadyCachedEvents=true
         return retval
+    }
+
+    fun getAllCalendarEntries(): ArrayList<CalendarObject> {
+        var calendars = db.getAllCalendarEntries()
+        verifyCalendars(calendars)
+        return calendars
+    }
+
+    fun verifyCalendars(calendars: ArrayList<CalendarObject>){
+        Log.e(APP_NAME,"CalendarHandler: verifyCalendars")
+        var showError=false
+        for (e in calendars){
+            Log.e(APP_NAME,"CalendarHandler: verifyCalendars: "+e.name)
+            if (e.name == NOTSET){
+                showError=true;
+            }
+        }
+        if(showError){
+            NotificationHandler().showNotification(context)
+        }
     }
 
     internal inner class MyMapComparator : Comparator<Map<String, String>> {

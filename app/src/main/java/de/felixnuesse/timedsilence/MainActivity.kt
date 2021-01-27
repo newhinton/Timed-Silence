@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         //it plays a sound after the volume has changed to loud. Therefore it seems to be the main button who makes the sound
         button_buttonsound_fix.isSoundEffectsEnabled=true
         button_buttonsound_fix.setOnClickListener {
-            Log.e(APP_NAME,"MainAcitivity: HiddenButton: PerformClick to make sound")
+            Log.e(APP_NAME, "MainAcitivity: HiddenButton: PerformClick to make sound")
         }
 
         fab.setOnClickListener {
@@ -112,7 +112,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         val seekBarSupportText= findViewById<TextView>(R.id.textview_waittime_content)
         val seekBar = findViewById<SeekBar>(R.id.seekBar_waittime)
 
-        val interval= SharedPreferencesHandler.getPref(this, PrefConstants.PREF_INTERVAL_CHECK, PrefConstants.PREF_INTERVAL_CHECK_DEFAULT)
+        val interval= SharedPreferencesHandler.getPref(
+            this,
+            PrefConstants.PREF_INTERVAL_CHECK,
+            PrefConstants.PREF_INTERVAL_CHECK_DEFAULT
+        )
 
         seekBarSupportText.text=interval.toString()
         seekBar.progress=interval
@@ -122,7 +126,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 // Write code to perform some action when progress is changed.
-                seekBarSupportText.text= (seekBar.progress+1).toString()
+                seekBarSupportText.text = (seekBar.progress + 1).toString()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -130,9 +134,9 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-             //Toast.makeText(this@MainActivity, "Progress is " + seekBar.progress+1 + "%", Toast.LENGTH_SHORT).show()
-                seekBarSupportText.text= (seekBar.progress+1).toString()
-                setInterval(seekBar.progress+1)
+                //Toast.makeText(this@MainActivity, "Progress is " + seekBar.progress+1 + "%", Toast.LENGTH_SHORT).show()
+                seekBarSupportText.text = (seekBar.progress + 1).toString()
+                setInterval(seekBar.progress + 1)
 
             }
         })
@@ -154,7 +158,13 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         mPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {}
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+            }
+
             override fun onPageSelected(position: Int) {
                 val tab = tabs.getTabAt(position)
                 tab?.select()
@@ -167,7 +177,9 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         mPager.adapter = pagerAdapter
 
 
-        SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(getSharedPreferencesListener())
+        SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
+            getSharedPreferencesListener()
+        )
 
         PauseTimerService.registerListener(this)
 
@@ -179,17 +191,29 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         buttonState()
 
         AlarmBroadcastReceiver().switchVolumeMode(this)
+
+        var bundle = intent.extras
+        if (bundle != null) {
+            val intentFragment = intent?.extras?.getInt(Constants.MAIN_ACTIVITY_LOAD_CALENDAR)
+            if(intentFragment==1){
+                //mPager.setCurrentItem(2);
+
+            }
+            mPager.currentItem =2
+        }
     }
 
     override fun onResume() {
         super.onResume()
         buttonState()
-        SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(getSharedPreferencesListener())
+        SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
+            getSharedPreferencesListener()
+        )
 
 
         //This handler is needed. Otherwise the state is not beeing restored
         Handler().postDelayed({
-            if(viewPager.adapter != null){
+            if (viewPager.adapter != null) {
                 viewPager.adapter = ScreenSlidePagerAdapter(supportFragmentManager)
                 mPager.currentItem = lastTabPosition
             }
@@ -213,15 +237,27 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         when (item.itemId) {
             R.id.action_settings -> openSettings()
             R.id.action_set_manual_loud -> {
-                val makeSound=!voLHandler.isButtonClickAudible(this)
+                val makeSound = !voLHandler.isButtonClickAudible(this)
                 voLHandler.setLoud()
-                if(makeSound){
+                if (makeSound) {
                     button_buttonsound_fix.performClick()
                 }
                 Toast.makeText(this, getString(R.string.loud), Toast.LENGTH_LONG).show()
             }
-            R.id.action_set_manual_vibrate -> {voLHandler.setVibrate(); Toast.makeText(this, getString(R.string.vibrate), Toast.LENGTH_LONG).show()}
-            R.id.action_set_manual_silent -> {voLHandler.setSilent(); Toast.makeText(this, getString(R.string.silent), Toast.LENGTH_LONG).show()}
+            R.id.action_set_manual_vibrate -> {
+                voLHandler.setVibrate(); Toast.makeText(
+                    this, getString(
+                        R.string.vibrate
+                    ), Toast.LENGTH_LONG
+                ).show()
+            }
+            R.id.action_set_manual_silent -> {
+                voLHandler.setSilent(); Toast.makeText(
+                    this, getString(
+                        R.string.silent
+                    ), Toast.LENGTH_LONG
+                ).show()
+            }
         }
         voLHandler.applyVolume(applicationContext)
         return true
@@ -289,7 +325,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     private fun buttonState() {
 
 
-        Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: "+button_check)
+        Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: " + button_check)
 
         //Todo remove dummy textview
         if(AlarmHandler.checkIfNextAlarmExists(this)){
@@ -305,20 +341,20 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     private fun setHandlerState() {
 
-        Log.e(Constants.APP_NAME, "Main: setHandlerState: State: "+button_check)
+        Log.e(APP_NAME, "Main: setHandlerState: State: " + button_check)
 
         if(button_check == getString(R.string.timecheck_start)){
             AlarmHandler.createRepeatingTimecheck(this)
-            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
+            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
             AlarmBroadcastReceiver().switchVolumeMode(this)
         }else if(button_check == getString(R.string.timecheck_paused)){
             AlarmHandler.createRepeatingTimecheck(this)
-            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,true)
+            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
             PauseTimerService.cancelTimer(this)
             AlarmBroadcastReceiver().switchVolumeMode(this)
         }else{
             AlarmHandler.removeRepeatingTimecheck(this)
-            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART,false)
+            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, false)
         }
         buttonState()
     }
@@ -330,7 +366,10 @@ class MainActivity : AppCompatActivity(), TimerInterface {
        // fab.setImageResource(R.drawable.ic_play_arrow_white_24dp)
 
         val d = getDrawable(R.drawable.ic_pause_black_24dp)
-        d?.mutate()?.setColorFilter(resources.getColor(R.color.colorStateButtonIcon), PorterDuff.Mode.SRC_IN)
+        d?.mutate()?.setColorFilter(
+            resources.getColor(R.color.colorStateButtonIcon),
+            PorterDuff.Mode.SRC_IN
+        )
 
         fab.setImageDrawable(d)
 
@@ -344,7 +383,10 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
         val d = getDrawable(R.drawable.ic_play_arrow_white_24dp)
-        d?.mutate()?.setColorFilter(resources.getColor(R.color.colorStateButtonIcon), PorterDuff.Mode.SRC_IN)
+        d?.mutate()?.setColorFilter(
+            resources.getColor(R.color.colorStateButtonIcon),
+            PorterDuff.Mode.SRC_IN
+        )
 
         fab.setImageDrawable(d)
         AlarmHandler.removeRepeatingTimecheck(this)

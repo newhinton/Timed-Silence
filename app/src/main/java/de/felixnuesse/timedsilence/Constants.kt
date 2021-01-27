@@ -39,6 +39,8 @@ class Constants {
         const val BROADCAST_INTENT_ACTION_DELAY_EXTRA = "delayVolumeUpdate_EXTRA"
         const val BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW = "restartDelayNow"
 
+        const val MAIN_ACTIVITY_LOAD_CALENDAR = "MAIN_ACTIVITY_LOAD_CALENDAR"
+
         const val TIME_SETTING_SILENT = 1
         const val TIME_SETTING_VIBRATE = 2
         const val TIME_SETTING_LOUD = 3

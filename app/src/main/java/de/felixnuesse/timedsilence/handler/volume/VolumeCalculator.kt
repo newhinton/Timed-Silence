@@ -185,7 +185,7 @@ class VolumeCalculator {
         val hour =time.hour
         val min = time.minute
 
-        val dayLongName = Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
+        //val dayLongName = Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
         val dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
 
         Calendar.SATURDAY

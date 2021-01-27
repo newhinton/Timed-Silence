@@ -50,40 +50,28 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, var 
                 notifyDataSetChanged()
         }
 
-
         fun update(context: Context, co: CalendarObject){
                 DatabaseHandler(context).updateCalendarEntry(co)
                 myDataset.clear()
-                myDataset = DatabaseHandler(context).getAllCalendarEntries()
+                myDataset = calHandler.getAllCalendarEntries()
                 notifyDataSetChanged()
         }
 
-// Provide a reference to the views for each data item
-// Complex data items may need more than one view per item, and
-// you provide access to all the views for a data item in a view holder.
-// Each data item is just a string in this case that is shown in a TextView.
-class CalendarViewHolder(val calendarView: View, var calHandler: CalendarHandler) : RecyclerView.ViewHolder(calendarView)
-
-
-
         // Create new views (invoked by the layout manager)
-        override fun onCreateViewHolder(parent: ViewGroup,
-                                        viewType: Int): CalendarListAdapter.CalendarViewHolder {
-        // create a new view
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_calendar_list, parent, false)
-        // set the view's size, margins, paddings and layout parameters
-        return CalendarViewHolder(view, calHandler)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarListAdapter.CalendarViewHolder {
+                // create a new view
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_calendar_list, parent, false)
+                // set the view's size, margins, paddings and layout parameters
+                return CalendarViewHolder(view, calHandler)
         }
 
         // Replace the contents of a view (invoked by the layout manager)
         override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-
-
+                // - get element from your dataset at this position
+                // - replace the contents of the view with that element
                 val calObject=myDataset.get(position)
 
-                holder.calendarView.textView_calendar_row_title.text = calHandler.getCalendarName(calObject.ext_id)
+                holder.calendarView.textView_calendar_row_title.text = calHandler.getCalendarName(calObject.ext_id, "")
 
                 holder.calendarView.delete_calendar_element.setOnClickListener {
                         DatabaseHandler(holder.calendarView.context).deleteCalendarEntry(calObject.id)
@@ -101,9 +89,6 @@ class CalendarViewHolder(val calendarView: View, var calHandler: CalendarHandler
                         TIME_SETTING_SILENT -> imageID=R.drawable.ic_volume_off_black_24dp
                 }
                 holder.calendarView.imageView_volume_state.setImageDrawable(holder.calendarView.context.getDrawable(imageID))
-
-
-
         }
 
         private fun applyTextfieldStyle(view: TextView){
@@ -113,6 +98,13 @@ class CalendarViewHolder(val calendarView: View, var calHandler: CalendarHandler
 
         // Return the size of your dataset (invoked by the layout manager)
         override fun getItemCount() = myDataset.size
-        }
+
+        // Provide a reference to the views for each data item
+        // Complex data items may need more than one view per item, and
+        // you provide access to all the views for a data item in a view holder.
+        // Each data item is just a string in this case that is shown in a TextView.
+        class CalendarViewHolder(val calendarView: View, var calHandler: CalendarHandler) : RecyclerView.ViewHolder(calendarView)
+
+}
 
 

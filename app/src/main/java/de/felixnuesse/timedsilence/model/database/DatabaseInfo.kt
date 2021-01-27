@@ -32,7 +32,7 @@ class DatabaseInfo{
     companion object {
 
         // If you change the database schema, you must increment the database version.
-        const val DATABASE_VERSION = 6
+        const val DATABASE_VERSION = 7
         const val DATABASE_NAME = "TimedSilence.db"
 
         val SCHEDULE_TABLE="timetable"
@@ -82,12 +82,15 @@ class DatabaseInfo{
         val CALENDAR_ID= "calendar_id"
         val CALENDAR_ANDROID_ID= "calendar_android_id"
         val CALENDAR_VOL_MODE= "calendar_volume_mode"
+        val CALENDAR_NAME= "calendar_name"
 
         val SQL_CREATE_ENTRIES_CALENDAR =
             "CREATE TABLE ${CALENDAR_TABLE} (" +
                     "${CALENDAR_ID} INTEGER PRIMARY KEY," +
                     "${CALENDAR_ANDROID_ID} INTEGER," +
                     "${CALENDAR_VOL_MODE} INT)"
+
+        val SQL_UPDATE_CALENDAR_ADD_NAME = "ALTER TABLE ${CALENDAR_TABLE} ADD COLUMN ${CALENDAR_NAME} TEXT"
 
     }
 }

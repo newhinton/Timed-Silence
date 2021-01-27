@@ -167,12 +167,14 @@ class Importer {
                         "ext_id" -> transferEObject.ext_id=type.textContent.toLong()
                         "color" -> transferEObject.color=type.textContent.toInt()
                         "volume" -> transferEObject.volume=type.textContent.toInt()
+                        "name" -> transferEObject.name=type.textContent.toString()
                     }
 
                 }
 
                 val eObject = CalendarObject(transferEObject.id,transferEObject.ext_id, transferEObject.volume)
                 eObject.color=transferEObject.color
+                eObject.name=transferEObject.name
                 result.add(eObject)
             }
 
