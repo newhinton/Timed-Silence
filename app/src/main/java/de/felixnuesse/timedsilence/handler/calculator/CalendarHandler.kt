@@ -185,6 +185,7 @@ class CalendarHandler(context: Context) {
             cachedCalendarEntry = HashMap<Long, CalendarObject>()
         }
         var dbEntries = db.getAllCalendarEntries()
+        Log.e(APP_NAME,"CalendarHandler: B")
         verifyCalendars(dbEntries)
         for(e in dbEntries){
             cachedCalendarEntry[e.ext_id] = e
@@ -360,6 +361,7 @@ class CalendarHandler(context: Context) {
 
     fun getAllCalendarEntries(): ArrayList<CalendarObject> {
         var calendars = db.getAllCalendarEntries()
+        Log.e(APP_NAME,"CalendarHandler: A")
         verifyCalendars(calendars)
         return calendars
     }
@@ -368,7 +370,7 @@ class CalendarHandler(context: Context) {
         Log.e(APP_NAME,"CalendarHandler: verifyCalendars")
         var showError=false
         for (e in calendars){
-            Log.e(APP_NAME,"CalendarHandler: verifyCalendars: "+e.name)
+            Log.e(APP_NAME,"CalendarHandler: verifyCalendars: "+e.name+ " "+e.color+ " "+e.ext_id+ " ")
             if (e.name == NOTSET){
                 showError=true;
             }

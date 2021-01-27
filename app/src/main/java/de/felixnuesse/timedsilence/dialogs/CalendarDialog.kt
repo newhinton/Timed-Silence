@@ -58,6 +58,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
 
 
     private var radioMap: HashMap<Int,Long> = HashMap()
+    private var radioNameMap: HashMap<Long,String> = HashMap()
 
     constructor(context: Context, tfragment: CalendarEventFragment, calHandler: CalendarHandler) : this(context) {
         tfrag=tfragment
@@ -92,6 +93,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
             radioButton.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE)
             radioButton.id = View.generateViewId()
             radioMap.put(radioButton.id,calObject.ext_id)
+            radioNameMap.put(calObject.ext_id,calObject.name)
 
             val params = RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.WRAP_CONTENT,
@@ -137,6 +139,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
                 volId
             )
             so.ext_id=calId
+            so.name = radioNameMap.getOrDefault(calId, "NOTSET")
             tfrag?.saveCalendar(context,so)
 
             this.cancel()
