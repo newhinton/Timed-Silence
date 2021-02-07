@@ -71,7 +71,7 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, var 
                 // - replace the contents of the view with that element
                 val calObject=myDataset.get(position)
 
-                holder.calendarView.textView_calendar_row_title.text = calHandler.getCalendarName(calObject.ext_id, "")
+                holder.calendarView.textView_calendar_row_title.text = calHandler.getCalendarName(calObject.ext_id, calObject.name)
 
                 holder.calendarView.delete_calendar_element.setOnClickListener {
                         DatabaseHandler(holder.calendarView.context).deleteCalendarEntry(calObject.id)
@@ -80,7 +80,7 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, var 
 
                 applyTextfieldStyle(holder.calendarView.textView_calendar_row_title)
 
-                holder.calendarView.imageView_calendar_color.setColorFilter(calHandler.getCalendarColor(calObject.ext_id))
+                holder.calendarView.imageView_calendar_color.setColorFilter(calHandler.getCalendarColor(calObject.ext_id, calObject.name))
 
                 var imageID=R.drawable.ic_volume_up_black_24dp
                 when (calObject.volume) {

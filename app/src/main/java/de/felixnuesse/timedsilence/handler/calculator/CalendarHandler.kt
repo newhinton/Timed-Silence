@@ -103,10 +103,16 @@ class CalendarHandler(context: Context) {
         return calObject?.volume ?: -1
     }
 
-    fun getCalendarColor(externalId: Long): Int{
+    fun getCalendarColor(externalId: Long, name: String): Int{
         getCalendars(context)
         for (calObject in cachedCalendars){
             if(calObject.ext_id==externalId){
+                return calObject.color
+            }
+        }
+
+        for (calObject in cachedCalendars) {
+            if (calObject.name == name) {
                 return calObject.color
             }
         }
@@ -121,12 +127,17 @@ class CalendarHandler(context: Context) {
             }
         }
 
-        Log.e(APP_NAME,"CalendarHandler: getCalendarName did not find name! Try by name, not by id.")
+        Log.e(APP_NAME,"CalendarHandler: getCalendarName did not find name! Try by name, not by id...")
         for (calObject in cachedCalendars) {
+            Log.e(APP_NAME,"CalendarHandler: Check: $name - ${calObject.name}")
             if (calObject.name == name) {
+
+                Log.e(APP_NAME,"CalendarHandler: ...found: "+calObject.name)
                 return calObject.name
             }
         }
+
+        Log.e(APP_NAME,"CalendarHandler: ...failed.")
         return NOTSET
     }
 
