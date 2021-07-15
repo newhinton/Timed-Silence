@@ -14,6 +14,8 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.model.data.CalendarObject
+import de.felixnuesse.timedsilence.model.data.KeywordObject
+import de.felixnuesse.timedsilence.model.data.KeywordObject.Companion.ALL_CALENDAR
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
@@ -92,11 +94,10 @@ class Importer {
             val schedulesList = getScheduleObjects(result)
             val calendarList = getCalendarObjects(result)
             val wifiList = getWifiObjects(result)
+            val keywordList = getKeywordList(result)
 
 
             Log.e(APP_NAME, ": $result")
-
-
 
             for(scheduleObject in schedulesList){
                 Log.e(APP_NAME, "Create Schedule: ${scheduleObject.name}")
@@ -113,6 +114,11 @@ class Importer {
                 db.createWifiEntry(wifiObject)
             }
 
+
+            for(keywordObject in keywordList){
+                Log.e(APP_NAME, "Create Keyword: ${keywordObject.keyword}")
+                db.createKeyword(keywordObject)
+            }
 
             val text = a.getString(R.string.import_file_success)
             Toast.makeText(a, text, Toast.LENGTH_LONG).show()
@@ -269,5 +275,39 @@ class Importer {
 
             return result
         }
+
+        private fun getKeywordList(content: String): ArrayList<KeywordObject> {
+            val result = ArrayList<KeywordObject>()
+
+            val documentBuilderFactory = DocumentBuilderFactory.newInstance()
+            val documentBuilder = documentBuilderFactory.newDocumentBuilder()
+            val inputStream = InputSource(StringReader(content))
+            val document = documentBuilder.parse(inputStream)
+
+            val nList = document.getElementsByTagName("keywords")
+
+            for (i in 0 until nList.length) {
+
+                val children =  nList.item(i).childNodes
+
+                val transferEObject = KeywordObject(-1,ALL_CALENDAR,"", Constants.TIME_SETTING_UNSET)
+
+                for (j in 0 until children.length) {
+                    val type = children.item(j)
+                    when (type.nodeName) {
+                        "keyword" -> transferEObject.keyword=type.textContent
+                        "calendarid" -> transferEObject.calendarid=type.textContent.toLong()
+                        "volume" -> transferEObject.volume=type.textContent.toInt()
+                    }
+
+                }
+
+                val eObject = KeywordObject(transferEObject.id,transferEObject.calendarid,transferEObject.keyword,transferEObject.volume)
+                result.add(eObject)
+            }
+
+            return result
+        }
+
     }
 }
