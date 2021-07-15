@@ -61,8 +61,7 @@ class VolumeCalculator {
         nonNullContext = context
         this.volumeHandler = VolumeHandler()
         dbHandler = DatabaseHandler(nonNullContext)
-        calendarHandler=
-            CalendarHandler(nonNullContext)
+        calendarHandler= CalendarHandler(nonNullContext)
     }
 
     constructor(context: Context, cached: Boolean) {
@@ -71,8 +70,7 @@ class VolumeCalculator {
         this.cached=cached
         dbHandler = DatabaseHandler(nonNullContext)
         dbHandler.setCaching(cached)
-        calendarHandler=
-            CalendarHandler(nonNullContext)
+        calendarHandler= CalendarHandler(nonNullContext)
     }
 
 
@@ -125,28 +123,32 @@ class VolumeCalculator {
                 }else if (elem.get("duration")!=null){
                     endtime = starttime+elem.get("duration")!!.toLong()
                 }
-                val volume = calendarHandler.getCalendarVolumeSetting(elem.get("calendar_id")!!.toLong())
+
+                for (keyword in dbHandler.getKeywords()){
+                    val desc = elem.getOrDefault("description", "").toLowerCase()
+                    val name = elem.getOrDefault("name_of_event", "").toLowerCase()
+                    val key = keyword.keyword.toLowerCase()
+
+                    //Log.e(APP_NAME, "Check Keyword: $key")
+
+                    if(desc.contains(key) || name.contains(key)){
+                        //Log.e(APP_NAME, "Keyword: $key is in current element $name")
+                        if (currentMilliseconds in (starttime + 1) until endtime-1){
+                            //Log.e(APP_NAME, "Keyword: $key is in time")
+                            setGenericVolume(keyword.volume)
+                        }
+                    }
+                }
+
+                var volume = calendarHandler.getCalendarVolumeSetting(elem.getOrDefault("calendar_id","-1").toLong())
                 //Log.i(APP_NAME, elem.get("name_of_event")+ " | " + volume  + " ")
+
                 if(volume==-1){
                     continue
                 }else{
                     if (currentMilliseconds in (starttime + 1) until endtime-1){
                         //Log.i(APP_NAME, elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("calendar_id")+" "+volume)
-
-                        if (volume == Constants.TIME_SETTING_SILENT) {
-                            volumeHandler.setSilent()
-                            //Log.d(APP_NAME, "Alarmintent: Calendar: (${elem.get("calendar_id")}): Set silent!")
-                        }
-
-                        if (volume == Constants.TIME_SETTING_VIBRATE) {
-                            volumeHandler.setVibrate()
-                            //Log.d(Constants.APP_NAME, "Alarmintent: Calendar: (${elem.get("calendar_id")}): Set vibrate!")
-                        }
-
-                        if (volume == Constants.TIME_SETTING_LOUD) {
-                            volumeHandler.setLoud()
-                            //Log.d(Constants.APP_NAME, "Alarmintent: Calendar: (${elem.get("calendar_id")}): Set loud!")
-                        }
+                        setGenericVolume(volume)
                     }
                 }
             }catch (e:Exception ){
@@ -227,21 +229,24 @@ class VolumeCalculator {
             }
 
             if (time in it.time_start..it.time_end || isInInversedTimeInterval) {
+                setGenericVolume(it.time_setting)
+            }
+        }
+    }
 
-                when (it.time_setting) {
-                    Constants.TIME_SETTING_LOUD -> {
-                        volumeHandler.setLoud()
-                        //Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
-                    }
-                    Constants.TIME_SETTING_VIBRATE -> {
-                        volumeHandler.setVibrate()
-                        //Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
-                    }
-                    Constants.TIME_SETTING_SILENT -> {
-                        volumeHandler.setSilent()
-                        //Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
-                    }
-                }
+    private fun setGenericVolume(volume: Int){
+        when (volume) {
+            Constants.TIME_SETTING_LOUD -> {
+                volumeHandler.setLoud()
+                //Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
+            }
+            Constants.TIME_SETTING_VIBRATE -> {
+                volumeHandler.setVibrate()
+                //Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
+            }
+            Constants.TIME_SETTING_SILENT -> {
+                volumeHandler.setSilent()
+                //Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
             }
         }
     }
@@ -273,18 +278,7 @@ class VolumeCalculator {
                     val ssidit = "\"" + it.ssid + "\""
                     //Log.d(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
                     if (currentSSID.equals(ssidit) && it.type == Constants.WIFI_TYPE_CONNECTED) {
-                        if (it.volume == Constants.TIME_SETTING_LOUD) {
-                            volumeHandler.setLoud()
-                            //Log.d(Constants.APP_NAME,"Alarmintent: WifiCheck: Set lout, because Connected to $currentSSID")
-                        }
-                        if (it.volume == Constants.TIME_SETTING_SILENT) {
-                            volumeHandler.setSilent()
-                            //Log.d(Constants.APP_NAME,"Alarmintent: WifiCheck: Set silent, because Connected to $currentSSID")
-                        }
-                        if (it.volume == Constants.TIME_SETTING_VIBRATE) {
-                            volumeHandler.setVibrate()
-                            //Log.d(Constants.APP_NAME, "Alarmintent: WifiCheck: Set vibrate, because Connected to $currentSSID")
-                        }
+                        setGenericVolume(it.volume)
                         return
                     }
                 }
