@@ -92,5 +92,19 @@ class DatabaseInfo{
 
         val SQL_UPDATE_CALENDAR_ADD_NAME = "ALTER TABLE ${CALENDAR_TABLE} ADD COLUMN ${CALENDAR_NAME} TEXT"
 
+
+        val KEYWORD_TABLE="KEYWORD_TABLE"
+        val KEYWORD_ID= "KEYWORD_ID"
+        val KEYWORD_VOL_MODE= "KEYWORD_VOL_MODE"
+        val KEYWORD_KEYWORD= "KEYWORD_KEYWORD"
+        val KEYWORD_CALENDAR= "KEYWORD_CALENDAR"
+
+        val SQL_CREATE_ENTRIES_KEYWORD =
+            "CREATE TABLE ${KEYWORD_TABLE} (" +
+                    "${KEYWORD_ID} INTEGER PRIMARY KEY," +
+                    "${KEYWORD_KEYWORD} TEXT," +
+                    "${KEYWORD_CALENDAR} INT," +
+                    "${KEYWORD_VOL_MODE} INT)"
+
     }
 }

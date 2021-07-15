@@ -54,6 +54,7 @@ import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.Constants.Companion.MAIN_ACTIVITY_LOAD_CALENDAR_FORCE
 import de.felixnuesse.timedsilence.activities.SettingsMainActivity
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
+import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
@@ -422,7 +423,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
      */
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-        override fun getCount(): Int = 4
+        override fun getCount(): Int = 5
 
         override fun getItem(position: Int): Fragment {
 
@@ -430,7 +431,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
                 0 -> return GraphFragment()
                 1 -> return TimeFragment()
                 2 -> return CalendarEventFragment()
-                3 -> return WifiConnectedFragment()
+                3 -> return KeywordFragment()
+                4 -> return WifiConnectedFragment()
                 else -> return TimeFragment()
             }
         }

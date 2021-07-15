@@ -199,6 +199,18 @@ class Exporter {
                 wifiElement.appendChild(em)
             }
 
+            //keywords
+            val keywordsElement = document.createElement("keywords")
+            rootElement.appendChild(keywordsElement)
+
+            for (keywordObject in dbHandler.getKeywords()) {
+                val em = document.createElement("keyword")
+                em.appendChild(createChild(document, "keyword", keywordObject.keyword))
+                em.appendChild(createChild(document, "calendarid", keywordObject.calendarid.toString()))
+                em.appendChild(createChild(document, "volume", keywordObject.volume.toString()))
+                keywordsElement.appendChild(em)
+            }
+
             val sw = StringWriter()
             val tf = TransformerFactory.newInstance()
             val transformer = tf.newTransformer()

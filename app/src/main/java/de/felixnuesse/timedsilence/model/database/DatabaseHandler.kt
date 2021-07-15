@@ -14,9 +14,10 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CRE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_TABLE
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import android.content.ContentValues
+import android.database.Cursor
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.handler.NotificationHandler
+import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ANDROID_ID
@@ -24,6 +25,11 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDA
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_NAME
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_TABLE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_VOL_MODE
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.KEYWORD_CALENDAR
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.KEYWORD_ID
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.KEYWORD_KEYWORD
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.KEYWORD_TABLE
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.KEYWORD_VOL_MODE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_MON
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_TUE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_WED
@@ -32,6 +38,7 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDUL
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_SAT
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_SUN
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_CALENDAR
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_KEYWORD
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_WIFI
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_UPDATE_CALENDAR_ADD_NAME
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_ID
@@ -79,6 +86,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     lateinit var cachedSchedules: ArrayList<ScheduleObject>
     lateinit var cachedCalendars: ArrayList<CalendarObject>
     lateinit var cachedWifi: ArrayList<WifiObject>
+    lateinit var cachedKeywords: ArrayList<KeywordObject>
 
     fun setCaching(caching: Boolean){
         cachingEnabled=caching
@@ -89,6 +97,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         db.execSQL(SQL_CREATE_ENTRIES_WIFI)
         db.execSQL(SQL_CREATE_ENTRIES_CALENDAR)
         db.execSQL(SQL_UPDATE_CALENDAR_ADD_NAME)
+        db.execSQL(SQL_CREATE_ENTRIES_KEYWORD)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -102,6 +111,10 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         if(oldVersion<7){
             db.execSQL(SQL_UPDATE_CALENDAR_ADD_NAME)
+        }
+
+        if(oldVersion<8){
+            db.execSQL(SQL_CREATE_ENTRIES_KEYWORD)
         }
     }
 
@@ -606,5 +619,95 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             }
         }
         return null
+    }
+
+
+    fun getKeywordProjection(): Array<String> {
+        return arrayOf(
+            KEYWORD_ID,
+            KEYWORD_CALENDAR,
+            KEYWORD_KEYWORD,
+            KEYWORD_VOL_MODE
+        )
+    }
+
+    fun getKeywordListFromCursor(cursor: Cursor): ArrayList<KeywordObject> {
+        val results = arrayListOf<KeywordObject>()
+        while (cursor.moveToNext()) {
+            val cko = KeywordObject(
+                cursor.getLong(0),
+                cursor.getLong(1),
+                cursor.getString(2),
+                cursor.getInt(3)
+            )
+            results.add(cko)
+        }
+        cursor.close()
+        return results
+    }
+
+    fun getKeywords(): ArrayList<KeywordObject> {
+        if (::cachedKeywords.isInitialized && cachingEnabled) {
+            return cachedKeywords
+        }
+
+        val db = readableDatabase
+        val cursor = db.query(
+            KEYWORD_TABLE,
+            getKeywordProjection(),
+            "",
+            arrayOf<String>(),
+            null, null,
+            "$KEYWORD_ID ASC"
+        )
+        cachedKeywords=getKeywordListFromCursor(cursor)
+        db.close()
+        return cachedKeywords
+    }
+
+    fun createKeyword(keywordObject: KeywordObject): KeywordObject {
+        val db = writableDatabase
+
+        val values = ContentValues()
+        values.put(KEYWORD_CALENDAR, keywordObject.calendarid)
+        values.put(KEYWORD_KEYWORD, keywordObject.keyword)
+        values.put(KEYWORD_VOL_MODE, keywordObject.volume)
+
+        // Insert the new row, returning the primary key value of the new row
+        val newRowId = db.insert(KEYWORD_TABLE, null, values)
+        val newObject = KeywordObject(newRowId, keywordObject.calendarid,  keywordObject.keyword,  keywordObject.volume)
+        db.close()
+        return newObject
+    }
+
+    fun editKeyword(keywordObject: KeywordObject){
+        val db = writableDatabase
+
+        val values = ContentValues()
+        values.put(KEYWORD_ID, keywordObject.id)
+        values.put(KEYWORD_CALENDAR, keywordObject.calendarid)
+        values.put(KEYWORD_KEYWORD, keywordObject.keyword)
+        values.put(KEYWORD_VOL_MODE, keywordObject.volume)
+
+        val idofchangedobject = arrayOf<String>(
+            keywordObject.id.toString()
+        )
+
+        db.update(
+            KEYWORD_TABLE,
+            values,
+            KEYWORD_ID + " = ?",
+            idofchangedobject
+        )
+        db.close()
+    }
+
+    fun deleteKeyword(id: Long): Int {
+        val db = writableDatabase
+        val selection = KEYWORD_ID + " LIKE ?"
+        val selectionArgs = arrayOf(id.toString())
+        val retcode: Int = db.delete(KEYWORD_TABLE, selection, selectionArgs)
+        db.close()
+        return retcode
     }
 }

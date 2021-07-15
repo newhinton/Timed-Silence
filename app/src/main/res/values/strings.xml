@@ -97,4 +97,8 @@
     <string name="volume_low_warning">One of your Volumes is below 15%. Depending on your device, it may be inaudible.</string>
     <string name="channel_name_calendar_error">Calendar Errors</string>
     <string name="channel_description_calendar_error">Shows errors with detecting calendars</string>
+    <string name="main_tab_keyword">Keyword</string>
+    <string name="keyword_add_new">Add new Keyword:</string>
+    <string name="keyword_dialog_textfield_hint">Enter the keyword here</string>
+    <string name="keyword_dialog_title_title">Create a Keyword</string>
 </resources>
