@@ -22,6 +22,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import android.text.format.DateUtils
 import android.content.ContentUris
+import androidx.viewpager.widget.ViewPager
 import de.felixnuesse.timedsilence.Utils
 import de.felixnuesse.timedsilence.handler.NotificationHandler
 import java.time.Duration
@@ -95,6 +96,26 @@ class CalendarHandler(context: Context) {
     private var cachedCalendarPermission: Boolean=false
     private var alreadyCachedCalendarEntry: Boolean=false
 
+
+
+    fun getCalendarVolumeSetting(name: String):Int{
+        getCalendars(context)
+        getCalendarEntries(context)
+        var externalId: Long = -1
+
+        //Todo: this fails when a device has more than one calendar with the same name.
+        for (c in cachedCalendars){
+            if (c.name.equals(name)){
+                externalId = c.ext_id
+            }
+        }
+        val calObject = cachedCalendarEntry.get(externalId)
+        return calObject?.volume ?: -1
+    }
+
+
+
+    @Deprecated("externalID is unstable. Please use Name!")
     fun getCalendarVolumeSetting(externalId: Long):Int{
         getCalendars(context)
         getCalendarEntries(context)

@@ -77,13 +77,9 @@ class CalendarEventFragment : Fragment() {
     }
 
     private fun checkContainer(calHandler: CalendarHandler, context: Context){
-
         val emtpyMessage = CalendarEmptyContainer
         val permissionMessage = CalendarPermissionContainer
         val listContainer = CalendarListContainer
-
-
-
 
         emtpyMessage.visibility = View.GONE
         permissionMessage.visibility = View.GONE
