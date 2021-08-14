@@ -1,10 +1,12 @@
 package de.felixnuesse.timedsilence.handler.volume
 
+import android.app.Activity
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.Utils
 import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.handler.calculator.LocationHandler
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
@@ -75,6 +77,7 @@ class VolumeCalculator {
 
 
     fun calculateAllAndApply(){
+        Utils.appendLogfile(nonNullContext,"VolCacl", "calculateAllAndApply called.")
         volumeHandler= VolumeHandler()
         switchBasedOnWifi()
         switchBasedOnTime()

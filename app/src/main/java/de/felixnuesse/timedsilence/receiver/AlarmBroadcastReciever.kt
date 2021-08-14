@@ -1,11 +1,13 @@
 package de.felixnuesse.timedsilence.receiver
 
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.Utils
 import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import java.util.*
@@ -14,7 +16,10 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        val current =System.currentTimeMillis()
+        if (context != null) {
+            Utils.appendLogfile(context,"ABREC", "recieved alarm broadcast intent")
+        }
+        val current = System.currentTimeMillis()
         val date = Date(current)
         val dateFormat = android.text.format.DateFormat.getDateFormat(context)
         val currentformatted = dateFormat.format(date)
