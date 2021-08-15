@@ -16,8 +16,9 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
+        //todo: fix this mess
         if (context != null) {
-            Utils.appendLogfile(context,"ABREC", "recieved alarm broadcast intent")
+            Utils.appendLogfile(context,"Alarmintent", "Recieved Alarmintent")
         }
         val current = System.currentTimeMillis()
         val date = Date(current)
@@ -54,6 +55,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
+    @Deprecated("This is just a tiny useless wrapper. Please use 'VolumeCalculator(context).calculateAllAndApply()' directly")
     fun switchVolumeMode(context: Context?) {
 
         val nonNullContext = context
