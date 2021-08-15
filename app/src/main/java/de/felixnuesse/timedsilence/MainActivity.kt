@@ -60,7 +60,7 @@ import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
-import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
+import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.PauseTimerService
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     private var button_check : String = ""
     private var lastTabPosition = 0
     private lateinit var mPager : ViewPager
-    private var mTriggerInterface = TargetedAlarmHandler(this)
+    private var mTriggerInterface = Trigger(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

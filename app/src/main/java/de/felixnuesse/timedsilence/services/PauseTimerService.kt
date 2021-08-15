@@ -33,7 +33,6 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import android.content.Context
 import android.widget.Toast
-import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import de.felixnuesse.timedsilence.ui.PauseNotification
 import java.text.SimpleDateFormat
@@ -42,6 +41,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.os.Handler
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.ui.LocationAccessMissingNotification
 
 
@@ -128,7 +128,7 @@ class PauseTimerService : Service() {
          */
         fun finishTimer(context: Context){
 
-            TargetedAlarmHandler(context).createTimecheck()
+            Trigger(context).createTimecheck()
             for (interfaceElement in mListenerList){
                 interfaceElement.timerFinished(context)
             }
@@ -233,7 +233,7 @@ class PauseTimerService : Service() {
             var time: Long= -1
 
             Log.e(Constants.APP_NAME, "PauseTimerService: Intent is pause "+intent?.getLongExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, time))
-            TargetedAlarmHandler(applicationContext).removeTimecheck()
+            Trigger(applicationContext).removeTimecheck()
 
             val ie = intent?.getLongExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, time)
 
@@ -267,7 +267,7 @@ class PauseTimerService : Service() {
             mTimerTimeInitial = time
             mTimerStartTime = now()
 
-            if(!TargetedAlarmHandler(this).checkIfNextAlarmExists()){
+            if(!Trigger(this).checkIfNextAlarmExists()){
                 Toast.makeText(this, "Restarted Regular Checking in (${getTimestampInProperLength(mTimerTimeInitial)})", Toast.LENGTH_SHORT).show()
             }
 
@@ -307,7 +307,7 @@ class PauseTimerService : Service() {
     private fun finishTimer(context: Context, milliseconds: Long){
         Log.e(APP_NAME, "PauseTimerService: Timer($milliseconds): ended, restarting checks!")
 
-        TargetedAlarmHandler(applicationContext).createTimecheck()
+        Trigger(applicationContext).createTimecheck()
         for (interfaceElement in mListenerList){
             interfaceElement.timerFinished(context)
         }

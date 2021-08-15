@@ -8,6 +8,7 @@ import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import de.felixnuesse.timedsilence.handler.trigger.Trigger
 
 class BootReciever : BroadcastReceiver(){
 
@@ -24,7 +25,7 @@ class BootReciever : BroadcastReceiver(){
 
             if(restartOnBoot){
                 Log.e(APP_NAME, "BootReciever: Started Checks!")
-                TargetedAlarmHandler(context).createTimecheck()
+                Trigger(context).createTimecheck()
                 return
             }
             Log.e(APP_NAME, "BootReciever: Dont check.")

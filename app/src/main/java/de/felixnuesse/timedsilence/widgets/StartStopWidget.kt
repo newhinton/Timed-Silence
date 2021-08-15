@@ -12,6 +12,7 @@ import android.widget.RemoteViews
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
+import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.services.PauseTimerService
 
 
@@ -50,7 +51,7 @@ class StartStopWidget : AppWidgetProvider() {
 
             val watchWidget = ComponentName(context, StartStopWidget::class.java)
 
-            val t = TargetedAlarmHandler(context)
+            val t = Trigger(context)
             if(t.checkIfNextAlarmExists()){
                 t.removeTimecheck()
             }else if(PauseTimerService.isTimerRunning()){
@@ -96,7 +97,7 @@ class StartStopWidget : AppWidgetProvider() {
             remoteViews.setViewVisibility( R.id.playpausewidget_stopped, View.GONE)
             remoteViews.setViewVisibility( R.id.playpausewidget_paused, View.GONE)
 
-            if(TargetedAlarmHandler(context).checkIfNextAlarmExists()){
+            if(Trigger(context).checkIfNextAlarmExists()){
                 remoteViews.setViewVisibility( R.id.playpausewidget_running, View.VISIBLE)
             }else if(PauseTimerService.isTimerRunning()){
                 remoteViews.setViewVisibility( R.id.playpausewidget_paused, View.VISIBLE)
