@@ -37,6 +37,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
 
             switchVolumeMode(context)
+            AlarmHandler.createRepeatingTimecheck(context!!)
 
         }
 

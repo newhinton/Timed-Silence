@@ -244,7 +244,7 @@ class CalendarHandler(context: Context) {
             return cachedCalendarEvents
         }
 
-        Log.e(APP_NAME, "CalendarHandler: CurrentTime in MS:"+ Utils.getDate(timeInMilliseconds.toString()))
+        Log.e(APP_NAME, "CalendarHandler: CurrentTime in MS: "+ Utils.getDate(timeInMilliseconds.toString()))
         val startTime = Calendar.getInstance()
 
         startTime.set(Calendar.HOUR_OF_DAY, 0)

@@ -67,6 +67,7 @@ import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import kotlinx.android.synthetic.main.content_main.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 

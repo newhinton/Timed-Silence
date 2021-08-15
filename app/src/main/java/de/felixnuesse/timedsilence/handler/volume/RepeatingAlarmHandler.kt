@@ -46,47 +46,55 @@ import java.text.SimpleDateFormat
  */
 
 
-class AlarmHandler {
+class RepeatingAlarmHandler {
 
     companion object {
 
-        fun createRepeatingTimecheck(context: Context){
-            createAlarmIntime(context)
-        }
 
-        fun createAlarmIntime(context: Context){
-           System.err.println("start create")
-           val now = System.currentTimeMillis()
-           var calculatedChecktime = 0L
-           var list = VolumeHandler().getChangeList(context)
-           for (it in list) {
-               //Log.e(Constants.APP_NAME, "Calculated time $it")
-               //Log.e(Constants.APP_NAME, "Calculated time ${Utils.getDate(calculatedChecktime)}")
-               if(it > now && calculatedChecktime == 0L){
-                   calculatedChecktime = it
-               }
-           }
-           Log.e(Constants.APP_NAME, "Calculated time $calculatedChecktime")
-           Log.e(Constants.APP_NAME, "Calculated time ${Utils.getDate(calculatedChecktime)}")
-
-           val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-           val pi: PendingIntent? = createRestartBroadcast(
-               context
+       fun createRepeatingTimecheck(context: Context){
+           val interval=
+               SharedPreferencesHandler.getPref(
+                   context,
+                   PrefConstants.PREF_INTERVAL_CHECK,
+                   PrefConstants.PREF_INTERVAL_CHECK_DEFAULT
+               )
+           createRepeatingTimecheck(
+               context,
+               interval
            )
-           am.cancel(pi)
-           am.setExact(
+       }
+
+       fun createRepeatingTimecheck(context: Context, intervalInMinutes: Int){
+
+           Log.d(Constants.APP_NAME, "AlarmHandler: CreateRepeatingTimecheck: Precreate")
+           //todo create inexact version
+           val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+           alarms.setRepeating(
                AlarmManager.RTC_WAKEUP,
-               calculatedChecktime,
-               pi
+               System.currentTimeMillis() + 100,
+               (1000 * 60 * intervalInMinutes).toLong(),
+               createIntentBroadcast(
+                   context
+               )
            )
-        }
+       }
 
        fun removeRepeatingTimecheck(context: Context){
-           val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-           alarms.cancel(createRestartBroadcast(context))
-           createRestartBroadcast(context)?.cancel()
 
-           if(!checkIfNextAlarmExists(context)){
+           val alarms = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+           alarms.cancel(
+               createIntentBroadcast(
+                   context
+               )
+           )
+           createIntentBroadcast(
+               context
+           )?.cancel()
+
+           if(!checkIfNextAlarmExists(
+                   context
+               )
+           ){
                Log.d(Constants.APP_NAME, "AlarmHandler: Recurring alarm canceled")
                return
            }
@@ -94,11 +102,28 @@ class AlarmHandler {
 
        }
 
-       private fun createRestartBroadcast(context: Context): PendingIntent? {
-           return createRestartBroadcast(context, 0)
+       private fun createIntentBroadcast(context: Context): PendingIntent? {
+           return createIntentBroadcast(
+               context,
+               PendingIntent.FLAG_UPDATE_CURRENT
+           )
        }
 
-       private fun createRestartBroadcast(context: Context, flag: Int): PendingIntent? {
+       private fun createIntentBroadcast(context: Context, flag: Int): PendingIntent? {
+
+           val broadcastIntent = Intent(context, AlarmBroadcastReceiver::class.java)
+           broadcastIntent.putExtra(
+               Constants.BROADCAST_INTENT_ACTION,
+               Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME
+           )
+
+           // The Pending Intent to pass in AlarmManager
+           return PendingIntent.getBroadcast(context,
+               Constants.RECURRING_INTENT_ID, broadcastIntent,  flag)
+
+       }
+
+       private fun createRestartBroadcast(context: Context): PendingIntent? {
 
            val broadcastIntent = Intent(context, AlarmBroadcastReceiver::class.java)
            broadcastIntent.putExtra(
@@ -109,19 +134,15 @@ class AlarmHandler {
                Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA,
                Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW
            )
-           broadcastIntent.putExtra(
-               Constants.BROADCAST_INTENT_ACTION,
-               Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME
-           )
 
            // The Pending Intent to pass in AlarmManager
-           return PendingIntent.getBroadcast(context,0, broadcastIntent,flag)
+           return PendingIntent.getBroadcast(context,0,broadcastIntent,0)
 
        }
 
        fun checkIfNextAlarmExists(context: Context): Boolean{
            val pIntent =
-               createRestartBroadcast(
+               createIntentBroadcast(
                    context,
                    PendingIntent.FLAG_NO_CREATE
                )

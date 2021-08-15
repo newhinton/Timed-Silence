@@ -46,8 +46,17 @@ import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.fragments.graph.GraphBarVolumeSwitchElement
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.*
+import kotlin.collections.ArrayList
 
 class VolumeHandler {
     companion object {
@@ -334,5 +343,51 @@ class VolumeHandler {
             TIME_SETTING_UNSET -> return TIME_SETTING_UNSET
         }
         return TIME_SETTING_UNSET
+    }
+
+    fun getChangeList(context: Context):ArrayList<Long> {
+        Log.e(APP_NAME, "VolumeHandler: start")
+
+        var list = ArrayList<Long>()
+
+        var volCalc = VolumeCalculator(context!!, true)
+
+        val midnight: LocalTime = LocalTime.MIDNIGHT
+        val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
+        var todayMidnight = LocalDateTime.of(today, midnight)
+
+        var lastState = Constants.TIME_SETTING_UNSET
+        val lastElem = 1440 //start by 0:00 end by 23:59
+
+
+        val rightNow = Calendar.getInstance()
+        var currentHour = rightNow.get(Calendar.HOUR_OF_DAY)*60
+        currentHour += rightNow.get(Calendar.MINUTE)
+
+
+        for(elem in 0..lastElem){
+
+            val hoursFromInt = Math.floorDiv(elem, 60)
+            val minutesFromInt = elem - (60*hoursFromInt)
+
+            var localMidnight = todayMidnight.plusHours(hoursFromInt.toLong())
+            localMidnight = localMidnight.plusMinutes(minutesFromInt.toLong())
+
+            //val text = TextView(context)
+            var checkTime = localMidnight.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            val state = volCalc.getStateAt(checkTime)
+
+
+            if(lastState!=state || elem == lastElem){
+                Log.e(APP_NAME, "VolumeHandler: getChangeList: Run Minute: ${elem}; State: ${state}")
+
+                list.add(checkTime)
+                lastState=state
+            }
+
+        }
+
+        list.sort()
+        return list
     }
 }
