@@ -11,7 +11,7 @@ import android.view.View
 import android.widget.RemoteViews
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
+import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.services.PauseTimerService
 
 
@@ -50,12 +50,13 @@ class StartStopWidget : AppWidgetProvider() {
 
             val watchWidget = ComponentName(context, StartStopWidget::class.java)
 
-            if(AlarmHandler.checkIfNextAlarmExists(context)){
-                AlarmHandler.removeRepeatingTimecheck(context)
+            val t = TargetedAlarmHandler(context)
+            if(t.checkIfNextAlarmExists()){
+                t.removeTimecheck()
             }else if(PauseTimerService.isTimerRunning()){
-                AlarmHandler.createRepeatingTimecheck(context)
+                t.createTimecheck()
             }else{
-                AlarmHandler.createRepeatingTimecheck(context)
+                t.createTimecheck()
             }
             updateIcon(remoteViews, context)
 
@@ -95,7 +96,7 @@ class StartStopWidget : AppWidgetProvider() {
             remoteViews.setViewVisibility( R.id.playpausewidget_stopped, View.GONE)
             remoteViews.setViewVisibility( R.id.playpausewidget_paused, View.GONE)
 
-            if(AlarmHandler.checkIfNextAlarmExists(context)){
+            if(TargetedAlarmHandler(context).checkIfNextAlarmExists()){
                 remoteViews.setViewVisibility( R.id.playpausewidget_running, View.VISIBLE)
             }else if(PauseTimerService.isTimerRunning()){
                 remoteViews.setViewVisibility( R.id.playpausewidget_paused, View.VISIBLE)

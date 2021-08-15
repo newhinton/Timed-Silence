@@ -7,7 +7,7 @@ import android.service.quicksettings.TileService
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
+import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -48,12 +48,14 @@ class StartStopTileService: TileService() {
         super.onClick()
         Log.e(APP_NAME,"StartStopTileService: onClick")
 
-        if(AlarmHandler.checkIfNextAlarmExists(applicationContext)){
-            AlarmHandler.removeRepeatingTimecheck(applicationContext)
+        val t = TargetedAlarmHandler(this)
+
+        if(t.checkIfNextAlarmExists()){
+            t.removeTimecheck()
         }else if(PauseTimerService.isTimerRunning()){
-            AlarmHandler.createRepeatingTimecheck(applicationContext)
+            t.removeTimecheck()
         }else{
-            AlarmHandler.createRepeatingTimecheck(applicationContext)
+            t.createTimecheck()
         }
         WidgetService.updateStateWidget(applicationContext)
         updateTile()
@@ -88,7 +90,7 @@ class StartStopTileService: TileService() {
     fun updateTile(){
         val tile = qsTile
 
-        if(AlarmHandler.checkIfNextAlarmExists(applicationContext)){
+        if(TargetedAlarmHandler(applicationContext).checkIfNextAlarmExists()){
             tile.state = Tile.STATE_ACTIVE
             tile.label = applicationContext.getString(R.string.timecheck_running)
         }else if(PauseTimerService.isTimerRunning()){

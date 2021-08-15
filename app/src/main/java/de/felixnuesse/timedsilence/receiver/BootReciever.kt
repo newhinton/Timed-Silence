@@ -6,7 +6,7 @@ import android.content.Intent
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
+import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 
 class BootReciever : BroadcastReceiver(){
@@ -24,7 +24,7 @@ class BootReciever : BroadcastReceiver(){
 
             if(restartOnBoot){
                 Log.e(APP_NAME, "BootReciever: Started Checks!")
-                AlarmHandler.createRepeatingTimecheck(context)
+                TargetedAlarmHandler(context).createTimecheck()
                 return
             }
             Log.e(APP_NAME, "BootReciever: Dont check.")

@@ -33,7 +33,7 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import android.content.Context
 import android.widget.Toast
-import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
+import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import de.felixnuesse.timedsilence.ui.PauseNotification
 import java.text.SimpleDateFormat
@@ -75,7 +75,6 @@ class PauseTimerService : Service() {
          * This is used to define the length of the countdown timer. It ticks every mCheckInterval milliseconds
          */
         private val mCheckInterval: Long = (Constants.SEC).toLong()
-
 
         /**
          * This can be used to register a TimerInterface which can be used to update widgets/uielements with the current pause
@@ -129,7 +128,7 @@ class PauseTimerService : Service() {
          */
         fun finishTimer(context: Context){
 
-            AlarmHandler.createRepeatingTimecheck(context)
+            TargetedAlarmHandler(context).createTimecheck()
             for (interfaceElement in mListenerList){
                 interfaceElement.timerFinished(context)
             }
@@ -234,7 +233,7 @@ class PauseTimerService : Service() {
             var time: Long= -1
 
             Log.e(Constants.APP_NAME, "PauseTimerService: Intent is pause "+intent?.getLongExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, time))
-            AlarmHandler.removeRepeatingTimecheck(applicationContext)
+            TargetedAlarmHandler(applicationContext).removeTimecheck()
 
             val ie = intent?.getLongExtra(Constants.SERVICE_INTENT_DELAY_AMOUNT, time)
 
@@ -268,7 +267,7 @@ class PauseTimerService : Service() {
             mTimerTimeInitial = time
             mTimerStartTime = now()
 
-            if(!AlarmHandler.checkIfNextAlarmExists(this)){
+            if(!TargetedAlarmHandler(this).checkIfNextAlarmExists()){
                 Toast.makeText(this, "Restarted Regular Checking in (${getTimestampInProperLength(mTimerTimeInitial)})", Toast.LENGTH_SHORT).show()
             }
 
@@ -308,7 +307,7 @@ class PauseTimerService : Service() {
     private fun finishTimer(context: Context, milliseconds: Long){
         Log.e(APP_NAME, "PauseTimerService: Timer($milliseconds): ended, restarting checks!")
 
-        AlarmHandler.createRepeatingTimecheck(applicationContext)
+        TargetedAlarmHandler(applicationContext).createTimecheck()
         for (interfaceElement in mListenerList){
             interfaceElement.timerFinished(context)
         }

@@ -60,14 +60,13 @@ import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
-import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
+import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import kotlinx.android.synthetic.main.content_main.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -78,6 +77,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     private var button_check : String = ""
     private var lastTabPosition = 0
     private lateinit var mPager : ViewPager
+    private var mTriggerInterface = TargetedAlarmHandler(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -291,15 +291,15 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     fun setInterval(interval: Int){
 
         SharedPreferencesHandler.setPref(this, PrefConstants.PREF_INTERVAL_CHECK, interval)
-        AlarmHandler.removeRepeatingTimecheck(this)
-        AlarmHandler.createRepeatingTimecheck(this)
+        mTriggerInterface.removeTimecheck()
+        mTriggerInterface.createTimecheck()
 
     }
 
 
     fun updateTimeCheckDisplay(){
         val nextCheckDisplayTextView= findViewById<TextView>(R.id.nextCheckDisplay)
-        nextCheckDisplayTextView.text= AlarmHandler.getNextAlarmTimestamp(this)
+        nextCheckDisplayTextView.text= mTriggerInterface.getNextAlarmTimestamp()
 
         val sharedPref = this?.getSharedPreferences("test", Context.MODE_PRIVATE) ?: return
         val lasttime = sharedPref.getLong("last_ExecTime", 0)
@@ -334,7 +334,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: " + button_check)
 
         //Todo remove dummy textview
-        if(AlarmHandler.checkIfNextAlarmExists(this)){
+        if(mTriggerInterface.checkIfNextAlarmExists()){
             setFabStarted(fab, TextView(this))
         }else if(PauseTimerService.isTimerRunning()){
             setFabPaused(fab, TextView(this))
@@ -350,16 +350,16 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         Log.e(APP_NAME, "Main: setHandlerState: State: " + button_check)
 
         if(button_check == getString(R.string.timecheck_start)){
-            AlarmHandler.createRepeatingTimecheck(this)
+            mTriggerInterface.createTimecheck()
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
             AlarmBroadcastReceiver().switchVolumeMode(this)
         }else if(button_check == getString(R.string.timecheck_paused)){
-            AlarmHandler.createRepeatingTimecheck(this)
+            mTriggerInterface.createTimecheck()
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
             PauseTimerService.cancelTimer(this)
             AlarmBroadcastReceiver().switchVolumeMode(this)
         }else{
-            AlarmHandler.removeRepeatingTimecheck(this)
+            mTriggerInterface.removeTimecheck()
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, false)
         }
         buttonState()
@@ -395,7 +395,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         )
 
         fab.setImageDrawable(d)
-        AlarmHandler.removeRepeatingTimecheck(this)
+        mTriggerInterface.removeTimecheck()
         button_check=getString(R.string.timecheck_start)
     }
 

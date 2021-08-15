@@ -38,7 +38,7 @@ import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
-import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
+import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 
 class PausedNotification : BroadcastReceiver(){
 
@@ -46,8 +46,8 @@ class PausedNotification : BroadcastReceiver(){
         Log.e(APP_NAME, "PausedNotification: Recieved Intent!")
         if(intent?.action== ACTION_END_PAUSE){
             context?.let {
-                AlarmHandler.createRepeatingTimecheck(it)
-                AlarmHandler.checkIfNextAlarmExists(it)
+                TargetedAlarmHandler(it).createTimecheck()
+                TargetedAlarmHandler(it).checkIfNextAlarmExists()
             }
         }
     }

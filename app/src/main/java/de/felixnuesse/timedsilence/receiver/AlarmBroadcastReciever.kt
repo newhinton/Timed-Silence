@@ -1,6 +1,5 @@
 package de.felixnuesse.timedsilence.receiver
 
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -8,7 +7,7 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.Utils
-import de.felixnuesse.timedsilence.handler.volume.AlarmHandler
+import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import java.util.*
 
@@ -37,7 +36,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
 
             switchVolumeMode(context)
-            AlarmHandler.createRepeatingTimecheck(context!!)
+            TargetedAlarmHandler(context).createTimecheck()
 
         }
 
@@ -48,7 +47,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
             if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
                 Log.d(APP_NAME, "Alarmintent: Content is to \"Restart recurring alarms\"")
-                AlarmHandler.createRepeatingTimecheck(context!!)
+                TargetedAlarmHandler(context!!).createTimecheck()
             }
 
         }
