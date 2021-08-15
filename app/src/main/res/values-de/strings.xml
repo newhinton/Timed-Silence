@@ -82,6 +82,9 @@
     <string name="actionbar_title_settings">Einstellungen</string>
     <string name="actionbar_title_settings_volume">Lautstärke</string>
     <string name="darkmode">Dunkles Thema</string>
+    <string name="darkmode_light">Hell</string>
+    <string name="darkmode_dark">Dunkel</string>
+    <string name="darkmode_auto">Wie Gerät</string>
     <string name="enablePauseNotification">Zeige Benachrichtigung wenn Prüfung pausiert ist</string>
     <string name="export">Einstellungen exportieren</string>
     <string name="export_file_success">Exportierte Datei:</string>
@@ -94,4 +97,10 @@
     <string name="volume_setting_unset">Undefiniert</string>
     <string name="open_volume_settings">Öffne Lautstärkeeinstellungen</string>
     <string name="volume_low_warning">Eine Lautstärkeeinstellung ist unter 15%: Dies könnte zu leise sein</string>
+    <string name="channel_name_calendar_error">Kalenderfehler</string>
+    <string name="channel_description_calendar_error">Zeige Fehler bei der Kalenderfindung</string>
+    <string name="main_tab_keyword">Stichworte</string>
+    <string name="keyword_add_new">Neues Stichwort:</string>
+    <string name="keyword_dialog_textfield_hint">Neues Stichwort eingeben</string>
+    <string name="keyword_dialog_title_title">Stichwort erstellen</string>
 </resources>
