@@ -40,6 +40,7 @@ import android.text.format.DateFormat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
@@ -77,7 +78,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     private var button_check : String = ""
     private var lastTabPosition = 0
     private lateinit var mPager : ViewPager
-    private var mTriggerInterface = Trigger(this)
+    private lateinit var mTrigger: Trigger
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +93,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         VolumeHandler.getVolumePermission(this)
         CalendarHandler.getCalendarReadPermission(this)
+        mTrigger = Trigger(this)
 
         button_check = getString(R.string.timecheck_stopped)
 
@@ -113,7 +115,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         }
 
 
-        val seekBarSupportText= findViewById<TextView>(R.id.textview_waittime_content)
+        val seekBarSupportText = findViewById<TextView>(R.id.textview_waittime_content)
         val seekBar = findViewById<SeekBar>(R.id.seekBar_waittime)
 
         val interval= SharedPreferencesHandler.getPref(
@@ -289,17 +291,16 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
     fun setInterval(interval: Int){
-
         SharedPreferencesHandler.setPref(this, PrefConstants.PREF_INTERVAL_CHECK, interval)
-        mTriggerInterface.removeTimecheck()
-        mTriggerInterface.createTimecheck()
+        mTrigger.removeTimecheck()
+        mTrigger.createTimecheck()
 
     }
 
 
     fun updateTimeCheckDisplay(){
         val nextCheckDisplayTextView= findViewById<TextView>(R.id.nextCheckDisplay)
-        nextCheckDisplayTextView.text= mTriggerInterface.getNextAlarmTimestamp()
+        nextCheckDisplayTextView.text= mTrigger.getNextAlarmTimestamp()
 
         val sharedPref = this?.getSharedPreferences("test", Context.MODE_PRIVATE) ?: return
         val lasttime = sharedPref.getLong("last_ExecTime", 0)
@@ -330,11 +331,10 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     private fun buttonState() {
 
-
         Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: " + button_check)
 
         //Todo remove dummy textview
-        if(mTriggerInterface.checkIfNextAlarmExists()){
+        if(mTrigger.checkIfNextAlarmExists()){
             setFabStarted(fab, TextView(this))
         }else if(PauseTimerService.isTimerRunning()){
             setFabPaused(fab, TextView(this))
@@ -343,6 +343,35 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         }
         updateTimeCheckDisplay()
         WidgetService.updateStateWidget(this)
+
+
+        val seekBarSupportText = findViewById<TextView>(R.id.textview_waittime_content)
+        val seekBar = findViewById<SeekBar>(R.id.seekBar_waittime)
+        val tv = findViewById<TextView>(R.id.interval_text_view)
+        val tv1 = findViewById<TextView>(R.id.textView4)
+
+
+        when (mTrigger.getTriggertype()) {
+            PrefConstants.PREF_TRIGGERTYPE_REPEATING -> {
+                seekBarSupportText.visibility = View.VISIBLE
+                seekBar.visibility = View.VISIBLE
+                tv.visibility = View.VISIBLE
+                tv1.visibility = View.VISIBLE
+            }
+            PrefConstants.PREF_TRIGGERTYPE_TARGETED -> {
+                seekBarSupportText.visibility = View.GONE
+                seekBar.visibility = View.GONE
+                tv.visibility = View.GONE
+                tv1.visibility = View.GONE
+            }
+            else ->{
+                seekBarSupportText.visibility = View.GONE
+                seekBar.visibility = View.GONE
+                tv.visibility = View.GONE
+                tv1.visibility = View.GONE
+            }
+        }
+
     }
 
     private fun setHandlerState() {
@@ -350,16 +379,16 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         Log.e(APP_NAME, "Main: setHandlerState: State: " + button_check)
 
         if(button_check == getString(R.string.timecheck_start)){
-            mTriggerInterface.createTimecheck()
+            mTrigger.createTimecheck()
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
             AlarmBroadcastReceiver().switchVolumeMode(this)
         }else if(button_check == getString(R.string.timecheck_paused)){
-            mTriggerInterface.createTimecheck()
+            mTrigger.createTimecheck()
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
             PauseTimerService.cancelTimer(this)
             AlarmBroadcastReceiver().switchVolumeMode(this)
         }else{
-            mTriggerInterface.removeTimecheck()
+            mTrigger.removeTimecheck()
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, false)
         }
         buttonState()
@@ -395,7 +424,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         )
 
         fab.setImageDrawable(d)
-        mTriggerInterface.removeTimecheck()
+        mTrigger.removeTimecheck()
         button_check=getString(R.string.timecheck_start)
     }
 
