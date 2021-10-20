@@ -85,7 +85,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
 
         val rg = findViewById<RadioGroup>(R.id.calendar_radio_group)
 
-        for(calObject in calHandler.getCalendars()){
+        for(calObject in calHandler.getDeviceCalendars()){
             val radioButton = RadioButton(context)
             val hexColor = String.format("#%06X", 0xFFFFFF and calObject.color)
             val text = "<font color=\"$hexColor\">&#9612;</font>${calObject.name}"
@@ -103,7 +103,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
             rg.addView(radioButton, params)
         }
 
-        rg.check(calHandler.getCalendars()[0].ext_id.toInt())
+        rg.check(calHandler.getVolumeCalendars()[0].ext_id.toInt())
 
         calendar_next.setOnClickListener {
             Log.e(Constants.APP_NAME, "CalendarDialog: next!")

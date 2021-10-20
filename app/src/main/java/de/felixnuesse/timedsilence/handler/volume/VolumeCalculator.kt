@@ -104,8 +104,6 @@ class VolumeCalculator {
     }
 
     private fun switchBasedOnCalendar(timeInMilliseconds: Long){
-        calendarHandler.enableCaching(cached)
-
         //Log.d(APP_NAME, "VolumeCalculator: Start CalendarCheck")
         for (elem in calendarHandler.readCalendarEvent(timeInMilliseconds)){
 
@@ -143,7 +141,9 @@ class VolumeCalculator {
                     }
                 }
 
-                var volume = calendarHandler.getCalendarVolumeSetting(elem.getOrDefault("calendar_id","-1").toLong())
+                var calendar_id = elem.getOrDefault("calendar_id","-1").toLong()
+                var calendar_name = calendarHandler.getCalendarName(calendar_id)
+                var volume = calendarHandler.getCalendarVolumeSetting(calendar_name)
                 //Log.i(APP_NAME, elem.get("name_of_event")+ " | " + volume  + " ")
 
                 if(volume==-1){
