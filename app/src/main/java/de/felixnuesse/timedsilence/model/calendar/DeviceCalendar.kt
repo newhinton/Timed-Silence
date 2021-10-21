@@ -56,30 +56,32 @@ class DeviceCalendar(private var mContext: Context) {
         val cursor = contentResolver!!.query(
             Uri.parse("content://com.android.calendar/calendars"),
             arrayOf("_id", "calendar_displayName",
-                CalendarContract.Calendars.CALENDAR_COLOR),
+                    CalendarContract.Calendars.CALENDAR_COLOR),
             null,
             null,
             null
         )
 
         // Get calendars name
-        if (cursor.count > 0) {
-            cursor.moveToFirst()
+        if (cursor != null) {
+            if (cursor.count > 0) {
+                cursor.moveToFirst()
 
-            for (i in 0 until cursor.count) {
-                var calentry = CalendarObject(0, 0, Constants.TIME_SETTING_SILENT)
+                for (i in 0 until cursor.count) {
+                    var calentry = CalendarObject(0, 0, Constants.TIME_SETTING_SILENT)
 
-                calentry.ext_id=cursor.getInt(0).toLong()
-                calentry.color=cursor.getInt(2)
-                calentry.name=cursor.getString(1)
+                    calentry.ext_id=cursor.getInt(0).toLong()
+                    calentry.color=cursor.getInt(2)
+                    calentry.name=cursor.getString(1)
 
-                calendarCache[calentry.name] = calentry
-                cursor.moveToNext()
+                    calendarCache[calentry.name] = calentry
+                    cursor.moveToNext()
+                }
+            } else {
+                Log.e(Constants.APP_NAME,"CalendarHandler: No calendar found in the device")
             }
-        } else {
-            Log.e(Constants.APP_NAME,"CalendarHandler: No calendar found in the device")
         }
-        cursor.close()
+        cursor?.close()
         return calendarCache
     }
 

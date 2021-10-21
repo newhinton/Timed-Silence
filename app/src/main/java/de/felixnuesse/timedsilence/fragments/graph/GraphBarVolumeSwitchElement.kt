@@ -1,5 +1,7 @@
 package de.felixnuesse.timedsilence.fragments.graph
 
+import de.felixnuesse.timedsilence.handler.volume.VolumeState
+
 /**
  * Copyright (C) 2019  Felix Nüsse
  * Created on 30.11.19 - 08:13
@@ -31,6 +33,7 @@ package de.felixnuesse.timedsilence.fragments.graph
 class GraphBarVolumeSwitchElement(var minuteOfDay: Int, var Volume: Int, var text: String) {
 
     private var barlen: Float = 1.0F
+    public lateinit var state: VolumeState
 
     fun getBarLenght(): Float{
         return minuteOfDay.toFloat().div(1440)

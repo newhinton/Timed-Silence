@@ -77,8 +77,8 @@ class GraphFragmentThread(context: Context): Thread() {
             localMidnight = localMidnight.plusMinutes(minutesFromInt.toLong())
 
             //val text = TextView(context)
-
-            val state = volCalc.getStateAt(localMidnight.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+            val vol_state = volCalc.getStateAt(localMidnight.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+            val state = vol_state.state
 
             //Log.e("app", "run $elem : $state")
 
@@ -117,23 +117,24 @@ class GraphFragmentThread(context: Context): Thread() {
                 //text.text = "$hour:$minute | $localMidnight | $volume" ///+ " |\n " +todayMidnights.toString()
                 //barList.addView(text)
 
-                Log.e(APP_NAME, "GraphFragmentThread: Run Minute: ${elem}; State: ${state}")
+                Log.e(APP_NAME, "GraphFragmentThread: Run Minute: ${elem}; State: ${state} because: ${vol_state.reason}-${vol_state.reasonDescription}")
 
                 //var shortFormat = DateTimeFormatter.ISO_LOCAL_TIME
                 //var text= DateFormat.format("yyyy-MM-dd hh:mm:ss a", dt).toString()
                 //DateUtils.formatDateTime(context, localMidnight.toEpochSecond(ZoneOffset.UTC)!!, 0)
-                list.add(GraphBarVolumeSwitchElement(elem, lastState,dt))
+                var gbvse = GraphBarVolumeSwitchElement(elem, lastState, dt)
+                gbvse.state = vol_state
+                list.add(gbvse)
                 lastState=state
             }
 
         }
 
         if(list.size==1){
-            list.add(GraphBarVolumeSwitchElement(lastElem, TIME_SETTING_UNSET,lastGraphElement))
+            list.add(GraphBarVolumeSwitchElement(lastElem, TIME_SETTING_UNSET, lastGraphElement))
         }
 
         return list
     }
-
 
 }

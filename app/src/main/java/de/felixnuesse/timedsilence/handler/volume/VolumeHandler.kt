@@ -375,7 +375,8 @@ class VolumeHandler {
 
             //val text = TextView(context)
             var checkTime = localMidnight.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-            val state = volCalc.getStateAt(checkTime)
+            val vol_state = volCalc.getStateAt(checkTime)
+            val state = vol_state.state
 
 
             if(lastState!=state || elem == lastElem){

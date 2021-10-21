@@ -1,11 +1,13 @@
 package de.felixnuesse.timedsilence.handler.volume
 
-import android.app.Activity
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
-import android.util.Log
 import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_CALENDAR
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_KEYWORD
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_TIME
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_UNDEFINED
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_WIFI
 import de.felixnuesse.timedsilence.Utils
 import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.handler.calculator.LocationHandler
@@ -58,6 +60,9 @@ class VolumeCalculator {
 
     lateinit var calendarHandler: CalendarHandler
 
+    var changeReason = REASON_UNDEFINED
+    var changeReasonString = ""
+
 
     constructor(context: Context) {
         nonNullContext = context
@@ -75,7 +80,6 @@ class VolumeCalculator {
         calendarHandler= CalendarHandler(nonNullContext)
     }
 
-
     fun calculateAllAndApply(){
         Utils.appendLogfile(nonNullContext,"VolCacl", "calculateAllAndApply called.")
         volumeHandler= VolumeHandler()
@@ -85,17 +89,17 @@ class VolumeCalculator {
         volumeHandler.applyVolume(nonNullContext)
     }
 
-    fun getState(): Int{
+    fun getState(): VolumeState{
         return getStateAt(Date().time)
     }
 
-    fun getStateAt(timeInMilliseconds: Long): Int{
+    fun getStateAt(timeInMilliseconds: Long): VolumeState{
 
         volumeHandler= VolumeHandler()
         switchBasedOnTime(timeInMilliseconds)
         switchBasedOnCalendar(timeInMilliseconds)
 
-        return volumeHandler.getVolume()
+        return VolumeState(volumeHandler.getVolume(), changeReason, changeReasonString)
 
     }
 
@@ -136,7 +140,8 @@ class VolumeCalculator {
                         //Log.e(APP_NAME, "Keyword: $key is in current element $name")
                         if (currentMilliseconds in (starttime + 1) until endtime-1){
                             //Log.e(APP_NAME, "Keyword: $key is in time")
-                            setGenericVolume(keyword.volume)
+                            setGenericVolumeWithReason(keyword.volume, keyword.keyword, REASON_KEYWORD)
+
                         }
                     }
                 }
@@ -151,7 +156,7 @@ class VolumeCalculator {
                 }else{
                     if (currentMilliseconds in (starttime + 1) until endtime-1){
                         //Log.i(APP_NAME, elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("calendar_id")+" "+volume)
-                        setGenericVolume(volume)
+                        setGenericVolumeWithReason(volume, calendar_name, REASON_CALENDAR)
                     }
                 }
             }catch (e:Exception ){
@@ -232,9 +237,15 @@ class VolumeCalculator {
             }
 
             if (time in it.time_start..it.time_end || isInInversedTimeInterval) {
-                setGenericVolume(it.time_setting)
+                setGenericVolumeWithReason(it.time_setting,it.name, REASON_TIME)
             }
         }
+    }
+
+    private fun setGenericVolumeWithReason(volume: Int, reasonString: String, reason: Int){
+        changeReason = reason
+        changeReasonString = reasonString
+        setGenericVolume(volume)
     }
 
     private fun setGenericVolume(volume: Int){
@@ -281,7 +292,7 @@ class VolumeCalculator {
                     val ssidit = "\"" + it.ssid + "\""
                     //Log.d(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
                     if (currentSSID.equals(ssidit) && it.type == Constants.WIFI_TYPE_CONNECTED) {
-                        setGenericVolume(it.volume)
+                        setGenericVolumeWithReason(it.volume, it.ssid, REASON_WIFI)
                         return
                     }
                 }

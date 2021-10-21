@@ -69,6 +69,12 @@ class Constants {
         const val HOUR = 60*MIN
 
         var TIME_PAUSE_SERVICE_LENGTH_ARRAY: IntArray = intArrayOf(5*MIN, 15*MIN, 30*MIN, HOUR, 3*HOUR, 8*HOUR, 0)
+
+        const val REASON_UNDEFINED = -1
+        const val REASON_TIME = 0
+        const val REASON_CALENDAR = 1
+        const val REASON_WIFI = 2
+        const val REASON_KEYWORD = 3
     }
 
 }

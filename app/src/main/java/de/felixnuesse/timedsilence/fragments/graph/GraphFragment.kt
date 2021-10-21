@@ -6,20 +6,25 @@ import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import kotlinx.android.synthetic.main.graph_fragment.*
 import de.felixnuesse.timedsilence.R
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.balloon
+import com.skydoves.balloon.showAlignTop
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import kotlin.collections.ArrayList
 import kotlin.math.absoluteValue
 
@@ -43,7 +48,8 @@ class GraphFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewObject = view
-        buildGraph(view.context, view!!.findViewById(R.id.rel_layout))
+        var mainBarLayout = view.findViewById<RelativeLayout>(R.id.rel_layout)
+        buildGraph(view.context, mainBarLayout)
 
 
         if(!HeadsetHandler.headphonesConnected(view.context)){
@@ -68,7 +74,6 @@ class GraphFragment : Fragment() {
         var isFirstElem=true
         val revL=list.asReversed()
         for (elem in revL){
-
 
             var stateNext = -2
             //try to get the next element
@@ -98,7 +103,7 @@ class GraphFragment : Fragment() {
 
 
             setLastTextview(elem)
-            createBarElem(context, relLayout, resources.getColor(id), elem.getBarLenght(),  elem.text, elem.Volume, isFirstElem)
+            createBarElem(context, relLayout, resources.getColor(id), elem, isFirstElem)
             isLastElem=false
             isFirstElem=false
         }
@@ -110,13 +115,12 @@ class GraphFragment : Fragment() {
     }
 
 
-    private fun createBarElem(context: Context, relativeLayout: RelativeLayout, color: Int, len: Float, text: String, volume: Int, isFirst: Boolean){
+    private fun createBarElem(context: Context, relativeLayout: RelativeLayout, color: Int, gbvse: GraphBarVolumeSwitchElement, isFirst: Boolean){
         val viewid=View.generateViewId()
-        val shapeview = getShape(context,color, len, viewid)
-        val text= getTextForShape(context, text, volume, viewid)
+        val shapeview = getShape(context, color, gbvse.getBarLenght(), viewid)
+        val text = getTextForShape(context, gbvse.text, gbvse.state, viewid)
 
         relativeLayout.addView(shapeview)
-
 
         val t = relativeLayout.getChildAt(relativeLayout.childCount-1)
         if(isViewOverlapping()){
@@ -131,13 +135,11 @@ class GraphFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun getTextForShape(context: Context, text: String, volume: Int, setTo: Int):View{
-
-
+    private fun getTextForShape(context: Context, text: String, volume: VolumeState, setTo: Int):View{
         val textView = TextView(context)
 
         var text_addition=""
-        when (volume) {
+        when (volume.state) {
             Constants.TIME_SETTING_SILENT -> text_addition = "Silent"
             Constants.TIME_SETTING_VIBRATE -> text_addition = "Vibrate"
             Constants.TIME_SETTING_LOUD -> text_addition = "Loud"
@@ -147,6 +149,10 @@ class GraphFragment : Fragment() {
         textView.setText(" - $text: $text_addition")
         textView.setTypeface(null, Typeface.ITALIC)
 
+
+        val image = getTooltipIcon(context, volume.getReason())
+
+        val rootView = LinearLayout(context)
         val imageViewParam = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
@@ -154,12 +160,14 @@ class GraphFragment : Fragment() {
 
         imageViewParam.setMargins(getSizeInDP(20),0,0,getSizeInDP(-8))
 
-        textView.layoutParams = imageViewParam
+        rootView.layoutParams = imageViewParam
         imageViewParam.addRule(RelativeLayout.RIGHT_OF, setTo)
         imageViewParam.addRule(RelativeLayout.ALIGN_BOTTOM, setTo)
 
+        rootView.addView(textView)
+        rootView.addView(image)
 
-        return textView
+        return rootView
 
     }
 
@@ -167,10 +175,10 @@ class GraphFragment : Fragment() {
         val colorInt = color
         val csl = ColorStateList.valueOf(colorInt)
 
-        val shapeDrawable = resources.getDrawable(R.drawable.drawable_bar) as GradientDrawable
+        val shapeDrawable = context.getDrawable(R.drawable.drawable_bar) as GradientDrawable
         shapeDrawable.color = csl
 
-        var lengthOfBar=len
+        var lengthOfBar = len
 
         var barlen = (lengthOfBar*getSizeInDP(500)).toInt()
 
@@ -178,8 +186,10 @@ class GraphFragment : Fragment() {
             barlen=getSizeInDP(12)
         }
 
+        //detach the drawable from it's source so it can be changed independently
+        shapeDrawable.mutate()
         shapeDrawable.setSize(getSizeInDP(12),barlen)
-
+        shapeDrawable.intrinsicHeight
         val image = ImageView(context)
         image.setImageDrawable(shapeDrawable)
 
@@ -205,6 +215,38 @@ class GraphFragment : Fragment() {
             last_text=current_text
         }
         current_text=time
+    }
+
+    fun getTooltip(context: Context, tooltip: String): Balloon {
+        var balloon = Balloon.Builder(context)
+        balloon.setArrowSize(10)
+        balloon.setArrowPosition(0.5f)
+        balloon.setCornerRadius(4f)
+        balloon.setHeight(getSizeInDP(12))
+        balloon.paddingLeft=getSizeInDP(8)
+        balloon.paddingRight=getSizeInDP(8)
+        balloon.setAlpha(0.9f)
+        balloon.setText(tooltip)
+        balloon.setBalloonAnimation(BalloonAnimation.OVERSHOOT)
+        return balloon.build()
+    }
+
+    private fun getTooltipIcon(context: Context, tooltip: String): View {
+        val imageView = ImageView(context)
+        imageView.setImageResource(R.drawable.ic_baseline_help_outline_24)
+        val imageViewParam = RelativeLayout.LayoutParams(
+            getSizeInDP(16),
+            getSizeInDP(16)
+        )
+        imageViewParam.setMargins(getSizeInDP(4),getSizeInDP(2),0, 0)
+
+        imageView.layoutParams = imageViewParam
+
+        imageView.setOnClickListener { it ->
+            it.showAlignTop(getTooltip(context, tooltip))
+        }
+
+        return imageView
     }
 
     private fun isViewOverlapping(): Boolean {
