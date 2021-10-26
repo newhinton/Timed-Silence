@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.ui
+package de.felixnuesse.timedsilence.ui.notifications
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -28,18 +28,10 @@ package de.felixnuesse.timedsilence.ui
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import androidx.core.app.NotificationManagerCompat
 import android.util.Log
-import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.MainActivity
-import de.felixnuesse.timedsilence.services.PauseTimerService
-import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 
 class LocationAccessMissingNotification {
 

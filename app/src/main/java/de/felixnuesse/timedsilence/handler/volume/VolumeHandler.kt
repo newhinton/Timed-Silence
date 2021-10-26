@@ -49,6 +49,7 @@ import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.fragments.graph.GraphBarVolumeSwitchElement
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import de.felixnuesse.timedsilence.handler.permissions.DoNotDisturb
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -61,32 +62,10 @@ import kotlin.collections.ArrayList
 class VolumeHandler {
     companion object {
         fun getVolumePermission(context: Context) {
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            if (!notificationManager.isNotificationPolicyAccessGranted) {
-
-                Log.d(Constants.APP_NAME, "VolumeHandler: Ask for DND-Access")
-
-                val builder = AlertDialog.Builder(context)
-                builder.setMessage(R.string.GrantDNDPermissionAccess)
-                    .setPositiveButton(R.string.GrantDND,
-                        DialogInterface.OnClickListener { dialog, id ->
-                            val intent = Intent(
-                                Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS
-                            )
-                            context.startActivity(intent)
-                        })
-                    .setNegativeButton(R.string.cancel,
-                        DialogInterface.OnClickListener { dialog, id ->
-                            Log.e(Constants.APP_NAME, "VolumeHandler: Did not get 'Do not Disturb'-Access, quitting...")
-                            finishAffinity(context as Activity)
-                        })
-                // Create the AlertDialog object and return it
-                builder.create().show()
-            }
+            DoNotDisturb.getNotificationPolicy(context, true)
         }
         fun hasVolumePermission(context: Context):Boolean{
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            return notificationManager.isNotificationPolicyAccessGranted
+            return DoNotDisturb.getNotificationPolicy(context)
         }
     }
 

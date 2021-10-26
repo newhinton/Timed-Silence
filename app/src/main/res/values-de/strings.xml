@@ -103,4 +103,7 @@
     <string name="keyword_add_new">Neues Stichwort:</string>
     <string name="keyword_dialog_textfield_hint">Neues Stichwort eingeben</string>
     <string name="keyword_dialog_title_title">Stichwort erstellen</string>
+    <string name="GrantCalendarPermissionAccess">Erlauben!</string>
+    <string name="GrantCalendarPermissionAccessDescription">Diese Anwendung wird besser funktionieren wenn du Zugriff auf die Kalender erlaubst.</string>
+    <string name="import_deletion_warning">Einstellungen importieren löscht ALLE alten Einstellungen!</string>
 </resources>

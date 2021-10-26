@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.ui
+package de.felixnuesse.timedsilence.ui.notifications
 
 /**
  * Copyright (C) 2019  Felix Nüsse

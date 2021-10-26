@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Utils
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
+import de.felixnuesse.timedsilence.handler.permissions.CalendarAccess
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import java.time.Duration
 import java.util.*
@@ -25,19 +26,11 @@ class DeviceCalendar(private var mContext: Context) {
 
     companion object {
         fun getCalendarReadPermission(context: Context) {
-            var permissions = true
-            permissions = permissions && ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
-
-            //val permissionsList = Array(1) {Manifest.permission.ACCESS_FINE_LOCATION}
-            val permissionsList = Array(1) { Manifest.permission.READ_CALENDAR}
-
-            if (!permissions)
-                ActivityCompat.requestPermissions(context as Activity,permissionsList , Constants.CALENDAR_PERMISSION_REQUEST_ID)
-
+            CalendarAccess.hasCalendarReadPermission(context, true)
         }
 
         fun hasCalendarReadPermission(context: Context):Boolean{
-            return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
+            return CalendarAccess.hasCalendarReadPermission(context)
         }
     }
 
@@ -98,6 +91,9 @@ class DeviceCalendar(private var mContext: Context) {
             return eventCache
         }
 
+        if(!hasCalendarReadPermission(mContext)){
+            return eventCache
+        }
 
         Log.e(Constants.APP_NAME, "CalendarHandler: CurrentTime in MS: "+ Utils.getDate(timeInMilliseconds.toString()))
         val startTime = Calendar.getInstance()

@@ -102,4 +102,6 @@
     <string name="keyword_dialog_textfield_hint">Enter the keyword here</string>
     <string name="keyword_dialog_title_title">Create a Keyword</string>
     <string name="import_deletion_warning">Importing deletes ALL old configurations!</string>
+    <string name="GrantCalendarPermissionAccess">Grant!</string>
+    <string name="GrantCalendarPermissionAccessDescription">This app makes use of the local calendar. To greatly enhance the use of this app, please allow access to your calendars!</string>
 </resources>

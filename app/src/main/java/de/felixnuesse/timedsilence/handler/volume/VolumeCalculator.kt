@@ -13,7 +13,7 @@ import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.handler.calculator.LocationHandler
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import de.felixnuesse.timedsilence.ui.LocationAccessMissingNotification
+import de.felixnuesse.timedsilence.ui.notifications.LocationAccessMissingNotification
 import java.time.LocalDateTime
 import java.util.*
 import java.time.ZoneId.systemDefault

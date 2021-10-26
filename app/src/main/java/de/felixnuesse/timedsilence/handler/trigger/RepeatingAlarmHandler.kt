@@ -5,15 +5,11 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import java.text.DateFormat
-import java.util.*
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.trigger.TriggerInterface.Companion.FLAG_NOFLAG
-import de.felixnuesse.timedsilence.ui.PausedNotification
 
 
 /**

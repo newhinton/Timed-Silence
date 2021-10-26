@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.handler
+package de.felixnuesse.timedsilence.ui.notifications
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

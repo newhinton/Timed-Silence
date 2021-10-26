@@ -6,7 +6,7 @@ import android.content.Context
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.ui.PausedNotification
+import de.felixnuesse.timedsilence.ui.notifications.PausedNotification
 import java.text.DateFormat
 import java.util.*
 

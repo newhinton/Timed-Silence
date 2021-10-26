@@ -34,7 +34,7 @@ import de.felixnuesse.timedsilence.Constants
 import android.content.Context
 import android.widget.Toast
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
-import de.felixnuesse.timedsilence.ui.PauseNotification
+import de.felixnuesse.timedsilence.ui.notifications.PauseNotification
 import java.text.SimpleDateFormat
 import java.util.*
 import android.app.AlarmManager
@@ -42,7 +42,7 @@ import android.app.PendingIntent
 import android.os.Handler
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
-import de.felixnuesse.timedsilence.ui.LocationAccessMissingNotification
+import de.felixnuesse.timedsilence.ui.notifications.LocationAccessMissingNotification
 
 
 

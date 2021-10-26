@@ -1,36 +1,10 @@
 package de.felixnuesse.timedsilence.handler.calculator
 
-import android.Manifest
-import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
-import android.database.Cursor
-import android.net.Uri
-import android.provider.CalendarContract
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import android.util.Log
-import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.descriptions
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.endDates
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.nameOfEvent
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.startDates
 import de.felixnuesse.timedsilence.model.data.CalendarObject
-import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import java.util.*
 import kotlin.collections.ArrayList
-import android.text.format.DateUtils
-import android.content.ContentUris
-import androidx.viewpager.widget.ViewPager
-import de.felixnuesse.timedsilence.Utils
-import de.felixnuesse.timedsilence.handler.NotificationHandler
 import de.felixnuesse.timedsilence.model.calendar.DeviceCalendar
 import de.felixnuesse.timedsilence.model.calendar.SettingsCalendar
-import java.time.Duration
-import java.time.format.DateTimeParseException
-import java.util.regex.Pattern
-import kotlin.collections.HashMap
 
 
 /**
