@@ -109,6 +109,13 @@ class VolumeCalculator {
 
     private fun switchBasedOnCalendar(timeInMilliseconds: Long){
         //Log.d(APP_NAME, "VolumeCalculator: Start CalendarCheck")
+
+        //todo: switch to checking of calendar entries and THEN device calendar entries to increase performance
+        // for now we only check it once and abort before getting all calendars.
+        if(calendarHandler.getVolumeCalendars().size==0){
+            return
+        }
+
         for (elem in calendarHandler.readCalendarEvent(timeInMilliseconds)){
 
             val x = ""//calendarHandler.getDate(elem.get("start_date") ?: "0")
@@ -188,7 +195,6 @@ class VolumeCalculator {
                 cachedTime=time
             }
         }
-
 
         //Log.d(APP_NAME, "VolumeCalculator: Start TimeCheck: "+time.toString())
 

@@ -12,14 +12,11 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDUL
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_START
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_TABLE
-import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import android.content.ContentValues
 import android.database.Cursor
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.model.data.KeywordObject
-import de.felixnuesse.timedsilence.model.data.CalendarObject
-import de.felixnuesse.timedsilence.model.data.WifiObject
+import de.felixnuesse.timedsilence.model.data.*
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ANDROID_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_NAME
@@ -81,12 +78,14 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_VO
 class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
 
-    var cachingEnabled=false
+    var cachingEnabled=true
 
-    var cachedSchedules = ArrayList<ScheduleObject>()
-    var cachedCalendars = ArrayList<CalendarObject>()
-    var cachedWifi = ArrayList<WifiObject>()
-    var cachedKeywords = ArrayList<KeywordObject>()
+    var cachedSchedules = CachedArrayList<ScheduleObject>()
+    var cachedCalendars = CachedArrayList<CalendarObject>()
+    var cachedWifi = CachedArrayList<WifiObject>()
+    var cachedKeywords = CachedArrayList<KeywordObject>()
+
+
 
     fun setCaching(caching: Boolean){
         cachingEnabled=caching
@@ -142,7 +141,10 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
 
     fun getAllSchedules(): ArrayList<ScheduleObject> {
-        if (cachedSchedules.size>0 && cachingEnabled) {
+        Log.e("Database", "get schedules")
+        Log.e("Database", "content: ${cachedSchedules.size}")
+        Log.e("Database", "content: ${cachingEnabled}")
+        if (cachedSchedules.cacheInitialized && cachingEnabled) {
             return cachedSchedules
         }
 
@@ -201,7 +203,9 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         cursor.close()
 
         db.close()
-        cachedSchedules=results
+        cachedSchedules.set(results)
+        Log.e("Database", "content: ${results.size}")
+        Log.e("Database", "content: ${cachedSchedules.size}")
         return cachedSchedules
     }
 
@@ -395,7 +399,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
 
     fun getAllWifiEntries(): ArrayList<WifiObject> {
-        if (cachedWifi.size>0 && cachingEnabled) {
+        if (cachedWifi.cacheInitialized && cachingEnabled) {
             return cachedWifi
         }
 
@@ -439,7 +443,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         cursor.close()
 
         db.close()
-        cachedWifi=results
+        cachedWifi.set(results)
         return cachedWifi
     }
 
@@ -497,7 +501,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
     fun getAllCalendarEntries(): ArrayList<CalendarObject> {
 
-        if (cachedCalendars.size>0 && cachingEnabled) {
+        if (cachedCalendars.cacheInitialized && cachingEnabled) {
             return cachedCalendars
         }
 
@@ -550,7 +554,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         cursor.close()
         db.close()
-        cachedCalendars=results
+        cachedCalendars.set(results)
         return cachedCalendars
     }
 
@@ -665,7 +669,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     }
 
     fun getKeywords(): ArrayList<KeywordObject> {
-        if (cachedKeywords.size>0 && cachingEnabled) {
+        if (cachedKeywords.cacheInitialized && cachingEnabled) {
             return cachedKeywords
         }
 
@@ -678,7 +682,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             null, null,
             "$KEYWORD_ID ASC"
         )
-        cachedKeywords=getKeywordListFromCursor(cursor)
+        cachedKeywords.set(getKeywordListFromCursor(cursor))
         db.close()
         return cachedKeywords
     }
