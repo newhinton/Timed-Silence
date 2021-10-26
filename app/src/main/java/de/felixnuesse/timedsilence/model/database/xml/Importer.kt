@@ -20,6 +20,7 @@ import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import org.xml.sax.InputSource
+import org.xml.sax.SAXParseException
 import java.io.*
 import java.util.ArrayList
 import javax.xml.parsers.DocumentBuilderFactory
@@ -91,14 +92,26 @@ class Importer {
             val db = DatabaseHandler(a.applicationContext)
 
             val result = readFileFromDisk(a, requestCode, resultCode, resultData)
-            val schedulesList = getScheduleObjects(result)
-            val calendarList = getCalendarObjects(result)
-            val wifiList = getWifiObjects(result)
-            val keywordList = getKeywordList(result)
+            val schedulesList: ArrayList<ScheduleObject>
+            val calendarList: ArrayList<CalendarObject>
+            val wifiList: ArrayList<WifiObject>
+            val keywordList: ArrayList<KeywordObject>
+
+            try {
+                schedulesList = getScheduleObjects(result)
+                calendarList = getCalendarObjects(result)
+                wifiList = getWifiObjects(result)
+                keywordList = getKeywordList(result)
+            }catch ( e: SAXParseException){
+                e.printStackTrace()
+                Toast.makeText(a, "Could not read config!", Toast.LENGTH_LONG).show()
+                return
+            }
 
 
             Log.e(APP_NAME, ": $result")
 
+            db.clean()
             for(scheduleObject in schedulesList){
                 Log.e(APP_NAME, "Create Schedule: ${scheduleObject.name}")
                 db.createScheduleEntry(scheduleObject)
@@ -284,25 +297,24 @@ class Importer {
             val inputStream = InputSource(StringReader(content))
             val document = documentBuilder.parse(inputStream)
 
-            val nList = document.getElementsByTagName("keywords")
+            val nList = document.getElementsByTagName("keyword")
 
             for (i in 0 until nList.length) {
 
                 val children =  nList.item(i).childNodes
 
-                val transferEObject = KeywordObject(-1,ALL_CALENDAR,"", Constants.TIME_SETTING_UNSET)
-
+                val transferEObject = KeywordObject(-1, ALL_CALENDAR,"", Constants.TIME_SETTING_UNSET)
                 for (j in 0 until children.length) {
                     val type = children.item(j)
                     when (type.nodeName) {
-                        "keyword" -> transferEObject.keyword=type.textContent
+                        "key" -> transferEObject.keyword=type.textContent
                         "calendarid" -> transferEObject.calendarid=type.textContent.toLong()
                         "volume" -> transferEObject.volume=type.textContent.toInt()
                     }
 
                 }
 
-                val eObject = KeywordObject(transferEObject.id,transferEObject.calendarid,transferEObject.keyword,transferEObject.volume)
+                val eObject = KeywordObject(transferEObject.id, transferEObject.calendarid, transferEObject.keyword, transferEObject.volume)
                 result.add(eObject)
             }
 

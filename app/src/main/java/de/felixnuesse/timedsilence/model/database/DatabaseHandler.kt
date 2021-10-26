@@ -83,10 +83,10 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
     var cachingEnabled=false
 
-    lateinit var cachedSchedules: ArrayList<ScheduleObject>
-    lateinit var cachedCalendars: ArrayList<CalendarObject>
-    lateinit var cachedWifi: ArrayList<WifiObject>
-    lateinit var cachedKeywords: ArrayList<KeywordObject>
+    var cachedSchedules = ArrayList<ScheduleObject>()
+    var cachedCalendars = ArrayList<CalendarObject>()
+    var cachedWifi = ArrayList<WifiObject>()
+    var cachedKeywords = ArrayList<KeywordObject>()
 
     fun setCaching(caching: Boolean){
         cachingEnabled=caching
@@ -122,9 +122,27 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         onUpgrade(db, oldVersion, newVersion)
     }
 
+    fun clean() {
+        drop()
+        onCreate(writableDatabase)
+    }
+    private fun drop() {
+        val db = writableDatabase
+        val tables = arrayOf(SCHEDULE_TABLE, CALENDAR_TABLE, WIFI_TABLE, KEYWORD_TABLE)
+        val caches = arrayOf(cachedSchedules, cachedCalendars, cachedWifi, cachedKeywords)
+
+        for (table in tables){
+            db.execSQL("DROP TABLE IF EXISTS $table")
+        }
+
+        for (cache in caches){
+            cache.clear()
+        }
+    }
+
 
     fun getAllSchedules(): ArrayList<ScheduleObject> {
-        if (::cachedSchedules.isInitialized && cachingEnabled) {
+        if (cachedSchedules.size>0 && cachingEnabled) {
             return cachedSchedules
         }
 
@@ -377,7 +395,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
 
     fun getAllWifiEntries(): ArrayList<WifiObject> {
-        if (::cachedWifi.isInitialized && cachingEnabled) {
+        if (cachedWifi.size>0 && cachingEnabled) {
             return cachedWifi
         }
 
@@ -479,7 +497,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
     fun getAllCalendarEntries(): ArrayList<CalendarObject> {
 
-        if (::cachedCalendars.isInitialized && cachingEnabled) {
+        if (cachedCalendars.size>0 && cachingEnabled) {
             return cachedCalendars
         }
 
@@ -647,7 +665,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     }
 
     fun getKeywords(): ArrayList<KeywordObject> {
-        if (::cachedKeywords.isInitialized && cachingEnabled) {
+        if (cachedKeywords.size>0 && cachingEnabled) {
             return cachedKeywords
         }
 
