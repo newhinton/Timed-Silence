@@ -6,7 +6,6 @@ import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -123,7 +122,6 @@ class GraphFragment : Fragment() {
         shapeview.setOnTouchListener(View.OnTouchListener { view, motionEvent ->
             when (motionEvent.action){
                 MotionEvent.ACTION_UP -> {
-                    Log.e("POS", "Up ${shapeview.height}:${motionEvent.y}")
                     view.showAsDropDown(
                         getTooltip(context, gbvse.state.getReason(), ArrowOrientation.LEFT),
                         getSizeInDP(BAR_WIDTH),

@@ -121,10 +121,8 @@ class Exporter {
                 return
             }
 
-            //todo: do not use localized date, this breaks. (on US system?)
-            val currentDateandTime = Utils.getDate(Date().time)
-
-            val filename = "${APP_NAME}_.xml"
+            val currentDateandTime = Utils.getDate(Date().time, "yyyyMMdd-HHmmss")
+            val filename = "${APP_NAME}_${currentDateandTime}.xml"
 
             val path = File(Environment.getExternalStorageDirectory().absolutePath + "/$APP_NAME")
             path.mkdirs()

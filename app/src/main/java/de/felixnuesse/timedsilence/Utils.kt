@@ -49,15 +49,19 @@ class Utils{
 
     companion object{
 
+        fun getDate(milliSeconds: Long, format: String): String {
+            val formatter = SimpleDateFormat(format)
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = milliSeconds
+            return formatter.format(calendar.time)
+        }
+
         fun getDate(milliSeconds: Long): String {
-            return getDate(milliSeconds.toString())
+           return getDate(milliSeconds, "dd.MM.yyyy HH:mm:ss")
         }
 
         fun getDate(milliSeconds: String): String {
-            val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
-            val calendar = Calendar.getInstance()
-            calendar.timeInMillis = milliSeconds.toLong()
-            return formatter.format(calendar.time)
+            return getDate(milliSeconds.toLong())
         }
 
         fun appendLogfile(context: Context, state: String, content: String){
