@@ -101,4 +101,5 @@
     <string name="keyword_add_new">Add new Keyword:</string>
     <string name="keyword_dialog_textfield_hint">Enter the keyword here</string>
     <string name="keyword_dialog_title_title">Create a Keyword</string>
+    <string name="import_deletion_warning">Importing deletes ALL old configurations!</string>
 </resources>

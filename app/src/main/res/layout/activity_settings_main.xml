@@ -99,12 +99,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/exportLayout">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/import_button"
-            android:textColor="@color/secondary_material_light" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/import_button"
+                android:textColor="@color/secondary_material_light" />
+
+            <TextView
+                android:id="@+id/textview_import_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="@string/import_deletion_warning"
+                android:textSize="10sp" />
+        </LinearLayout>
 
         <Space
             android:layout_width="0dp"
