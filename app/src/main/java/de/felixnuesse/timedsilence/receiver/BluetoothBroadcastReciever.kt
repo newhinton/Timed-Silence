@@ -7,6 +7,7 @@ import android.content.Intent
 import android.media.AudioManager
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 
 class BluetoothBroadcastReciever : BroadcastReceiver(){
 
@@ -19,6 +20,7 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
 
         if (intent.action == BluetoothDevice.ACTION_ACL_DISCONNECTED) {
             Log.e(APP_NAME, "BluetoothBroadcastReciever: Device disconnected!")
+            // todo: think about running a check here
         }
 
     }

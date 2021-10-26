@@ -6,7 +6,9 @@ import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -16,10 +18,7 @@ import kotlinx.android.synthetic.main.graph_fragment.*
 import de.felixnuesse.timedsilence.R
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.skydoves.balloon.Balloon
-import com.skydoves.balloon.BalloonAnimation
-import com.skydoves.balloon.balloon
-import com.skydoves.balloon.showAlignTop
+import com.skydoves.balloon.*
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
@@ -31,6 +30,7 @@ import kotlin.math.absoluteValue
 
 class GraphFragment : Fragment() {
 
+    private val BAR_WIDTH = 12
     private lateinit var viewObject: View
 
 
@@ -66,8 +66,8 @@ class GraphFragment : Fragment() {
 
     fun buildGraph(context:Context, relLayout: RelativeLayout){
 
-        val thread = GraphFragmentThread(context!!)
-        val list = thread.doIt(context!!) as ArrayList
+        val thread = GraphFragmentThread(requireContext())
+        val list = thread.doIt(requireContext()) as ArrayList
 
         //isFirst and isLast is reversed because we traverse the list backwards!
         var isLastElem=false
@@ -115,9 +115,25 @@ class GraphFragment : Fragment() {
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun createBarElem(context: Context, relativeLayout: RelativeLayout, color: Int, gbvse: GraphBarVolumeSwitchElement, isFirst: Boolean){
         val viewid=View.generateViewId()
         val shapeview = getShape(context, color, gbvse.getBarLenght(), viewid)
+
+        shapeview.setOnTouchListener(View.OnTouchListener { view, motionEvent ->
+            when (motionEvent.action){
+                MotionEvent.ACTION_UP -> {
+                    Log.e("POS", "Up ${shapeview.height}:${motionEvent.y}")
+                    view.showAsDropDown(
+                        getTooltip(context, gbvse.state.getReason(), ArrowOrientation.LEFT),
+                        getSizeInDP(BAR_WIDTH),
+                        -1*shapeview.height+motionEvent.y.toInt()-30 // add a slight offset to account for the "rounding" which is not actually touchable
+                    )
+                }
+            }
+            return@OnTouchListener false
+        })
+
         val text = getTextForShape(context, gbvse.text, gbvse.state, viewid)
 
         relativeLayout.addView(shapeview)
@@ -188,7 +204,7 @@ class GraphFragment : Fragment() {
 
         //detach the drawable from it's source so it can be changed independently
         shapeDrawable.mutate()
-        shapeDrawable.setSize(getSizeInDP(12),barlen)
+        shapeDrawable.setSize(getSizeInDP(BAR_WIDTH),barlen)
         shapeDrawable.intrinsicHeight
         val image = ImageView(context)
         image.setImageDrawable(shapeDrawable)
@@ -218,6 +234,10 @@ class GraphFragment : Fragment() {
     }
 
     fun getTooltip(context: Context, tooltip: String): Balloon {
+        return getTooltip(context, tooltip, ArrowOrientation.BOTTOM)
+    }
+
+    fun getTooltip(context: Context, tooltip: String, orientation: ArrowOrientation): Balloon {
         var balloon = Balloon.Builder(context)
         balloon.setArrowSize(10)
         balloon.setArrowPosition(0.5f)
@@ -227,6 +247,7 @@ class GraphFragment : Fragment() {
         balloon.paddingRight=getSizeInDP(8)
         balloon.setAlpha(0.9f)
         balloon.setText(tooltip)
+        balloon.setArrowOrientation(orientation)
         balloon.setBalloonAnimation(BalloonAnimation.OVERSHOOT)
         return balloon.build()
     }
