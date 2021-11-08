@@ -37,29 +37,35 @@
                     android:id="@+id/graph_tab_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_baseline_auto_graph_24"
                     android:text="@string/main_tab_graph" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/time_tab_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_baseline_access_time_24"
                     android:text="@string/main_tab_time" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/calendar_tab_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_baseline_calendar_today_24"
                     android:text="@string/main_tab_calendar" />
+
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/keyword_tab_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_baseline_key_24"
                     android:text="@string/main_tab_keyword" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/wifi_tab_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_baseline_wifi_24"
                     android:text="@string/main_tab_wifi_connected" />
             </com.google.android.material.tabs.TabLayout>
         </com.google.android.material.appbar.AppBarLayout>
