@@ -182,6 +182,17 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
         mPager.adapter = pagerAdapter
 
+        tabs.getTabAt(0)?.setIcon(R.drawable.ic_baseline_auto_graph_24)
+        tabs.getTabAt(0)?.setText("")
+        tabs.getTabAt(1)?.setIcon(R.drawable.ic_baseline_access_time_24)
+        tabs.getTabAt(1)?.setText("")
+        tabs.getTabAt(2)?.setIcon(R.drawable.ic_baseline_calendar_today_24)
+        tabs.getTabAt(2)?.setText("")
+        tabs.getTabAt(3)?.setIcon(R.drawable.ic_baseline_key_24)
+        tabs.getTabAt(3)?.setText("")
+        tabs.getTabAt(4)?.setIcon(R.drawable.ic_baseline_wifi_24)
+        tabs.getTabAt(4)?.setText("")
+
 
         SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
             getSharedPreferencesListener()
