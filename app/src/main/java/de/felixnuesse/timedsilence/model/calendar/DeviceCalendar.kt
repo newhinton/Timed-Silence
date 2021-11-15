@@ -9,13 +9,17 @@ import android.net.Uri
 import android.provider.CalendarContract
 import android.text.format.DateUtils
 import android.util.Log
+import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.Utils
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
+import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.permissions.CalendarAccess
 import de.felixnuesse.timedsilence.model.data.CalendarObject
+import kotlinx.android.synthetic.main.graph_fragment.*
 import java.time.Duration
 import java.util.*
 import java.util.regex.Pattern
@@ -34,6 +38,7 @@ class DeviceCalendar(private var mContext: Context) {
         }
     }
 
+    private val TAG: String = "DeviceCalendar"
     private var calendarCache = HashMap<String, CalendarObject>()
     private var eventCache = ArrayList<Map<String, String>>()
 
@@ -231,7 +236,16 @@ class DeviceCalendar(private var mContext: Context) {
                 map["recurring"] = "true"
             }
 
-            retval.add(map)
+            val isAlldayEvent = map["all_day"]?.toInt() == 1
+            Log.d(TAG, "Is ${map["name_of_event"]} all Day: $isAlldayEvent")
+            if(SharedPreferencesHandler.getPref(mContext, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS_DEFAULT)){
+                if(!isAlldayEvent){
+                    retval.add(map)
+                }
+            }else{
+                retval.add(map)
+            }
+
             cursor.moveToNext()
         }
 

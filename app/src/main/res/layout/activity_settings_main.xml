@@ -53,6 +53,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/volumeSettingsLayout" />
 
+    <Switch
+        android:id="@+id/switchIgnoreAllDay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_settings"
+        android:layout_marginTop="@dimen/margin_settings"
+        android:layout_marginEnd="@dimen/margin_settings"
+        android:text="@string/ignore_all_day"
+        android:textColor="@color/secondary_material_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchHeadsetIgnoreChange" />
+
     <LinearLayout
         android:id="@+id/exportLayout"
         android:layout_width="match_parent"
@@ -63,7 +76,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchHeadsetIgnoreChange">
+        app:layout_constraintTop_toBottomOf="@+id/switchIgnoreAllDay">
 
         <TextView
             android:layout_width="wrap_content"

@@ -55,6 +55,11 @@ class SettingsMainActivity : AppCompatActivity() {
             writeHeadsetSwitchSetting(this, checked)
         }
 
+        switchIgnoreAllDay.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS_DEFAULT)
+        switchIgnoreAllDay.setOnCheckedChangeListener { _, checked ->
+            writeIgnoreAlldaySwitchSetting(this, checked)
+        }
+
         export_button.setOnClickListener {
             Log.e(Constants.APP_NAME, "SettingsMain: Click export")
             Exporter.export(this)
@@ -101,6 +106,10 @@ class SettingsMainActivity : AppCompatActivity() {
 
     fun writeHeadsetSwitchSetting(context: Context, value: Boolean) {
        SharedPreferencesHandler.setPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, value)
+    }
+
+    fun writeIgnoreAlldaySwitchSetting(context: Context, value: Boolean) {
+        SharedPreferencesHandler.setPref(context, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS, value)
     }
 
     fun writeThemeSwitchSetting(context: Context, value: Int) {

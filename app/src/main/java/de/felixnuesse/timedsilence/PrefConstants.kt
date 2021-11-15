@@ -51,6 +51,9 @@ class PrefConstants {
         const val PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT = true
 
 
+        const val PREF_IGNORE_ALL_DAY_EVENTS= "PREF_IGNORE_ALL_DAY_EVENTS"
+        const val PREF_IGNORE_ALL_DAY_EVENTS_DEFAULT = true
+
         const val PREF_DARKMODE= "PREF_DARKMODE"
         const val PREF_DARKMODE_DEFAULT = 0
         const val PREF_DARKMODE_LIGHT = 0
