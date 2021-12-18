@@ -23,8 +23,12 @@ class SettingsVolumeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         ThemeHandler.setTheme(this, window)
+        ThemeHandler.setSupportActionBarTheme(this, supportActionBar)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         setContentView(R.layout.activity_settings_volume)
 
         //sets the actionbartitle
