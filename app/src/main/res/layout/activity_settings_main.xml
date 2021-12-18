@@ -25,14 +25,14 @@
         <ImageView
             android:id="@+id/divider_volume"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="2dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/label_volume"
-            app:srcCompat="@android:drawable/divider_horizontal_textfield" />
+            app:srcCompat="@drawable/divider" />
 
         <LinearLayout
             android:id="@+id/volumeSettingsLayout"
@@ -119,14 +119,14 @@
         <ImageView
             android:id="@+id/divider_coalendar"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="2dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/label_calendar"
-            app:srcCompat="@android:drawable/divider_horizontal_textfield" />
+            app:srcCompat="@drawable/divider" />
 
         <Switch
             android:id="@+id/switchIgnoreAllDay"
@@ -157,14 +157,14 @@
         <ImageView
             android:id="@+id/divider_settings"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="2dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/label_settings"
-            app:srcCompat="@android:drawable/divider_horizontal_textfield" />
+            app:srcCompat="@drawable/divider" />
 
         <LinearLayout
             android:id="@+id/layout_export"
@@ -264,14 +264,14 @@
         <ImageView
             android:id="@+id/divider_ui"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="2dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/label_ui"
-            app:srcCompat="@android:drawable/divider_horizontal_textfield" />
+            app:srcCompat="@drawable/divider" />
 
         <LinearLayout
             android:id="@+id/layout_darkmode"
