@@ -9,13 +9,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/label_volume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
-            android:text="Volume"
+            android:text="@string/volume_settings"
             android:textSize="20sp"
             android:textStyle="bold|italic"
             app:layout_constraintStart_toStartOf="@+id/volumeSettingsLayout"
@@ -109,7 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
-            android:text="Calendar"
+            android:text="@string/main_tab_calendar"
             android:textSize="20sp"
             android:textStyle="bold|italic"
             app:layout_constraintStart_toStartOf="@+id/switchIgnoreAllDay"
@@ -147,7 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
-            android:text="Settings"
+            android:text="@string/action_settings"
             android:textSize="20sp"
             android:textStyle="bold|italic"
             app:layout_constraintStart_toStartOf="@+id/layout_export"
@@ -254,7 +255,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
-            android:text="User Interface"
+            android:text="@string/user_interface"
             android:textSize="20sp"
             android:textStyle="bold|italic"
             app:layout_constraintStart_toStartOf="@+id/layout_darkmode"

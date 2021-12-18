@@ -105,4 +105,5 @@
     <string name="GrantCalendarPermissionAccess">Grant!</string>
     <string name="GrantCalendarPermissionAccessDescription">This app makes use of the local calendar. To greatly enhance the use of this app, please allow access to your calendars!</string>
     <string name="ignore_all_day">Ignore All Day Events</string>
+    <string name="user_interface">User Interface</string>
 </resources>
