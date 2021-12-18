@@ -30,7 +30,7 @@ android {
             def buildType = variant.buildType.name
             //def version = variant.versionName
             def date = new Date()
-            def formattedDate = date.format('yyyy-mm-dd_HH:mm')
+            def formattedDate = date.format('yyyy-mm-dd_HHmm')
 
             def newApkName = project + SEP + buildType + SEP + formattedDate + ".apk"
 

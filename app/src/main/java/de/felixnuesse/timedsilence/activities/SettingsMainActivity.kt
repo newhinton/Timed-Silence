@@ -109,7 +109,7 @@ class SettingsMainActivity : AppCompatActivity() {
         // Create an ArrayAdapter using the string array and a default spinner layout
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
             this,
-            android.R.layout.simple_spinner_item, android.R.id.text1,
+            R.layout.spinner_default_volume, R.id.textview_spinner,
             mDefaultVolumeSettings
         )
         spinner.adapter = arrayAdapter
