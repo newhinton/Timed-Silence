@@ -30,11 +30,8 @@ import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_DEFAULT_PREF
 
 class SettingsMainActivity : AppCompatActivity() {
 
-
-    val mDefaultVolumeSettings = ArrayList<String>()
-    val mDefaultVolumeSettingIDs = ArrayList<Int>()
-
-
+    private val mDefaultVolumeSettings = ArrayList<String>()
+    private val mDefaultVolumeSettingIDs = ArrayList<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
