@@ -77,7 +77,7 @@ class GraphFragmentThread(context: Context): Thread() {
             localMidnight = localMidnight.plusMinutes(minutesFromInt.toLong())
 
             //val text = TextView(context)
-            val vol_state = volCalc.getStateAt(localMidnight.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+            val vol_state = volCalc.getStateAt(context, localMidnight.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
             val state = vol_state.state
 
             //Log.e("app", "run $elem : $state")

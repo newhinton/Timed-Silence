@@ -66,14 +66,14 @@ class VolumeCalculator {
 
     constructor(context: Context) {
         nonNullContext = context
-        this.volumeHandler = VolumeHandler()
+        this.volumeHandler = VolumeHandler(context)
         dbHandler = DatabaseHandler(nonNullContext)
         calendarHandler= CalendarHandler(nonNullContext)
     }
 
     constructor(context: Context, cached: Boolean) {
         nonNullContext = context
-        this.volumeHandler = VolumeHandler()
+        this.volumeHandler = VolumeHandler(nonNullContext)
         this.cached=cached
         dbHandler = DatabaseHandler(nonNullContext)
         dbHandler.setCaching(cached)
@@ -82,20 +82,20 @@ class VolumeCalculator {
 
     fun calculateAllAndApply(){
         Utils.appendLogfile(nonNullContext,"VolCacl", "calculateAllAndApply called.")
-        volumeHandler= VolumeHandler()
+        volumeHandler= VolumeHandler(nonNullContext)
         switchBasedOnWifi()
         switchBasedOnTime()
         switchBasedOnCalendar()
         volumeHandler.applyVolume(nonNullContext)
     }
 
-    fun getState(): VolumeState{
-        return getStateAt(Date().time)
+    fun getState(context: Context): VolumeState{
+        return getStateAt(context, Date().time)
     }
 
-    fun getStateAt(timeInMilliseconds: Long): VolumeState{
+    fun getStateAt(context: Context, timeInMilliseconds: Long): VolumeState{
 
-        volumeHandler= VolumeHandler()
+        volumeHandler= VolumeHandler(context)
         switchBasedOnTime(timeInMilliseconds)
         switchBasedOnCalendar(timeInMilliseconds)
 

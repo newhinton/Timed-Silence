@@ -76,7 +76,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchIgnoreAllDay">
+        app:layout_constraintTop_toBottomOf="@+id/spinner_defaultVolume">
 
         <TextView
             android:layout_width="wrap_content"
@@ -95,9 +95,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:contentDescription="@string/export"
             android:padding="@dimen/padding_settings_imagebutton"
-            android:src="@drawable/ic_file_download_black_24dp"
-            android:contentDescription="@string/export" />
+            android:src="@drawable/ic_file_download_black_24dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -215,5 +215,16 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <Spinner
+        android:id="@+id/spinner_defaultVolume"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchIgnoreAllDay" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

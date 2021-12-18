@@ -2,27 +2,39 @@ package de.felixnuesse.timedsilence.activities
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.NavUtils
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import de.felixnuesse.timedintenttrigger.database.xml.Exporter
 import de.felixnuesse.timedintenttrigger.database.xml.Importer
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.ThemeHandler
 import kotlinx.android.synthetic.main.activity_settings_main.*
+import android.widget.AdapterView
 
+import android.widget.AdapterView.OnItemSelectedListener
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_DEFAULT
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
 
 
 class SettingsMainActivity : AppCompatActivity() {
+
+
+    val mDefaultVolumeSettings = ArrayList<String>()
+    val mDefaultVolumeSettingIDs = ArrayList<Int>()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +45,18 @@ class SettingsMainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setContentView(R.layout.activity_settings_main)
 
-
-
         //sets the actionbartitle
         title = resources.getString(R.string.actionbar_title_settings)
+
+        mDefaultVolumeSettingIDs.add(TIME_SETTING_SILENT)
+        mDefaultVolumeSettingIDs.add(TIME_SETTING_VIBRATE)
+        mDefaultVolumeSettingIDs.add(TIME_SETTING_LOUD)
+        mDefaultVolumeSettingIDs.add(TIME_SETTING_UNSET)
+
+        mDefaultVolumeSettings.add(resources.getString(R.string.volume_setting_silent))
+        mDefaultVolumeSettings.add(resources.getString(R.string.volume_setting_vibrate))
+        mDefaultVolumeSettings.add(resources.getString(R.string.volume_setting_loud))
+        mDefaultVolumeSettings.add(resources.getString(R.string.volume_setting_unset))
 
 
         volumeSettingsLayout.setOnClickListener {
@@ -87,6 +107,29 @@ class SettingsMainActivity : AppCompatActivity() {
         switchPauseNotification.setOnCheckedChangeListener { _, checked ->
             writePauseNotificationSwitchSetting(this, checked)
         }
+
+        val spinner: Spinner = findViewById(R.id.spinner_defaultVolume)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            this,
+            android.R.layout.simple_spinner_item, android.R.id.text1,
+            mDefaultVolumeSettings
+        )
+        spinner.adapter = arrayAdapter
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
+                SharedPreferencesHandler.setPref(baseContext, TIME_SETTING_DEFAULT_PREFERENCE, mDefaultVolumeSettingIDs[position])
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                SharedPreferencesHandler.setPref(baseContext, TIME_SETTING_DEFAULT_PREFERENCE, TIME_SETTING_DEFAULT)
+            }
+        }
+        //spinner.set
+        //
+        val selectedDefault = mDefaultVolumeSettingIDs.indexOf(SharedPreferencesHandler.getPref(baseContext, TIME_SETTING_DEFAULT_PREFERENCE, TIME_SETTING_DEFAULT))
+        spinner.setSelection(selectedDefault)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

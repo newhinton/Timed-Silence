@@ -88,7 +88,7 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
         System.err.println("start create")
         val now = System.currentTimeMillis()
         var calculatedChecktime = 0L
-        val list = VolumeHandler().getChangeList(mContext)
+        val list = VolumeHandler(mContext).getChangeList(mContext)
         for (it in list) {
             //Log.e(Constants.APP_NAME, "Calculated time $it")
             //Log.e(Constants.APP_NAME, "Calculated time ${Utils.getDate(calculatedChecktime)}")

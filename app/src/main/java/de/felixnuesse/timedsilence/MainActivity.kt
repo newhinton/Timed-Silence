@@ -246,7 +246,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        val voLHandler = VolumeHandler()
+        val voLHandler = VolumeHandler(baseContext)
 
         when (item.itemId) {
             R.id.action_settings -> openSettings()

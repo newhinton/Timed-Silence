@@ -40,6 +40,8 @@ import androidx.core.app.ActivityCompat.finishAffinity
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_DEFAULT
+import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
@@ -59,7 +61,7 @@ import java.time.format.FormatStyle
 import java.util.*
 import kotlin.collections.ArrayList
 
-class VolumeHandler {
+class VolumeHandler(mContext: Context) {
     companion object {
         fun getVolumePermission(context: Context) {
             DoNotDisturb.getNotificationPolicy(context, true)
@@ -69,7 +71,7 @@ class VolumeHandler {
         }
     }
 
-    var volumeSetting = TIME_SETTING_UNSET
+    var volumeSetting = SharedPreferencesHandler.getPref(mContext, TIME_SETTING_DEFAULT_PREFERENCE, TIME_SETTING_DEFAULT)
 
     fun setSilent(){
         //Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Silent!")
@@ -354,7 +356,7 @@ class VolumeHandler {
 
             //val text = TextView(context)
             var checkTime = localMidnight.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-            val vol_state = volCalc.getStateAt(checkTime)
+            val vol_state = volCalc.getStateAt(context, checkTime)
             val state = vol_state.state
 
 
