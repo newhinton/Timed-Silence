@@ -125,8 +125,7 @@ class SettingsMainActivity : AppCompatActivity() {
                 SharedPreferencesHandler.setPref(baseContext, TIME_SETTING_DEFAULT_PREFERENCE, TIME_SETTING_DEFAULT)
             }
         }
-        //spinner.set
-        //
+
         val selectedDefault = mDefaultVolumeSettingIDs.indexOf(SharedPreferencesHandler.getPref(baseContext, TIME_SETTING_DEFAULT_PREFERENCE, TIME_SETTING_DEFAULT))
         spinner.setSelection(selectedDefault)
 

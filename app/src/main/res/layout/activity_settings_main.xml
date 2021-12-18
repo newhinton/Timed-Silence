@@ -1,230 +1,344 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.SettingsMainActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activities.SettingsMainActivity">
 
-    <LinearLayout
-        android:id="@+id/volumeSettingsLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_settings"
-        android:layout_marginTop="@dimen/margin_settings"
-        android:layout_marginEnd="@dimen/margin_settings"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/label_volume"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/volume_settings"
-            android:textColor="@color/secondary_material_light" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="Volume"
+            android:textSize="20sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintStart_toStartOf="@+id/volumeSettingsLayout"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <Space
+        <ImageView
+            android:id="@+id/divider_volume"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <ImageButton
-            android:id="@+id/volumeSettingsImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:padding="@dimen/padding_settings_imagebutton"
-            android:src="@drawable/ic_chevron_right_black_24dp"
-            android:contentDescription="@string/open_volume_settings" />
-    </LinearLayout>
-
-    <Switch
-        android:id="@+id/switchHeadsetIgnoreChange"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_settings"
-        android:layout_marginTop="@dimen/margin_settings"
-        android:layout_marginEnd="@dimen/margin_settings"
-        android:text="@string/volume_while_headset_connected"
-        android:textColor="@color/secondary_material_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/volumeSettingsLayout" />
-
-    <Switch
-        android:id="@+id/switchIgnoreAllDay"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_settings"
-        android:layout_marginTop="@dimen/margin_settings"
-        android:layout_marginEnd="@dimen/margin_settings"
-        android:text="@string/ignore_all_day"
-        android:textColor="@color/secondary_material_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchHeadsetIgnoreChange" />
-
-    <LinearLayout
-        android:id="@+id/exportLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_settings"
-        android:layout_marginTop="@dimen/margin_settings"
-        android:layout_marginEnd="@dimen/margin_settings"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_defaultVolume">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/export"
-            android:textColor="@color/secondary_material_light" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <ImageButton
-            android:id="@+id/export_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:contentDescription="@string/export"
-            android:padding="@dimen/padding_settings_imagebutton"
-            android:src="@drawable/ic_file_download_black_24dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/importLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_settings"
-        android:layout_marginTop="@dimen/margin_settings"
-        android:layout_marginEnd="@dimen/margin_settings"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exportLayout">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_volume"
+            app:srcCompat="@android:drawable/divider_horizontal_textfield" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="@string/import_button"
-                android:textColor="@color/secondary_material_light" />
-
-            <TextView
-                android:id="@+id/textview_import_warning"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/import_deletion_warning"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <Space
+            android:id="@+id/volumeSettingsLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_marginStart="@dimen/margin_settings"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_settings"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_volume">
 
-        <ImageButton
-            android:id="@+id/import_button"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/volume_settings"
+                android:textColor="@color/secondary_material_light" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/volumeSettingsImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:contentDescription="@string/open_volume_settings"
+                android:padding="@dimen/padding_settings_imagebutton"
+                android:src="@drawable/ic_chevron_right_black_24dp" />
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/switchHeadsetIgnoreChange"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:padding="@dimen/padding_settings_imagebutton"
-            android:src="@drawable/ic_file_upload_black_24dp"
-            android:contentDescription="@string/import_button" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_settings"
-        android:layout_marginTop="@dimen/margin_settings"
-        android:layout_marginEnd="@dimen/margin_settings"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/importLayout">
+            android:layout_marginStart="@dimen/margin_settings"
+            android:layout_marginTop="@dimen/margin_settings"
+            android:layout_marginEnd="@dimen/margin_settings"
+            android:minHeight="48dp"
+            android:text="@string/volume_while_headset_connected"
+            android:textColor="@color/secondary_material_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/volumeSettingsLayout" />
 
         <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="1"
-            android:singleLine="false"
-            android:text="@string/darkmode"
-            android:textStyle="bold" />
+            android:layout_marginTop="16dp"
+            android:text="Default"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/switchHeadsetIgnoreChange"
+            app:layout_constraintTop_toBottomOf="@+id/switchHeadsetIgnoreChange" />
+
+        <Spinner
+            android:id="@+id/spinner_defaultVolume"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="13dp"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="@+id/switchHeadsetIgnoreChange"
+            app:layout_constraintStart_toStartOf="@+id/textView7"
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+        <TextView
+            android:id="@+id/label_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="Calendar"
+            android:textSize="20sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintStart_toStartOf="@+id/switchIgnoreAllDay"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_defaultVolume" />
+
+        <ImageView
+            android:id="@+id/divider_coalendar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_calendar"
+            app:srcCompat="@android:drawable/divider_horizontal_textfield" />
 
         <Switch
-            android:id="@+id/switchThemeLight"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/switchIgnoreAllDay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_settings"
-            android:layout_weight="1"
-            android:text="@string/darkmode_light"
-            android:textColor="@color/secondary_material_light" />
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_settings"
+            android:minHeight="48dp"
+            android:text="@string/ignore_all_day"
+            android:textColor="@color/secondary_material_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_calendar" />
+
+        <TextView
+            android:id="@+id/label_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="Settings"
+            android:textSize="20sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintStart_toStartOf="@+id/layout_export"
+            app:layout_constraintTop_toBottomOf="@+id/switchIgnoreAllDay" />
+
+        <ImageView
+            android:id="@+id/divider_settings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_settings"
+            app:srcCompat="@android:drawable/divider_horizontal_textfield" />
+
+        <LinearLayout
+            android:id="@+id/layout_export"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_settings"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_settings"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_settings">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/export"
+                android:textColor="@color/secondary_material_light" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/export_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:contentDescription="@string/export"
+                android:padding="@dimen/padding_settings_imagebutton"
+                android:src="@drawable/ic_file_download_black_24dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_import"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_settings"
+            android:layout_marginTop="@dimen/margin_settings"
+            android:layout_marginEnd="@dimen/margin_settings"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_export">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/import_button"
+                    android:textColor="@color/secondary_material_light" />
+
+                <TextView
+                    android:id="@+id/textview_import_warning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/import_deletion_warning"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/import_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:contentDescription="@string/import_button"
+                android:padding="@dimen/padding_settings_imagebutton"
+                android:src="@drawable/ic_file_upload_black_24dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/label_ui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="User Interface"
+            android:textSize="20sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintStart_toStartOf="@+id/layout_darkmode"
+            app:layout_constraintTop_toBottomOf="@+id/layout_import" />
+
+        <ImageView
+            android:id="@+id/divider_ui"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_ui"
+            app:srcCompat="@android:drawable/divider_horizontal_textfield" />
+
+        <LinearLayout
+            android:id="@+id/layout_darkmode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_settings"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_settings"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_ui">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:singleLine="false"
+                android:text="@string/darkmode"
+                android:textStyle="bold" />
+
+            <Switch
+                android:id="@+id/switchThemeLight"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_settings"
+                android:layout_weight="1"
+                android:text="@string/darkmode_light"
+                android:textColor="@color/secondary_material_light" />
+
+            <Switch
+                android:id="@+id/switchThemeDark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_settings"
+                android:layout_weight="1"
+                android:text="@string/darkmode_dark"
+                android:textColor="@color/secondary_material_light" />
+
+            <Switch
+                android:id="@+id/switchThemeAuto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_settings"
+                android:layout_weight="1"
+                android:text="@string/darkmode_auto"
+                android:textColor="@color/secondary_material_light" />
+        </LinearLayout>
 
         <Switch
-            android:id="@+id/switchThemeDark"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/switchPauseNotification"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_settings"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/margin_settings"
             android:layout_weight="1"
-            android:text="@string/darkmode_dark"
-            android:textColor="@color/secondary_material_light" />
+            android:minHeight="48dp"
+            android:text="@string/enablePauseNotification"
+            android:textColor="@color/secondary_material_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_darkmode" />
 
-        <Switch
-            android:id="@+id/switchThemeAuto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/margin_settings"
-            android:layout_weight="1"
-            android:text="@string/darkmode_auto"
-            android:textColor="@color/secondary_material_light" />
-    </LinearLayout>
-
-    <Switch
-        android:id="@+id/switchPauseNotification"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_settings"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="@dimen/margin_settings"
-        android:layout_weight="1"
-        android:text="@string/enablePauseNotification"
-        android:textColor="@color/secondary_material_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
-
-    <Spinner
-        android:id="@+id/spinner_defaultVolume"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchIgnoreAllDay" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
