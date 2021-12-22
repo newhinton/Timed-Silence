@@ -3,7 +3,6 @@ package de.felixnuesse.timedsilence.fragments.graph
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -18,7 +17,6 @@ import kotlinx.android.synthetic.main.graph_fragment.*
 import de.felixnuesse.timedsilence.R
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
 import com.skydoves.balloon.*
 import de.felixnuesse.timedsilence.Constants
@@ -40,10 +38,25 @@ class GraphFragment : Fragment() {
     private lateinit var last_text: GraphBarVolumeSwitchElement
     private lateinit var current_text: GraphBarVolumeSwitchElement
 
+    private var mBalloon: Balloon? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        imageview_legend_loud_help.setOnClickListener {
+            handleTooltip(requireContext(), getString(R.string.volume_setting_loud_help), it)
+        }
+        imageview_legend_silent_help.setOnClickListener {
+            handleTooltip(requireContext(), getString(R.string.volume_setting_silent_help), it)
+        }
+        imageview_legend_vibrate_help.setOnClickListener {
+            handleTooltip(requireContext(), getString(R.string.volume_setting_vibrate_help), it)
+        }
+        imageview_legend_unset_help.setOnClickListener {
+            handleTooltip(requireContext(), getString(R.string.volume_setting_unset_help), it)
+        }
 
         return  inflater.inflate(R.layout.graph_fragment, container, false)
     }
@@ -234,6 +247,16 @@ class GraphFragment : Fragment() {
         current_text=time
     }
 
+    /**
+     * Required to dismiss old tooltips when a new was opened
+     */
+    fun handleTooltip(context: Context, tooltip: String, view: View){
+        mBalloon?.dismiss()
+        mBalloon = getTooltip(context, tooltip)
+        view.showAlignTop(mBalloon!!)
+    }
+
+
     fun getTooltip(context: Context, tooltip: String): Balloon {
         return getTooltip(context, tooltip, ArrowOrientation.BOTTOM)
     }
@@ -271,7 +294,7 @@ class GraphFragment : Fragment() {
         imageView.layoutParams = imageViewParam
 
         imageView.setOnClickListener { it ->
-            it.showAlignTop(getTooltip(context, tooltip))
+            handleTooltip(context, tooltip, it)
         }
 
         return imageView

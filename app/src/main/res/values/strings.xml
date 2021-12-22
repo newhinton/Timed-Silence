@@ -3,9 +3,14 @@
     <string name="action_settings">Settings</string>
     <string name="no_next_time_set">Not Set</string>
     <string name="cancel">Cancel</string>
+    <string name="volume_setting_unset">Dont Change</string>
     <string name="volume_setting_silent">Silent</string>
     <string name="volume_setting_loud">Loud</string>
     <string name="volume_setting_vibrate">Vibrate</string>
+    <string name="volume_setting_unset_help">This indicates that no rule covers this timeframe. Therefore, this app will not change your volume.</string>
+    <string name="volume_setting_silent_help">Makes the phone silent</string>
+    <string name="volume_setting_loud_help">Makes the phone loud</string>
+    <string name="volume_setting_vibrate_help">Makes the phone vibrate</string>
     <string name="timecheck_start">start</string>
     <string name="timecheck_stop">stop</string>
     <string name="action_set_manual_loud">Set Loud</string>
@@ -74,7 +79,6 @@
     <string name="calendar_list_empty">You do not have calendars.</string>
     <string name="calendar_missing_permissions">Permissions not granted.</string>
     <string name="main_tab_graph">Graph</string>
-    <string name="volume_setting_unset">Undefined</string>
     <string name="export">Export settings</string>
     <string name="import_button">Import settings</string>
     <string name="darkmode">Darkmode</string>

@@ -36,7 +36,7 @@
     <string name="timecheck_stopped">Gestoppt</string>
     <string name="tuesday">Dienstag</string>
     <string name="volume_setting_loud">Laut</string>
-    <string name="volume_setting_silent">Leise</string>
+    <string name="volume_setting_silent">Stumm</string>
     <string name="volume_setting_vibrate">Vibrieren</string>
     <string name="wednesday">Mittwoch</string>
     <string name="LocationAccessNotification">LocationAccessNotification</string>
@@ -94,7 +94,7 @@
     <string name="main_tab_graph">Graph</string>
     <string name="silent">Lautlos!</string>
     <string name="vibrate">Nur Vibrieren!</string>
-    <string name="volume_setting_unset">Undefiniert</string>
+    <string name="volume_setting_unset">Keine Veränderung</string>
     <string name="open_volume_settings">Öffne Lautstärkeeinstellungen</string>
     <string name="volume_low_warning">Eine Lautstärkeeinstellung ist unter 15%: Dies könnte zu leise sein</string>
     <string name="channel_name_calendar_error">Kalenderfehler</string>
@@ -106,4 +106,10 @@
     <string name="GrantCalendarPermissionAccess">Erlauben!</string>
     <string name="GrantCalendarPermissionAccessDescription">Diese Anwendung wird besser funktionieren wenn du Zugriff auf die Kalender erlaubst.</string>
     <string name="import_deletion_warning">Einstellungen importieren löscht ALLE alten Einstellungen!</string>
+    <string name="ignore_all_day">Ignoriere Ganztagstermine</string>
+    <string name="user_interface">volume_setting_unset</string>
+    <string name="volume_setting_unset_help">Wenn keine Regel festgelegt ist, wird zu diesem Zeitpunkt keine veränderung an der Lautstärke vorgenommen.</string>
+    <string name="volume_setting_silent_help">Stellt das Telefon auf Stumm</string>
+    <string name="volume_setting_loud_help">Stellt das Telefon auf Laut</string>
+    <string name="volume_setting_vibrate_help">Stellt das Telefon auf Vibrieren</string>
 </resources>
