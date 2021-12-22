@@ -64,7 +64,9 @@ class GraphFragment : Fragment() {
         }
 
         imageview_headphones_connected.setOnClickListener {
-            handleTooltip(requireContext(), getString(R.string.headphones_help), it)
+            var builder = getTooltip(requireContext(), getString(R.string.headphones_help))
+            builder.setArrowPosition(0.75f)
+            it.showAlignTop(builder.build())
         }
 
         var mainBarLayout = view.findViewById<RelativeLayout>(R.id.rel_layout)
@@ -143,7 +145,7 @@ class GraphFragment : Fragment() {
             when (motionEvent.action){
                 MotionEvent.ACTION_UP -> {
                     view.showAsDropDown(
-                        getTooltip(context, gbvse.state.getReason(), ArrowOrientation.LEFT),
+                        getTooltip(context, gbvse.state.getReason(), ArrowOrientation.LEFT).build(),
                         getSizeInDP(BAR_WIDTH),
                         -1*shapeview.height+motionEvent.y.toInt()-30 // add a slight offset to account for the "rounding" which is not actually touchable
                     )
@@ -255,19 +257,19 @@ class GraphFragment : Fragment() {
      * Required to dismiss old tooltips when a new was opened
      */
     fun handleTooltip(context: Context, tooltip: String, view: View){
-        view.showAlignTop(getTooltip(context, tooltip))
+        view.showAlignTop(getTooltip(context, tooltip).build())
     }
 
     fun handleTooltipRight(context: Context, tooltip: String, view: View){
-        view.showAlignLeft(getTooltip(context, tooltip, ArrowOrientation.RIGHT))
+        view.showAlignLeft(getTooltip(context, tooltip, ArrowOrientation.RIGHT).build())
     }
 
 
-    fun getTooltip(context: Context, tooltip: String): Balloon {
+    fun getTooltip(context: Context, tooltip: String): Balloon.Builder {
         return getTooltip(context, tooltip, ArrowOrientation.BOTTOM)
     }
 
-    fun getTooltip(context: Context, tooltip: String, orientation: ArrowOrientation): Balloon {
+    fun getTooltip(context: Context, tooltip: String, orientation: ArrowOrientation): Balloon.Builder {
         var balloon = Balloon.Builder(context)
         balloon.setArrowSize(10)
         balloon.setArrowPosition(0.5f)
@@ -283,7 +285,7 @@ class GraphFragment : Fragment() {
         balloon.setBalloonAnimation(BalloonAnimation.OVERSHOOT)
         balloon.setBackgroundColor(ContextCompat.getColor(context, R.color.tooltip_background))
         balloon.setDismissWhenTouchOutside(true)
-        return balloon.build()
+        return balloon
     }
 
     private fun getTooltipIcon(context: Context, tooltip: String): View {
