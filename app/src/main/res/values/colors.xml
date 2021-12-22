@@ -27,4 +27,5 @@
 
     <color name="secondary_material_light1">#8a000000</color>
     <color name="secondary_material_light">#656464</color>
+    <color name="tooltip_background">#484848</color>
 </resources>

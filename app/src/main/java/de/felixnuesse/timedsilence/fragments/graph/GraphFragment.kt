@@ -44,25 +44,25 @@ class GraphFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        imageview_legend_loud_help.setOnClickListener {
-            handleTooltip(requireContext(), getString(R.string.volume_setting_loud_help), it)
-        }
-        imageview_legend_silent_help.setOnClickListener {
-            handleTooltip(requireContext(), getString(R.string.volume_setting_silent_help), it)
-        }
-        imageview_legend_vibrate_help.setOnClickListener {
-            handleTooltip(requireContext(), getString(R.string.volume_setting_vibrate_help), it)
-        }
-        imageview_legend_unset_help.setOnClickListener {
-            handleTooltip(requireContext(), getString(R.string.volume_setting_unset_help), it)
-        }
-
         return  inflater.inflate(R.layout.graph_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewObject = view
+
+        imageview_legend_loud_help.setOnClickListener {
+            handleTooltipRight(requireContext(), getString(R.string.volume_setting_loud_help), it)
+        }
+        imageview_legend_silent_help.setOnClickListener {
+            handleTooltipRight(requireContext(), getString(R.string.volume_setting_silent_help), it)
+        }
+        imageview_legend_vibrate_help.setOnClickListener {
+            handleTooltipRight(requireContext(), getString(R.string.volume_setting_vibrate_help), it)
+        }
+        imageview_legend_unset_help.setOnClickListener {
+            handleTooltipRight(requireContext(), getString(R.string.volume_setting_unset_help), it)
+        }
+
         var mainBarLayout = view.findViewById<RelativeLayout>(R.id.rel_layout)
         buildGraph(view.context, mainBarLayout)
 
@@ -251,9 +251,11 @@ class GraphFragment : Fragment() {
      * Required to dismiss old tooltips when a new was opened
      */
     fun handleTooltip(context: Context, tooltip: String, view: View){
-        mBalloon?.dismiss()
-        mBalloon = getTooltip(context, tooltip)
-        view.showAlignTop(mBalloon!!)
+        view.showAlignTop(getTooltip(context, tooltip))
+    }
+
+    fun handleTooltipRight(context: Context, tooltip: String, view: View){
+        view.showAlignLeft(getTooltip(context, tooltip, ArrowOrientation.RIGHT))
     }
 
 
@@ -273,6 +275,8 @@ class GraphFragment : Fragment() {
         balloon.setText(tooltip)
         balloon.setArrowOrientation(orientation)
         balloon.setBalloonAnimation(BalloonAnimation.OVERSHOOT)
+        balloon.setBackgroundColor(ContextCompat.getColor(context, R.color.tooltip_background))
+        balloon.setDismissWhenTouchOutside(true)
         return balloon.build()
     }
 
