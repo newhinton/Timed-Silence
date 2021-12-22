@@ -3,6 +3,7 @@ package de.felixnuesse.timedsilence.fragments.graph
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -16,6 +17,8 @@ import android.widget.RelativeLayout
 import kotlinx.android.synthetic.main.graph_fragment.*
 import de.felixnuesse.timedsilence.R
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
 import com.skydoves.balloon.*
 import de.felixnuesse.timedsilence.Constants
@@ -252,7 +255,13 @@ class GraphFragment : Fragment() {
 
     private fun getTooltipIcon(context: Context, tooltip: String): View {
         val imageView = ImageView(context)
-        imageView.setImageResource(R.drawable.ic_baseline_help_outline_24)
+
+        var d = ContextCompat.getDrawable(context, R.drawable.ic_baseline_help_outline_24)
+        if (d != null) {
+            d.applyTheme(context.theme)
+            imageView.setImageDrawable(d)
+        }
+
         val imageViewParam = RelativeLayout.LayoutParams(
             getSizeInDP(16),
             getSizeInDP(16)
