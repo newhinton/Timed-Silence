@@ -63,6 +63,10 @@ class GraphFragment : Fragment() {
             handleTooltipRight(requireContext(), getString(R.string.volume_setting_unset_help), it)
         }
 
+        imageview_headphones_connected.setOnClickListener {
+            handleTooltip(requireContext(), getString(R.string.headphones_help), it)
+        }
+
         var mainBarLayout = view.findViewById<RelativeLayout>(R.id.rel_layout)
         buildGraph(view.context, mainBarLayout)
 
@@ -268,9 +272,11 @@ class GraphFragment : Fragment() {
         balloon.setArrowSize(10)
         balloon.setArrowPosition(0.5f)
         balloon.setCornerRadius(4f)
-        balloon.setHeight(getSizeInDP(12))
+        //balloon.setHeight(getSizeInDP(12))
         balloon.paddingLeft=getSizeInDP(8)
         balloon.paddingRight=getSizeInDP(8)
+        balloon.paddingTop=getSizeInDP(8)
+        balloon.paddingBottom=getSizeInDP(8)
         balloon.setAlpha(0.9f)
         balloon.setText(tooltip)
         balloon.setArrowOrientation(orientation)
