@@ -86,7 +86,7 @@ class CalendarEventFragment : Fragment() {
         listContainer.visibility = View.GONE
 
         val allowed = CalendarHandler.hasCalendarReadPermission(context)
-        val size =calHandler.getVolumeCalendars().size
+        val size =calHandler.getDeviceCalendars().size
 
         if(allowed && size!=0){
             emtpyMessage.visibility = View.GONE

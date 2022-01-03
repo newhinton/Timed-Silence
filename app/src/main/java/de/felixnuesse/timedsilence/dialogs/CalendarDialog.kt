@@ -103,7 +103,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
             rg.addView(radioButton, params)
         }
 
-        rg.check(calHandler.getVolumeCalendars()[0].ext_id.toInt())
+        rg.check(calHandler.getDeviceCalendars()[0].ext_id.toInt())
 
         calendar_next.setOnClickListener {
             Log.e(Constants.APP_NAME, "CalendarDialog: next!")
