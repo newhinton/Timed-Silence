@@ -42,6 +42,8 @@ class DeviceCalendar(private var mContext: Context) {
     private var calendarCache = HashMap<String, CalendarObject>()
     private var eventCache = ArrayList<Map<String, String>>()
 
+    private var validEventCacheButEmptyCache = false
+
 
     fun getCalendars(): HashMap<String, CalendarObject> {
         if(calendarCache.size>0){
@@ -92,7 +94,7 @@ class DeviceCalendar(private var mContext: Context) {
     //todo: implement caching
     fun readCalendarEvent(timeInMilliseconds: Long, cached: Boolean): ArrayList<Map<String, String>> {
 
-        if(eventCache.size>0){
+        if(eventCache.size>0 || validEventCacheButEmptyCache){
             return eventCache
         }
 
@@ -100,6 +102,7 @@ class DeviceCalendar(private var mContext: Context) {
             return eventCache
         }
 
+        validEventCacheButEmptyCache = false
         Log.e(Constants.APP_NAME, "CalendarHandler: CurrentTime in MS: "+ Utils.getDate(timeInMilliseconds.toString()))
         val startTime = Calendar.getInstance()
 
@@ -253,6 +256,7 @@ class DeviceCalendar(private var mContext: Context) {
 
         Collections.sort(retval, this.MyMapComparator())
         eventCache.addAll(retval)
+        validEventCacheButEmptyCache = true
         return retval
     }
 
