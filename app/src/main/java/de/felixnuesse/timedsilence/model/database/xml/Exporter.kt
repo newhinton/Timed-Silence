@@ -2,14 +2,29 @@ package de.felixnuesse.timedintenttrigger.database.xml
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Environment
 import androidx.core.app.ActivityCompat
 import android.util.Log
 import android.widget.Toast
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
+import de.felixnuesse.timedsilence.PrefConstants
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_BOOT_RESTART
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_DARKMODE
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_IGNORE_ALL_DAY_EVENTS
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_IGNORE_CHECK_WHEN_HEADSET
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_INTERVAL_CHECK
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_PAUSE_NOTIFICATION
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_TRIGGERTYPE
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_VOLUME_ALARM
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_VOLUME_MUSIC
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_VOLUME_NOTIFICATION
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_VOLUME_RINGER
+import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.Utils
+import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -22,6 +37,11 @@ import javax.xml.transform.TransformerException
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
+import android.content.SharedPreferences
+
+import android.content.Context.MODE_PRIVATE
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREFS_NAME
+
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -210,6 +230,11 @@ class Exporter {
                 keywordsElement.appendChild(em)
             }
 
+            val settings = document.createElement("SETTINGS")
+            rootElement.appendChild(settings)
+            addPreferences(document, settings, a.applicationContext)
+
+
             val sw = StringWriter()
             val tf = TransformerFactory.newInstance()
             val transformer = tf.newTransformer()
@@ -222,6 +247,31 @@ class Exporter {
             val child = document.createElement(name)
             child.textContent = content
             return child
+        }
+
+        private fun addPreferences(doc: Document, element: Element, context: Context){
+            var preferencesBoolean = arrayListOf(PREF_BOOT_RESTART, PREF_IGNORE_CHECK_WHEN_HEADSET, PREF_IGNORE_ALL_DAY_EVENTS, PREF_PAUSE_NOTIFICATION)
+            var preferencesInt = arrayListOf(PREF_INTERVAL_CHECK, PREF_DARKMODE, PREF_VOLUME_ALARM, PREF_VOLUME_RINGER, PREF_VOLUME_NOTIFICATION, PREF_VOLUME_MUSIC, PREF_TRIGGERTYPE, TIME_SETTING_DEFAULT_PREFERENCE)
+
+            val sharedPrefs: SharedPreferences = context.applicationContext.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+            for (settings in preferencesBoolean) {
+                if(sharedPrefs.contains(settings)){
+                    val em = doc.createElement("PREFERENCE")
+                    em.setAttribute("NAME", settings)
+                    em.setAttribute("VALUE", sharedPrefs.getBoolean(settings, false).toString())
+                    em.setAttribute("TYPE", "BOOLEAN")
+                    element.appendChild(em)
+                }
+            }
+            for (settings in preferencesInt) {
+                if(sharedPrefs.contains(settings)){
+                    val em = doc.createElement("PREFERENCE")
+                    em.setAttribute("NAME", settings)
+                    em.setAttribute("VALUE", sharedPrefs.getInt(settings, -1).toString())
+                    em.setAttribute("TYPE", "INTEGER")
+                    element.appendChild(em)
+                }
+            }
         }
     }
 

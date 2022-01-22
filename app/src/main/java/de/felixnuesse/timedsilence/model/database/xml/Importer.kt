@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.app.ActivityCompat
@@ -13,6 +14,7 @@ import android.widget.Toast
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.data.KeywordObject.Companion.ALL_CALENDAR
@@ -102,6 +104,7 @@ class Importer {
                 calendarList = getCalendarObjects(result)
                 wifiList = getWifiObjects(result)
                 keywordList = getKeywordList(result)
+                writePreferences(result, a.applicationContext)
             }catch ( e: SAXParseException){
                 e.printStackTrace()
                 Toast.makeText(a, "Could not read config!", Toast.LENGTH_LONG).show()
@@ -319,6 +322,36 @@ class Importer {
             }
 
             return result
+        }
+
+        private fun writePreferences(content: String, context: Context) {
+            val documentBuilderFactory = DocumentBuilderFactory.newInstance()
+            val documentBuilder = documentBuilderFactory.newDocumentBuilder()
+            val inputStream = InputSource(StringReader(content))
+            val document = documentBuilder.parse(inputStream)
+
+            val nList = document.getElementsByTagName("SETTINGS")
+
+            for (i in 0 until nList.length) {
+
+                val children =  nList.item(i).childNodes
+
+                var type = ""
+                var name = ""
+                var value = ""
+                for (j in 0 until children.length) {
+                    val item = children.item(j)
+                    when (item.nodeName) {
+                        "TYPE" -> type = item.textContent.toString()
+                        "VALUE" -> type= item.textContent.toString()
+                        "NAME" -> type = item.textContent.toString()
+                    }
+                }
+                when(type){
+                    "BOOLEAN" -> {SharedPreferencesHandler.setPref(context, name, value.toBoolean())}
+                    "INTEGER" -> {SharedPreferencesHandler.setPref(context, name, value.toInt())}
+                }
+            }
         }
 
     }
