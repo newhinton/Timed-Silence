@@ -47,9 +47,6 @@ class Constants {
         const val TIME_SETTING_LOUD = 3
         const val TIME_SETTING_UNSET = -1
 
-        const val TIME_SETTING_DEFAULT_PREFERENCE = "TIME_SETTING_DEFAULT_PREFERENCE"
-        const val TIME_SETTING_DEFAULT = TIME_SETTING_UNSET
-
         const val WIFI_TYPE_CONNECTED = 1
         const val WIFI_TYPE_SEARCHING = 2
 

@@ -24,8 +24,8 @@ import kotlinx.android.synthetic.main.activity_settings_main.*
 import android.widget.AdapterView
 
 import android.widget.AdapterView.OnItemSelectedListener
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_DEFAULT
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
+import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT
+import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
 
 
 class SettingsMainActivity : AppCompatActivity() {

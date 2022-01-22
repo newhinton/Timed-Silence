@@ -55,15 +55,14 @@ class PrefConstants {
         const val PREF_IGNORE_ALL_DAY_EVENTS_DEFAULT = true
 
         const val PREF_DARKMODE= "PREF_DARKMODE"
-        const val PREF_DARKMODE_DEFAULT = 0
         const val PREF_DARKMODE_LIGHT = 0
         const val PREF_DARKMODE_DARK = 1
         const val PREF_DARKMODE_AUTO = 2
+        const val PREF_DARKMODE_DEFAULT = PREF_DARKMODE_AUTO
 
 
         const val PREF_PAUSE_NOTIFICATION= "PREF_PAUSE_NOTIFICATION"
         const val PREF_PAUSE_NOTIFICATION_DEFAULT = true
-
 
 
         const val VOLUME_LOW_WARNING_THRESHOLD = 15
@@ -89,6 +88,9 @@ class PrefConstants {
         const val PREF_TRIGGERTYPE_TARGETED = "PREF_TRIGGERTYPE_TARGETED"
         const val PREF_TRIGGERTYPE_DEFAULT = PREF_TRIGGERTYPE_TARGETED
 
+
+        const val TIME_SETTING_DEFAULT_PREFERENCE = "TIME_SETTING_DEFAULT_PREFERENCE"
+        const val TIME_SETTING_DEFAULT = Constants.TIME_SETTING_UNSET
 
     }
 }

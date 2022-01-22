@@ -28,27 +28,19 @@ package de.felixnuesse.timedsilence.handler.volume
  *
  */
 
-import android.app.Activity
-import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
 import android.media.AudioManager
-import android.provider.Settings
-import androidx.core.app.ActivityCompat.finishAffinity
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_DEFAULT
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
+import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT
+import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.fragments.graph.GraphBarVolumeSwitchElement
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.permissions.DoNotDisturb
@@ -56,8 +48,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.*
 import kotlin.collections.ArrayList
 
