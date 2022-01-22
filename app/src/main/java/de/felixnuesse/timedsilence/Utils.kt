@@ -50,7 +50,7 @@ class Utils{
     companion object{
 
         fun getDate(milliSeconds: Long, format: String): String {
-            val formatter = SimpleDateFormat(format)
+            val formatter = SimpleDateFormat(format, Locale.getDefault())
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = milliSeconds
             return formatter.format(calendar.time)

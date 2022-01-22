@@ -138,24 +138,24 @@ class SettingsMainActivity : AppCompatActivity() {
         }
     }
 
-    fun openVolumeSettings() {
+    private fun openVolumeSettings() {
         val intent = Intent(this, SettingsVolumeActivity::class.java).apply {}
         startActivity(intent)
     }
 
-    fun writeHeadsetSwitchSetting(context: Context, value: Boolean) {
+    private fun writeHeadsetSwitchSetting(context: Context, value: Boolean) {
        SharedPreferencesHandler.setPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, value)
     }
 
-    fun writeIgnoreAlldaySwitchSetting(context: Context, value: Boolean) {
+    private fun writeIgnoreAlldaySwitchSetting(context: Context, value: Boolean) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS, value)
     }
 
-    fun writeThemeSwitchSetting(context: Context, value: Int) {
+    private fun writeThemeSwitchSetting(context: Context, value: Int) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_DARKMODE, value)
     }
 
-    fun writePauseNotificationSwitchSetting(context: Context, value: Boolean) {
+    private fun writePauseNotificationSwitchSetting(context: Context, value: Boolean) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_PAUSE_NOTIFICATION, value)
     }
 

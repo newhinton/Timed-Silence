@@ -137,9 +137,9 @@ class VolumeCalculator {
                 }
 
                 for (keyword in dbHandler.getKeywords()){
-                    val desc = elem.getOrDefault("description", "").toLowerCase()
-                    val name = elem.getOrDefault("name_of_event", "").toLowerCase()
-                    val key = keyword.keyword.toLowerCase()
+                    val desc = elem.getOrDefault("description", "").toLowerCase(Locale.getDefault())
+                    val name = elem.getOrDefault("name_of_event", "").toLowerCase(Locale.getDefault())
+                    val key = keyword.keyword.toLowerCase(Locale.getDefault())
 
                     //Log.e(APP_NAME, "Check Keyword: $key")
 
