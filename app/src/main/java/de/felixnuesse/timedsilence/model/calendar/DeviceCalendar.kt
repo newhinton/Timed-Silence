@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
+import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.Utils
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
@@ -196,8 +197,8 @@ class DeviceCalendar(private var mContext: Context) {
         for (i in lengthDummyArray) {
             val map = HashMap<String, String>()
             map["calendar_id"] = cursor.getString(0)
-            map["name_of_event"] = cursor.getString(1)
-            map["description"] = cursor?.getString(2) ?: "unset"
+            map["name_of_event"] = cursor?.getString(1) ?: mContext.getString(R.string.event_no_title)
+            map["description"] = cursor?.getString(2) ?: mContext.getString(R.string.event_no_description)
 
             val start= cursor.getString(3).toLong()
             //the start time is from the FIRST time the event happens, so adjust it
