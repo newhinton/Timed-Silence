@@ -115,4 +115,6 @@
     <string name="fragment_title_keywords">Keyword Entries</string>
     <string name="fragment_title_calendar">Calendar Entries</string>
     <string name="headphones_help">When Headphones are connected, the mediavolume is not changed, even if it is louder as the timeslot suggests. You can disable this behaviour in the Settings.</string>
+    <string name="event_no_title">No Title</string>
+    <string name="event_no_description">No Description</string>
 </resources>
