@@ -62,6 +62,7 @@ class VolumeHandler(mContext: Context) {
     }
 
     var volumeSetting = SharedPreferencesHandler.getPref(mContext, TIME_SETTING_DEFAULT_PREFERENCE, TIME_SETTING_DEFAULT)
+    var overrideMusicToZero = false
 
     fun setSilent(){
         //Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Silent!")
@@ -87,14 +88,12 @@ class VolumeHandler(mContext: Context) {
     }
 
     private fun applySilent(context: Context) {
-        Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Silent!")
+        Log.e(APP_NAME, "VolumeHandler: Apply: Silent!")
         val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-
-        if(!manager.isMusicActive){
+        if(!manager.isMusicActive || overrideMusicToZero){
             setMediaVolume(0, context, manager)
         }
-
 
         //supress annoying vibration on Q
         //maybe this is nessessary on P, but idk
@@ -200,7 +199,7 @@ class VolumeHandler(mContext: Context) {
         mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
 
 
-        if(!manager.isMusicActive){
+        if(!manager.isMusicActive || overrideMusicToZero){
             setMediaVolume(0, context, manager)
         }
 
@@ -273,7 +272,7 @@ class VolumeHandler(mContext: Context) {
     }
 
     fun isButtonClickAudible(context: Context): Boolean{
-    Log.d(Constants.APP_NAME, "VolumeHandler: Check if Buttonclicks are audible")
+    Log.d(APP_NAME, "VolumeHandler: Check if Buttonclicks are audible")
     val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     if(0>=manager.getStreamVolume(AudioManager.STREAM_RING)){
         return false
@@ -294,7 +293,7 @@ class VolumeHandler(mContext: Context) {
             return
         }
 
-        Log.d(Constants.APP_NAME, "VolumeHandler: VolumeSetting: $volumeSetting")
+        Log.d(APP_NAME, "VolumeHandler: VolumeSetting: $volumeSetting")
 
         when (getVolume()) {
             TIME_SETTING_SILENT -> applySilent(context)
@@ -327,7 +326,7 @@ class VolumeHandler(mContext: Context) {
         val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
         var todayMidnight = LocalDateTime.of(today, midnight)
 
-        var lastState = Constants.TIME_SETTING_UNSET
+        var lastState = TIME_SETTING_UNSET
         val lastElem = 1440 //start by 0:00 end by 23:59
 
 

@@ -80,6 +80,11 @@ class VolumeCalculator {
         calendarHandler= CalendarHandler(nonNullContext)
     }
 
+    var ignoreMusicPlaying = false
+    fun ignoreMusicPlaying(ignore: Boolean) {
+        ignoreMusicPlaying = ignore
+    }
+
     fun calculateAllAndApply(){
         Utils.appendLogfile(nonNullContext,"VolCacl", "calculateAllAndApply called.")
         volumeHandler= VolumeHandler(nonNullContext)
@@ -255,6 +260,7 @@ class VolumeCalculator {
     }
 
     private fun setGenericVolume(volume: Int){
+        volumeHandler.overrideMusicToZero = ignoreMusicPlaying;
         when (volume) {
             Constants.TIME_SETTING_LOUD -> {
                 volumeHandler.setLoud()
