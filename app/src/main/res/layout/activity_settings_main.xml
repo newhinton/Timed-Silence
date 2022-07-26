@@ -249,6 +249,21 @@
                 android:src="@drawable/ic_file_upload_black_24dp" />
         </LinearLayout>
 
+        <Switch
+            android:id="@+id/switchAllowTriggerWhileIdle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_settings"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/margin_settings"
+            android:contentDescription="@string/ignore_all_day"
+            android:minHeight="48dp"
+            android:text="@string/allow_trigger_when_device_idle"
+            android:textColor="@color/secondary_material_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_import" />
+
         <TextView
             android:id="@+id/label_ui"
             android:layout_width="wrap_content"
@@ -259,7 +274,7 @@
             android:textSize="20sp"
             android:textStyle="bold|italic"
             app:layout_constraintStart_toStartOf="@+id/layout_darkmode"
-            app:layout_constraintTop_toBottomOf="@+id/layout_import" />
+            app:layout_constraintTop_toBottomOf="@+id/switchAllowTriggerWhileIdle" />
 
         <ImageView
             android:id="@+id/divider_ui"

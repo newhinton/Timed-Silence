@@ -2,8 +2,10 @@ package de.felixnuesse.timedsilence.activities
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -100,9 +102,19 @@ class SettingsMainActivity : AppCompatActivity() {
             if(checked) applyTheme(PrefConstants.PREF_DARKMODE_AUTO)
         }
 
-        switchPauseNotification.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_PAUSE_NOTIFICATION, PrefConstants.PREF_PAUSE_NOTIFICATION_DEFAULT)
+        switchPauseNotification.isChecked = SharedPreferencesHandler.getPref(this, PrefConstants.PREF_PAUSE_NOTIFICATION, PrefConstants.PREF_PAUSE_NOTIFICATION_DEFAULT)
         switchPauseNotification.setOnCheckedChangeListener { _, checked ->
             writePauseNotificationSwitchSetting(this, checked)
+        }
+
+        switchAllowTriggerWhileIdle.isChecked = SharedPreferencesHandler.getPref(this, PrefConstants.PREF_RUN_ALARMTRIGGER_WHEN_IDLE, PrefConstants.PREF_RUN_ALARMTRIGGER_WHEN_IDLE_DEFAULT)
+        switchAllowTriggerWhileIdle.setOnCheckedChangeListener { _, checked ->
+            val sharedPreferences: SharedPreferences.Editor? =
+                PreferenceManager.getDefaultSharedPreferences(this).edit()
+            sharedPreferences?.putBoolean(
+                PrefConstants.PREF_RUN_ALARMTRIGGER_WHEN_IDLE,
+                checked
+            )
         }
 
         val spinner: Spinner = findViewById(R.id.spinner_defaultVolume)

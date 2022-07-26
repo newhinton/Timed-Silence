@@ -4,12 +4,16 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Build
+import android.preference.PreferenceManager
 import android.util.Log
-import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_RUN_ALARMTRIGGER_WHEN_IDLE
 import de.felixnuesse.timedsilence.Utils
 import de.felixnuesse.timedsilence.handler.trigger.TriggerInterface.Companion.FLAG_NOFLAG
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
+import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 
 
 /**
@@ -102,11 +106,27 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
         val am = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pi: PendingIntent? = createBroadcast()
         am.cancel(pi)
-        am.setExact(
-            AlarmManager.RTC_WAKEUP,
-            calculatedChecktime,
-            pi
+
+
+        val sharedPreferences: SharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(mContext)
+        val allowWhileIdle = sharedPreferences.getBoolean(
+            PREF_RUN_ALARMTRIGGER_WHEN_IDLE,
+            false
         )
+        if (allowWhileIdle) {
+            am.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                calculatedChecktime,
+                pi
+            )
+        } else {
+            am.setExact(
+                AlarmManager.RTC_WAKEUP,
+                calculatedChecktime,
+                pi
+            )
+        }
     }
 
 }

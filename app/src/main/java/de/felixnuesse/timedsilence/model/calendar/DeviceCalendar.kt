@@ -1,17 +1,11 @@
 package de.felixnuesse.timedsilence.model.calendar
 
-import android.Manifest
-import android.app.Activity
 import android.content.ContentUris
 import android.content.Context
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.CalendarContract
 import android.text.format.DateUtils
 import android.util.Log
-import android.view.View
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
