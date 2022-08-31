@@ -141,9 +141,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
 
     fun getAllSchedules(): ArrayList<ScheduleObject> {
-        Log.e("Database", "get schedules")
-        Log.e("Database", "content: ${cachedSchedules.size}")
-        Log.e("Database", "content: ${cachingEnabled}")
         if (cachedSchedules.cacheInitialized && cachingEnabled) {
             return cachedSchedules
         }
@@ -338,7 +335,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         // Insert the new row, returning the primary key value of the new row
         val newRowId = db.insert(SCHEDULE_TABLE, null, values)
-        Log.e(APP_NAME,"Database: Create: RowID: $newRowId")
 
         val newObject = ScheduleObject("",0,0,0,newRowId)
 
@@ -353,10 +349,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         newObject.fri=so.fri
         newObject.sat=so.sat
         newObject.sun=so.sun
-
-
-        Log.e(APP_NAME,"Database: Create: Result: ${newObject.name}")
-
 
         db.close()
         return newObject
@@ -464,11 +456,9 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         // Insert the new row, returning the primary key value of the new row
         val newRowId = db.insert(WIFI_TABLE, null, values)
-        Log.e(APP_NAME,"Database: CreateWifi: RowID: $newRowId")
 
         val newObject = WifiObject(newRowId,wifiObject.ssid, wifiObject.type, wifiObject.volume)
 
-        Log.e(APP_NAME,"Database: CreateWifi: Result: ${newObject.type}")
 
         db.close()
         return newObject
@@ -595,7 +585,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         // Insert the new row, returning the primary key value of the new row
         val newRowId = db.insert(CALENDAR_TABLE, null, values)
-        Log.e(APP_NAME,"Database: CreateCalendar: RowID     : $newRowId")
 
         val newObject = CalendarObject(newRowId,calendarObject.ext_id, calendarObject.volume)
         if(!calendarObject.name.equals("NOTSET")){
