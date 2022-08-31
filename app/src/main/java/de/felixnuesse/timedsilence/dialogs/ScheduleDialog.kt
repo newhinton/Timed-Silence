@@ -8,6 +8,9 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import androidx.core.content.ContextCompat.getSystemService
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.fragments.TimeFragment
@@ -48,20 +51,20 @@ import java.util.concurrent.TimeUnit
 class ScheduleDialog(context: Context) : Dialog(context) {
 
 
-    private var tfrag: TimeFragment? = null
-    private var svholder: ScheduleListAdapter? = null
-    private var create: Boolean = true
-    private var update_so: ScheduleObject? = null
+    private var timeFragment: TimeFragment? = null
+    private var scheduleListHolder: ScheduleListAdapter? = null
+    private var createNewSchedule: Boolean = true
+    private var existingSchedule: ScheduleObject? = null
 
-    constructor(context: Context, tfragment: TimeFragment) : this(context) {
-        tfrag=tfragment
-        create=true
+    constructor(context: Context, timeFragment: TimeFragment) : this(context) {
+        this.timeFragment = timeFragment
+        createNewSchedule = true
     }
 
-    constructor(context: Context, sholder: ScheduleListAdapter, so: ScheduleObject) : this(context) {
-        svholder=sholder
-        create=false
-        update_so=so
+    constructor(context: Context, scheduleHolder: ScheduleListAdapter, scheduleObject: ScheduleObject) : this(context) {
+        scheduleListHolder = scheduleHolder
+        createNewSchedule = false
+        existingSchedule = scheduleObject
     }
 
     private var state: Int = 0
@@ -70,14 +73,28 @@ class ScheduleDialog(context: Context) : Dialog(context) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.schedule_dialog)
-        window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        window!!.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
         setCanceledOnTouchOutside(true)
 
 
-        if(!create){
-            prepareUpdate(update_so!!)
+        if (!createNewSchedule) {
+            prepareUpdate(existingSchedule!!)
         }
 
+        if (createNewSchedule) {
+            when(Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+                Calendar.MONDAY -> schedule_dialog_days_monday.isChecked = true
+                Calendar.TUESDAY -> schedule_dialog_days_tuesday.isChecked = true
+                Calendar.WEDNESDAY -> schedule_dialog_days_wednesday.isChecked = true
+                Calendar.THURSDAY -> schedule_dialog_days_thursday.isChecked = true
+                Calendar.FRIDAY -> schedule_dialog_days_friday.isChecked = true
+                Calendar.SATURDAY -> schedule_dialog_days_saturday.isChecked = true
+                Calendar.SUNDAY -> schedule_dialog_days_sunday.isChecked = true
+            }
+        }
 
         hideAll()
         schedule_back.visibility = View.INVISIBLE
@@ -87,14 +104,12 @@ class ScheduleDialog(context: Context) : Dialog(context) {
         schedule_dialog_title.text = context.getText(R.string.schedule_dialog_title_title)
         schedule_title_layout.visibility = View.VISIBLE
 
-        /*
-        schedule_dialog_title.text = context.getText(R.string.schedule_dialog_title_days)
-
-        */
-
-
         schedule_next.setOnClickListener {
             Log.e(Constants.APP_NAME, "ScheduleDialog: next!")
+
+            val view = schedule_dialog_title
+            val imm: InputMethodManager? = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm?.hideSoftInputFromWindow(view?.windowToken, 0)
 
             hideAll()
             state++
@@ -117,11 +132,11 @@ class ScheduleDialog(context: Context) : Dialog(context) {
         schedule_save.setOnClickListener {
             Log.e(Constants.APP_NAME, "ScheduleDialog: save!")
 
-            if(create){
+            if (createNewSchedule) {
                 val so = ScheduleObject(
                     schedule_title_textfield.text.toString(),
-                    (schedule_start_timepicker.hour *60*60*1000+schedule_start_timepicker.minute *60*1000).toLong(),
-                    (schedule_end_timepicker.hour *60*60*1000+schedule_end_timepicker.minute *60*1000).toLong(),
+                    (schedule_start_timepicker.hour * 60 * 60 * 1000 + schedule_start_timepicker.minute * 60 * 1000).toLong(),
+                    (schedule_end_timepicker.hour * 60 * 60 * 1000 + schedule_end_timepicker.minute * 60 * 1000).toLong(),
                     getValueForVolumeRadioGroup(),
                     0,
                     schedule_dialog_days_monday.isChecked,
@@ -131,15 +146,15 @@ class ScheduleDialog(context: Context) : Dialog(context) {
                     schedule_dialog_days_friday.isChecked,
                     schedule_dialog_days_saturday.isChecked,
                     schedule_dialog_days_sunday.isChecked
-                    )
-                tfrag?.saveSchedule(context,so)
-            }else{
+                )
+                timeFragment?.saveSchedule(context, so)
+            } else {
                 val so = ScheduleObject(
                     schedule_title_textfield.text.toString(),
-                    (schedule_start_timepicker.hour *60*60*1000+schedule_start_timepicker.minute *60*1000).toLong(),
-                    (schedule_end_timepicker.hour *60*60*1000+schedule_end_timepicker.minute *60*1000).toLong(),
+                    (schedule_start_timepicker.hour * 60 * 60 * 1000 + schedule_start_timepicker.minute * 60 * 1000).toLong(),
+                    (schedule_end_timepicker.hour * 60 * 60 * 1000 + schedule_end_timepicker.minute * 60 * 1000).toLong(),
                     getValueForVolumeRadioGroup(),
-                    update_so!!.id,
+                    existingSchedule!!.id,
                     schedule_dialog_days_monday.isChecked,
                     schedule_dialog_days_tuesday.isChecked,
                     schedule_dialog_days_wednesday.isChecked,
@@ -148,7 +163,7 @@ class ScheduleDialog(context: Context) : Dialog(context) {
                     schedule_dialog_days_saturday.isChecked,
                     schedule_dialog_days_sunday.isChecked
                 )
-                svholder?.update(context, so)
+                scheduleListHolder?.update(context, so)
             }
 
 
@@ -164,7 +179,7 @@ class ScheduleDialog(context: Context) : Dialog(context) {
         schedule_days_layout.visibility = View.GONE
     }
 
-    private fun getValueForVolumeRadioGroup(): Int{
+    private fun getValueForVolumeRadioGroup(): Int {
         when (schedule_dialog_rb_volume.checkedRadioButtonId) {
             R.id.schedule_dialog_rb_loud -> return Constants.TIME_SETTING_LOUD
             R.id.schedule_dialog_rb_silent -> return Constants.TIME_SETTING_SILENT
@@ -173,7 +188,7 @@ class ScheduleDialog(context: Context) : Dialog(context) {
         return Constants.TIME_SETTING_VIBRATE;
     }
 
-    private fun setValueForVolumeRadioGroup(id: Int){
+    private fun setValueForVolumeRadioGroup(id: Int) {
         when (id) {
             Constants.TIME_SETTING_LOUD -> schedule_dialog_rb_loud.isChecked = true
             Constants.TIME_SETTING_SILENT -> schedule_dialog_rb_silent.isChecked = true
@@ -181,40 +196,43 @@ class ScheduleDialog(context: Context) : Dialog(context) {
         }
     }
 
-    private fun prepareUpdate(so: ScheduleObject){
+    private fun prepareUpdate(so: ScheduleObject) {
         schedule_title_textfield.setText(so.name)
 
-        var hours= TimeUnit.MILLISECONDS.toHours(so.time_start).toInt()
-        var min = TimeUnit.MILLISECONDS.toMinutes(so.time_start-TimeUnit.HOURS.toMillis(hours.toLong())).toInt()
+        var hours = TimeUnit.MILLISECONDS.toHours(so.time_start).toInt()
+        var min =
+            TimeUnit.MILLISECONDS.toMinutes(so.time_start - TimeUnit.HOURS.toMillis(hours.toLong()))
+                .toInt()
         schedule_start_timepicker.hour = hours
         schedule_start_timepicker.minute = min
 
-        hours= TimeUnit.MILLISECONDS.toHours(so.time_end).toInt()
-        min = TimeUnit.MILLISECONDS.toMinutes(so.time_end-TimeUnit.HOURS.toMillis(hours.toLong())).toInt()
+        hours = TimeUnit.MILLISECONDS.toHours(so.time_end).toInt()
+        min = TimeUnit.MILLISECONDS.toMinutes(so.time_end - TimeUnit.HOURS.toMillis(hours.toLong()))
+            .toInt()
         schedule_end_timepicker.hour = hours
         schedule_end_timepicker.minute = min
 
         setValueForVolumeRadioGroup(so.time_setting)
 
-        schedule_dialog_days_monday.isChecked=so.mon
-        schedule_dialog_days_tuesday.isChecked=so.tue
-        schedule_dialog_days_wednesday.isChecked=so.wed
-        schedule_dialog_days_thursday.isChecked=so.thu
-        schedule_dialog_days_friday.isChecked=so.fri
-        schedule_dialog_days_saturday.isChecked=so.sat
-        schedule_dialog_days_sunday.isChecked=so.sun
+        schedule_dialog_days_monday.isChecked = so.mon
+        schedule_dialog_days_tuesday.isChecked = so.tue
+        schedule_dialog_days_wednesday.isChecked = so.wed
+        schedule_dialog_days_thursday.isChecked = so.thu
+        schedule_dialog_days_friday.isChecked = so.fri
+        schedule_dialog_days_saturday.isChecked = so.sat
+        schedule_dialog_days_sunday.isChecked = so.sun
     }
 
     private fun decideState() {
 
-        if(state==0){
+        if (state == 0) {
             schedule_back.visibility = View.INVISIBLE
             schedule_save.visibility = View.GONE
-        }else if (state == 4){
+        } else if (state == 4) {
             schedule_save.visibility = View.VISIBLE
             schedule_back.visibility = View.VISIBLE
             schedule_next.visibility = View.GONE
-        }else {
+        } else {
             schedule_back.visibility = View.VISIBLE
             schedule_next.visibility = View.VISIBLE
             schedule_save.visibility = View.GONE
