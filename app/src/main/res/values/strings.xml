@@ -118,4 +118,5 @@
     <string name="event_no_title">No Title</string>
     <string name="event_no_description">No Description</string>
     <string name="allow_trigger_when_device_idle">Allow Checks when the device is idle</string>
+    <string name="PausedNotification_RESUME_AND_CHECK">Resume and Check</string>
 </resources>

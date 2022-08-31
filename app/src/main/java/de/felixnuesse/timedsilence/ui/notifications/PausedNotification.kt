@@ -39,12 +39,23 @@ import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
+import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
+import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 
 class PausedNotification : BroadcastReceiver(){
 
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.e(APP_NAME, "PausedNotification: Recieved Intent!")
-        if(intent?.action== ACTION_END_PAUSE){
+
+        val action = intent?.action
+        if(action == ACTION_END_PAUSE_AND_CHECK){
+            context?.let {
+                // Set Volume now.
+                VolumeCalculator(it).calculateAllAndApply()
+            }
+        }
+
+        if(action == ACTION_END_PAUSE || action == ACTION_END_PAUSE_AND_CHECK){
             context?.let {
                 TargetedAlarmHandler(it).createTimecheck()
                 TargetedAlarmHandler(it).checkIfNextAlarmExists()
@@ -55,6 +66,7 @@ class PausedNotification : BroadcastReceiver(){
     companion object {
 
         private const val ACTION_END_PAUSE = "ACTION_END_PAUSE"
+        private const val ACTION_END_PAUSE_AND_CHECK = "ACTION_END_PAUSE_CHECK"
         private const val NOTIFICATION_ID = 498
 
         fun show(context: Context){
@@ -79,11 +91,24 @@ class PausedNotification : BroadcastReceiver(){
             val service = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             service.createNotificationChannel(chan)
 
+
+            val checkIntent = Intent(context, PausedNotification::class.java).apply {
+                action = ACTION_END_PAUSE_AND_CHECK
+            }
+
+            val checkPendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, checkIntent, 0)
+            val resumeAndCheckAction = NotificationCompat.Action.Builder(
+                0,
+                context.getString(R.string.PausedNotification_RESUME_AND_CHECK),
+                checkPendingIntent
+            ).build()
+
+
             val snoozeIntent = Intent(context, PausedNotification::class.java).apply {
                 action = ACTION_END_PAUSE
             }
             val snoozePendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, snoozeIntent, 0)
-            val action = NotificationCompat.Action.Builder(
+            val resumeAction = NotificationCompat.Action.Builder(
                 0,
                 context.getString(R.string.PausedNotification_RESUME),
                 snoozePendingIntent
@@ -95,7 +120,8 @@ class PausedNotification : BroadcastReceiver(){
                 .setSmallIcon(R.drawable.logo_pause)
                 .setOnlyAlertOnce(true)
                 .setOngoing(true)
-                .addAction(action)
+                .addAction(resumeAction)
+                .addAction(resumeAndCheckAction)
                 .build()
         }
 
