@@ -12,18 +12,15 @@ import java.util.*
 
 interface TriggerInterface {
 
-    companion object {
-        val FLAG_NOFLAG: Int = 0
-    }
     var mContext: Context
 
     fun createTimecheck()
 
     fun removeTimecheck()
 
-    fun createBroadcast(): PendingIntent?
+    fun createBroadcast(): PendingIntent
 
-    fun createBroadcast(flag: Int): PendingIntent?
+    fun createBroadcast(flag: Int): PendingIntent
 
     fun checkIfNextAlarmExists(): Boolean {
         val pIntent = createBroadcast(PendingIntent.FLAG_NO_CREATE)
@@ -41,11 +38,7 @@ interface TriggerInterface {
 
     fun getNextAlarmTimestamp(): String {
         val alarms = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val clockInfo = alarms.nextAlarmClock
-
-        if (clockInfo == null) {
-            return mContext.getString(R.string.no_next_time_set)
-        }
+        val clockInfo = alarms.nextAlarmClock ?: return mContext.getString(R.string.no_next_time_set)
 
         Log.d(Constants.APP_NAME, "TriggerInterface: Next Runtime: " + clockInfo.triggerTime)
         return DateFormat.getDateInstance().format(Date(clockInfo.triggerTime))

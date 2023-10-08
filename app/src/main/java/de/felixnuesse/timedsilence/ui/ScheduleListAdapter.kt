@@ -1,21 +1,19 @@
 package de.felixnuesse.timedsilence.ui;
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.databinding.AdapterSchedulesListBinding
 import de.felixnuesse.timedsilence.dialogs.ScheduleDialog
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import kotlinx.android.synthetic.main.adapter_schedules_list.view.*
 import java.text.DateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -45,92 +43,105 @@ import kotlin.collections.ArrayList
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
-class ScheduleListAdapter(private var myDataset: ArrayList<ScheduleObject>) : RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder>() {
+class ScheduleListAdapter(private var myDataset: ArrayList<ScheduleObject>) :
+    RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder>() {
 
-        fun removeAt(position: Int) {
-                myDataset.removeAt(position)
-                notifyDataSetChanged()
-        }
-
-
-        fun update(context: Context, so: ScheduleObject){
-                DatabaseHandler(context).updateScheduleEntry(so)
-                myDataset.clear()
-                myDataset = DatabaseHandler(context).getAllSchedules()
-                notifyDataSetChanged()
-        }
-
-// Provide a reference to the views for each data item
-// Complex data items may need more than one view per item, and
-// you provide access to all the views for a data item in a view holder.
-// Each data item is just a string in this case that is shown in a TextView.
-class ScheduleViewHolder(val scheduleView: View) : RecyclerView.ViewHolder(scheduleView)
+    fun removeAt(position: Int) {
+        myDataset.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, myDataset.size)
+    }
 
 
+    fun update(context: Context, so: ScheduleObject) {
+        DatabaseHandler(context).updateScheduleEntry(so)
+        myDataset.clear()
+        myDataset = DatabaseHandler(context).getAllSchedules()
+        notifyDataSetChanged()
+    }
 
-        // Create new views (invoked by the layout manager)
-        override fun onCreateViewHolder(parent: ViewGroup,
-                                        viewType: Int): ScheduleListAdapter.ScheduleViewHolder {
-        // create a new view
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_schedules_list, parent, false)
-        // set the view's size, margins, paddings and layout parameters
-        return ScheduleViewHolder(view)
-        }
+    // Create new views (invoked by the layout manager)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScheduleViewHolder {
 
-        // Replace the contents of a view (invoked by the layout manager)
-        override fun onBindViewHolder(holder: ScheduleViewHolder, position: Int) {
+        val binding =
+            AdapterSchedulesListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ScheduleViewHolder(binding)
+
+    }
+
+    // Replace the contents of a view (invoked by the layout manager)
+    override fun onBindViewHolder(holder: ScheduleViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-                val df = DateFormat.getTimeInstance(DateFormat.SHORT)
-                df.timeZone= TimeZone.getTimeZone("UTC")
+        val df = DateFormat.getTimeInstance(DateFormat.SHORT)
+        df.timeZone = TimeZone.getTimeZone("UTC")
 
-                holder.scheduleView.textView_schedule_row_title.text = myDataset.get(position).name
-                holder.scheduleView.textView_schedule_row_time_start.text = df.format(myDataset.get(position).time_start)
-                holder.scheduleView.textView_schedule_row_time_end.text =  df.format(myDataset.get(position).time_end)
+        holder.scheduleView.textViewScheduleRowTitle.text = myDataset[position].name
+        holder.scheduleView.textViewScheduleRowTimeStart.text =
+            df.format(myDataset[position].time_start)
+        holder.scheduleView.textViewScheduleRowTimeEnd.text =
+            df.format(myDataset[position].time_end)
 
-                val c = holder.scheduleView.context;
+        val c = holder.scheduleView.root.context
 
-                if(myDataset.get(position).mon){applyTextfieldStyle(holder.scheduleView.mon, c)}
-                if(myDataset.get(position).tue){applyTextfieldStyle(holder.scheduleView.tue, c)}
-                if(myDataset.get(position).wed){applyTextfieldStyle(holder.scheduleView.wed, c)}
-                if(myDataset.get(position).thu){applyTextfieldStyle(holder.scheduleView.thu, c)}
-                if(myDataset.get(position).fri){applyTextfieldStyle(holder.scheduleView.fri, c)}
-                if(myDataset.get(position).sat){applyTextfieldStyle(holder.scheduleView.sat, c)}
-                if(myDataset.get(position).sun){applyTextfieldStyle(holder.scheduleView.sun, c)}
+        if (myDataset[position].mon) {
+            applyTextfieldStyle(holder.scheduleView.mon, c)
+        }
+        if (myDataset[position].tue) {
+            applyTextfieldStyle(holder.scheduleView.tue, c)
+        }
+        if (myDataset[position].wed) {
+            applyTextfieldStyle(holder.scheduleView.wed, c)
+        }
+        if (myDataset[position].thu) {
+            applyTextfieldStyle(holder.scheduleView.thu, c)
+        }
+        if (myDataset[position].fri) {
+            applyTextfieldStyle(holder.scheduleView.fri, c)
+        }
+        if (myDataset[position].sat) {
+            applyTextfieldStyle(holder.scheduleView.sat, c)
+        }
+        if (myDataset[position].sun) {
+            applyTextfieldStyle(holder.scheduleView.sun, c)
+        }
 
-
-
-
-
-                holder.scheduleView.delete_schedule_element.setOnClickListener {
-                        DatabaseHandler(holder.scheduleView.context).deleteScheduleEntry(myDataset.get(position).id)
-                        removeAt(position)
-
-                }
-
-                holder.scheduleView.edit_schedule_element.setOnClickListener {
-                        ScheduleDialog(holder.scheduleView.context, this, myDataset.get(position)).show()
-                }
-
-                var imageID=R.drawable.ic_volume_up_black_24dp
-                when (myDataset.get(position).time_setting) {
-                        TIME_SETTING_LOUD -> imageID=R.drawable.ic_volume_up_black_24dp
-                        TIME_SETTING_VIBRATE -> imageID=R.drawable.ic_vibration_black_24dp
-                        TIME_SETTING_SILENT -> imageID=R.drawable.ic_volume_off_black_24dp
-                }
-                holder.scheduleView.imageView_volume_state.setImageDrawable(holder.scheduleView.context.getDrawable(imageID))
-
-
+        holder.scheduleView.deleteScheduleElement.setOnClickListener {
+            DatabaseHandler(holder.scheduleView.root.context).deleteScheduleEntry(
+                myDataset[position].id
+            )
+            removeAt(position)
 
         }
 
-        private fun applyTextfieldStyle(view: TextView, context: Context){
-                view.setTextColor(context.getColor(R.color.colorIcons))
-                view.setTypeface(view.typeface, Typeface.BOLD)
+        holder.scheduleView.editScheduleElement.setOnClickListener {
+            ScheduleDialog(holder.scheduleView.root.context, this, myDataset[position]).show()
         }
 
-        // Return the size of your dataset (invoked by the layout manager)
-        override fun getItemCount() = myDataset.size
+        var imageID = R.drawable.ic_volume_up_black_24dp
+        when (myDataset[position].time_setting) {
+            TIME_SETTING_LOUD -> imageID = R.drawable.ic_volume_up_black_24dp
+            TIME_SETTING_VIBRATE -> imageID = R.drawable.ic_vibration_black_24dp
+            TIME_SETTING_SILENT -> imageID = R.drawable.ic_volume_off_black_24dp
         }
+        holder.scheduleView.imageViewVolumeState.setImageDrawable(
+            holder.scheduleView.root.context.getDrawable(
+                imageID
+            )
+        )
+
+
+    }
+
+    private fun applyTextfieldStyle(view: TextView, context: Context) {
+        view.setTextColor(context.getColor(R.color.colorIcons))
+        view.setTypeface(view.typeface, Typeface.BOLD)
+    }
+
+    // Return the size of your dataset (invoked by the layout manager)
+    override fun getItemCount() = myDataset.size
+
+    class ScheduleViewHolder(val scheduleView: AdapterSchedulesListBinding): RecyclerView.ViewHolder(scheduleView.root)
+}
 
 

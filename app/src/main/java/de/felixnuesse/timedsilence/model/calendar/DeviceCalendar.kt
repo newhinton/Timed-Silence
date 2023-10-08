@@ -14,7 +14,6 @@ import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.permissions.CalendarAccess
 import de.felixnuesse.timedsilence.model.data.CalendarObject
-import kotlinx.android.synthetic.main.graph_fragment.*
 import java.time.Duration
 import java.util.*
 import java.util.regex.Pattern

@@ -2,6 +2,7 @@ package de.felixnuesse.timedsilence.handler.trigger
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,7 +12,6 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_RUN_ALARMTRIGGER_WHEN_IDLE
 import de.felixnuesse.timedsilence.Utils
-import de.felixnuesse.timedsilence.handler.trigger.TriggerInterface.Companion.FLAG_NOFLAG
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 
@@ -63,11 +63,11 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
         Log.e(Constants.APP_NAME, "AlarmHandler: Error canceling recurring alarm!")
     }
 
-    override fun createBroadcast(): PendingIntent? {
-        return createBroadcast(FLAG_NOFLAG)
+    override fun createBroadcast(): PendingIntent {
+        return createBroadcast(FLAG_IMMUTABLE)
     }
 
-    override fun createBroadcast(flag: Int): PendingIntent? {
+    override fun createBroadcast(flag: Int): PendingIntent {
 
         val broadcastIntent = Intent(mContext, AlarmBroadcastReceiver::class.java)
         broadcastIntent.putExtra(
@@ -84,7 +84,7 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
         )
 
         // The Pending Intent to pass in AlarmManager
-        return PendingIntent.getBroadcast(mContext,0, broadcastIntent,flag)
+        return PendingIntent.getBroadcast(mContext,0, broadcastIntent, flag or FLAG_IMMUTABLE)
     }
 
 
@@ -104,7 +104,7 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
         Log.e(Constants.APP_NAME, "Calculated time ${Utils.getDate(calculatedChecktime)}")
 
         val am = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pi: PendingIntent? = createBroadcast()
+        val pi: PendingIntent = createBroadcast()
         am.cancel(pi)
 
 
@@ -114,6 +114,8 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
             PREF_RUN_ALARMTRIGGER_WHEN_IDLE,
             false
         )
+
+        //todo: fix permission requesting
         if (allowWhileIdle) {
             am.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,

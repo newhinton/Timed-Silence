@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import kotlinx.android.synthetic.main.graph_fragment.*
 import de.felixnuesse.timedsilence.R
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -21,6 +20,8 @@ import androidx.fragment.app.Fragment
 import com.skydoves.balloon.*
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
+import de.felixnuesse.timedsilence.databinding.CalendarEventFragmentBinding
+import de.felixnuesse.timedsilence.databinding.GraphFragmentBinding
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
@@ -40,30 +41,34 @@ class GraphFragment : Fragment() {
 
     private var mBalloon: Balloon? = null
 
+    private var _binding: GraphFragmentBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return  inflater.inflate(R.layout.graph_fragment, container, false)
+        _binding = GraphFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewObject = view
 
-        imageview_legend_loud_help.setOnClickListener {
+        binding.imageviewLegendLoudHelp.setOnClickListener {
             handleTooltipRight(requireContext(), getString(R.string.volume_setting_loud_help), it)
         }
-        imageview_legend_silent_help.setOnClickListener {
+        binding.imageviewLegendSilentHelp.setOnClickListener {
             handleTooltipRight(requireContext(), getString(R.string.volume_setting_silent_help), it)
         }
-        imageview_legend_vibrate_help.setOnClickListener {
+        binding.imageviewLegendVibrateHelp.setOnClickListener {
             handleTooltipRight(requireContext(), getString(R.string.volume_setting_vibrate_help), it)
         }
-        imageview_legend_unset_help.setOnClickListener {
+        binding.imageviewLegendUnsetHelp.setOnClickListener {
             handleTooltipRight(requireContext(), getString(R.string.volume_setting_unset_help), it)
         }
 
-        imageview_headphones_connected.setOnClickListener {
+        binding.imageviewHeadphonesConnected.setOnClickListener {
             var builder = getTooltip(requireContext(), getString(R.string.headphones_help))
             builder.setArrowPosition(0.75f)
             it.showAlignTop(builder.build())
@@ -74,13 +79,13 @@ class GraphFragment : Fragment() {
 
 
         if(!HeadsetHandler.headphonesConnected(view.context)){
-            imageview_headphones_connected.visibility=View.INVISIBLE
-            textfield_headset_connected.visibility=View.INVISIBLE
+            binding.imageviewHeadphonesConnected.visibility=View.INVISIBLE
+            binding.textfieldHeadsetConnected.visibility=View.INVISIBLE
         }
 
         if(!SharedPreferencesHandler.getPref(view.context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)){
-            imageview_headphones_connected.visibility=View.INVISIBLE
-            textfield_headset_connected.visibility=View.INVISIBLE
+            binding.imageviewHeadphonesConnected.visibility=View.INVISIBLE
+            binding.textfieldHeadsetConnected.visibility=View.INVISIBLE
         }
 
     }
@@ -129,10 +134,10 @@ class GraphFragment : Fragment() {
             isFirstElem=false
         }
 
-        setLegendColor(context, R.color.color_graph_unset, imageView_legend_unset)
-        setLegendColor(context, R.color.color_graph_silent, imageView_legend_silent)
-        setLegendColor(context, R.color.color_graph_vibrate, imageView_legend_vibrate)
-        setLegendColor(context, R.color.color_graph_loud, imageView_legend_loud)
+        setLegendColor(context, R.color.color_graph_unset, binding.imageViewLegendUnset)
+        setLegendColor(context, R.color.color_graph_silent, binding.imageViewLegendSilent)
+        setLegendColor(context, R.color.color_graph_vibrate, binding.imageViewLegendVibrate)
+        setLegendColor(context, R.color.color_graph_loud, binding.imageViewLegendLoud)
     }
 
 
@@ -323,5 +328,10 @@ class GraphFragment : Fragment() {
         }
 
         return true
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

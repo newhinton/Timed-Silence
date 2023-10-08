@@ -9,10 +9,11 @@ import android.view.Window
 import android.view.WindowManager
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.databinding.CalendarDialogBinding
+import de.felixnuesse.timedsilence.databinding.KeywordDialogBinding
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.data.KeywordObject.Companion.ALL_CALENDAR
-import kotlinx.android.synthetic.main.keyword_dialog.*
 
 
 /**
@@ -47,6 +48,8 @@ class KeywordDialog(context: Context) : Dialog(context) {
 
     private var tfrag: KeywordFragment? = null
 
+    private lateinit var binding: KeywordDialogBinding
+
     constructor(context: Context, tfragment: KeywordFragment) : this(context) {
         tfrag=tfragment
     }
@@ -56,17 +59,21 @@ class KeywordDialog(context: Context) : Dialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.keyword_dialog)
+
+        binding = KeywordDialogBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         setCanceledOnTouchOutside(true)
 
 
         hideAll()
-        keyword_back.visibility = View.INVISIBLE
-        keyword_dialog_title.text = context.getText(R.string.keyword_dialog_title_title)
-        keyword_keyword_layout.visibility = View.VISIBLE
+        binding.keywordBack.visibility = View.INVISIBLE
+        binding.keywordDialogTitle.text = context.getText(R.string.keyword_dialog_title_title)
+        binding.keywordKeywordLayout.visibility = View.VISIBLE
 
-        keyword_next.setOnClickListener {
+        binding.keywordNext.setOnClickListener {
             Log.e(Constants.APP_NAME, "KeywordDialog: next!")
 
             hideAll()
@@ -74,7 +81,7 @@ class KeywordDialog(context: Context) : Dialog(context) {
             decideState()
         }
 
-        keyword_back.setOnClickListener {
+        binding.keywordBack.setOnClickListener {
             Log.e(Constants.APP_NAME, "KeywordDialog: back!")
 
             hideAll()
@@ -82,19 +89,19 @@ class KeywordDialog(context: Context) : Dialog(context) {
             decideState()
         }
 
-        keyword_cancel.setOnClickListener {
+        binding.keywordCancel.setOnClickListener {
             Log.e(Constants.APP_NAME, "KeywordDialog: cancel!")
             this.cancel()
         }
 
-        keyword_save.setOnClickListener {
+        binding.keywordSave.setOnClickListener {
             Log.e(Constants.APP_NAME, "KeywordDialog: save!")
 
             val volId = getValueForVolumeRadioGroup()
             val keyword = KeywordObject(
                 0,
                 ALL_CALENDAR,
-                keyword_textfield.text.toString(),
+                binding.keywordTextfield.text.toString(),
                 volId
             )
             tfrag?.saveKeyword(context, keyword)
@@ -103,12 +110,12 @@ class KeywordDialog(context: Context) : Dialog(context) {
     }
 
     private fun hideAll() {
-        keyword_keyword_layout.visibility = View.GONE
-        keyword_dialog_rb_volume.visibility = View.GONE
+        binding.keywordKeywordLayout.visibility = View.GONE
+        binding.keywordDialogRbVolume.visibility = View.GONE
     }
 
     private fun getValueForVolumeRadioGroup(): Int{
-        when (keyword_dialog_rb_volume.checkedRadioButtonId) {
+        when (binding.keywordDialogRbVolume.checkedRadioButtonId) {
             R.id.keyword_dialog_rb_loud -> return Constants.TIME_SETTING_LOUD
             R.id.keyword_dialog_rb_silent -> return Constants.TIME_SETTING_SILENT
             R.id.keyword_dialog_rb_vibrate -> return Constants.TIME_SETTING_VIBRATE
@@ -119,27 +126,27 @@ class KeywordDialog(context: Context) : Dialog(context) {
     private fun decideState() {
 
         if(state==0){
-            keyword_back.visibility = View.INVISIBLE
-            keyword_save.visibility = View.GONE
-            keyword_next.visibility = View.VISIBLE
+            binding.keywordBack.visibility = View.INVISIBLE
+            binding.keywordSave.visibility = View.GONE
+            binding.keywordNext.visibility = View.VISIBLE
         }else if (state == 1){
-            keyword_save.visibility = View.VISIBLE
-            keyword_back.visibility = View.VISIBLE
-            keyword_next.visibility = View.GONE
+            binding.keywordSave.visibility = View.VISIBLE
+            binding.keywordBack.visibility = View.VISIBLE
+            binding.keywordNext.visibility = View.GONE
         }else {
-            keyword_back.visibility = View.VISIBLE
-            keyword_next.visibility = View.VISIBLE
-            keyword_save.visibility = View.GONE
+            binding.keywordBack.visibility = View.VISIBLE
+            binding.keywordNext.visibility = View.VISIBLE
+            binding.keywordSave.visibility = View.GONE
         }
 
         when (state) {
             0 -> {
-                keyword_dialog_title.text = context.getText(R.string.keyword_dialog_title_title)
-                keyword_keyword_layout.visibility = View.VISIBLE
+                binding.keywordDialogTitle.text = context.getText(R.string.keyword_dialog_title_title)
+                binding.keywordKeywordLayout.visibility = View.VISIBLE
             }
             1 -> {
-                keyword_dialog_title.text = context.getText(R.string.schedule_dialog_title_volume)
-                keyword_dialog_rb_volume.visibility = View.VISIBLE
+                binding.keywordDialogTitle.text = context.getText(R.string.schedule_dialog_title_volume)
+                binding.keywordDialogRbVolume.visibility = View.VISIBLE
 
             }
 

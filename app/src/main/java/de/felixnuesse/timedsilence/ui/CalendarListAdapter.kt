@@ -11,11 +11,10 @@ import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.databinding.AdapterCalendarListBinding
 import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import kotlinx.android.synthetic.main.adapter_calendar_list.view.*
-import kotlinx.android.synthetic.main.adapter_schedules_list.view.imageView_volume_state
 import kotlin.collections.ArrayList
 
 
@@ -43,11 +42,12 @@ import kotlin.collections.ArrayList
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
-class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, var calHandler: CalendarHandler) : RecyclerView.Adapter<CalendarListAdapter.CalendarViewHolder>() {
+class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, private var calHandler: CalendarHandler) : RecyclerView.Adapter<CalendarListAdapter.CalendarViewHolder>() {
 
         fun removeAt(position: Int) {
                 myDataset.removeAt(position)
-                notifyDataSetChanged()
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, myDataset.size)
         }
 
         fun update(context: Context, co: CalendarObject){
@@ -58,11 +58,9 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, var 
         }
 
         // Create new views (invoked by the layout manager)
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarListAdapter.CalendarViewHolder {
-                // create a new view
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_calendar_list, parent, false)
-                // set the view's size, margins, paddings and layout parameters
-                return CalendarViewHolder(view, calHandler)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
+                val binding = AdapterCalendarListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return CalendarViewHolder(binding, calHandler)
         }
 
         // Replace the contents of a view (invoked by the layout manager)
@@ -71,16 +69,15 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, var 
                 // - replace the contents of the view with that element
                 val calObject=myDataset.get(position)
 
-                holder.calendarView.textView_calendar_row_title.text = calObject.name
-
-                holder.calendarView.delete_calendar_element.setOnClickListener {
-                        DatabaseHandler(holder.calendarView.context).deleteCalendarEntry(calObject.id)
+                holder.calendarView.textViewCalendarRowTitle.text = calObject.name
+                holder.calendarView.deleteCalendarElement.setOnClickListener {
+                        DatabaseHandler(holder.calendarView.root.context).deleteCalendarEntry(calObject.id)
                         removeAt(position)
                 }
 
-                applyTextfieldStyle(holder.calendarView.textView_calendar_row_title)
+                applyTextfieldStyle(holder.calendarView.textViewCalendarRowTitle)
 
-                holder.calendarView.imageView_calendar_color.setColorFilter(calHandler.getCalendarColor(calObject.name))
+                holder.calendarView.imageViewCalendarColor.setColorFilter(calHandler.getCalendarColor(calObject.name))
 
                 var imageID=R.drawable.ic_volume_up_black_24dp
                 when (calObject.volume) {
@@ -88,7 +85,7 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, var 
                         TIME_SETTING_VIBRATE -> imageID=R.drawable.ic_vibration_black_24dp
                         TIME_SETTING_SILENT -> imageID=R.drawable.ic_volume_off_black_24dp
                 }
-                holder.calendarView.imageView_volume_state.setImageDrawable(holder.calendarView.context.getDrawable(imageID))
+                holder.calendarView.imageViewVolumeState.setImageDrawable(holder.calendarView.root.context.getDrawable(imageID))
         }
 
         private fun applyTextfieldStyle(view: TextView){
@@ -103,7 +100,7 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, var 
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder.
         // Each data item is just a string in this case that is shown in a TextView.
-        class CalendarViewHolder(val calendarView: View, var calHandler: CalendarHandler) : RecyclerView.ViewHolder(calendarView)
+        class CalendarViewHolder(val calendarView: AdapterCalendarListBinding, var calHandler: CalendarHandler) : RecyclerView.ViewHolder(calendarView.root)
 
 }
 

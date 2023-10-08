@@ -9,13 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import de.felixnuesse.timedsilence.Constants
 import androidx.recyclerview.widget.RecyclerView
+import de.felixnuesse.timedsilence.databinding.CalendarEventFragmentBinding
 import de.felixnuesse.timedsilence.dialogs.CalendarDialog
 import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.CalendarListAdapter
 import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
-import kotlinx.android.synthetic.main.calendar_event_fragment.*
 import kotlin.collections.ArrayList
 
 
@@ -32,12 +32,17 @@ class CalendarEventFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
+    private var _binding: CalendarEventFragmentBinding? = null
+    private val binding get() = _binding!!
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(de.felixnuesse.timedsilence.R.layout.calendar_event_fragment, container, false)
+        _binding = CalendarEventFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +52,7 @@ class CalendarEventFragment : Fragment() {
 
         checkContainer(calHandler, view.context)
 
-        button_calendar_fragment.setOnClickListener {
+        binding.buttonCalendarFragment.setOnClickListener {
             Log.e(Constants.APP_NAME, "CalendarFragment: Add new!")
             CalendarDialog(view.context, this, calHandler).show()
         }
@@ -61,7 +66,7 @@ class CalendarEventFragment : Fragment() {
         viewManager = NestedRecyclerManager(view.context)
         viewAdapter = CalendarListAdapter(db.getAllCalendarEntries(), calHandler)
 
-        calendar_fragment_recylcer_list_view.apply {
+        binding.calendarFragmentRecylcerListView.apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
@@ -77,9 +82,9 @@ class CalendarEventFragment : Fragment() {
     }
 
     private fun checkContainer(calHandler: CalendarHandler, context: Context){
-        val emtpyMessage = CalendarEmptyContainer
-        val permissionMessage = CalendarPermissionContainer
-        val listContainer = CalendarListContainer
+        val emtpyMessage = binding.CalendarEmptyContainer
+        val permissionMessage = binding.CalendarPermissionContainer
+        val listContainer = binding.CalendarListContainer
 
         emtpyMessage.visibility = View.GONE
         permissionMessage.visibility = View.GONE
@@ -110,7 +115,7 @@ class CalendarEventFragment : Fragment() {
             CalendarHandler(context)
         )
 
-        calendar_fragment_recylcer_list_view.apply {
+        binding.calendarFragmentRecylcerListView.apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
@@ -122,5 +127,11 @@ class CalendarEventFragment : Fragment() {
             adapter = viewAdapter
 
         }
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

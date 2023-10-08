@@ -47,15 +47,17 @@ class WifiHandler {
             var ssid: String? = null
             val connManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = connManager.activeNetworkInfo
-            if (networkInfo.isConnected) {
-                Log.d(Constants.APP_NAME, "Wifimanager: networkInfo is connected")
+            if (networkInfo != null) {
+                if (networkInfo.isConnected) {
+                    Log.d(Constants.APP_NAME, "Wifimanager: networkInfo is connected")
 
-                val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
-                val connectionInfo = wifiManager.connectionInfo
-                if (connectionInfo != null && connectionInfo.ssid != "") {
-                    ssid = connectionInfo.ssid
+                    val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
+                    val connectionInfo = wifiManager.connectionInfo
+                    if (connectionInfo != null && connectionInfo.ssid != "") {
+                        ssid = connectionInfo.ssid
 
-                    Log.d(Constants.APP_NAME, "Wifimanager: non blank, non null ssid")
+                        Log.d(Constants.APP_NAME, "Wifimanager: non blank, non null ssid")
+                    }
                 }
             }
 

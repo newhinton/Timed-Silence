@@ -54,6 +54,7 @@ import com.google.android.material.tabs.TabLayout
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.Constants.Companion.MAIN_ACTIVITY_LOAD_CALENDAR_FORCE
 import de.felixnuesse.timedsilence.activities.SettingsMainActivity
+import de.felixnuesse.timedsilence.databinding.ActivityMainBinding
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
@@ -67,7 +68,6 @@ import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.PauseTimerService
 import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
-import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 
 
@@ -80,14 +80,20 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     private lateinit var mPager : ViewPager
     private lateinit var mTrigger: Trigger
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         ThemeHandler.setTheme(this, window)
-        ThemeHandler.setTabLayoutTheme(this, tabLayout)
 
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(bottom_app_bar)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        ThemeHandler.setTabLayoutTheme(this, binding.tabLayout)
+
+        setSupportActionBar(binding.bottomAppBar)
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
@@ -99,17 +105,17 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         //This hidden button is needed because the buttonsound of the main button is supressed because the device is still muted. A click is performed on this button, and when the onClick handler is set,
         //it plays a sound after the volume has changed to loud. Therefore it seems to be the main button who makes the sound
-        button_buttonsound_fix.isSoundEffectsEnabled=true
-        button_buttonsound_fix.setOnClickListener {
+        binding.buttonButtonsoundFix.isSoundEffectsEnabled=true
+        binding.buttonButtonsoundFix.setOnClickListener {
             Log.e(APP_NAME, "MainAcitivity: HiddenButton: PerformClick to make sound")
         }
 
-        fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             //Log.e(APP_NAME, "Main: fab: Clicked")
             setHandlerState()
         }
 
-        frameLayout.setOnClickListener {
+        binding.frameLayout.setOnClickListener {
             //Log.e(APP_NAME, "Main: FabTester: Clicked")
             buttonState()
         }
@@ -148,8 +154,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         })
 
 
-        val tabs = tabLayout
-        mPager = viewPager
+        val tabs = binding.tabLayout
+        mPager = binding.viewPager
 
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -161,7 +167,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        mPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        mPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {}
             override fun onPageScrolled(
@@ -182,11 +188,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
         mPager.adapter = pagerAdapter
 
-        tabs.getTabAt(0)?.setText("")
-        tabs.getTabAt(1)?.setText("")
-        tabs.getTabAt(2)?.setText("")
-        tabs.getTabAt(3)?.setText("")
-        tabs.getTabAt(4)?.setText("")
+        tabs.getTabAt(0)?.text = ""
+        tabs.getTabAt(1)?.text = ""
+        tabs.getTabAt(2)?.text = ""
+        tabs.getTabAt(3)?.text = ""
+        tabs.getTabAt(4)?.text = ""
 
 
         SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
@@ -208,7 +214,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         }
     }
 
-    fun loadCalendarFragment(){
+    private fun loadCalendarFragment(){
         val intentFragment = intent?.extras?.getInt(Constants.MAIN_ACTIVITY_LOAD_CALENDAR)
         if(intentFragment == MAIN_ACTIVITY_LOAD_CALENDAR_FORCE){
             mPager.currentItem = 2
@@ -227,8 +233,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         //This handler is needed. Otherwise the state is not beeing restored
         Handler().postDelayed({
-            if (viewPager.adapter != null) {
-                viewPager.adapter = ScreenSlidePagerAdapter(supportFragmentManager)
+            if (binding.viewPager.adapter != null) {
+                binding.viewPager.adapter = ScreenSlidePagerAdapter(supportFragmentManager)
                 mPager.currentItem = lastTabPosition
             }
         }, 0)
@@ -254,7 +260,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
                 val makeSound = !voLHandler.isButtonClickAudible(this)
                 voLHandler.setLoud()
                 if (makeSound) {
-                    button_buttonsound_fix.performClick()
+                    binding.buttonButtonsoundFix.performClick()
                 }
                 Toast.makeText(this, getString(R.string.loud), Toast.LENGTH_LONG).show()
             }
@@ -288,7 +294,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     }
 
 
-    fun openSettings(): Boolean {
+    private fun openSettings(): Boolean {
         val intent = Intent(this, SettingsMainActivity::class.java).apply {}
         startActivity(intent)
         return true
@@ -304,7 +310,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     }
 
 
-    fun updateTimeCheckDisplay(){
+    private fun updateTimeCheckDisplay(){
         val nextCheckDisplayTextView= findViewById<TextView>(R.id.nextCheckDisplay)
         nextCheckDisplayTextView.text= mTrigger.getNextAlarmTimestamp()
 
@@ -337,15 +343,15 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     private fun buttonState() {
 
-        Log.e(Constants.APP_NAME, "Main: ButtonStartCheck: State: " + button_check)
+        Log.e(APP_NAME, "Main: ButtonStartCheck: State: $button_check")
 
         //Todo remove dummy textview
         if(mTrigger.checkIfNextAlarmExists()){
-            setFabStarted(fab, TextView(this))
+            setFabStarted(binding.fab, TextView(this))
         }else if(PauseTimerService.isTimerRunning()){
-            setFabPaused(fab, TextView(this))
+            setFabPaused(binding.fab, TextView(this))
         }else{
-            setFabStopped(fab, TextView(this))
+            setFabStopped(binding.fab, TextView(this))
         }
         updateTimeCheckDisplay()
         WidgetService.updateStateWidget(this)
@@ -382,7 +388,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     private fun setHandlerState() {
 
-        Log.e(APP_NAME, "Main: setHandlerState: State: " + button_check)
+        Log.e(APP_NAME, "Main: setHandlerState: State: $button_check")
 
         if(button_check == getString(R.string.timecheck_start)){
             mTrigger.createTimecheck()

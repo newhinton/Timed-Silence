@@ -12,13 +12,14 @@ import android.view.ViewGroup
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.databinding.CalendarEventFragmentBinding
+import de.felixnuesse.timedsilence.databinding.WifiConnectedFragmentBinding
 import de.felixnuesse.timedsilence.dialogs.WifiDialog
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
 import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.WifiListAdapter
 import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
-import kotlinx.android.synthetic.main.wifi_connected_fragment.*
 
 
 class WifiConnectedFragment : Fragment() {
@@ -26,14 +27,16 @@ class WifiConnectedFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
+    private var _binding: WifiConnectedFragmentBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
-        return  inflater.inflate(R.layout.wifi_connected_fragment, container, false)
+        _binding = WifiConnectedFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -42,13 +45,13 @@ class WifiConnectedFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        buttonRequestWifiPermissions.setOnClickListener {
+        binding.buttonRequestWifiPermissions.setOnClickListener {
             Log.e(Constants.APP_NAME, "WifiConnectedFragment: Request Location Permission!")
             WifiHandler.requestPermissions(view.context as Activity)
             checkContainer()
         }
 
-        button_wifi_add_fragment.setOnClickListener {
+        binding.buttonWifiAddFragment.setOnClickListener {
             Log.e(APP_NAME, "WifiFragment: Add new!")
             //createSSIDDialog(view.context)
             WifiDialog(view.context, this).show()
@@ -63,7 +66,7 @@ class WifiConnectedFragment : Fragment() {
         viewManager = NestedRecyclerManager(view.context)
         viewAdapter = WifiListAdapter(db.getAllWifiEntries())
 
-        wifi_recylcer_list_view.apply {
+        binding.wifiRecylcerListView.apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(false)
@@ -81,9 +84,9 @@ class WifiConnectedFragment : Fragment() {
     private fun checkContainer(){
 
         //val a = activity.findViewById(R.id.WifiContentContainer) as ConstraintLayout
-        val a = WifiContentContainer
+        val a = binding.WifiContentContainer
         //val b = activity.findViewById(R.id.WifiRequestLocationContainer) as ConstraintLayout
-        val b = WifiRequestLocationContainer
+        val b = binding.WifiRequestLocationContainer
 
 
         a.visibility = View.GONE
@@ -100,7 +103,7 @@ class WifiConnectedFragment : Fragment() {
         db.createWifiEntry(wifiObj)
         viewAdapter = WifiListAdapter(db.getAllWifiEntries())
 
-        wifi_recylcer_list_view.apply {
+        binding.wifiRecylcerListView.apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
@@ -112,5 +115,10 @@ class WifiConnectedFragment : Fragment() {
             adapter = viewAdapter
 
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -9,14 +9,12 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import androidx.core.content.ContextCompat.getSystemService
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.databinding.ScheduleDialogBinding
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
-import kotlinx.android.synthetic.main.schedule_dialog.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -56,6 +54,8 @@ class ScheduleDialog(context: Context) : Dialog(context) {
     private var createNewSchedule: Boolean = true
     private var existingSchedule: ScheduleObject? = null
 
+    private lateinit var binding: ScheduleDialogBinding
+
     constructor(context: Context, timeFragment: TimeFragment) : this(context) {
         this.timeFragment = timeFragment
         createNewSchedule = true
@@ -72,7 +72,11 @@ class ScheduleDialog(context: Context) : Dialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.schedule_dialog)
+
+        binding = ScheduleDialogBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         window!!.setLayout(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT
@@ -86,28 +90,28 @@ class ScheduleDialog(context: Context) : Dialog(context) {
 
         if (createNewSchedule) {
             when(Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-                Calendar.MONDAY -> schedule_dialog_days_monday.isChecked = true
-                Calendar.TUESDAY -> schedule_dialog_days_tuesday.isChecked = true
-                Calendar.WEDNESDAY -> schedule_dialog_days_wednesday.isChecked = true
-                Calendar.THURSDAY -> schedule_dialog_days_thursday.isChecked = true
-                Calendar.FRIDAY -> schedule_dialog_days_friday.isChecked = true
-                Calendar.SATURDAY -> schedule_dialog_days_saturday.isChecked = true
-                Calendar.SUNDAY -> schedule_dialog_days_sunday.isChecked = true
+                Calendar.MONDAY -> binding.scheduleDialogDaysMonday.isChecked = true
+                Calendar.TUESDAY -> binding.scheduleDialogDaysTuesday.isChecked = true
+                Calendar.WEDNESDAY -> binding.scheduleDialogDaysWednesday.isChecked = true
+                Calendar.THURSDAY -> binding.scheduleDialogDaysThursday.isChecked = true
+                Calendar.FRIDAY -> binding.scheduleDialogDaysFriday.isChecked = true
+                Calendar.SATURDAY -> binding.scheduleDialogDaysSaturday.isChecked = true
+                Calendar.SUNDAY -> binding.scheduleDialogDaysSunday.isChecked = true
             }
         }
 
         hideAll()
-        schedule_back.visibility = View.INVISIBLE
-        schedule_start_timepicker.setIs24HourView(DateFormat.is24HourFormat(context))
-        schedule_end_timepicker.setIs24HourView(DateFormat.is24HourFormat(context))
+        binding.scheduleBack.visibility = View.INVISIBLE
+        binding.scheduleStartTimepicker.setIs24HourView(DateFormat.is24HourFormat(context))
+        binding.scheduleEndTimepicker.setIs24HourView(DateFormat.is24HourFormat(context))
 
-        schedule_dialog_title.text = context.getText(R.string.schedule_dialog_title_title)
-        schedule_title_layout.visibility = View.VISIBLE
+        binding.scheduleDialogTitle.text = context.getText(R.string.schedule_dialog_title_title)
+        binding.scheduleTitleLayout.visibility = View.VISIBLE
 
-        schedule_next.setOnClickListener {
+        binding.scheduleNext.setOnClickListener {
             Log.e(Constants.APP_NAME, "ScheduleDialog: next!")
 
-            val view = schedule_dialog_title
+            val view = binding.scheduleDialogTitle
             val imm: InputMethodManager? = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
             imm?.hideSoftInputFromWindow(view?.windowToken, 0)
 
@@ -116,7 +120,7 @@ class ScheduleDialog(context: Context) : Dialog(context) {
             decideState()
         }
 
-        schedule_back.setOnClickListener {
+        binding.scheduleBack.setOnClickListener {
             Log.e(Constants.APP_NAME, "ScheduleDialog: back!")
 
             hideAll()
@@ -124,44 +128,44 @@ class ScheduleDialog(context: Context) : Dialog(context) {
             decideState()
         }
 
-        schedule_cancel.setOnClickListener {
+        binding.scheduleCancel.setOnClickListener {
             Log.e(Constants.APP_NAME, "ScheduleDialog: cancel!")
             this.cancel()
         }
 
-        schedule_save.setOnClickListener {
+        binding.scheduleSave.setOnClickListener {
             Log.e(Constants.APP_NAME, "ScheduleDialog: save!")
 
             if (createNewSchedule) {
                 val so = ScheduleObject(
-                    schedule_title_textfield.text.toString(),
-                    (schedule_start_timepicker.hour * 60 * 60 * 1000 + schedule_start_timepicker.minute * 60 * 1000).toLong(),
-                    (schedule_end_timepicker.hour * 60 * 60 * 1000 + schedule_end_timepicker.minute * 60 * 1000).toLong(),
+                    binding.scheduleTitleTextfield.text.toString(),
+                    (binding.scheduleStartTimepicker.hour * 60 * 60 * 1000 + binding.scheduleStartTimepicker.minute * 60 * 1000).toLong(),
+                    (binding.scheduleEndTimepicker.hour * 60 * 60 * 1000 + binding.scheduleEndTimepicker.minute * 60 * 1000).toLong(),
                     getValueForVolumeRadioGroup(),
                     0,
-                    schedule_dialog_days_monday.isChecked,
-                    schedule_dialog_days_tuesday.isChecked,
-                    schedule_dialog_days_wednesday.isChecked,
-                    schedule_dialog_days_thursday.isChecked,
-                    schedule_dialog_days_friday.isChecked,
-                    schedule_dialog_days_saturday.isChecked,
-                    schedule_dialog_days_sunday.isChecked
+                    binding.scheduleDialogDaysMonday.isChecked,
+                    binding.scheduleDialogDaysTuesday.isChecked,
+                    binding.scheduleDialogDaysWednesday.isChecked,
+                    binding.scheduleDialogDaysThursday.isChecked,
+                    binding.scheduleDialogDaysFriday.isChecked,
+                    binding.scheduleDialogDaysSaturday.isChecked,
+                    binding.scheduleDialogDaysSunday.isChecked
                 )
                 timeFragment?.saveSchedule(context, so)
             } else {
                 val so = ScheduleObject(
-                    schedule_title_textfield.text.toString(),
-                    (schedule_start_timepicker.hour * 60 * 60 * 1000 + schedule_start_timepicker.minute * 60 * 1000).toLong(),
-                    (schedule_end_timepicker.hour * 60 * 60 * 1000 + schedule_end_timepicker.minute * 60 * 1000).toLong(),
+                    binding.scheduleTitleTextfield.text.toString(),
+                    (binding.scheduleStartTimepicker.hour * 60 * 60 * 1000 + binding.scheduleStartTimepicker.minute * 60 * 1000).toLong(),
+                    (binding.scheduleEndTimepicker.hour * 60 * 60 * 1000 + binding.scheduleEndTimepicker.minute * 60 * 1000).toLong(),
                     getValueForVolumeRadioGroup(),
                     existingSchedule!!.id,
-                    schedule_dialog_days_monday.isChecked,
-                    schedule_dialog_days_tuesday.isChecked,
-                    schedule_dialog_days_wednesday.isChecked,
-                    schedule_dialog_days_thursday.isChecked,
-                    schedule_dialog_days_friday.isChecked,
-                    schedule_dialog_days_saturday.isChecked,
-                    schedule_dialog_days_sunday.isChecked
+                    binding.scheduleDialogDaysMonday.isChecked,
+                    binding.scheduleDialogDaysTuesday.isChecked,
+                    binding.scheduleDialogDaysWednesday.isChecked,
+                    binding.scheduleDialogDaysThursday.isChecked,
+                    binding.scheduleDialogDaysFriday.isChecked,
+                    binding.scheduleDialogDaysSaturday.isChecked,
+                    binding.scheduleDialogDaysSunday.isChecked
                 )
                 scheduleListHolder?.update(context, so)
             }
@@ -172,15 +176,15 @@ class ScheduleDialog(context: Context) : Dialog(context) {
     }
 
     private fun hideAll() {
-        schedule_title_layout.visibility = View.GONE
-        schedule_start_timepicker.visibility = View.GONE
-        schedule_end_timepicker.visibility = View.GONE
-        schedule_dialog_rb_volume.visibility = View.GONE
-        schedule_days_layout.visibility = View.GONE
+        binding.scheduleTitleLayout.visibility = View.GONE
+        binding.scheduleStartTimepicker.visibility = View.GONE
+        binding.scheduleEndTimepicker.visibility = View.GONE
+        binding.scheduleDialogRbVolume.visibility = View.GONE
+        binding.scheduleDaysLayout.visibility = View.GONE
     }
 
     private fun getValueForVolumeRadioGroup(): Int {
-        when (schedule_dialog_rb_volume.checkedRadioButtonId) {
+        when (binding.scheduleDialogRbVolume.checkedRadioButtonId) {
             R.id.schedule_dialog_rb_loud -> return Constants.TIME_SETTING_LOUD
             R.id.schedule_dialog_rb_silent -> return Constants.TIME_SETTING_SILENT
             R.id.schedule_dialog_rb_vibrate -> return Constants.TIME_SETTING_VIBRATE
@@ -190,74 +194,74 @@ class ScheduleDialog(context: Context) : Dialog(context) {
 
     private fun setValueForVolumeRadioGroup(id: Int) {
         when (id) {
-            Constants.TIME_SETTING_LOUD -> schedule_dialog_rb_loud.isChecked = true
-            Constants.TIME_SETTING_SILENT -> schedule_dialog_rb_silent.isChecked = true
-            Constants.TIME_SETTING_VIBRATE -> schedule_dialog_rb_vibrate.isChecked = true
+            Constants.TIME_SETTING_LOUD -> binding.scheduleDialogRbLoud.isChecked = true
+            Constants.TIME_SETTING_SILENT -> binding.scheduleDialogRbSilent.isChecked = true
+            Constants.TIME_SETTING_VIBRATE -> binding.scheduleDialogRbVibrate.isChecked = true
         }
     }
 
     private fun prepareUpdate(so: ScheduleObject) {
-        schedule_title_textfield.setText(so.name)
+        binding.scheduleTitleTextfield.setText(so.name)
 
         var hours = TimeUnit.MILLISECONDS.toHours(so.time_start).toInt()
         var min =
             TimeUnit.MILLISECONDS.toMinutes(so.time_start - TimeUnit.HOURS.toMillis(hours.toLong()))
                 .toInt()
-        schedule_start_timepicker.hour = hours
-        schedule_start_timepicker.minute = min
+        binding.scheduleStartTimepicker.hour = hours
+        binding.scheduleStartTimepicker.minute = min
 
         hours = TimeUnit.MILLISECONDS.toHours(so.time_end).toInt()
         min = TimeUnit.MILLISECONDS.toMinutes(so.time_end - TimeUnit.HOURS.toMillis(hours.toLong()))
             .toInt()
-        schedule_end_timepicker.hour = hours
-        schedule_end_timepicker.minute = min
+        binding.scheduleEndTimepicker.hour = hours
+        binding.scheduleEndTimepicker.minute = min
 
         setValueForVolumeRadioGroup(so.time_setting)
 
-        schedule_dialog_days_monday.isChecked = so.mon
-        schedule_dialog_days_tuesday.isChecked = so.tue
-        schedule_dialog_days_wednesday.isChecked = so.wed
-        schedule_dialog_days_thursday.isChecked = so.thu
-        schedule_dialog_days_friday.isChecked = so.fri
-        schedule_dialog_days_saturday.isChecked = so.sat
-        schedule_dialog_days_sunday.isChecked = so.sun
+        binding.scheduleDialogDaysMonday.isChecked = so.mon
+        binding.scheduleDialogDaysTuesday.isChecked = so.tue
+        binding.scheduleDialogDaysWednesday.isChecked = so.wed
+        binding.scheduleDialogDaysThursday.isChecked = so.thu
+        binding.scheduleDialogDaysFriday.isChecked = so.fri
+        binding.scheduleDialogDaysSaturday.isChecked = so.sat
+        binding.scheduleDialogDaysSunday.isChecked = so.sun
     }
 
     private fun decideState() {
 
         if (state == 0) {
-            schedule_back.visibility = View.INVISIBLE
-            schedule_save.visibility = View.GONE
+            binding.scheduleBack.visibility = View.INVISIBLE
+            binding.scheduleSave.visibility = View.GONE
         } else if (state == 4) {
-            schedule_save.visibility = View.VISIBLE
-            schedule_back.visibility = View.VISIBLE
-            schedule_next.visibility = View.GONE
+            binding.scheduleSave.visibility = View.VISIBLE
+            binding.scheduleBack.visibility = View.VISIBLE
+            binding.scheduleNext.visibility = View.GONE
         } else {
-            schedule_back.visibility = View.VISIBLE
-            schedule_next.visibility = View.VISIBLE
-            schedule_save.visibility = View.GONE
+            binding.scheduleBack.visibility = View.VISIBLE
+            binding.scheduleNext.visibility = View.VISIBLE
+            binding.scheduleSave.visibility = View.GONE
         }
 
         when (state) {
             0 -> {
-                schedule_dialog_title.text = context.getText(R.string.schedule_dialog_title_title)
-                schedule_title_layout.visibility = View.VISIBLE
+                binding.scheduleDialogTitle.text = context.getText(R.string.schedule_dialog_title_title)
+                binding.scheduleTitleLayout.visibility = View.VISIBLE
             }
             1 -> {
-                schedule_dialog_title.text = context.getText(R.string.schedule_dialog_title_volume)
-                schedule_dialog_rb_volume.visibility = View.VISIBLE
+                binding.scheduleDialogTitle.text = context.getText(R.string.schedule_dialog_title_volume)
+                binding.scheduleTitleLayout.visibility = View.VISIBLE
             }
             2 -> {
-                schedule_dialog_title.text = context.getText(R.string.schedule_dialog_title_start)
-                schedule_start_timepicker.visibility = View.VISIBLE
+                binding.scheduleDialogTitle.text = context.getText(R.string.schedule_dialog_title_start)
+                binding.scheduleTitleLayout.visibility = View.VISIBLE
             }
             3 -> {
-                schedule_dialog_title.text = context.getText(R.string.schedule_dialog_title_end)
-                schedule_end_timepicker.visibility = View.VISIBLE
+                binding.scheduleDialogTitle.text = context.getText(R.string.schedule_dialog_title_end)
+                binding.scheduleTitleLayout.visibility = View.VISIBLE
             }
             4 -> {
-                schedule_dialog_title.text = context.getText(R.string.schedule_dialog_title_days)
-                schedule_days_layout.visibility = View.VISIBLE
+                binding.scheduleDialogTitle.text = context.getText(R.string.schedule_dialog_title_days)
+                binding.scheduleTitleLayout.visibility = View.VISIBLE
             }
         }
 

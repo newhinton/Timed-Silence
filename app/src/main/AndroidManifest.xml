@@ -1,57 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="de.felixnuesse.timedsilence">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission
-            android:name="android.permission.ACCESS_COARSE_LOCATION"/> <!-- This is required because wifi ssids can be used to identify a position of the user -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- This is required because wifi ssids can be used to identify a position of the user -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- Needed for statechange of icon in graphview -->
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/> <!-- Needed for headset identification -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> <!-- Needed for headset identification -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-permission android:name="android.permission.READ_CALENDAR"/>
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
 
     <!--todo: migrate to scoped storage!-->
     <application
-            android:allowBackup="true"
-            android:fullBackupContent="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme"
-            android:requestLegacyExternalStorage="true"
-            tools:ignore="GoogleAppIndexingWarning">
+        android:allowBackup="true"
+        android:fullBackupContent="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".activities.SettingsMainActivity"/>
+        <activity android:name=".activities.SettingsMainActivity" />
         <activity android:name=".activities.SettingsVolumeActivity" />
 
         <activity
-                android:name=".MainActivity"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Registering the BroadcastReceiver ! -->
-        <receiver android:name=".receiver.AlarmBroadcastReceiver"/>
-        <receiver android:name=".receiver.NoisyBroadcastReciever">
+        <receiver android:name=".receiver.AlarmBroadcastReceiver" />
+        <receiver
+            android:name=".receiver.NoisyBroadcastReciever"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
+                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
                 <!-- This does not work. Needs to be registered from code. Needs workaround, maybe a service -->
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.BluetoothBroadcastReciever">
+        <receiver
+            android:name=".receiver.BluetoothBroadcastReciever"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
                 <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
@@ -60,85 +64,99 @@
                 <action android:name="android.bluetooth.adapter.action.DISCOVERY_STARTED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.BootReciever">
+        <receiver
+            android:name=".receiver.BootReciever"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".ui.notifications.PausedNotification"/>
+        <receiver android:name=".ui.notifications.PausedNotification" />
 
         <service
-                android:name=".services.PauseTileService"
-                android:icon="@drawable/ic_delete_black_24dp"
-                android:label="pause"
-                android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:name=".services.PauseTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_delete_black_24dp"
+            android:label="pause"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
 
         <service
-                android:name=".services.StartStopTileService"
-                android:icon="@drawable/ic_av_timer_black_24dp"
-                android:label="Start/Stop"
-                android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:name=".services.StartStopTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_av_timer_black_24dp"
+            android:label="Start/Stop"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
 
-        <service android:name=".services.PauseTimerService"/>
-        <service android:name=".services.WidgetService"/>
+        <service android:name=".services.PauseTimerService" />
+        <service android:name=".services.WidgetService" />
 
-        <receiver android:name=".widgets.OneHourWidget"
-                  android:label="@string/OneHourWidget">
+        <receiver
+            android:name=".widgets.OneHourWidget"
+            android:exported="true"
+            android:label="@string/OneHourWidget">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/w1hour_widget_info"/>
+                android:name="android.appwidget.provider"
+                android:resource="@xml/w1hour_widget_info" />
         </receiver>
-        <receiver android:name=".widgets.ThreeHourWidget"
-                  android:label="@string/ThreeHourWidget">
+        <receiver
+            android:name=".widgets.ThreeHourWidget"
+            android:exported="true"
+            android:label="@string/ThreeHourWidget">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/w3hour_widget_info"/>
+                android:name="android.appwidget.provider"
+                android:resource="@xml/w3hour_widget_info" />
         </receiver>
-        <receiver android:name=".widgets.EightHourWidget"
-                  android:label="@string/EightHourWidget">
+        <receiver
+            android:name=".widgets.EightHourWidget"
+            android:exported="true"
+            android:label="@string/EightHourWidget">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/w8hour_widget_info"/>
+                android:name="android.appwidget.provider"
+                android:resource="@xml/w8hour_widget_info" />
         </receiver>
-        <receiver android:name=".widgets.AutoHourWidget"
-                  android:label="@string/AutoHourWidget">
+        <receiver
+            android:name=".widgets.AutoHourWidget"
+            android:exported="true"
+            android:label="@string/AutoHourWidget">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/ahour_widget_info"/>
+                android:name="android.appwidget.provider"
+                android:resource="@xml/ahour_widget_info" />
         </receiver>
-        <receiver android:name=".widgets.StartStopWidget">
+        <receiver
+            android:name=".widgets.StartStopWidget"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/start_stop_widget_info"/>
+                android:name="android.appwidget.provider"
+                android:resource="@xml/start_stop_widget_info" />
         </receiver>
     </application>
 

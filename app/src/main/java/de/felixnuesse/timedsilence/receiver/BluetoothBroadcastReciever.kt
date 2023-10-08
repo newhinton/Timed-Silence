@@ -35,8 +35,5 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
                 Log.e(APP_NAME, "BluetoothBroadcastReciever: No next alarm scheduled, dont update!")
             }
         }
-
     }
-
-
 }
