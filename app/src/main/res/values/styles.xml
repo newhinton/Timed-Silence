@@ -10,10 +10,7 @@
         <item name="colorControlNormal">@color/colorTextSettingbar</item>
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="android:textColor">@color/secondary_material_light</item>
-
-
-        <item name="android:navigationBarColor">@android:color/white</item>
-        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">?attr/android:colorBackground</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
