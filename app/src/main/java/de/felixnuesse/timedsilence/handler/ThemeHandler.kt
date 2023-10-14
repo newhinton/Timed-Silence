@@ -64,8 +64,6 @@ class ThemeHandler {
         }
 
         fun setTheme(context: Activity, window: Window, mode: Int){
-            window.navigationBarColor = ContextCompat.getColor(context, R.color.colorAccentDark)
-
             when(mode) {
                 PrefConstants.PREF_DARKMODE_DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 PrefConstants.PREF_DARKMODE_AUTO -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
