@@ -34,17 +34,18 @@ class IntroActivity : AppIntro() {
         // You can use AppIntroFragment to use a pre-built fragment
         addSlide(
             AppIntroFragment.createInstance(
-                title = "Welcome!",
-                description = "We will help you stay focused on your tasks, and not get distracted! But first, let us set this app up!",
+                title = getString(R.string.intro_slide_welcome_title),
+                description = getString(R.string.intro_slide_welcome_description),
                 imageDrawable = R.drawable.undraw_reading_time,
                 backgroundColorRes = R.color.intro_color1
             ))
 
         addSlide(
             AppIntroFragment.createInstance(
-                title = "Calendar",
-                description = "If you want to silence your phone during your meetings and events, we need to access your calendar",
-                backgroundColorRes = R.color.intro_color1
+                title = getString(R.string.intro_slide_calendar_title),
+                description = getString(R.string.intro_slide_calendar_description),
+                imageDrawable = R.drawable.undraw_schedule,
+                backgroundColorRes = R.color.intro_color2
             ))
         // Regarding Slide Numbers: They index with 0. But since we want to show them AFTER the slide,
         // We have to offset them by one, and assume 1-indexing.
@@ -58,9 +59,10 @@ class IntroActivity : AppIntro() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             addSlide(
                 AppIntroFragment.createInstance(
-                    title = "Get Notified!",
-                    description = "We want to show you notifications when this app is beeing paused, so please grant us access to post notifications. We wont spam you!",
-                    backgroundColorRes = R.color.intro_color2
+                    title = getString(R.string.intro_slide_notification_title),
+                    description = getString(R.string.intro_slide_notification_description),
+                    imageDrawable = R.drawable.undraw_notify,
+                    backgroundColorRes = R.color.intro_color1
                 ))
             askForPermissions(
                 permissions = arrayOf(Manifest.permission.POST_NOTIFICATIONS),
@@ -70,16 +72,18 @@ class IntroActivity : AppIntro() {
 
         addSlide(
             AppIntroFragment.createInstance(
-                title = "DND",
-                description = "If you want to silence your phone during your meetings and events, we need to access your calendar",
-                backgroundColorRes = R.color.intro_color1
+                title = getString(R.string.intro_slide_donotdisturb_title),
+                description = getString(R.string.intro_slide_donotdisturb_description),
+                imageDrawable = R.drawable.undraw_camping,
+                backgroundColorRes = R.color.intro_color2
             ))
 
 
         addSlide(
             AppIntroFragment.createInstance(
-                title = "Done!",
-                description = "You are now ready to start!",
+                title = getString(R.string.intro_slide_done_title),
+                description = getString(R.string.intro_slide_done_description),
+                imageDrawable = R.drawable.undraw_completed,
                 backgroundColorRes = R.color.intro_color1
             ))
     }
