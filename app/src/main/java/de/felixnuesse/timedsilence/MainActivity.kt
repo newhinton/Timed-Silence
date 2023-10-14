@@ -121,10 +121,10 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             setHandlerState()
         }
 
-        binding.frameLayout.setOnClickListener {
+        //binding.frameLayout.setOnClickListener {
             //Log.e(APP_NAME, "Main: FabTester: Clicked")
-            buttonState()
-        }
+         //   buttonState()
+        //}
 
 
         val seekBarSupportText = findViewById<TextView>(R.id.textview_waittime_content)
