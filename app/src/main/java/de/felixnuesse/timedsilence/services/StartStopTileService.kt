@@ -7,7 +7,6 @@ import android.service.quicksettings.TileService
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 
@@ -43,7 +42,7 @@ class StartStopTileService: TileService() {
 
 
     companion object {
-        var icon = R.drawable.ic_av_timer_black_24dp
+        var icon = R.drawable.icon_av_timer
     }
 
     override fun onClick() {

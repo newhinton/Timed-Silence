@@ -118,11 +118,11 @@ class ScheduleListAdapter(private var myDataset: ArrayList<ScheduleObject>) :
             ScheduleDialog(holder.scheduleView.root.context, this, myDataset[position]).show()
         }
 
-        var imageID = R.drawable.ic_volume_up_black_24dp
+        var imageID = R.drawable.icon_volume_up
         when (myDataset[position].time_setting) {
-            TIME_SETTING_LOUD -> imageID = R.drawable.ic_volume_up_black_24dp
-            TIME_SETTING_VIBRATE -> imageID = R.drawable.ic_vibration_black_24dp
-            TIME_SETTING_SILENT -> imageID = R.drawable.ic_volume_off_black_24dp
+            TIME_SETTING_LOUD -> imageID = R.drawable.icon_volume_up
+            TIME_SETTING_VIBRATE -> imageID = R.drawable.icon_vibration
+            TIME_SETTING_SILENT -> imageID = R.drawable.icon_volume_off
         }
         holder.scheduleView.imageViewVolumeState.setImageDrawable(
             holder.scheduleView.root.context.getDrawable(

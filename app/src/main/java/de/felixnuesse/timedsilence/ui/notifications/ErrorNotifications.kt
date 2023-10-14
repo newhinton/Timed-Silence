@@ -58,7 +58,7 @@ class ErrorNotifications {
         val notification = Notification.Builder(context, ERROR_CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(content)
-            .setSmallIcon(R.drawable.ic_error_black_24dp)
+            .setSmallIcon(R.drawable.icon_error)
             .setOnlyAlertOnce(true)
 
         notificationManager.notify(

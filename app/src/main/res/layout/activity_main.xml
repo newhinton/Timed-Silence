@@ -29,31 +29,31 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_baseline_auto_graph_24"
+                android:icon="@drawable/icon_auto_graph"
                 android:text="@string/main_tab_graph" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_baseline_access_time_24"
+                android:icon="@drawable/icon_access_time"
                 android:text="@string/main_tab_time" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_baseline_calendar_today_24"
+                android:icon="@drawable/icon_calendar_today"
                 android:text="@string/main_tab_calendar" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_baseline_key_24"
+                android:icon="@drawable/icon_key"
                 android:text="@string/main_tab_keyword" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_baseline_wifi_24"
+                android:icon="@drawable/icon_wifi"
                 android:text="@string/main_tab_wifi_connected" />
         </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -225,7 +225,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_fast_forward_white_24dp"
+                android:src="@drawable/icon_fast_forward"
                 app:elevation="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

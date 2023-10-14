@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment
 import com.skydoves.balloon.*
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.databinding.CalendarEventFragmentBinding
 import de.felixnuesse.timedsilence.databinding.GraphFragmentBinding
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
@@ -216,7 +215,7 @@ class GraphFragment : Fragment() {
         val colorInt = color
         val csl = ColorStateList.valueOf(colorInt)
 
-        val shapeDrawable = context.getDrawable(R.drawable.drawable_bar) as GradientDrawable
+        val shapeDrawable = context.getDrawable(R.drawable.shape_drawable_bar) as GradientDrawable
         shapeDrawable.color = csl
 
         var lengthOfBar = len
@@ -244,7 +243,7 @@ class GraphFragment : Fragment() {
     }
 
     private fun setLegendColor(context: Context, color: Int, image: ImageView): View {
-        val shapeDrawable = resources.getDrawable(R.drawable.drawable_bar_legend) as GradientDrawable
+        val shapeDrawable = resources.getDrawable(R.drawable.shape_drawable_bar_legend) as GradientDrawable
         shapeDrawable.color = ColorStateList.valueOf(resources.getColor(color))
         image.setImageDrawable(shapeDrawable)
 
@@ -296,7 +295,7 @@ class GraphFragment : Fragment() {
     private fun getTooltipIcon(context: Context, tooltip: String): View {
         val imageView = ImageView(context)
 
-        var d = ContextCompat.getDrawable(context, R.drawable.ic_baseline_help_outline_24)
+        var d = ContextCompat.getDrawable(context, R.drawable.icon_help)
         if (d != null) {
             d.applyTheme(context.theme)
             imageView.setImageDrawable(d)

@@ -11,7 +11,7 @@
         android:layout_gravity="center_vertical"
         android:background="@null"
         android:contentDescription="@string/appwidget_text"
-        android:src="@drawable/ic_av_timer_black_24dp" />
+        android:src="@drawable/icon_av_timer" />
 
     <TextView
         android:id="@+id/widget_abstracthour_textview"

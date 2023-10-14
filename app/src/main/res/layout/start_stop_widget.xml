@@ -18,7 +18,7 @@
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_play_arrow_white_24dp"/>
+                android:src="@drawable/icon_play_arrow"/>
 
         <TextView
                 android:text="@string/timecheck_running"
@@ -41,7 +41,7 @@
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_fast_forward_white_24dp"/>
+                android:src="@drawable/icon_fast_forward"/>
         <TextView
                 android:text="@string/timecheck_paused"
                 android:layout_width="match_parent"
@@ -62,7 +62,7 @@
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_pause_white_24dp"/>
+                android:src="@drawable/icon_pause_white"/>
         <TextView
                 android:text="@string/timecheck_stopped"
                 android:layout_width="match_parent"

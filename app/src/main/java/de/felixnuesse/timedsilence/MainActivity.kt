@@ -406,7 +406,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_running))
        // fab.setImageResource(R.drawable.ic_play_arrow_white_24dp)
 
-        val d = getDrawable(R.drawable.ic_pause_black_24dp)
+        val d = getDrawable(R.drawable.icon_pause)
         d?.mutate()?.setColorFilter(
             resources.getColor(R.color.colorStateButtonIcon),
             PorterDuff.Mode.SRC_IN
@@ -423,7 +423,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
 
 
-        val d = getDrawable(R.drawable.ic_play_arrow_white_24dp)
+        val d = getDrawable(R.drawable.icon_play_arrow)
         d?.mutate()?.setColorFilter(
             resources.getColor(R.color.colorStateButtonIcon),
             PorterDuff.Mode.SRC_IN
@@ -437,7 +437,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     fun setFabPaused(fab: FloatingActionButton, text: TextView){
         text.text = getString(R.string.timecheck_paused)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_paused))
-        fab.setImageResource(R.drawable.ic_fast_forward_white_24dp)
+        fab.setImageResource(R.drawable.icon_fast_forward)
         button_check=getString(R.string.timecheck_paused)
     }
 

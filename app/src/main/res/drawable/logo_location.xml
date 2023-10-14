@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:drawable="@drawable/ic_av_timer_black_24dp" android:height="24dp" android:width="24dp" />
-    <item android:drawable="@drawable/ic_error_black_24dp" android:height="12dp" android:width="12dp" android:gravity="bottom" android:left="14dp" android:bottom="-2dp"/>
+    <item android:drawable="@drawable/icon_av_timer" android:height="24dp" android:width="24dp" />
+    <item android:drawable="@drawable/icon_error" android:height="12dp" android:width="12dp" android:gravity="bottom" android:left="14dp" android:bottom="-2dp"/>
 </layer-list>

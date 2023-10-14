@@ -82,10 +82,10 @@ class WifiListAdapter(private val myDataset: ArrayList<WifiObject>) :
             holder.wifiView.root.context.resources.getString(string) + " " + wifiObj.type
 
 
-        var imageID = R.drawable.ic_tap_and_play_black_24dp
+        var imageID = R.drawable.icon_tap_and_play
         when (wifiObj.type) {
-            WIFI_TYPE_CONNECTED -> imageID = R.drawable.ic_tap_and_play_black_24dp
-            WIFI_TYPE_SEARCHING -> imageID = R.drawable.ic_search_black_24dp
+            WIFI_TYPE_CONNECTED -> imageID = R.drawable.icon_tap_and_play
+            WIFI_TYPE_SEARCHING -> imageID = R.drawable.icon_search
         }
         holder.wifiView.imageViewWifiType.setImageDrawable(
             holder.wifiView.root.context.getDrawable(

@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Typeface
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
@@ -79,11 +78,11 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
 
                 holder.calendarView.imageViewCalendarColor.setColorFilter(calHandler.getCalendarColor(calObject.name))
 
-                var imageID=R.drawable.ic_volume_up_black_24dp
+                var imageID=R.drawable.icon_volume_up
                 when (calObject.volume) {
-                        TIME_SETTING_LOUD -> imageID=R.drawable.ic_volume_up_black_24dp
-                        TIME_SETTING_VIBRATE -> imageID=R.drawable.ic_vibration_black_24dp
-                        TIME_SETTING_SILENT -> imageID=R.drawable.ic_volume_off_black_24dp
+                        TIME_SETTING_LOUD -> imageID=R.drawable.icon_volume_up
+                        TIME_SETTING_VIBRATE -> imageID=R.drawable.icon_vibration
+                        TIME_SETTING_SILENT -> imageID=R.drawable.icon_volume_off
                 }
                 holder.calendarView.imageViewVolumeState.setImageDrawable(holder.calendarView.root.context.getDrawable(imageID))
         }

@@ -89,7 +89,7 @@
         <service
             android:name=".services.StartStopTileService"
             android:exported="true"
-            android:icon="@drawable/ic_av_timer_black_24dp"
+            android:icon="@drawable/icon_av_timer"
             android:label="Start/Stop"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>

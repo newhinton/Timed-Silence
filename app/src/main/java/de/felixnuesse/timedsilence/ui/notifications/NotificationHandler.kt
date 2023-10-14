@@ -64,7 +64,7 @@ class NotificationHandler {
     fun showNotification(c: Context){
         createNotificationChannel(c)
         var builder = NotificationCompat.Builder(c, CHANNEL_ID_CALENDAR_ERROR)
-            .setSmallIcon(R.drawable.ic_schedule_appicon)
+            .setSmallIcon(R.drawable.logo_schedule_appicon)
             .setContentTitle("⚠ Calendar Issue")
             .setContentText("Your calendarnames may have changed!")
             .setStyle(
