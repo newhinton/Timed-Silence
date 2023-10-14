@@ -54,13 +54,10 @@ class StartStopTileService: TileService() {
 
         if(t.checkIfNextAlarmExists()){
             t.removeTimecheck()
-        }else if(PauseTimerService.isTimerRunning()){
-            t.removeTimecheck()
-        }else{
+        } else {
             t.createTimecheck()
             VolumeCalculator(this).calculateAllAndApply()
         }
-        WidgetService.updateStateWidget(applicationContext)
         updateTile()
     }
 
@@ -96,10 +93,7 @@ class StartStopTileService: TileService() {
         if(Trigger(applicationContext).checkIfNextAlarmExists()){
             tile.state = Tile.STATE_ACTIVE
             tile.label = applicationContext.getString(R.string.timecheck_running)
-        }else if(PauseTimerService.isTimerRunning()){
-            tile.state = Tile.STATE_INACTIVE
-            tile.label = applicationContext.getString(R.string.timecheck_paused)
-        }else{
+        } else {
             tile.state = Tile.STATE_INACTIVE
             tile.label = applicationContext.getString(R.string.timecheck_stopped)
         }

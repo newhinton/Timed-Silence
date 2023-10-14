@@ -66,8 +66,6 @@ import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
-import de.felixnuesse.timedsilence.services.PauseTimerService
-import de.felixnuesse.timedsilence.services.WidgetService
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import java.util.*
 
@@ -207,13 +205,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             getSharedPreferencesListener()
         )
 
-        PauseTimerService.registerListener(this)
-
-        // use this to start and trigger a service
-       // val i = Intent(this, WidgetService::class.java)
-        // potentially add data to the intent
-       // i.putExtra("KEY1", "Value to be used by the service");
-       // startService(i)
         buttonState()
 
         loadCalendarFragment()
@@ -356,14 +347,10 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         //Todo remove dummy textview
         if(mTrigger.checkIfNextAlarmExists()){
             setFabStarted(binding.fab, TextView(this))
-        }else if(PauseTimerService.isTimerRunning()){
-            setFabPaused(binding.fab, TextView(this))
-        }else{
+        } else{
             setFabStopped(binding.fab, TextView(this))
         }
         updateTimeCheckDisplay()
-        WidgetService.updateStateWidget(this)
-
 
         val seekBarSupportText = findViewById<TextView>(R.id.textview_waittime_content)
         val seekBar = findViewById<SeekBar>(R.id.seekBar_waittime)
@@ -405,7 +392,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         }else if(button_check == getString(R.string.timecheck_paused)){
             mTrigger.createTimecheck()
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
-            PauseTimerService.cancelTimer(this)
             AlarmBroadcastReceiver().switchVolumeMode(this)
         }else{
             mTrigger.removeTimecheck()

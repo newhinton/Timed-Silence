@@ -11,9 +11,7 @@ import android.view.View
 import android.widget.RemoteViews
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
-import de.felixnuesse.timedsilence.services.PauseTimerService
 
 
 
@@ -54,9 +52,7 @@ class StartStopWidget : AppWidgetProvider() {
             val t = Trigger(context)
             if(t.checkIfNextAlarmExists()){
                 t.removeTimecheck()
-            }else if(PauseTimerService.isTimerRunning()){
-                t.createTimecheck()
-            }else{
+            } else {
                 t.createTimecheck()
             }
             updateIcon(remoteViews, context)
@@ -89,7 +85,7 @@ class StartStopWidget : AppWidgetProvider() {
         protected fun getPendingSelfIntent(context: Context, action: String): PendingIntent {
             val intent = Intent(context, StartStopWidget::class.java)
             intent.action = action
-            return PendingIntent.getBroadcast(context, 0, intent, 0)
+            return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         }
 
         protected fun updateIcon(remoteViews: RemoteViews, context: Context){
@@ -99,9 +95,7 @@ class StartStopWidget : AppWidgetProvider() {
 
             if(Trigger(context).checkIfNextAlarmExists()){
                 remoteViews.setViewVisibility( R.id.playpausewidget_running, View.VISIBLE)
-            }else if(PauseTimerService.isTimerRunning()){
-                remoteViews.setViewVisibility( R.id.playpausewidget_paused, View.VISIBLE)
-            }else{
+            } else {
                 remoteViews.setViewVisibility( R.id.playpausewidget_stopped, View.VISIBLE)
             }
         }

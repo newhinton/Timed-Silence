@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- Needed for statechange of icon in graphview -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> <!-- Needed for headset identification -->
@@ -72,54 +73,7 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".ui.notifications.PausedNotification" />
-        <receiver
-            android:name=".widgets.OneHourWidget"
-            android:exported="true"
-            android:label="@string/OneHourWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
 
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/w1hour_widget_info" />
-        </receiver>
-        <receiver
-            android:name=".widgets.ThreeHourWidget"
-            android:exported="true"
-            android:label="@string/ThreeHourWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/w3hour_widget_info" />
-        </receiver>
-        <receiver
-            android:name=".widgets.EightHourWidget"
-            android:exported="true"
-            android:label="@string/EightHourWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/w8hour_widget_info" />
-        </receiver>
-        <receiver
-            android:name=".widgets.AutoHourWidget"
-            android:exported="true"
-            android:label="@string/AutoHourWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/ahour_widget_info" />
-        </receiver>
         <receiver
             android:name=".widgets.StartStopWidget"
             android:exported="true">
@@ -132,17 +86,6 @@
                 android:resource="@xml/start_stop_widget_info" />
         </receiver>
 
-
-        <service
-            android:name=".services.PauseTileService"
-            android:exported="true"
-            android:icon="@drawable/ic_delete_black_24dp"
-            android:label="pause"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
         <service
             android:name=".services.StartStopTileService"
             android:exported="true"
@@ -153,8 +96,6 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-        <service android:name=".services.PauseTimerService" />
-        <service android:name=".services.WidgetService" />
     </application>
 
 </manifest>
