@@ -13,7 +13,6 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
-import de.felixnuesse.timedsilence.handler.ThemeHandler
 import android.view.MenuItem
 import de.felixnuesse.timedsilence.databinding.ActivitySettingsVolumeBinding
 
@@ -30,10 +29,6 @@ class SettingsVolumeActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-
-        ThemeHandler.setTheme(this, window)
-        ThemeHandler.setSupportActionBarTheme(this, supportActionBar)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         //sets the actionbartitle
@@ -42,7 +37,7 @@ class SettingsVolumeActivity : AppCompatActivity() {
         binding.seekBarVolumeAlarm.max=100
         binding.seekBarVolumeAlarm.progress=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
         updateTextViewPercentage(binding.textViewPercentVolumeAlarm, binding.seekBarVolumeAlarm.progress)
-        binding.seekBarVolumeAlarm?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.seekBarVolumeAlarm.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {

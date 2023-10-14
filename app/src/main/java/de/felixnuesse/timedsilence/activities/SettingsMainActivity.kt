@@ -21,7 +21,6 @@ import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
-import de.felixnuesse.timedsilence.handler.ThemeHandler
 import android.widget.AdapterView
 
 import android.widget.AdapterView.OnItemSelectedListener
@@ -43,9 +42,6 @@ class SettingsMainActivity : AppCompatActivity() {
         binding = ActivitySettingsMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        ThemeHandler.setTheme(this, window)
-        ThemeHandler.setSupportActionBarTheme(this, supportActionBar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -92,19 +88,6 @@ class SettingsMainActivity : AppCompatActivity() {
         binding.importButton.setOnClickListener {
             Log.e(Constants.APP_NAME, "SettingsMain: Click import")
             Importer.importFile(this)
-        }
-
-        setSwitches()
-        binding.switchThemeDark.setOnCheckedChangeListener { _, checked ->
-            if(checked) applyTheme(PrefConstants.PREF_DARKMODE_DARK)
-        }
-
-        binding.switchThemeLight.setOnCheckedChangeListener { _, checked ->
-            if(checked) applyTheme(PrefConstants.PREF_DARKMODE_LIGHT)
-        }
-
-        binding.switchThemeAuto.setOnCheckedChangeListener { _, checked ->
-            if(checked) applyTheme(PrefConstants.PREF_DARKMODE_AUTO)
         }
 
         binding.switchPauseNotification.isChecked = SharedPreferencesHandler.getPref(this, PrefConstants.PREF_PAUSE_NOTIFICATION, PrefConstants.PREF_PAUSE_NOTIFICATION_DEFAULT)
@@ -187,26 +170,4 @@ class SettingsMainActivity : AppCompatActivity() {
         Importer.onActivityResult(this, requestCode, resultCode, data)
     }
 
-    private fun applyTheme(mode: Int){
-        writeThemeSwitchSetting(this, mode)
-        ThemeHandler.setTheme(this, window)
-        ThemeHandler.setSupportActionBarTheme(this, supportActionBar)
-        setSwitches()
-    }
-
-    private fun setSwitches(){
-        binding.switchThemeDark.isChecked=false
-        binding.switchThemeLight.isChecked=false
-        binding.switchThemeAuto.isChecked=false
-        binding.switchThemeDark.isClickable = true;
-        binding.switchThemeLight.isClickable=true
-        binding.switchThemeAuto.isClickable=true
-
-        when(SharedPreferencesHandler.getPref(this, PrefConstants.PREF_DARKMODE, PrefConstants.PREF_DARKMODE_DEFAULT)) {
-            PrefConstants.PREF_DARKMODE_DARK -> {binding.switchThemeDark.isChecked=true;binding.switchThemeDark.isClickable=false}
-            PrefConstants.PREF_DARKMODE_LIGHT -> {binding.switchThemeLight.isChecked=true;binding.switchThemeLight.isClickable=false}
-            PrefConstants.PREF_DARKMODE_AUTO-> {binding.switchThemeAuto.isChecked=true;binding.switchThemeAuto.isClickable=false}
-            else -> binding.switchThemeLight.isChecked=true
-        }
-    }
 }

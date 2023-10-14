@@ -11,6 +11,12 @@
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="android:textColor">@color/secondary_material_light</item>
         <item name="android:navigationBarColor">?attr/android:colorBackground</item>
+
+
+        <!-- Transparent Actionbar -->
+        <item name="android:actionBarStyle">@style/TransparentActionBar</item>
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/TransparentActionBar</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -24,4 +30,12 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">25%</item>
     </style>
+
+    <!-- ActionBar styles -->
+    <style name="TransparentActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/transparent</item>
+        <!-- Support library compatibility -->
+        <item name="background">@color/transparent</item>
+    </style>
+
 </resources>

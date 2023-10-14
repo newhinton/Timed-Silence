@@ -91,13 +91,9 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             finish()
         }
 
-        ThemeHandler.setTheme(this, window)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        ThemeHandler.setTabLayoutTheme(this, binding.tabLayout)
 
         setSupportActionBar(binding.toolbar)
 
