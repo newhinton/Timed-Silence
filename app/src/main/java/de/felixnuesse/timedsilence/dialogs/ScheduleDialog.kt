@@ -249,19 +249,19 @@ class ScheduleDialog(context: Context) : Dialog(context) {
             }
             1 -> {
                 binding.scheduleDialogTitle.text = context.getText(R.string.schedule_dialog_title_volume)
-                binding.scheduleTitleLayout.visibility = View.VISIBLE
+                binding.scheduleDialogRbVolume.visibility = View.VISIBLE
             }
             2 -> {
                 binding.scheduleDialogTitle.text = context.getText(R.string.schedule_dialog_title_start)
-                binding.scheduleTitleLayout.visibility = View.VISIBLE
+                binding.scheduleStartTimepicker.visibility = View.VISIBLE
             }
             3 -> {
                 binding.scheduleDialogTitle.text = context.getText(R.string.schedule_dialog_title_end)
-                binding.scheduleTitleLayout.visibility = View.VISIBLE
+                binding.scheduleEndTimepicker.visibility = View.VISIBLE
             }
             4 -> {
                 binding.scheduleDialogTitle.text = context.getText(R.string.schedule_dialog_title_days)
-                binding.scheduleTitleLayout.visibility = View.VISIBLE
+                binding.scheduleDaysLayout.visibility = View.VISIBLE
             }
         }
 
