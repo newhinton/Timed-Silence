@@ -29,11 +29,21 @@
                     android:padding="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" android:id="@+id/schedule_title_layout">
-                <EditText
-                        android:hint="@string/schedule_dialog_title_textfield_hint"
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/schedule_title_textfield"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/schedule_title_textfield" android:autofillHints="" android:inputType=""/>
+                        android:hint="@string/schedule_dialog_title_textfield_hint"
+                        android:importantForAutofill="no"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
                 <RadioGroup
                     android:padding="10dp"

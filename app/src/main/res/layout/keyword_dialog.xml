@@ -38,13 +38,19 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-                <EditText
-                    android:id="@+id/keyword_textfield"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/keyword_dialog_textfield_hint"
-                    android:importantForAutofill="no"
-                    android:inputType="text" />
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/keyword_textfield"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/keyword_dialog_textfield_hint"
+                        android:importantForAutofill="no"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
 
