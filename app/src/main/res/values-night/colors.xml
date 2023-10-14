@@ -5,7 +5,6 @@
     <color name="colorAccentDark">#D88F23</color>
     <color name="colorBackground">@android:color/background_dark</color>
 
-    <color name="iconColor">@color/colorPrimary</color>
 
     <color name="colorStateButtonIcon">@android:color/black</color>
 

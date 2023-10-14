@@ -6,7 +6,7 @@
     <color name="colorAccentDark">#1666AC</color>
     <color name="colorBackground">#FFFFFF</color>
 
-    <color name="iconColor">@color/colorPrimary</color>
+    <color name="iconColor">@android:color/tab_indicator_text</color>
 
     <color name="intro_color1">#C87802</color>
     <color name="intro_color2">#196487</color>
