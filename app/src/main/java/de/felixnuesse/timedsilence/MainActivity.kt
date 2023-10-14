@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         ThemeHandler.setTabLayoutTheme(this, binding.tabLayout)
 
-        setSupportActionBar(binding.bottomAppBar)
+        setSupportActionBar(binding.toolbar)
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
 

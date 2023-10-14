@@ -8,14 +8,23 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="colorControlNormal">@color/colorTextSettingbar</item>
-        <item name="android:navigationBarColor">@color/colorAccentDark</item>
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="android:textColor">@color/secondary_material_light</item>
+
+        <item name="android:windowLightNavigationBar">true</item>
+        <!-- required to contrast the dark buttons -->
+        <item name="android:navigationBarColor">@android:color/white</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
+    <style name="rectangularFab">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">25%</item>
+    </style>
 </resources>
