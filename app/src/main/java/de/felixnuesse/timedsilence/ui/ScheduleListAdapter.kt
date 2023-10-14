@@ -134,7 +134,7 @@ class ScheduleListAdapter(private var myDataset: ArrayList<ScheduleObject>) :
     }
 
     private fun applyTextfieldStyle(view: TextView, context: Context) {
-        view.setTextColor(context.getColor(R.color.colorIcons))
+        view.setTextColor(context.getColor(R.color.iconColor))
         view.setTypeface(view.typeface, Typeface.BOLD)
     }
 

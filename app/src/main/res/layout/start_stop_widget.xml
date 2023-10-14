@@ -62,7 +62,7 @@
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_pause_white"/>
+                android:src="@drawable/icon_pause"/>
         <TextView
                 android:text="@string/timecheck_stopped"
                 android:layout_width="match_parent"
