@@ -50,8 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="@string/volume_settings"
-                android:textColor="@color/secondary_material_light" />
+                android:text="@string/volume_settings" />
 
             <Space
                 android:layout_width="0dp"
@@ -77,7 +76,6 @@
             android:layout_marginEnd="@dimen/margin_settings"
             android:minHeight="48dp"
             android:text="@string/volume_while_headset_connected"
-            android:textColor="@color/secondary_material_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/volumeSettingsLayout" />
@@ -137,7 +135,6 @@
             android:layout_marginEnd="@dimen/margin_settings"
             android:minHeight="48dp"
             android:text="@string/ignore_all_day"
-            android:textColor="@color/secondary_material_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/label_calendar" />
@@ -182,8 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="@string/export"
-                android:textColor="@color/secondary_material_light" />
+                android:text="@string/export" />
 
             <Space
                 android:layout_width="0dp"
@@ -222,8 +218,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="@string/import_button"
-                    android:textColor="@color/secondary_material_light" />
+                    android:text="@string/import_button" />
 
                 <TextView
                     android:id="@+id/textview_import_warning"
@@ -259,7 +254,6 @@
             android:contentDescription="@string/ignore_all_day"
             android:minHeight="48dp"
             android:text="@string/allow_trigger_when_device_idle"
-            android:textColor="@color/secondary_material_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_import" />
@@ -274,7 +268,6 @@
             android:layout_weight="1"
             android:minHeight="48dp"
             android:text="@string/enablePauseNotification"
-            android:textColor="@color/secondary_material_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"

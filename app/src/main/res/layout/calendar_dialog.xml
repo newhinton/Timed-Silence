@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent"
+        android:background="?attr/colorSecondary"
         android:orientation="vertical">
 
         <TextView
@@ -92,8 +92,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:minWidth="0dp"
-            android:text="@string/cancel"
-            android:textColor="@color/colorPrimaryDark" />
+            android:text="@string/cancel" />
 
         <Space
             android:layout_width="wrap_content"
@@ -107,8 +106,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:minWidth="0dp"
-            android:text="@string/back"
-            android:textColor="@color/colorPrimaryDark" />
+            android:text="@string/back" />
 
         <Button
             android:id="@+id/calendar_next"
@@ -117,8 +115,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:minWidth="0dp"
-            android:text="@string/next"
-            android:textColor="@color/colorPrimaryDark" />
+            android:text="@string/next" />
 
         <Button
             android:id="@+id/calendar_save"
@@ -128,7 +125,6 @@
             android:background="@android:color/transparent"
             android:minWidth="0dp"
             android:text="@string/calendar_dialog_save"
-            android:textColor="@color/colorPrimaryDark"
             android:visibility="gone" />
     </LinearLayout>
 

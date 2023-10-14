@@ -11,7 +11,7 @@
         android:id="@+id/tabBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
+        android:theme="@style/BaseStyle.AppBarOverlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -108,7 +108,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text=""
-            android:textColor="@color/colorTextSettingbar"
             app:layout_constraintEnd_toStartOf="@+id/textView4"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -119,7 +118,6 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/main_interval_between_checks"
-            android:textColor="@color/colorTextSettingbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -129,7 +127,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/main_minutes"
-            android:textColor="@color/colorTextSettingbar"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="353dp" />
 
@@ -166,7 +163,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@string/main_last_check"
-                android:textColor="@color/colorTextSettingbar"
                 tools:layout_editor_absoluteX="8dp" />
 
             <TextView
@@ -174,7 +170,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:textColor="@color/colorTextSettingbar"
                 tools:layout_editor_absoluteX="66dp" />
 
             <Space
@@ -190,7 +185,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/colorBackground"
+        android:background="@color/transparent"
         android:fadingEdgeLength="0dp"
         app:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -202,12 +197,12 @@
             android:layout_height="match_parent">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView2"
+                android:id="@+id/bottomCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
-                app:cardBackgroundColor="@color/colorAccent"
+                app:cardBackgroundColor="?attr/colorPrimaryContainer"
                 app:cardCornerRadius="@dimen/cornerRadius"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:layout_editor_absoluteX="8dp">
@@ -228,7 +223,7 @@
                 android:layout_marginBottom="16dp"
                 android:src="@drawable/icon_fast_forward"
                 app:elevation="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/bottomCardView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:shapeAppearanceOverlay="@style/rectangularFab" />

@@ -35,16 +35,16 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/BaseStyle.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".activities.SettingsMainActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/BaseStyle" />
         <activity android:name=".activities.SettingsVolumeActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/BaseStyle" />
 
         <!-- Registering the BroadcastReceiver ! -->
         <receiver android:name=".receiver.AlarmBroadcastReceiver" />
