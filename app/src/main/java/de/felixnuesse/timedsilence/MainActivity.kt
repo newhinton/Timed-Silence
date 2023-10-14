@@ -53,6 +53,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.Constants.Companion.MAIN_ACTIVITY_LOAD_CALENDAR_FORCE
+import de.felixnuesse.timedsilence.IntroActivity.Companion.INTRO_PREFERENCES
 import de.felixnuesse.timedsilence.activities.SettingsMainActivity
 import de.felixnuesse.timedsilence.databinding.ActivityMainBinding
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
@@ -84,6 +85,13 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        val sharedPref = applicationContext.getSharedPreferences(INTRO_PREFERENCES, Context.MODE_PRIVATE)
+        if (!sharedPref.getBoolean(getString(R.string.pref_key_intro_v1_0_0), false)) {
+            startActivity(Intent(this, IntroActivity::class.java))
+            finish()
+        }
 
         ThemeHandler.setTheme(this, window)
 
@@ -202,10 +210,10 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         PauseTimerService.registerListener(this)
 
         // use this to start and trigger a service
-        val i = Intent(this, WidgetService::class.java)
+       // val i = Intent(this, WidgetService::class.java)
         // potentially add data to the intent
-        i.putExtra("KEY1", "Value to be used by the service");
-        startService(i)
+       // i.putExtra("KEY1", "Value to be used by the service");
+       // startService(i)
         buttonState()
 
         loadCalendarFragment()

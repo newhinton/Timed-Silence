@@ -54,10 +54,10 @@ import kotlin.collections.ArrayList
 class VolumeHandler(mContext: Context) {
     companion object {
         fun getVolumePermission(context: Context) {
-            DoNotDisturb.getNotificationPolicy(context, true)
+            DoNotDisturb.hasAccess(context, true)
         }
         fun hasVolumePermission(context: Context):Boolean{
-            return DoNotDisturb.getNotificationPolicy(context)
+            return DoNotDisturb.hasAccess(context)
         }
     }
 

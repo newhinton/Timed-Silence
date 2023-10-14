@@ -96,7 +96,7 @@ class PausedNotification : BroadcastReceiver(){
                 action = ACTION_END_PAUSE_AND_CHECK
             }
 
-            val checkPendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, checkIntent, 0)
+            val checkPendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, checkIntent, PendingIntent.FLAG_IMMUTABLE)
             val resumeAndCheckAction = NotificationCompat.Action.Builder(
                 0,
                 context.getString(R.string.PausedNotification_RESUME_AND_CHECK),
@@ -107,7 +107,7 @@ class PausedNotification : BroadcastReceiver(){
             val snoozeIntent = Intent(context, PausedNotification::class.java).apply {
                 action = ACTION_END_PAUSE
             }
-            val snoozePendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, snoozeIntent, 0)
+            val snoozePendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, snoozeIntent, PendingIntent.FLAG_IMMUTABLE)
             val resumeAction = NotificationCompat.Action.Builder(
                 0,
                 context.getString(R.string.PausedNotification_RESUME),

@@ -7,6 +7,9 @@
     <color name="colorIcons">@color/colorPrimary</color>
     <color name="colorBackground">#FFFFFF</color>
 
+    <color name="intro_color1">#C87802</color>
+    <color name="intro_color2">#196487</color>
+
 
     <color name="colorFab_running">#43A047</color>
     <color name="colorFab_paused">#FFC107</color>

@@ -18,21 +18,20 @@ interface TriggerInterface {
 
     fun removeTimecheck()
 
-    fun createBroadcast(): PendingIntent
+    fun createBroadcast(): PendingIntent?
 
-    fun createBroadcast(flag: Int): PendingIntent
+    fun createBroadcast(flag: Int): PendingIntent?
 
     fun checkIfNextAlarmExists(): Boolean {
         val pIntent = createBroadcast(PendingIntent.FLAG_NO_CREATE)
-
-        if (pIntent == null) {
+        return if (pIntent == null) {
             Log.d(Constants.APP_NAME, "TriggerInterface: There is no next Alarm set!")
             PausedNotification.show(mContext)
-            return false
+            false
         } else {
             Log.d(Constants.APP_NAME, "TriggerInterface: There is an upcoming Alarm!")
             PausedNotification.cancelNotification(mContext)
-            return true
+            true
         }
     }
 

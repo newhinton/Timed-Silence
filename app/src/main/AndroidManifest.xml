@@ -8,17 +8,14 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
     <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- Needed for statechange of icon in graphview -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> <!-- Needed for headset identification -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!--todo: migrate to scoped storage!-->
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
@@ -29,10 +26,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <activity android:name=".activities.SettingsMainActivity" />
-        <activity android:name=".activities.SettingsVolumeActivity" />
-
+        <activity
+            android:name=".IntroActivity"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -40,10 +37,13 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Registering the BroadcastReceiver ! -->
+        </activity>
+        <activity android:name=".activities.SettingsMainActivity" />
+        <activity android:name=".activities.SettingsVolumeActivity" />
+
+        <!-- Registering the BroadcastReceiver ! -->
         <receiver android:name=".receiver.AlarmBroadcastReceiver" />
         <receiver
             android:name=".receiver.NoisyBroadcastReciever"
@@ -71,34 +71,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".ui.notifications.PausedNotification" />
-
-        <service
-            android:name=".services.PauseTileService"
-            android:exported="true"
-            android:icon="@drawable/ic_delete_black_24dp"
-            android:label="pause"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name=".services.StartStopTileService"
-            android:exported="true"
-            android:icon="@drawable/ic_av_timer_black_24dp"
-            android:label="Start/Stop"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <service android:name=".services.PauseTimerService" />
-        <service android:name=".services.WidgetService" />
-
         <receiver
             android:name=".widgets.OneHourWidget"
             android:exported="true"
@@ -158,6 +131,30 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/start_stop_widget_info" />
         </receiver>
+
+
+        <service
+            android:name=".services.PauseTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_delete_black_24dp"
+            android:label="pause"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".services.StartStopTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_av_timer_black_24dp"
+            android:label="Start/Stop"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service android:name=".services.PauseTimerService" />
+        <service android:name=".services.WidgetService" />
     </application>
 
 </manifest>

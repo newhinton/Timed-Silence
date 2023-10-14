@@ -119,4 +119,7 @@
     <string name="event_no_description">No Description</string>
     <string name="allow_trigger_when_device_idle">Allow Checks when the device is idle</string>
     <string name="PausedNotification_RESUME_AND_CHECK">Resume and Check</string>
+    <string name="pref_key_intro_v1_0_0" translatable="false">pref_key_intro_v1_0_0</string>
+    <string name="notifications_error_title">Error!</string>
+    <string name="notifications_error_description">We could not schedule the next check!</string>
 </resources>
