@@ -40,9 +40,17 @@
     </style>
 
 
-    <style name="AddButtonCard" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+    <style name="AddButtonCard">
         <item name="cardBackgroundColor">?attr/colorSecondaryContainer</item>
         <item name="cardCornerRadius">@dimen/cornerRadius</item>
+    </style>
+
+
+    <style name="tertiaryCard">
+        <item name="cardBackgroundColor">?attr/colorTertiaryContainer</item>
+        <item name="cardCornerRadius">@dimen/cornerRadius</item>
+        <item name="android:textColor">?attr/colorOnTertiaryContainer</item>
+        <item name="android:tint">?attr/colorOnTertiaryContainer</item>
     </style>
 
 </resources>

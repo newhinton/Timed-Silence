@@ -5,56 +5,143 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/imageView_volume_state"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        style="@style/tertiaryCard"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_margin="@dimen/cardMargin"
+        android:padding="@dimen/cardPadding"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/edit_schedule_element"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_dialog" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/textView_schedule_row_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/imageView_volume_state"
-        app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/textView_schedule_row_time_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
-        app:layout_constraintStart_toEndOf="@+id/imageView_volume_state"
-        app:layout_constraintTop_toBottomOf="@+id/textView_schedule_row_title" />
+            <ImageView
+                android:id="@+id/volumeState"
+                style="@style/tertiaryCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:srcCompat="@android:drawable/btn_dialog" />
 
-    <TextView
-        android:id="@+id/textView_schedule_row_time_end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
-        app:layout_constraintStart_toEndOf="@+id/textView10"
-        app:layout_constraintTop_toBottomOf="@+id/textView_schedule_row_title" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="12dp">
 
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="-"
-        app:layout_constraintStart_toEndOf="@+id/textView_schedule_row_time_start"
-        app:layout_constraintTop_toBottomOf="@+id/textView_schedule_row_title" />
+                <TextView
+                    android:id="@+id/textView_schedule_row_title"
+                    style="@style/tertiaryCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="title" />
+
+                <LinearLayout
+                    android:id="@+id/scheduleBlock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/scheduleStart"
+                        style="@style/tertiaryCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="start" />
+
+                    <TextView
+                        android:id="@+id/scheduleDash"
+                        style="@style/tertiaryCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="-" />
+
+                    <TextView
+                        android:id="@+id/scheduleEnd"
+                        style="@style/tertiaryCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:hint="end" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutWeekdays"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/mon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/mon"
+                        android:textSize="@dimen/schedule_list_font_size" />
+
+                    <TextView
+                        android:id="@+id/tue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/tue"
+                        android:textSize="@dimen/schedule_list_font_size" />
+
+                    <TextView
+                        android:id="@+id/wed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/wed"
+                        android:textSize="@dimen/schedule_list_font_size" />
+
+                    <TextView
+                        android:id="@+id/thu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/thu"
+                        android:textSize="@dimen/schedule_list_font_size" />
+
+                    <TextView
+                        android:id="@+id/fri"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fri"
+                        android:textSize="@dimen/schedule_list_font_size" />
+
+                    <TextView
+                        android:id="@+id/sat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/sat"
+                        android:textSize="@dimen/schedule_list_font_size" />
+
+                    <TextView
+                        android:id="@+id/sun"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/sun"
+                        android:textSize="@dimen/schedule_list_font_size" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 
     <ImageButton
@@ -83,72 +170,4 @@
         app:layout_constraintEnd_toStartOf="@+id/delete_schedule_element"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/edit_schedule_element"
-        app:layout_constraintStart_toStartOf="@+id/textView_schedule_row_time_start"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_volume_state">
-
-        <TextView
-            android:id="@+id/mon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/mon"
-            android:textSize="@dimen/schedule_list_font_size" />
-
-        <TextView
-            android:id="@+id/tue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tue"
-            android:textSize="@dimen/schedule_list_font_size" />
-
-        <TextView
-            android:id="@+id/wed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/wed"
-            android:textSize="@dimen/schedule_list_font_size" />
-
-        <TextView
-            android:id="@+id/thu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/thu"
-            android:textSize="@dimen/schedule_list_font_size" />
-
-        <TextView
-            android:id="@+id/fri"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/fri"
-            android:textSize="@dimen/schedule_list_font_size" />
-
-        <TextView
-            android:id="@+id/sat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/sat"
-            android:textSize="@dimen/schedule_list_font_size" />
-
-        <TextView
-            android:id="@+id/sun"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/sun"
-            android:textSize="@dimen/schedule_list_font_size" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

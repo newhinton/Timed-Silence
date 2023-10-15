@@ -2,10 +2,13 @@ package de.felixnuesse.timedsilence.ui;
 
 import android.content.Context
 import android.graphics.Typeface
-import androidx.recyclerview.widget.RecyclerView
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
@@ -16,7 +19,6 @@ import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import java.text.DateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -77,9 +79,9 @@ class ScheduleListAdapter(private var myDataset: ArrayList<ScheduleObject>) :
         df.timeZone = TimeZone.getTimeZone("UTC")
 
         holder.scheduleView.textViewScheduleRowTitle.text = myDataset[position].name
-        holder.scheduleView.textViewScheduleRowTimeStart.text =
+        holder.scheduleView.scheduleStart.text =
             df.format(myDataset[position].time_start)
-        holder.scheduleView.textViewScheduleRowTimeEnd.text =
+        holder.scheduleView.scheduleEnd.text =
             df.format(myDataset[position].time_end)
 
         val c = holder.scheduleView.root.context
@@ -124,17 +126,21 @@ class ScheduleListAdapter(private var myDataset: ArrayList<ScheduleObject>) :
             TIME_SETTING_VIBRATE -> imageID = R.drawable.icon_vibration
             TIME_SETTING_SILENT -> imageID = R.drawable.icon_volume_off
         }
-        holder.scheduleView.imageViewVolumeState.setImageDrawable(
-            holder.scheduleView.root.context.getDrawable(
-                imageID
-            )
+        holder.scheduleView.volumeState.setImageDrawable(
+            AppCompatResources.getDrawable(holder.scheduleView.root.context, imageID)
         )
 
 
     }
 
     private fun applyTextfieldStyle(view: TextView, context: Context) {
-        view.setTextColor(context.getColor(R.color.iconColor))
+
+        val typedValue = TypedValue()
+        val theme = context.theme
+        theme.resolveAttribute(R.attr.colorTertiary, typedValue, true)
+        @ColorInt val color = typedValue.data
+
+        view.setTextColor(color)
         view.setTypeface(view.typeface, Typeface.BOLD)
     }
 

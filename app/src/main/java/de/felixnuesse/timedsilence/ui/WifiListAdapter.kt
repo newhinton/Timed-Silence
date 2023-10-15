@@ -3,6 +3,7 @@ package de.felixnuesse.timedsilence.ui;
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
@@ -60,39 +61,36 @@ class WifiListAdapter(private val myDataset: ArrayList<WifiObject>) :
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
+        val context = holder.wifiView.root.context
 
-        var wifiObj = myDataset.get(position)
+        var wifiObj = myDataset[position]
 
-        holder.wifiView.textViewWifiRowTitle.text = wifiObj.ssid
+        holder.wifiView.wifiTitle.text = wifiObj.ssid
 
-        holder.wifiView.editWifiElement.setOnClickListener {
-            DatabaseHandler(holder.wifiView.root.context).deleteWifiEntry(wifiObj.id)
+        holder.wifiView.deleteWifiElement.setOnClickListener {
+            DatabaseHandler(context).deleteWifiEntry(wifiObj.id)
             removeAt(position)
-
         }
+
 
         var string = R.string.volume_setting_silent
-        when (wifiObj.volume) {
-            TIME_SETTING_LOUD -> string = R.string.volume_setting_loud
-            TIME_SETTING_VIBRATE -> string = R.string.volume_setting_vibrate
-            TIME_SETTING_SILENT -> string = R.string.volume_setting_silent
-        }
-
-        holder.wifiView.textViewWifiRowTimeStart.text =
-            holder.wifiView.root.context.resources.getString(string) + " " + wifiObj.type
-
-
-        var imageID = R.drawable.icon_tap_and_play
         when (wifiObj.type) {
-            WIFI_TYPE_CONNECTED -> imageID = R.drawable.icon_tap_and_play
-            WIFI_TYPE_SEARCHING -> imageID = R.drawable.icon_search
+            WIFI_TYPE_CONNECTED -> string = R.string.wifi_type_connected
+            WIFI_TYPE_SEARCHING -> string = R.string.wifi_type_searching
         }
-        holder.wifiView.imageViewWifiType.setImageDrawable(
-            holder.wifiView.root.context.getDrawable(
-                imageID
-            )
-        )
+        holder.wifiView.wifiType.text = context.getString(string)
 
+
+        var imageID=R.drawable.icon_volume_up
+        when (wifiObj.volume) {
+            TIME_SETTING_LOUD -> imageID=R.drawable.icon_volume_up
+            TIME_SETTING_VIBRATE -> imageID=R.drawable.icon_vibration
+            TIME_SETTING_SILENT -> imageID=R.drawable.icon_volume_off
+        }
+
+        holder.wifiView.wifiState.setImageDrawable(
+            AppCompatResources.getDrawable(context, imageID)
+        )
 
     }
 

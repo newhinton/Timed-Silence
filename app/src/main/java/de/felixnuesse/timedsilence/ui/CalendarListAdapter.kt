@@ -76,7 +76,8 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
 
                 applyTextfieldStyle(holder.calendarView.textViewCalendarRowTitle)
 
-                holder.calendarView.imageViewCalendarColor.setColorFilter(calHandler.getCalendarColor(calObject.name))
+                holder.calendarView.cardView.setCardBackgroundColor(calHandler.getCalendarColor(calObject.name))
+                holder.calendarView.deleteCalendarElement.setColorFilter(calHandler.getCalendarColor(calObject.name))
 
                 var imageID=R.drawable.icon_volume_up
                 when (calObject.volume) {
@@ -84,7 +85,7 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
                         TIME_SETTING_VIBRATE -> imageID=R.drawable.icon_vibration
                         TIME_SETTING_SILENT -> imageID=R.drawable.icon_volume_off
                 }
-                holder.calendarView.imageViewVolumeState.setImageDrawable(holder.calendarView.root.context.getDrawable(imageID))
+                holder.calendarView.volumeState.setImageDrawable(holder.calendarView.root.context.getDrawable(imageID))
         }
 
         private fun applyTextfieldStyle(view: TextView){
