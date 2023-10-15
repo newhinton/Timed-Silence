@@ -29,7 +29,7 @@ class StartStopWidget : AppWidgetProvider() {
     }
 
     override fun onEnabled(context: Context) {
-        val remoteViews = RemoteViews(context.packageName, R.layout.start_stop_widget)
+        val remoteViews = RemoteViews(context.packageName, R.layout.widget_start_stop)
         updateIcon(remoteViews, context)
     }
 
@@ -44,7 +44,7 @@ class StartStopWidget : AppWidgetProvider() {
 
             val appWidgetManager = AppWidgetManager.getInstance(context)
 
-            var remoteViews = RemoteViews(context.packageName, R.layout.start_stop_widget)
+            var remoteViews = RemoteViews(context.packageName, R.layout.widget_start_stop)
 
 
             val watchWidget = ComponentName(context, StartStopWidget::class.java)
@@ -70,7 +70,7 @@ class StartStopWidget : AppWidgetProvider() {
 
         internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
 
-            val views = RemoteViews(context.packageName, R.layout.start_stop_widget)
+            val views = RemoteViews(context.packageName, R.layout.widget_start_stop)
 
             views.setOnClickPendingIntent(R.id.playpausewidget_running, getPendingSelfIntent(context, PLAYPAUSECLICKED))
             views.setOnClickPendingIntent(R.id.playpausewidget_paused, getPendingSelfIntent(context, PLAYPAUSECLICKED))
