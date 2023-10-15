@@ -132,4 +132,5 @@
     <string name="intro_slide_donotdisturb_description">To make your Phone truly silent, we need access to the Do not Disturb-Settings.</string>
     <string name="intro_slide_done_title">Done!</string>
     <string name="intro_slide_done_description">You are now ready to start! Enjoy your interruption free time!</string>
+    <string name="state_checks_are_paused">You paused this app, we currently do not controll your volume!</string>
 </resources>

@@ -123,8 +123,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         //}
 
 
-        val seekBarSupportText = findViewById<TextView>(R.id.textview_waittime_content)
-        val seekBar = findViewById<SeekBar>(R.id.seekBar_waittime)
 
         val interval= SharedPreferencesHandler.getPref(
             this,
@@ -132,15 +130,16 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             PrefConstants.PREF_INTERVAL_CHECK_DEFAULT
         )
 
-        seekBarSupportText.text=interval.toString()
-        seekBar.progress=interval
+        binding.textviewWaittimeContent.text=interval.toString()
+        binding.seekBarWaittime.progress=interval
 
         //minimum is zero, so we need to offset by one
-        seekBar.max=179
-        seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.seekBarWaittime.max=179
+        binding.seekBarWaittime?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 // Write code to perform some action when progress is changed.
-                seekBarSupportText.text = (seekBar.progress + 1).toString()
+
+                binding.textviewWaittimeContent.text = (seekBar.progress + 1).toString()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -149,7 +148,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 //Toast.makeText(this@MainActivity, "Progress is " + seekBar.progress+1 + "%", Toast.LENGTH_SHORT).show()
-                seekBarSupportText.text = (seekBar.progress + 1).toString()
+
+                binding.textviewWaittimeContent.text = (seekBar.progress + 1).toString()
                 setInterval(seekBar.progress + 1)
 
             }
@@ -306,8 +306,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
     private fun updateTimeCheckDisplay(){
-        val nextCheckDisplayTextView= findViewById<TextView>(R.id.nextCheckDisplay)
-        nextCheckDisplayTextView.text= mTrigger.getNextAlarmTimestamp()
+        binding.nextCheckDisplay.text= mTrigger.getNextAlarmTimestamp()
 
         val sharedPref = this?.getSharedPreferences("test", Context.MODE_PRIVATE) ?: return
         val lasttime = sharedPref.getLong("last_ExecTime", 0)
@@ -331,7 +330,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             highScore =  DateFormat.getDateFormat(this)
         }
 
-        nextCheckDisplayTextView.text=highScore.format(date)
+        binding.nextCheckDisplay.text=highScore.format(date)
     }
 
 
@@ -343,35 +342,33 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         //Todo remove dummy textview
         if(mTrigger.checkIfNextAlarmExists()){
             setFabStarted(binding.fab, TextView(this))
+            binding.runningStatus.visibility = View.GONE
         } else{
             setFabStopped(binding.fab, TextView(this))
+            binding.runningStatus.visibility = View.VISIBLE
         }
         updateTimeCheckDisplay()
 
-        val seekBarSupportText = findViewById<TextView>(R.id.textview_waittime_content)
-        val seekBar = findViewById<SeekBar>(R.id.seekBar_waittime)
-        val tv = findViewById<TextView>(R.id.interval_text_view)
-        val tv1 = findViewById<TextView>(R.id.textView4)
-
-
+        // Generally Hide this StatusElement.
+        binding.lastCheckStatus.visibility = View.GONE
         when (mTrigger.getTriggertype()) {
             PrefConstants.PREF_TRIGGERTYPE_REPEATING -> {
-                seekBarSupportText.visibility = View.VISIBLE
-                seekBar.visibility = View.VISIBLE
-                tv.visibility = View.VISIBLE
-                tv1.visibility = View.VISIBLE
+                binding.textviewWaittimeContent.visibility = View.VISIBLE
+                binding.seekBarWaittime.visibility = View.VISIBLE
+                binding.intervalTextView.visibility = View.VISIBLE
+                binding.textView4.visibility = View.VISIBLE
             }
             PrefConstants.PREF_TRIGGERTYPE_TARGETED -> {
-                seekBarSupportText.visibility = View.GONE
-                seekBar.visibility = View.GONE
-                tv.visibility = View.GONE
-                tv1.visibility = View.GONE
+                binding.textviewWaittimeContent.visibility = View.GONE
+                binding.seekBarWaittime.visibility = View.GONE
+                binding.intervalTextView.visibility = View.GONE
+                binding.textView4.visibility = View.GONE
             }
             else ->{
-                seekBarSupportText.visibility = View.GONE
-                seekBar.visibility = View.GONE
-                tv.visibility = View.GONE
-                tv1.visibility = View.GONE
+                binding.textviewWaittimeContent.visibility = View.GONE
+                binding.seekBarWaittime.visibility = View.GONE
+                binding.intervalTextView.visibility = View.GONE
+                binding.textView4.visibility = View.GONE
             }
         }
 
