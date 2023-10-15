@@ -35,7 +35,7 @@ class GraphBarVolumeSwitchElement(var minuteOfDay: Int, var Volume: Int, var tex
     private var barlen: Float = 1.0F
     public lateinit var state: VolumeState
 
-    fun getBarLenght(): Float{
+    fun getBarLenghtInPercent(): Float{
         return minuteOfDay.toFloat().div(1440)
     }
 

@@ -13,18 +13,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import de.felixnuesse.timedsilence.R
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.skydoves.balloon.*
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
+import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.FragmentGraphBinding
-import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
-import kotlin.collections.ArrayList
 import kotlin.math.absoluteValue
 
 
@@ -37,6 +36,7 @@ class GraphFragment : Fragment() {
 
     private lateinit var last_text: GraphBarVolumeSwitchElement
     private lateinit var current_text: GraphBarVolumeSwitchElement
+    private var mInitiallyAdded = false
 
     private var mBalloon: Balloon? = null
 
@@ -73,10 +73,6 @@ class GraphFragment : Fragment() {
             it.showAlignTop(builder.build())
         }
 
-        var mainBarLayout = view.findViewById<RelativeLayout>(R.id.rel_layout)
-        buildGraph(view.context, mainBarLayout)
-
-
         if(!HeadsetHandler.headphonesConnected(view.context)){
             binding.imageviewHeadphonesConnected.visibility=View.INVISIBLE
             binding.textfieldHeadsetConnected.visibility=View.INVISIBLE
@@ -87,6 +83,14 @@ class GraphFragment : Fragment() {
             binding.textfieldHeadsetConnected.visibility=View.INVISIBLE
         }
 
+        view.viewTreeObserver.addOnGlobalLayoutListener {
+            if(!mInitiallyAdded) {
+                binding.relLayout.post {
+                    view?.let { buildGraph(it.context, binding.relLayout) }
+                }
+                mInitiallyAdded = true
+            }
+        }
     }
 
     fun buildGraph(context:Context, relLayout: RelativeLayout){
@@ -142,8 +146,8 @@ class GraphFragment : Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun createBarElem(context: Context, relativeLayout: RelativeLayout, color: Int, gbvse: GraphBarVolumeSwitchElement, isFirst: Boolean){
-        val viewid=View.generateViewId()
-        val shapeview = getShape(context, color, gbvse.getBarLenght(), viewid)
+        val viewid = View.generateViewId()
+        val shapeview = getShape(context, color, gbvse.getBarLenghtInPercent(), viewid, (relativeLayout as View).height)
 
         shapeview.setOnTouchListener(View.OnTouchListener { view, motionEvent ->
             when (motionEvent.action){
@@ -163,7 +167,7 @@ class GraphFragment : Fragment() {
         relativeLayout.addView(shapeview)
 
         val t = relativeLayout.getChildAt(relativeLayout.childCount-1)
-        if(isViewOverlapping()){
+        if(isViewOverlapping() || gbvse.getBarLenghtInPercent() == 0.0F){
             text.visibility=View.GONE
         }
 
@@ -211,24 +215,20 @@ class GraphFragment : Fragment() {
 
     }
 
-    private fun getShape(context: Context, color: Int,len: Float, id: Int): View {
-        val colorInt = color
-        val csl = ColorStateList.valueOf(colorInt)
-
+    private fun getShape(context: Context, color: Int, lengthInPercent: Float, id: Int, maxLengthPixel: Int): View {
+        val csl = ColorStateList.valueOf(color)
         val shapeDrawable = context.getDrawable(R.drawable.shape_drawable_bar) as GradientDrawable
         shapeDrawable.color = csl
 
-        var lengthOfBar = len
+        var lengthOfBarInPixel = (lengthInPercent*maxLengthPixel*0.9).toInt()
 
-        var barlen = (lengthOfBar*getSizeInDP(500)).toInt()
-
-        if(barlen<getSizeInDP(12)){
-            barlen=getSizeInDP(12)
+        if(lengthOfBarInPixel<convertPixelToDP(12)){
+            lengthOfBarInPixel=convertPixelToDP(12)
         }
 
         //detach the drawable from it's source so it can be changed independently
         shapeDrawable.mutate()
-        shapeDrawable.setSize(getSizeInDP(BAR_WIDTH),barlen)
+        shapeDrawable.setSize(getSizeInDP(BAR_WIDTH), lengthOfBarInPixel)
         shapeDrawable.intrinsicHeight
         val image = ImageView(context)
         image.setImageDrawable(shapeDrawable)
@@ -237,9 +237,14 @@ class GraphFragment : Fragment() {
         return image
     }
 
+    // Todo: this is highly suspect
     private fun getSizeInDP(size: Int): Int{
         //https://www.mysamplecode.com/2011/10/android-set-padding-programmatically-in.html
         return (size * resources.displayMetrics.density + 0.5f).toInt()
+    }
+
+    private fun convertPixelToDP(pixel: Int): Int {
+        return pixel.div(resources.displayMetrics.density).toInt()
     }
 
     private fun setLegendColor(context: Context, color: Int, image: ImageView): View {
