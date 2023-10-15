@@ -45,10 +45,7 @@ class TimeFragment : Fragment() {
             ScheduleDialog(view.context, this).show()
         }
 
-
-
         val db = DatabaseHandler(view.context)
-
         Log.e(APP_NAME, "TimeFragment: DatabaseResuluts: Size: "+db.getAllSchedules().size)
 
         viewManager = NestedRecyclerManager(view.context)

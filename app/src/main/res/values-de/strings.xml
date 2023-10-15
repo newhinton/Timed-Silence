@@ -62,12 +62,12 @@
     <string name="volume_settings_ringer">Lautstärke: Klingelton</string>
     <string name="volume_while_headset_connected">Musiklautstärke nicht verändern wenn Kopfhörer verbunden sind.</string>
     <string name="wed">Mi</string>
-    <string name="wifi_add_new">Neue Wlan-Einstellung hinzufügen:</string>
+    <string name="wifi_add_new">Neue Wlan-Einstellung hinzufügen</string>
     <string name="wifi_permission_hint">"Du benötigst Ortungsdienstzugriff da Wlan genutzt werden kann um dich zu tracken. "
     </string>
     <string name="wifi_request">Anfordern!</string>
-    <string name="schedule_add_new">Füge neuen Zeitplan hinzu:</string>
-    <string name="calendar_add_new">Füge neue Kalendereinstellugn hinzu:</string>
+    <string name="schedule_add_new">Füge neuen Zeitplan hinzu</string>
+    <string name="calendar_add_new">Füge neue Kalendereinstellung hinzu</string>
     <string name="calendar_dialog_save">Speichern</string>
     <string name="calendar_dialog_title_title">Kalender auswählen</string>
     <string name="calendar_list_empty">Sie haben keine Kalender.</string>
@@ -100,7 +100,7 @@
     <string name="channel_name_calendar_error">Kalenderfehler</string>
     <string name="channel_description_calendar_error">Zeige Fehler bei der Kalenderfindung</string>
     <string name="main_tab_keyword">Stichworte</string>
-    <string name="keyword_add_new">Neues Stichwort:</string>
+    <string name="keyword_add_new">Neues Stichwort</string>
     <string name="keyword_dialog_textfield_hint">Neues Stichwort eingeben</string>
     <string name="keyword_dialog_title_title">Stichwort erstellen</string>
     <string name="GrantCalendarPermissionAccess">Erlauben!</string>

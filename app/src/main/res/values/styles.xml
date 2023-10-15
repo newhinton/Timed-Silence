@@ -39,4 +39,10 @@
         <item name="background">@color/transparent</item>
     </style>
 
+
+    <style name="AddButtonCard" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="cardBackgroundColor">?attr/colorSecondaryContainer</item>
+        <item name="cardCornerRadius">@dimen/cornerRadius</item>
+    </style>
+
 </resources>
