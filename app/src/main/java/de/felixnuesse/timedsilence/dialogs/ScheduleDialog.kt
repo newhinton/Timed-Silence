@@ -11,7 +11,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.databinding.ScheduleDialogBinding
+import de.felixnuesse.timedsilence.databinding.DialogScheduleBinding
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
@@ -54,7 +54,7 @@ class ScheduleDialog(context: Context) : Dialog(context) {
     private var createNewSchedule: Boolean = true
     private var existingSchedule: ScheduleObject? = null
 
-    private lateinit var binding: ScheduleDialogBinding
+    private lateinit var binding: DialogScheduleBinding
 
     constructor(context: Context, timeFragment: TimeFragment) : this(context) {
         this.timeFragment = timeFragment
@@ -73,7 +73,7 @@ class ScheduleDialog(context: Context) : Dialog(context) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-        binding = ScheduleDialogBinding.inflate(layoutInflater)
+        binding = DialogScheduleBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 

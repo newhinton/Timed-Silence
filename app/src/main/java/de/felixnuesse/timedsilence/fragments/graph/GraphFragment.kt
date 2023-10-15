@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment
 import com.skydoves.balloon.*
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.databinding.GraphFragmentBinding
+import de.felixnuesse.timedsilence.databinding.FragmentGraphBinding
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
@@ -40,14 +40,14 @@ class GraphFragment : Fragment() {
 
     private var mBalloon: Balloon? = null
 
-    private var _binding: GraphFragmentBinding? = null
+    private var _binding: FragmentGraphBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = GraphFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentGraphBinding.inflate(inflater, container, false)
         return binding.root
     }
 

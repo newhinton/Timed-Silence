@@ -16,7 +16,7 @@ import android.widget.RadioButton
 import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import android.widget.TextView
 import android.text.Html
-import de.felixnuesse.timedsilence.databinding.CalendarDialogBinding
+import de.felixnuesse.timedsilence.databinding.DialogCalendarBinding
 
 
 /**
@@ -57,7 +57,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
     private var radioMap: HashMap<Int,Long> = HashMap()
     private var radioNameMap: HashMap<Long,String> = HashMap()
 
-    private lateinit var binding: CalendarDialogBinding
+    private lateinit var binding: DialogCalendarBinding
 
     constructor(context: Context, tfragment: CalendarEventFragment, calHandler: CalendarHandler) : this(context) {
         tfrag=tfragment
@@ -72,7 +72,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-        binding = CalendarDialogBinding.inflate(layoutInflater)
+        binding = DialogCalendarBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 

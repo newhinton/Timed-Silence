@@ -9,8 +9,7 @@ import android.view.Window
 import android.view.WindowManager
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.databinding.CalendarDialogBinding
-import de.felixnuesse.timedsilence.databinding.KeywordDialogBinding
+import de.felixnuesse.timedsilence.databinding.DialogKeywordBinding
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.data.KeywordObject.Companion.ALL_CALENDAR
@@ -48,7 +47,7 @@ class KeywordDialog(context: Context) : Dialog(context) {
 
     private var tfrag: KeywordFragment? = null
 
-    private lateinit var binding: KeywordDialogBinding
+    private lateinit var binding: DialogKeywordBinding
 
     constructor(context: Context, tfragment: KeywordFragment) : this(context) {
         tfrag=tfragment
@@ -60,7 +59,7 @@ class KeywordDialog(context: Context) : Dialog(context) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-        binding = KeywordDialogBinding.inflate(layoutInflater)
+        binding = DialogKeywordBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 

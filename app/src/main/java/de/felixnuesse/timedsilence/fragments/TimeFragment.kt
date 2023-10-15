@@ -7,11 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.R
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import de.felixnuesse.timedsilence.databinding.CalendarEventFragmentBinding
-import de.felixnuesse.timedsilence.databinding.TimeFragmentBinding
+import de.felixnuesse.timedsilence.databinding.FragmentTimeBinding
 import de.felixnuesse.timedsilence.dialogs.ScheduleDialog
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
@@ -24,7 +22,7 @@ class TimeFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private var _binding: TimeFragmentBinding? = null
+    private var _binding: FragmentTimeBinding? = null
     private val binding get() = _binding!!
 
 
@@ -32,7 +30,7 @@ class TimeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = TimeFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentTimeBinding.inflate(inflater, container, false)
         return binding.root
     }
 

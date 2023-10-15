@@ -9,8 +9,7 @@ import android.view.Window
 import android.view.WindowManager
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.databinding.ScheduleDialogBinding
-import de.felixnuesse.timedsilence.databinding.WifiDialogBinding
+import de.felixnuesse.timedsilence.databinding.DialogWifiBinding
 import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.model.data.WifiObject
 
@@ -46,7 +45,7 @@ class WifiDialog(context: Context) : Dialog(context) {
 
 
     private var tfrag: WifiConnectedFragment? = null
-    private lateinit var binding: WifiDialogBinding
+    private lateinit var binding: DialogWifiBinding
 
 
     constructor(context: Context, tfragment: WifiConnectedFragment) : this(context) {
@@ -61,7 +60,7 @@ class WifiDialog(context: Context) : Dialog(context) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-        binding = WifiDialogBinding.inflate(layoutInflater)
+        binding = DialogWifiBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 

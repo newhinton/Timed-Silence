@@ -9,8 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import de.felixnuesse.timedsilence.Constants
 import androidx.recyclerview.widget.RecyclerView
-import de.felixnuesse.timedsilence.databinding.CalendarEventFragmentBinding
-import de.felixnuesse.timedsilence.databinding.CalendarKeywordFragmentBinding
+import de.felixnuesse.timedsilence.databinding.FragmentCalendarKeywordBinding
 import de.felixnuesse.timedsilence.dialogs.KeywordDialog
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
@@ -23,7 +22,7 @@ class KeywordFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private var _binding: CalendarKeywordFragmentBinding? = null
+    private var _binding: FragmentCalendarKeywordBinding? = null
     private val binding get() = _binding!!
 
 
@@ -31,7 +30,7 @@ class KeywordFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = CalendarKeywordFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentCalendarKeywordBinding.inflate(inflater, container, false)
         return binding.root
     }
 

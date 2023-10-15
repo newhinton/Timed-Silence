@@ -11,9 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.databinding.CalendarEventFragmentBinding
-import de.felixnuesse.timedsilence.databinding.WifiConnectedFragmentBinding
+import de.felixnuesse.timedsilence.databinding.FragmentWifiConnectedBinding
 import de.felixnuesse.timedsilence.dialogs.WifiDialog
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
 import de.felixnuesse.timedsilence.model.data.WifiObject
@@ -27,7 +25,7 @@ class WifiConnectedFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private var _binding: WifiConnectedFragmentBinding? = null
+    private var _binding: FragmentWifiConnectedBinding? = null
     private val binding get() = _binding!!
 
 
@@ -35,7 +33,7 @@ class WifiConnectedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = WifiConnectedFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentWifiConnectedBinding.inflate(inflater, container, false)
         return binding.root
     }
 
