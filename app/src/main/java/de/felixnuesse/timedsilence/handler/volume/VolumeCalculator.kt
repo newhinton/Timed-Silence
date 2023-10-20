@@ -9,6 +9,7 @@ import de.felixnuesse.timedsilence.Constants.Companion.REASON_TIME
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_UNDEFINED
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_WIFI
 import de.felixnuesse.timedsilence.Utils
+import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.handler.calculator.LocationHandler
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
@@ -86,7 +87,7 @@ class VolumeCalculator {
     }
 
     fun calculateAllAndApply(){
-        Utils.appendLogfile(nonNullContext,"VolCacl", "calculateAllAndApply called.")
+        LogHandler.writeAppLog(nonNullContext,"VolCacl: calculateAllAndApply called.")
         volumeHandler= VolumeHandler(nonNullContext)
         switchBasedOnWifi()
         switchBasedOnTime()

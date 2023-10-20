@@ -7,6 +7,7 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.Utils
+import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
@@ -18,7 +19,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
         //todo: fix this mess
         if (context != null) {
-            Utils.appendLogfile(context,"Alarmintent", "Recieved Alarmintent")
+            LogHandler.writeAppLog(context,"Alarmintent: Recieved Alarmintent")
         }
         val current = System.currentTimeMillis()
         val date = Date(current)

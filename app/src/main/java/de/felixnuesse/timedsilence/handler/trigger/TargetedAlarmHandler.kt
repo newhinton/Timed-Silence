@@ -12,6 +12,7 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_RUN_ALARMTRIGGER_WHEN_IDLE
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.Utils
+import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.ui.notifications.ErrorNotifications
@@ -102,6 +103,8 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
         }
         Log.e(Constants.APP_NAME, "Calculated time $calculatedChecktime")
         Log.e(Constants.APP_NAME, "Calculated time ${Utils.getDate(calculatedChecktime)}")
+
+        LogHandler.writeTargeted(mContext, "$now,$calculatedChecktime,${Utils.getDate(now)},${Utils.getDate(calculatedChecktime)}")
 
         val am = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pi: PendingIntent? = createBroadcast()

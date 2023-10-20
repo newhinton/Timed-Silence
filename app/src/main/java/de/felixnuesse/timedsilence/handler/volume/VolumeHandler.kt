@@ -41,6 +41,8 @@ import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
+import de.felixnuesse.timedsilence.Utils
+import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.permissions.DoNotDisturb
@@ -294,12 +296,24 @@ class VolumeHandler(mContext: Context) {
         }
 
         Log.d(APP_NAME, "VolumeHandler: VolumeSetting: $volumeSetting")
+        var now = System.currentTimeMillis();
+        var nowF = Utils.getDate(now)
 
         when (getVolume()) {
-            TIME_SETTING_SILENT -> applySilent(context)
-            TIME_SETTING_VIBRATE -> applyVibrate(context)
-            TIME_SETTING_LOUD -> applyLoud(context)
+            TIME_SETTING_SILENT -> {
+                applySilent(context)
+                LogHandler.writeVolumeManager(context,"$now,$nowF,$TIME_SETTING_SILENT")
+            }
+            TIME_SETTING_VIBRATE -> {
+                applyVibrate(context)
+                LogHandler.writeVolumeManager(context,"$now,$nowF,$TIME_SETTING_VIBRATE")
+            }
+            TIME_SETTING_LOUD -> {
+                applyLoud(context)
+                LogHandler.writeVolumeManager(context,"$now,$nowF,$TIME_SETTING_LOUD")
+            }
             else -> {
+                LogHandler.writeVolumeManager(context,"$now,$nowF,else")
                 Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Nothing, because no volume was selecteds!")
             }
         }

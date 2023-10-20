@@ -64,45 +64,6 @@ class Utils{
             return getDate(milliSeconds.toLong())
         }
 
-        fun appendLogfile(context: Context, state: String, content: String){
-            if (!isWriteStoragePermissionGranted(context)) {
-                Log.e(APP_NAME, "No external write permission for logging.")
-                return
-            }
-            val now = Date()
-            val timestamp = now.time
-            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-            val dateStr = sdf.format(timestamp)
-
-            var text = "$dateStr - [$state]: $content\n"
-
-            val filename = "${APP_NAME}.log"
-
-            //val path = File(Environment.getExternalStorageDirectory().absolutePath + "/$APP_NAME")
-            val path = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath)
-            path.mkdirs()
-            val file = File(path, filename)
-            val stream = FileOutputStream(file, true)
-            val myOutWriter = OutputStreamWriter(stream)
-
-            try {
-                myOutWriter.append(text)
-            } finally {
-                myOutWriter.close()
-                stream.close()
-            }
-        }
-
-        private fun isWriteStoragePermissionGranted(a: Context): Boolean {
-            if (a.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.v("perm", "Permission is granted")
-                return true
-            } else {
-                Log.v("perm", "Permission is revoked")
-                return false
-            }
-        }
-
     }
 
 }
