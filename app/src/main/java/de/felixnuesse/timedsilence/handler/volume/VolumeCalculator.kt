@@ -1,6 +1,7 @@
 package de.felixnuesse.timedsilence.handler.volume
 
 import android.content.Context
+import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_CALENDAR
@@ -8,17 +9,24 @@ import de.felixnuesse.timedsilence.Constants.Companion.REASON_KEYWORD
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_TIME
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_UNDEFINED
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_WIFI
-import de.felixnuesse.timedsilence.Utils
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.handler.calculator.LocationHandler
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.notifications.LocationAccessMissingNotification
 import java.time.LocalDateTime
 import java.util.*
 import java.time.ZoneId.systemDefault
 import java.time.Instant.ofEpochMilli
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import kotlin.collections.ArrayList
 
 
 /**
@@ -86,26 +94,62 @@ class VolumeCalculator {
         ignoreMusicPlaying = ignore
     }
 
+    fun getChangeList(): ArrayList<VolumeState> {
+
+        val midnight: LocalTime = LocalTime.MIDNIGHT
+        val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
+        var todayMidnight = LocalDateTime.of(today, midnight)
+
+        var stateList = arrayListOf<VolumeState>()
+
+
+        val timeInitial = todayMidnight.plusMinutes(0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        stateList.add(getStateAt(nonNullContext, timeInitial, 0))
+        var lastState = stateList[0]
+
+        for(elem in 0L..1440L){
+
+            val time = todayMidnight.plusMinutes(elem).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+            val currentState = getStateAt(nonNullContext, time, elem.toInt())
+            if(currentState.state != lastState.state) {
+                Log.e("TAG", "($elem) Switch from ${lastState.state} to ${currentState.state} because of ${currentState.getReason()}")
+
+                lastState.endTime = currentState.startTime-1
+                lastState = currentState
+                stateList.add(currentState)
+            }
+        }
+
+
+        var lastElement = stateList.last()
+        lastElement.endTime = 1440
+
+
+        return stateList
+    }
+
     fun calculateAllAndApply(){
         LogHandler.writeAppLog(nonNullContext,"VolCacl: calculateAllAndApply called.")
-        volumeHandler= VolumeHandler(nonNullContext)
+        volumeHandler = VolumeHandler(nonNullContext)
         switchBasedOnWifi()
         switchBasedOnTime()
         switchBasedOnCalendar()
         volumeHandler.applyVolume(nonNullContext)
     }
 
-    fun getState(context: Context): VolumeState{
-        return getStateAt(context, Date().time)
-    }
-
     fun getStateAt(context: Context, timeInMilliseconds: Long): VolumeState{
+        return getStateAt(context, timeInMilliseconds, 0)
+    }
+    fun getStateAt(context: Context, timeInMilliseconds: Long, timeAsOffset: Int): VolumeState{
 
-        volumeHandler= VolumeHandler(context)
+        volumeHandler = VolumeHandler(context)
         switchBasedOnTime(timeInMilliseconds)
         switchBasedOnCalendar(timeInMilliseconds)
-
-        return VolumeState(volumeHandler.getVolume(), changeReason, changeReasonString)
+        val state = VolumeState(timeAsOffset, volumeHandler.getVolume(), changeReason, changeReasonString)
+        changeReason = REASON_UNDEFINED
+        changeReasonString = ""
+        return state
 
     }
 
@@ -161,6 +205,7 @@ class VolumeCalculator {
 
                 var calendar_id = elem.getOrDefault("calendar_id","-1").toLong()
                 var calendar_name = calendarHandler.getCalendarName(calendar_id)
+                var eventName =elem.get("name_of_event")
                 var volume = calendarHandler.getCalendarVolumeSetting(calendar_name)
                 //Log.i(APP_NAME, elem.get("name_of_event")+ " | " + volume  + " ")
 
@@ -169,7 +214,7 @@ class VolumeCalculator {
                 }else{
                     if (currentMilliseconds in (starttime + 1) until endtime-1){
                         //Log.i(APP_NAME, elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("calendar_id")+" "+volume)
-                        setGenericVolumeWithReason(volume, calendar_name, REASON_CALENDAR)
+                        setGenericVolumeWithReason(volume, "$calendar_name ($eventName)", REASON_CALENDAR)
                     }
                 }
             }catch (e:Exception ){
@@ -263,15 +308,15 @@ class VolumeCalculator {
     private fun setGenericVolume(volume: Int){
         volumeHandler.overrideMusicToZero = ignoreMusicPlaying;
         when (volume) {
-            Constants.TIME_SETTING_LOUD -> {
+            TIME_SETTING_LOUD -> {
                 volumeHandler.setLoud()
                 //Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
             }
-            Constants.TIME_SETTING_VIBRATE -> {
+            TIME_SETTING_VIBRATE -> {
                 volumeHandler.setVibrate()
                 //Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
             }
-            Constants.TIME_SETTING_SILENT -> {
+            TIME_SETTING_SILENT -> {
                 volumeHandler.setSilent()
                 //Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
             }

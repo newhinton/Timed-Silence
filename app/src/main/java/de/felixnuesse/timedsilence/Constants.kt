@@ -42,11 +42,6 @@ class Constants {
         const val MAIN_ACTIVITY_LOAD_CALENDAR = "MAIN_ACTIVITY_LOAD_CALENDAR"
         const val MAIN_ACTIVITY_LOAD_CALENDAR_FORCE = 1
 
-        const val TIME_SETTING_SILENT = 1
-        const val TIME_SETTING_VIBRATE = 2
-        const val TIME_SETTING_LOUD = 3
-        const val TIME_SETTING_UNSET = -1
-
         const val WIFI_TYPE_CONNECTED = 1
         const val WIFI_TYPE_SEARCHING = 2
 

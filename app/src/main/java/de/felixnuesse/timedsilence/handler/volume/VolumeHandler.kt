@@ -36,10 +36,10 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT
 import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.Utils
 import de.felixnuesse.timedsilence.handler.LogHandler

@@ -201,8 +201,8 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         db.close()
         cachedSchedules.set(results)
-        Log.e("Database", "content: ${results.size}")
-        Log.e("Database", "content: ${cachedSchedules.size}")
+        //Log.e("Database", "content: ${results.size}")
+        //Log.e("Database", "content: ${cachedSchedules.size}")
         return cachedSchedules
     }
 

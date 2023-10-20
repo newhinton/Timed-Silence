@@ -13,6 +13,7 @@ import de.felixnuesse.timedsilence.Utils
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.permissions.CalendarAccess
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import java.time.Duration
 import java.util.*
@@ -62,7 +63,7 @@ class DeviceCalendar(private var mContext: Context) {
                 cursor.moveToFirst()
 
                 for (i in 0 until cursor.count) {
-                    var calentry = CalendarObject(0, 0, Constants.TIME_SETTING_SILENT)
+                    var calentry = CalendarObject(0, 0, TIME_SETTING_SILENT)
 
                     calentry.ext_id=cursor.getInt(0).toLong()
                     calentry.color=cursor.getInt(2)

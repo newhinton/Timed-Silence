@@ -15,6 +15,7 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.data.KeywordObject.Companion.ALL_CALENDAR
@@ -181,7 +182,7 @@ class Importer {
 
                 val children =  nList.item(i).childNodes
 
-                val transferEObject = CalendarObject(-1,-1, Constants.TIME_SETTING_UNSET)
+                val transferEObject = CalendarObject(-1,-1, TIME_SETTING_UNSET)
 
                 for (j in 0 until children.length) {
                     val type = children.item(j)
@@ -217,7 +218,7 @@ class Importer {
 
                 val children =  nList.item(i).childNodes
 
-                val transferEObject = WifiObject(-1,"",0, Constants.TIME_SETTING_UNSET)
+                val transferEObject = WifiObject(-1,"",0, TIME_SETTING_UNSET)
 
                 for (j in 0 until children.length) {
                     val type = children.item(j)
@@ -249,7 +250,7 @@ class Importer {
             for (i in 0 until nodeList.length) {
 
                 val children =  nodeList.item(i).childNodes
-                val transferIObject = ScheduleObject("",0,0, Constants.TIME_SETTING_UNSET, -1)
+                val transferIObject = ScheduleObject("",0,0, TIME_SETTING_UNSET, -1)
                 var id = 0L
 
                 for (j in 0 until children.length) {
@@ -306,7 +307,7 @@ class Importer {
 
                 val children =  nList.item(i).childNodes
 
-                val transferEObject = KeywordObject(-1, ALL_CALENDAR,"", Constants.TIME_SETTING_UNSET)
+                val transferEObject = KeywordObject(-1, ALL_CALENDAR,"", TIME_SETTING_UNSET)
                 for (j in 0 until children.length) {
                     val type = children.item(j)
                     when (type.nodeName) {

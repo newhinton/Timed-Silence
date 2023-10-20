@@ -4,9 +4,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.Constants.Companion.WIFI_TYPE_CONNECTED
 import de.felixnuesse.timedsilence.Constants.Companion.WIFI_TYPE_SEARCHING
 import de.felixnuesse.timedsilence.R

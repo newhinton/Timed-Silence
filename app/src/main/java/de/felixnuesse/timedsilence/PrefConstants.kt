@@ -1,5 +1,7 @@
 package de.felixnuesse.timedsilence;
 
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
+
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -90,7 +92,7 @@ class PrefConstants {
 
 
         const val TIME_SETTING_DEFAULT_PREFERENCE = "TIME_SETTING_DEFAULT_PREFERENCE"
-        const val TIME_SETTING_DEFAULT = Constants.TIME_SETTING_UNSET
+        const val TIME_SETTING_DEFAULT = TIME_SETTING_UNSET
 
 
         const val PREF_RUN_ALARMTRIGGER_WHEN_IDLE = "PREF_RUN_ALARMTRIGGER_WHEN_IDLE"

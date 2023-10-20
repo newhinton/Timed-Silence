@@ -17,7 +17,10 @@ import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import android.widget.TextView
 import android.text.Html
 import de.felixnuesse.timedsilence.databinding.DialogCalendarBinding
-
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -156,11 +159,11 @@ class CalendarDialog(context: Context) : Dialog(context) {
 
     private fun getValueForVolumeRadioGroup(): Int{
         when (binding.calendarDialogRbVolume.checkedRadioButtonId) {
-            R.id.calendar_dialog_rb_loud -> return Constants.TIME_SETTING_LOUD
-            R.id.calendar_dialog_rb_silent -> return Constants.TIME_SETTING_SILENT
-            R.id.calendar_dialog_rb_vibrate -> return Constants.TIME_SETTING_VIBRATE
+            R.id.calendar_dialog_rb_loud -> return TIME_SETTING_LOUD
+            R.id.calendar_dialog_rb_silent -> return TIME_SETTING_SILENT
+            R.id.calendar_dialog_rb_vibrate -> return TIME_SETTING_VIBRATE
         }
-        return Constants.TIME_SETTING_VIBRATE;
+        return TIME_SETTING_VIBRATE;
     }
 
     private fun getValueForCalendarRadioGroup(): Long{

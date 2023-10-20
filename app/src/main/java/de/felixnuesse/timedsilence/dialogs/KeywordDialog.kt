@@ -14,6 +14,10 @@ import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.data.KeywordObject.Companion.ALL_CALENDAR
 
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 
 /**
  * Copyright (C) 2021  Felix Nüsse
@@ -115,11 +119,11 @@ class KeywordDialog(context: Context) : Dialog(context) {
 
     private fun getValueForVolumeRadioGroup(): Int{
         when (binding.keywordDialogRbVolume.checkedRadioButtonId) {
-            R.id.keyword_dialog_rb_loud -> return Constants.TIME_SETTING_LOUD
-            R.id.keyword_dialog_rb_silent -> return Constants.TIME_SETTING_SILENT
-            R.id.keyword_dialog_rb_vibrate -> return Constants.TIME_SETTING_VIBRATE
+            R.id.keyword_dialog_rb_loud -> return TIME_SETTING_LOUD
+            R.id.keyword_dialog_rb_silent -> return TIME_SETTING_SILENT
+            R.id.keyword_dialog_rb_vibrate -> return TIME_SETTING_VIBRATE
         }
-        return Constants.TIME_SETTING_VIBRATE;
+        return TIME_SETTING_VIBRATE;
     }
 
     private fun decideState() {

@@ -18,6 +18,10 @@ import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -185,18 +189,18 @@ class ScheduleDialog(context: Context) : Dialog(context) {
 
     private fun getValueForVolumeRadioGroup(): Int {
         when (binding.scheduleDialogRbVolume.checkedRadioButtonId) {
-            R.id.schedule_dialog_rb_loud -> return Constants.TIME_SETTING_LOUD
-            R.id.schedule_dialog_rb_silent -> return Constants.TIME_SETTING_SILENT
-            R.id.schedule_dialog_rb_vibrate -> return Constants.TIME_SETTING_VIBRATE
+            R.id.schedule_dialog_rb_loud -> return TIME_SETTING_LOUD
+            R.id.schedule_dialog_rb_silent -> return TIME_SETTING_SILENT
+            R.id.schedule_dialog_rb_vibrate -> return TIME_SETTING_VIBRATE
         }
-        return Constants.TIME_SETTING_VIBRATE;
+        return TIME_SETTING_VIBRATE;
     }
 
     private fun setValueForVolumeRadioGroup(id: Int) {
         when (id) {
-            Constants.TIME_SETTING_LOUD -> binding.scheduleDialogRbLoud.isChecked = true
-            Constants.TIME_SETTING_SILENT -> binding.scheduleDialogRbSilent.isChecked = true
-            Constants.TIME_SETTING_VIBRATE -> binding.scheduleDialogRbVibrate.isChecked = true
+            TIME_SETTING_LOUD -> binding.scheduleDialogRbLoud.isChecked = true
+            TIME_SETTING_SILENT -> binding.scheduleDialogRbSilent.isChecked = true
+            TIME_SETTING_VIBRATE -> binding.scheduleDialogRbVibrate.isChecked = true
         }
     }
 

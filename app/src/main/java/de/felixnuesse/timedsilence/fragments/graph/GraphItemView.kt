@@ -1,10 +1,12 @@
 package de.felixnuesse.timedsilence.fragments.graph
 
 import android.content.Context
-import android.util.AttributeSet
+import android.content.res.ColorStateList
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import com.skydoves.balloon.ArrowOrientation
 import com.skydoves.balloon.Balloon
@@ -18,14 +20,42 @@ class GraphItemView: LinearLayout {
 
 
     private var binding = CustomuiGraphitemBinding.inflate(LayoutInflater.from(context), this, true)
+    private var mColor: ColorStateList
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)  {}
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)  {}
-    constructor(context: Context) : super(context) {}
 
-    init {
+    constructor(context: Context, color: Int, isFirst: Boolean, overlapColor: Int = -1) : super(context) {
+        layoutParams = LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.MATCH_PARENT
+        )
+        mColor = ColorStateList.valueOf(color)
+
+        if(overlapColor != -1) {
+            var shape = context.getDrawable(R.drawable.shape_drawable_bar_center) as GradientDrawable
+            shape.mutate()
+            shape.color = ColorStateList.valueOf(overlapColor)
+            binding.below.setImageDrawable(shape)
+
+        } else {
+            binding.below.visibility = View.INVISIBLE
+        }
+
+        var shapeDrawable = context.getDrawable(R.drawable.shape_drawable_bar_bottomonly) as GradientDrawable
+        if(isFirst) {
+            shapeDrawable = context.getDrawable(R.drawable.shape_drawable_bar) as GradientDrawable
+        }
+
+        shapeDrawable.mutate()
+        shapeDrawable.color = mColor
+        binding.bottom.setImageDrawable(shapeDrawable)
+
     }
 
+    fun updateVisibility(duration: Int) {
+        if(duration<10) {
+            binding.textContainer.visibility = View.GONE
+        }
+    }
 
     private fun getPixelFromDp(dp: Int ): Int {
         return (dp * resources.displayMetrics.density).toInt()

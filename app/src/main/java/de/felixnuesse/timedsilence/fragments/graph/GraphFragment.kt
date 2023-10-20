@@ -8,26 +8,24 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.skydoves.balloon.*
-import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_UNSET
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.FragmentGraphBinding
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
+import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import de.felixnuesse.timedsilence.util.SizeUtil
 import kotlin.math.absoluteValue
@@ -43,7 +41,7 @@ class GraphFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentGraphBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -85,22 +83,24 @@ class GraphFragment : Fragment() {
 
     fun buildGraph(context:Context, relLayout: LinearLayout){
 
-        val thread = GraphFragmentThread(requireContext())
-        val list = thread.doIt(requireContext()) as ArrayList
+        var volCalc = VolumeCalculator(requireContext(), true)
+        val list = volCalc.getChangeList()
+        var isfirst = true
 
-        var lastTime = 0
-        for (elem in list){
-            var state = elem.Volume
 
-            var id= R.color.color_graph_unset
-            when (state) {
-                TIME_SETTING_SILENT -> id = R.color.color_graph_silent
-                TIME_SETTING_VIBRATE -> id = R.color.color_graph_vibrate
-                TIME_SETTING_LOUD -> id = R.color.color_graph_loud
+        for (i in 0..<list.size){
+            var volumeState = list[i]
+            Log.e("TAG", volumeState.toString())
+
+            var color = resources.getColor(getColorFromState(volumeState.state))
+            var nextColor: Int? = null
+
+            if(list.size-1>i){
+                nextColor = resources.getColor(getColorFromState(list[i+1].state))
             }
 
-            relLayout.addView(createBarElem(context, lastTime, elem.minuteOfDay, resources.getColor(id), elem))
-            lastTime = elem.minuteOfDay
+            relLayout.addView(createBarElem(context, volumeState, color, nextColor, isfirst))
+            isfirst = false
         }
 
         setLegendColor(R.color.color_graph_unset, binding.imageViewLegendUnset)
@@ -111,34 +111,40 @@ class GraphFragment : Fragment() {
 
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun createBarElem(context: Context, lastTime: Int, now: Int, color: Int, gbvse: GraphBarVolumeSwitchElement): LinearLayout {
+    private fun createBarElem(context: Context, volumeState: VolumeState, color: Int, nextColor: Int?, isFirst: Boolean): LinearLayout {
 
 
         var outerLayout = LinearLayout(context)
         val outerLayoutParams = LinearLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT,
-            (now - lastTime).toFloat()
+            volumeState.duration.toFloat()
         )
 
         outerLayout.layoutParams = outerLayoutParams
-        val item = GraphItemView(context.applicationContext)
 
-        item.setTooltip(gbvse.state.getReason())
+        //outerLayout.setBackgroundColor(color)
+        val item = if(nextColor != null) {
+            GraphItemView(context.applicationContext, color, isFirst, nextColor)
+        } else {
+            GraphItemView(context.applicationContext, color, isFirst)
+        }
+
+        item.setTooltip(volumeState.getReason())
+        item.updateVisibility(volumeState.duration)
 
 
         var text_addition=""
-        when (gbvse.Volume) {
+        when (volumeState.state) {
             TIME_SETTING_SILENT -> text_addition = "Silent"
             TIME_SETTING_VIBRATE -> text_addition = "Vibrate"
             TIME_SETTING_LOUD -> text_addition = "Loud"
             TIME_SETTING_UNSET -> text_addition = "Unset"
         }
 
-        item.setText(" - ${gbvse.text}: $text_addition")
+        item.setText(" - ${volumeState.getFormattedStartDate()}: $text_addition")
 
         outerLayout.addView(item)
-        outerLayout.setBackgroundColor(color)
         return outerLayout
     }
 
@@ -185,5 +191,15 @@ class GraphFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun getColorFromState(state: Int): Int {
+        var id= R.color.color_graph_unset
+        when (state) {
+            TIME_SETTING_SILENT -> id = R.color.color_graph_silent
+            TIME_SETTING_VIBRATE -> id = R.color.color_graph_vibrate
+            TIME_SETTING_LOUD -> id = R.color.color_graph_loud
+        }
+        return id
     }
 }
