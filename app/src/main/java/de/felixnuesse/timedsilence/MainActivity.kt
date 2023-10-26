@@ -64,6 +64,7 @@ import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
+import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
@@ -73,10 +74,10 @@ import java.util.*
 class MainActivity : AppCompatActivity(), TimerInterface {
 
 
-    private var mDontCheckGraph = false
-    private var button_check : String = ""
+    private var mDontCheckGraph = true
+    private var button_check: String = ""
     private var lastTabPosition = 0
-    private lateinit var mPager : ViewPager
+    private lateinit var mPager: ViewPager
     private lateinit var mTrigger: Trigger
 
     private lateinit var binding: ActivityMainBinding
@@ -85,15 +86,15 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         super.onCreate(savedInstanceState)
 
 
-        val sharedPref = applicationContext.getSharedPreferences(INTRO_PREFERENCES, Context.MODE_PRIVATE)
+        val sharedPref =
+            applicationContext.getSharedPreferences(INTRO_PREFERENCES, Context.MODE_PRIVATE)
         if (!sharedPref.getBoolean(getString(R.string.pref_key_intro_v1_0_0), false)) {
             startActivity(Intent(this, IntroActivity::class.java))
             finish()
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
 
@@ -107,7 +108,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         //This hidden button is needed because the buttonsound of the main button is supressed because the device is still muted. A click is performed on this button, and when the onClick handler is set,
         //it plays a sound after the volume has changed to loud. Therefore it seems to be the main button who makes the sound
-        binding.buttonButtonsoundFix.isSoundEffectsEnabled=true
+        binding.buttonButtonsoundFix.isSoundEffectsEnabled = true
         binding.buttonButtonsoundFix.setOnClickListener {
             Log.e(APP_NAME, "MainAcitivity: HiddenButton: PerformClick to make sound")
         }
@@ -117,25 +118,18 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             setHandlerState()
         }
 
-        //binding.frameLayout.setOnClickListener {
-            //Log.e(APP_NAME, "Main: FabTester: Clicked")
-         //   buttonState()
-        //}
-
-
-
-        val interval= SharedPreferencesHandler.getPref(
+        val interval = SharedPreferencesHandler.getPref(
             this,
             PrefConstants.PREF_INTERVAL_CHECK,
             PrefConstants.PREF_INTERVAL_CHECK_DEFAULT
         )
 
-        binding.textviewWaittimeContent.text=interval.toString()
-        binding.seekBarWaittime.progress=interval
+        binding.textviewWaittimeContent.text = interval.toString()
+        binding.seekBarWaittime.progress = interval
 
         //minimum is zero, so we need to offset by one
-        binding.seekBarWaittime.max=179
-        binding.seekBarWaittime?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.seekBarWaittime.max = 179
+        binding.seekBarWaittime.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 // Write code to perform some action when progress is changed.
 
@@ -148,7 +142,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 //Toast.makeText(this@MainActivity, "Progress is " + seekBar.progress+1 + "%", Toast.LENGTH_SHORT).show()
-
                 binding.textviewWaittimeContent.text = (seekBar.progress + 1).toString()
                 setInterval(seekBar.progress + 1)
 
@@ -170,14 +163,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         })
 
         mPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-
             override fun onPageScrollStateChanged(state: Int) {}
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-            }
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
                 val tab = tabs.getTabAt(position)
@@ -188,14 +175,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         // The pager adapter, which provides the pages to the view pager widget.
         val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
+        mPager.offscreenPageLimit = 4
         mPager.adapter = pagerAdapter
 
-        tabs.getTabAt(0)?.text = ""
-        tabs.getTabAt(1)?.text = ""
-        tabs.getTabAt(2)?.text = ""
-        tabs.getTabAt(3)?.text = ""
-        tabs.getTabAt(4)?.text = ""
-
+        for(i in 0..4) {
+            tabs.getTabAt(i)?.text = ""
+        }
 
         SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
             getSharedPreferencesListener()
@@ -203,23 +188,28 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         buttonState()
 
-        loadCalendarFragment()
-        if(mDontCheckGraph){
-            AlarmBroadcastReceiver().switchVolumeMode(this)
+        handleCalendarFragmentIntentExtra()
+        if (mDontCheckGraph) {
+            VolumeCalculator(this).calculateAllAndApply()
         }
     }
 
-    private fun loadCalendarFragment(){
+
+    /**
+     * This opens the CalendarFragment if the intent has the proper extras.
+     */
+    private fun handleCalendarFragmentIntentExtra() {
         val intentFragment = intent?.extras?.getInt(Constants.MAIN_ACTIVITY_LOAD_CALENDAR)
-        if(intentFragment == MAIN_ACTIVITY_LOAD_CALENDAR_FORCE){
+        if (intentFragment == MAIN_ACTIVITY_LOAD_CALENDAR_FORCE) {
             mPager.currentItem = 2
-            mDontCheckGraph=true
+            mDontCheckGraph = true
         }
     }
+
     override fun onResume() {
         super.onResume()
 
-        loadCalendarFragment()
+        handleCalendarFragmentIntentExtra()
         buttonState()
         SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
             getSharedPreferencesListener()
@@ -233,7 +223,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
                 mPager.currentItem = lastTabPosition
             }
         }, 0)
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -259,6 +248,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
                 }
                 Toast.makeText(this, getString(R.string.loud), Toast.LENGTH_LONG).show()
             }
+
             R.id.action_set_manual_vibrate -> {
                 voLHandler.setVibrate(); Toast.makeText(
                     this, getString(
@@ -266,6 +256,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
                     ), Toast.LENGTH_LONG
                 ).show()
             }
+
             R.id.action_set_manual_silent -> {
                 voLHandler.setSilent(); Toast.makeText(
                     this, getString(
@@ -296,8 +287,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     }
 
 
-
-    fun setInterval(interval: Int){
+    fun setInterval(interval: Int) {
         SharedPreferencesHandler.setPref(this, PrefConstants.PREF_INTERVAL_CHECK, interval)
         mTrigger.removeTimecheck()
         mTrigger.createTimecheck()
@@ -305,13 +295,13 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     }
 
 
-    private fun updateTimeCheckDisplay(){
-        binding.nextCheckDisplay.text= mTrigger.getNextAlarmTimestamp()
+    private fun updateTimeCheckDisplay() {
+        binding.nextCheckDisplay.text = mTrigger.getNextAlarmTimestamp()
 
-        val sharedPref = this?.getSharedPreferences("test", Context.MODE_PRIVATE) ?: return
+        val sharedPref = this.getSharedPreferences("test", Context.MODE_PRIVATE) ?: return
         val lasttime = sharedPref.getLong("last_ExecTime", 0)
 
-        val current =System.currentTimeMillis()
+        val current = System.currentTimeMillis()
         val date = Date(current)
 
 
@@ -325,14 +315,13 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         val hours = ((difference - 1000 * 60 * 60 * 24 * days) / (1000 * 60 * 60))
         val min = (difference - 1000 * 60 * 60 * 24 * days - 1000 * 60 * 60 * hours) / (1000 * 60)
 
-        var highScore =  DateFormat.getTimeFormat(this)
-        if(hours>24){
-            highScore =  DateFormat.getDateFormat(this)
+        var highScore = DateFormat.getTimeFormat(this)
+        if (hours > 24) {
+            highScore = DateFormat.getDateFormat(this)
         }
 
-        binding.nextCheckDisplay.text=highScore.format(date)
+        binding.nextCheckDisplay.text = highScore.format(date)
     }
-
 
 
     private fun buttonState() {
@@ -340,10 +329,10 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         Log.e(APP_NAME, "Main: ButtonStartCheck: State: $button_check")
 
         //Todo remove dummy textview
-        if(mTrigger.checkIfNextAlarmExists()){
+        if (mTrigger.checkIfNextAlarmExists()) {
             setFabStarted(binding.fab, TextView(this))
             binding.runningStatus.visibility = View.GONE
-        } else{
+        } else {
             setFabStopped(binding.fab, TextView(this))
             binding.runningStatus.visibility = View.VISIBLE
         }
@@ -358,13 +347,15 @@ class MainActivity : AppCompatActivity(), TimerInterface {
                 binding.intervalTextView.visibility = View.VISIBLE
                 binding.textView4.visibility = View.VISIBLE
             }
+
             PrefConstants.PREF_TRIGGERTYPE_TARGETED -> {
                 binding.textviewWaittimeContent.visibility = View.GONE
                 binding.seekBarWaittime.visibility = View.GONE
                 binding.intervalTextView.visibility = View.GONE
                 binding.textView4.visibility = View.GONE
             }
-            else ->{
+
+            else -> {
                 binding.textviewWaittimeContent.visibility = View.GONE
                 binding.seekBarWaittime.visibility = View.GONE
                 binding.intervalTextView.visibility = View.GONE
@@ -378,15 +369,15 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         Log.e(APP_NAME, "Main: setHandlerState: State: $button_check")
 
-        if(button_check == getString(R.string.timecheck_start)){
+        if (button_check == getString(R.string.timecheck_start)) {
             mTrigger.createTimecheck()
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
             AlarmBroadcastReceiver().switchVolumeMode(this)
-        }else if(button_check == getString(R.string.timecheck_paused)){
+        } else if (button_check == getString(R.string.timecheck_paused)) {
             mTrigger.createTimecheck()
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
             AlarmBroadcastReceiver().switchVolumeMode(this)
-        }else{
+        } else {
             mTrigger.removeTimecheck()
             SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, false)
         }
@@ -394,10 +385,10 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     }
 
 
-    fun setFabStarted(fab: FloatingActionButton, text: TextView){
+    fun setFabStarted(fab: FloatingActionButton, text: TextView) {
         text.text = getString(R.string.timecheck_running)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_running))
-       // fab.setImageResource(R.drawable.ic_play_arrow_white_24dp)
+        // fab.setImageResource(R.drawable.ic_play_arrow_white_24dp)
 
         val d = getDrawable(R.drawable.icon_pause)
         d?.mutate()?.setColorFilter(
@@ -407,11 +398,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         fab.setImageDrawable(d)
 
-        button_check=getString(R.string.timecheck_stop)
+        button_check = getString(R.string.timecheck_stop)
 
     }
 
-    fun setFabStopped(fab: FloatingActionButton, text: TextView){
+    fun setFabStopped(fab: FloatingActionButton, text: TextView) {
         text.text = getString(R.string.timecheck_stopped)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
 
@@ -424,20 +415,20 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         fab.setImageDrawable(d)
         mTrigger.removeTimecheck()
-        button_check=getString(R.string.timecheck_start)
+        button_check = getString(R.string.timecheck_start)
     }
 
-    fun setFabPaused(fab: FloatingActionButton, text: TextView){
+    fun setFabPaused(fab: FloatingActionButton, text: TextView) {
         text.text = getString(R.string.timecheck_paused)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_paused))
         fab.setImageResource(R.drawable.icon_fast_forward)
-        button_check=getString(R.string.timecheck_paused)
+        button_check = getString(R.string.timecheck_paused)
     }
 
     @Deprecated("replace by callback")
     fun getSharedPreferencesListener(): SharedPreferences.OnSharedPreferenceChangeListener {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
-            if(key==PrefConstants.PREFS_LAST_KEY_EXEC){
+            if (key == PrefConstants.PREFS_LAST_KEY_EXEC) {
                 updateTimeCheckDisplay()
             }
         }

@@ -3,10 +3,8 @@ package de.felixnuesse.timedsilence.fragments.graph
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +14,6 @@ import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.skydoves.balloon.*
-import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
-import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
-import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
-import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.FragmentGraphBinding
@@ -27,8 +21,11 @@ import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.util.SizeUtil
-import kotlin.math.absoluteValue
 
 
 class GraphFragment : Fragment() {
@@ -77,36 +74,47 @@ class GraphFragment : Fragment() {
             binding.imageviewHeadphonesConnected.visibility=View.INVISIBLE
             binding.textfieldHeadsetConnected.visibility=View.INVISIBLE
         }
+        Thread {
+            buildGraph(view.context, binding.relLayout)
+        }.start()
 
-        buildGraph(view.context, binding.relLayout)
+
+
     }
 
     fun buildGraph(context:Context, relLayout: LinearLayout){
 
-        var volCalc = VolumeCalculator(requireContext(), true)
+        setLegendColor(R.color.color_graph_unset, binding.imageViewLegendUnset)
+        setLegendColor(R.color.color_graph_silent, binding.imageViewLegendSilent)
+        setLegendColor(R.color.color_graph_vibrate, binding.imageViewLegendVibrate)
+        setLegendColor(R.color.color_graph_loud, binding.imageViewLegendLoud)
+
+        val volCalc = VolumeCalculator(requireContext(), true)
         val list = volCalc.getChangeList()
         var isfirst = true
 
+        val barElementList = arrayListOf<LinearLayout>()
 
         for (i in 0..<list.size){
-            var volumeState = list[i]
-            Log.e("TAG", volumeState.toString())
+            val volumeState = list[i]
 
-            var color = resources.getColor(getColorFromState(volumeState.state))
+            val color = resources.getColor(getColorFromState(volumeState.state))
             var nextColor: Int? = null
 
             if(list.size-1>i){
                 nextColor = resources.getColor(getColorFromState(list[i+1].state))
             }
 
-            relLayout.addView(createBarElem(context, volumeState, color, nextColor, isfirst))
+            barElementList.add(createBarElem(context, volumeState, color, nextColor, isfirst))
             isfirst = false
         }
 
-        setLegendColor(R.color.color_graph_unset, binding.imageViewLegendUnset)
-        setLegendColor(R.color.color_graph_silent, binding.imageViewLegendSilent)
-        setLegendColor(R.color.color_graph_vibrate, binding.imageViewLegendVibrate)
-        setLegendColor(R.color.color_graph_loud, binding.imageViewLegendLoud)
+        requireActivity().runOnUiThread {
+            barElementList.forEach {
+                relLayout.addView(it)
+            }
+            binding.loadingColumn.visibility = View.GONE
+        }
     }
 
 

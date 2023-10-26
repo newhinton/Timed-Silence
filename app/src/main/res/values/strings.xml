@@ -127,10 +127,11 @@
     <string name="intro_slide_calendar_title">Calendar</string>
     <string name="intro_slide_calendar_description">If you want to silence your phone during your meetings and events, we need to access your calendar</string>
     <string name="intro_slide_notification_title">Get Notified!</string>
-    <string name="intro_slide_notification_description">We want to show you notifications when this app is beeing paused, so please grant us access to post notifications. We wont spam you!</string>
+    <string name="intro_slide_notification_description">We want to show you notifications when this app is being paused, so please grant us access to post notifications. We wont spam you!</string>
     <string name="intro_slide_donotdisturb_title">Do not Disturb</string>
     <string name="intro_slide_donotdisturb_description">To make your Phone truly silent, we need access to the Do not Disturb-Settings.</string>
     <string name="intro_slide_done_title">Done!</string>
     <string name="intro_slide_done_description">You are now ready to start! Enjoy your interruption free time!</string>
-    <string name="state_checks_are_paused">You paused this app, we currently do not controll your volume!</string>
+    <string name="state_checks_are_paused">You paused this app, we currently do not control your volume!</string>
+    <string name="calculationg_volume_loading_indicator">Calculating Volume…</string>
 </resources>
