@@ -100,6 +100,8 @@ class VolumeCalculator {
 
         val midnight: LocalTime = LocalTime.MIDNIGHT
         val today: LocalDate = LocalDate.now(systemDefault())
+        val now: LocalTime = LocalTime.now(systemDefault())
+        val nowAsOffset = now.minute+now.hour*60
         var todayMidnight = LocalDateTime.of(today, midnight)
 
         var stateList = arrayListOf<VolumeState>()
@@ -114,8 +116,11 @@ class VolumeCalculator {
             val time = todayMidnight.plusMinutes(elem).atZone(systemDefault()).toInstant().toEpochMilli()
 
             val currentState = getStateAt(nonNullContext, time, elem.toInt())
-            if(currentState.state != lastState.state) {
-                Log.e("TAG", "($elem) Switch from ${lastState.state} to ${currentState.state} because of ${currentState.getReason()}")
+            if(currentState.state != lastState.state || elem.toInt() == nowAsOffset) {
+                Log.e(TAG, "($elem) Switch from ${lastState.stateString()} to ${currentState.stateString()} because of ${currentState.getReason()}")
+                if(elem.toInt() == nowAsOffset){
+                    Log.e(TAG, "($elem) Added because it is the current time")
+                }
 
                 lastState.endTime = currentState.startTime-1
                 lastState = currentState

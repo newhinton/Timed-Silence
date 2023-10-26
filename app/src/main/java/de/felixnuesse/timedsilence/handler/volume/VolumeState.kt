@@ -64,15 +64,17 @@ class VolumeState(var startTime: Int, val state: Int, val reason: Int, val reaso
             Constants.REASON_WIFI -> stringReason = "WIFI"
         }
 
-        var stringState = state.toString()
-        when (state) {
-            TIME_SETTING_SILENT -> stringState = "SILENT"
-            TIME_SETTING_VIBRATE -> stringState = "VIBRATE"
-            TIME_SETTING_LOUD -> stringState = "LOUD"
-            TIME_SETTING_UNSET -> stringState = "UNSET"
-        }
+        return "VolumeState(startTime=${getFormattedStartDate()}, endTime=${getFormattedEndDate()}, duration=$duration, state=${stateString()}, reason=$stringReason, reasonDescription='$reasonDescription')"
+    }
 
-        return "VolumeState(startTime=${getFormattedStartDate()}, endTime=${getFormattedEndDate()}, duration=$duration, state=$stringState, reason=$stringReason, reasonDescription='$reasonDescription')"
+    fun stateString(): String {
+        return when (state) {
+            TIME_SETTING_SILENT -> "SILENT"
+            TIME_SETTING_VIBRATE -> "VIBRATE"
+            TIME_SETTING_LOUD -> "LOUD"
+            TIME_SETTING_UNSET -> "UNSET"
+            else -> state.toString()
+        }
     }
 
 
