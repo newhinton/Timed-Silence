@@ -4,15 +4,12 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.util.Log
 import android.widget.Toast
-import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
@@ -69,6 +66,7 @@ class Importer {
      */
 
     companion object{
+        private const val TAG = "Importer"
         private const val READ_SUCCESS_CODE = 42
         const val PERM_REQUEST_CODE = 41
 
@@ -113,27 +111,27 @@ class Importer {
             }
 
 
-            Log.e(APP_NAME, ": $result")
+            Log.e(TAG, ": $result")
 
             db.clean()
             for(scheduleObject in schedulesList){
-                Log.e(APP_NAME, "Create Schedule: ${scheduleObject.name}")
+                Log.e(TAG, "Create Schedule: ${scheduleObject.name}")
                 db.createScheduleEntry(scheduleObject)
             }
 
             for(calendarObject in calendarList){
-                Log.e(APP_NAME, "Create Calendar: ${calendarObject.name}")
+                Log.e(TAG, "Create Calendar: ${calendarObject.name}")
                 db.createCalendarEntry(calendarObject)
             }
 
             for(wifiObject in wifiList){
-                Log.e(APP_NAME, "Create Wifi: ${wifiObject.ssid}")
+                Log.e(TAG, "Create Wifi: ${wifiObject.ssid}")
                 db.createWifiEntry(wifiObject)
             }
 
 
             for(keywordObject in keywordList){
-                Log.e(APP_NAME, "Create Keyword: ${keywordObject.keyword}")
+                Log.e(TAG, "Create Keyword: ${keywordObject.keyword}")
                 db.createKeyword(keywordObject)
             }
 
@@ -159,10 +157,10 @@ class Importer {
 
         private fun getFileAccessPermission(activity: Activity): Boolean {
             return if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.e(APP_NAME, "Get permissions -- already granted!")
+                Log.e(TAG, "Get permissions -- already granted!")
                 true
             } else {
-                Log.e(APP_NAME, "Get permissions!")
+                Log.e(TAG, "Get permissions!")
                 ActivityCompat.requestPermissions(activity, arrayOf<String>(Manifest.permission.READ_EXTERNAL_STORAGE), PERM_REQUEST_CODE)
                 false
             }

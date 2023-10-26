@@ -22,6 +22,7 @@ import kotlin.collections.ArrayList
 class CalendarEventFragment : Fragment() {
 
     companion object {
+        private const val TAG = "WifiDialog"
         var nameOfEvent = ArrayList<String>()
         var startDates = ArrayList<String>()
         var endDates = ArrayList<String>()
@@ -53,13 +54,13 @@ class CalendarEventFragment : Fragment() {
         checkContainer(calHandler, view.context)
 
         binding.buttonCalendarFragment.setOnClickListener {
-            Log.e(Constants.APP_NAME, "CalendarFragment: Add new!")
+            Log.e(TAG, "CalendarFragment: Add new!")
             CalendarDialog(view.context, this, calHandler).show()
         }
 
         val db = DatabaseHandler(view.context)
 
-        Log.e(Constants.APP_NAME, "CalendarFragment: DatabaseResuluts: Size: "+db.getAllCalendarEntries().size)
+        Log.e(TAG, "CalendarFragment: DatabaseResuluts: Size: "+db.getAllCalendarEntries().size)
 
 
 

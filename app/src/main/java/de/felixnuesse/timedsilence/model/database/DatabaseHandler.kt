@@ -14,8 +14,6 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CRE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_TABLE
 import android.content.ContentValues
 import android.database.Cursor
-import android.util.Log
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.model.data.*
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ANDROID_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ID

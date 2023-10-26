@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.databinding.FragmentTimeBinding
@@ -18,6 +17,10 @@ import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 
 
 class TimeFragment : Fragment() {
+
+    companion object {
+        private const val TAG = "TimeFragment"
+    }
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -41,12 +44,12 @@ class TimeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.buttonTimeFragment.setOnClickListener {
-            Log.e(APP_NAME, "TimeFragment: Add new!")
+            Log.e(TAG, "TimeFragment: Add new!")
             ScheduleDialog(view.context, this).show()
         }
 
         val db = DatabaseHandler(view.context)
-        Log.e(APP_NAME, "TimeFragment: DatabaseResuluts: Size: "+db.getAllSchedules().size)
+        Log.e(TAG, "TimeFragment: DatabaseResuluts: Size: "+db.getAllSchedules().size)
 
         viewManager = NestedRecyclerManager(view.context)
         viewAdapter = ScheduleListAdapter(db.getAllSchedules())

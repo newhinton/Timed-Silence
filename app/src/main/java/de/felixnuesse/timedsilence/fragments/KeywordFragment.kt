@@ -19,6 +19,10 @@ import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 
 class KeywordFragment : Fragment() {
 
+    companion object {
+        private const val TAG = "KeywordFragment"
+    }
+
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
@@ -38,12 +42,12 @@ class KeywordFragment : Fragment() {
 
         binding.buttonCalendarFragment.setOnClickListener {
             KeywordDialog(view.context, this).show()
-            Log.e(Constants.APP_NAME, "CalendarKeywordFragment: Add new!")
+            Log.e(TAG, "CalendarKeywordFragment: Add new!")
         }
 
         val db = DatabaseHandler(view.context)
 
-        Log.e(Constants.APP_NAME, "CalendarKeywordFragment: DatabaseResuluts: Size: "+db.getKeywords().size)
+        Log.e(TAG, "CalendarKeywordFragment: DatabaseResuluts: Size: "+db.getKeywords().size)
 
         viewManager = NestedRecyclerManager(view.context)
         viewAdapter = KeywordListAdapter(db.getKeywords())

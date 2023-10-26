@@ -49,6 +49,10 @@ import de.felixnuesse.timedsilence.ui.notifications.ErrorNotifications
 
 class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
 
+    companion object {
+        private const val TAG = "TargetedAlarmHandler"
+    }
+
     override fun createTimecheck() {
         createAlarmIntime()
     }
@@ -59,10 +63,10 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
         createBroadcast()?.cancel()
 
         if(!checkIfNextAlarmExists()){
-            Log.d(Constants.APP_NAME, "AlarmHandler: Recurring alarm canceled")
+            Log.d(TAG, "AlarmHandler: Recurring alarm canceled")
             return
         }
-        Log.e(Constants.APP_NAME, "AlarmHandler: Error canceling recurring alarm!")
+        Log.e(TAG, "AlarmHandler: Error canceling recurring alarm!")
     }
 
     override fun createBroadcast(): PendingIntent? {
@@ -95,14 +99,14 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
         var calculatedChecktime = 0L
         val list = VolumeHandler(mContext).getChangeList(mContext)
         for (it in list) {
-            //Log.e(Constants.APP_NAME, "Calculated time $it")
-            //Log.e(Constants.APP_NAME, "Calculated time ${Utils.getDate(calculatedChecktime)}")
+            //Log.e(TAG, "Calculated time $it")
+            //Log.e(TAG, "Calculated time ${Utils.getDate(calculatedChecktime)}")
             if(it > now && calculatedChecktime == 0L){
                 calculatedChecktime = it
             }
         }
-        Log.e(Constants.APP_NAME, "Calculated time $calculatedChecktime")
-        Log.e(Constants.APP_NAME, "Calculated time ${Utils.getDate(calculatedChecktime)}")
+        Log.e(TAG, "Calculated time $calculatedChecktime")
+        Log.e(TAG, "Calculated time ${Utils.getDate(calculatedChecktime)}")
 
         LogHandler.writeTargeted(mContext, "$now,$calculatedChecktime,${Utils.getDate(now)},${Utils.getDate(calculatedChecktime)}")
 

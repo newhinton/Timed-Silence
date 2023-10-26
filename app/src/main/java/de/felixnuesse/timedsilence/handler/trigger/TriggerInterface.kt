@@ -11,6 +11,9 @@ import java.text.DateFormat
 import java.util.*
 
 interface TriggerInterface {
+    companion object {
+        private const val TAG = "TriggerInterface"
+    }
 
     var mContext: Context
 
@@ -25,11 +28,11 @@ interface TriggerInterface {
     fun checkIfNextAlarmExists(): Boolean {
         val pIntent = createBroadcast(PendingIntent.FLAG_NO_CREATE)
         return if (pIntent == null) {
-            Log.d(Constants.APP_NAME, "TriggerInterface: There is no next Alarm set!")
+            Log.d(TAG, "TriggerInterface: There is no next Alarm set!")
             PausedNotification.show(mContext)
             false
         } else {
-            Log.d(Constants.APP_NAME, "TriggerInterface: There is an upcoming Alarm!")
+            Log.d(TAG, "TriggerInterface: There is an upcoming Alarm!")
             PausedNotification.cancelNotification(mContext)
             true
         }
@@ -39,7 +42,7 @@ interface TriggerInterface {
         val alarms = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val clockInfo = alarms.nextAlarmClock ?: return mContext.getString(R.string.no_next_time_set)
 
-        Log.d(Constants.APP_NAME, "TriggerInterface: Next Runtime: " + clockInfo.triggerTime)
+        Log.d(TAG, "TriggerInterface: Next Runtime: " + clockInfo.triggerTime)
         return DateFormat.getDateInstance().format(Date(clockInfo.triggerTime))
 
     }

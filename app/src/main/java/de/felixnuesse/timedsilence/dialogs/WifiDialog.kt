@@ -47,6 +47,9 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
  */
 class WifiDialog(context: Context) : Dialog(context) {
 
+    companion object {
+        private const val TAG = "WifiDialog"
+    }
 
     private var tfrag: WifiConnectedFragment? = null
     private lateinit var binding: DialogWifiBinding
@@ -78,7 +81,7 @@ class WifiDialog(context: Context) : Dialog(context) {
         binding.wifiSsidLayout.visibility = View.VISIBLE
 
         binding.wifiNext.setOnClickListener {
-            Log.e(Constants.APP_NAME, "WifiDialog: next!")
+            Log.e(TAG, "WifiDialog: next!")
 
             hideAll()
             state++
@@ -86,7 +89,7 @@ class WifiDialog(context: Context) : Dialog(context) {
         }
 
         binding.wifiBack.setOnClickListener {
-            Log.e(Constants.APP_NAME, "WifiDialog: back!")
+            Log.e(TAG, "WifiDialog: back!")
 
             hideAll()
             state--
@@ -94,12 +97,12 @@ class WifiDialog(context: Context) : Dialog(context) {
         }
 
         binding.wifiCancel.setOnClickListener {
-            Log.e(Constants.APP_NAME, "WifiDialog: cancel!")
+            Log.e(TAG, "WifiDialog: cancel!")
             this.cancel()
         }
 
         binding.wifiSave.setOnClickListener {
-            Log.e(Constants.APP_NAME, "WifiDialog: save!")
+            Log.e(TAG, "WifiDialog: save!")
 
             val volId = getValueForVolumeRadioGroup()
             val type = getValueForTypeRadioGroup()

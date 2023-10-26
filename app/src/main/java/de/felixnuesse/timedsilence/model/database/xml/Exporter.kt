@@ -8,8 +8,6 @@ import android.os.Environment
 import androidx.core.app.ActivityCompat
 import android.util.Log
 import android.widget.Toast
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_BOOT_RESTART
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_DARKMODE
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_IGNORE_ALL_DAY_EVENTS
@@ -24,12 +22,10 @@ import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_VOLUME_RINGER
 import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.Utils
-import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import java.io.*
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.parsers.ParserConfigurationException
@@ -89,11 +85,12 @@ class Exporter {
 
     companion object{
 
+        private const val TAG = "Exporter"
         private const val PERMISSION_WRITE_EXTERNAL = 443
 
         fun export(a: Activity) {
             try {
-                Log.e(APP_NAME, "Export!")
+                Log.e(TAG, "Export!")
                 val `val` = create(a)
                 storeFile(a, `val`)
             } catch (e: ParserConfigurationException) {
@@ -142,9 +139,9 @@ class Exporter {
             }
 
             val currentDateandTime = Utils.getDate(Date().time, "yyyyMMdd-HHmmss")
-            val filename = "${APP_NAME}_${currentDateandTime}.xml"
+            val filename = "${a.getString(R.string.app_name)}_${currentDateandTime}.xml"
 
-            val path = File(Environment.getExternalStorageDirectory().absolutePath + "/$APP_NAME")
+            val path = File(Environment.getExternalStorageDirectory().absolutePath + "/${a.getString(R.string.app_name)}")
             path.mkdirs()
             val file = File(path, filename)
             val stream = FileOutputStream(file)

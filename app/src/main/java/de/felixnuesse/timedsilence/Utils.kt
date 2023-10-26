@@ -1,19 +1,5 @@
 package de.felixnuesse.timedsilence
 
-import android.Manifest
-import android.app.Activity
-import android.content.Context
-import android.content.Context.MODE_APPEND
-import android.content.pm.PackageManager
-import android.os.Environment
-import android.util.Log
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import de.felixnuesse.timedintenttrigger.database.xml.Exporter
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStreamWriter
 import java.text.SimpleDateFormat
 import java.util.*
 

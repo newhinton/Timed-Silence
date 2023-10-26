@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.databinding.FragmentWifiConnectedBinding
 import de.felixnuesse.timedsilence.dialogs.WifiDialog
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
@@ -21,6 +20,10 @@ import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 
 
 class WifiConnectedFragment : Fragment() {
+
+    companion object {
+        private const val TAG = "WifiConnectedFragment"
+    }
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -44,13 +47,13 @@ class WifiConnectedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.buttonRequestWifiPermissions.setOnClickListener {
-            Log.e(Constants.APP_NAME, "WifiConnectedFragment: Request Location Permission!")
+            Log.e(TAG, "WifiConnectedFragment: Request Location Permission!")
             WifiHandler.requestPermissions(view.context as Activity)
             checkContainer()
         }
 
         binding.buttonWifiAddFragment.setOnClickListener {
-            Log.e(APP_NAME, "WifiFragment: Add new!")
+            Log.e(TAG, "WifiFragment: Add new!")
             //createSSIDDialog(view.context)
             WifiDialog(view.context, this).show()
 
@@ -59,7 +62,7 @@ class WifiConnectedFragment : Fragment() {
 
         val db = DatabaseHandler(view.context)
 
-        Log.e(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: "+db.getAllWifiEntries().size)
+        Log.e(TAG, "WifiFragment: DatabaseResuluts: Size: "+db.getAllWifiEntries().size)
 
         viewManager = NestedRecyclerManager(view.context)
         viewAdapter = WifiListAdapter(db.getAllWifiEntries())

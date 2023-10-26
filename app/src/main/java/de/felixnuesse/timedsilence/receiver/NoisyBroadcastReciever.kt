@@ -5,13 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.util.Log
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 
 class NoisyBroadcastReciever : BroadcastReceiver(){
 
+    companion object {
+        private const val TAG = "NoisyBroadcastReciever"
+    }
+
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == AudioManager.ACTION_AUDIO_BECOMING_NOISY) {
-            Log.e(APP_NAME, "NoisyBroadcastReciever: Becoming Noisy! Checking Volume Again!")
+            Log.e(TAG, "NoisyBroadcastReciever: Becoming Noisy! Checking Volume Again!")
             AlarmBroadcastReceiver().switchVolumeMode(context)
         }
     }

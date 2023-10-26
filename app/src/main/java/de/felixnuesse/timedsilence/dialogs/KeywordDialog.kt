@@ -48,6 +48,9 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
  */
 class KeywordDialog(context: Context) : Dialog(context) {
 
+    companion object {
+        private const val TAG = "KeywordDialog"
+    }
 
     private var tfrag: KeywordFragment? = null
 
@@ -77,7 +80,7 @@ class KeywordDialog(context: Context) : Dialog(context) {
         binding.keywordKeywordLayout.visibility = View.VISIBLE
 
         binding.keywordNext.setOnClickListener {
-            Log.e(Constants.APP_NAME, "KeywordDialog: next!")
+            Log.e(TAG, "KeywordDialog: next!")
 
             hideAll()
             state++
@@ -85,7 +88,7 @@ class KeywordDialog(context: Context) : Dialog(context) {
         }
 
         binding.keywordBack.setOnClickListener {
-            Log.e(Constants.APP_NAME, "KeywordDialog: back!")
+            Log.e(TAG, "KeywordDialog: back!")
 
             hideAll()
             state--
@@ -93,12 +96,12 @@ class KeywordDialog(context: Context) : Dialog(context) {
         }
 
         binding.keywordCancel.setOnClickListener {
-            Log.e(Constants.APP_NAME, "KeywordDialog: cancel!")
+            Log.e(TAG, "KeywordDialog: cancel!")
             this.cancel()
         }
 
         binding.keywordSave.setOnClickListener {
-            Log.e(Constants.APP_NAME, "KeywordDialog: save!")
+            Log.e(TAG, "KeywordDialog: save!")
 
             val volId = getValueForVolumeRadioGroup()
             val keyword = KeywordObject(

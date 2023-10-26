@@ -33,7 +33,6 @@ import android.content.Context
 import android.media.AudioManager
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT
 import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
@@ -61,36 +60,38 @@ class VolumeHandler(mContext: Context) {
         fun hasVolumePermission(context: Context):Boolean{
             return DoNotDisturb.hasAccess(context)
         }
+
+        private const val TAG = "VolumeHandler"
     }
 
     var volumeSetting = SharedPreferencesHandler.getPref(mContext, TIME_SETTING_DEFAULT_PREFERENCE, TIME_SETTING_DEFAULT)
     var overrideMusicToZero = false
 
     fun setSilent(){
-        //Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Silent!")
+        //Log.d(TAG, "VolumeHandler: Volume: Silent!")
         volumeSetting = TIME_SETTING_SILENT
     }
 
     fun setVibrate(){
         if(volumeSetting != TIME_SETTING_SILENT){
-            //Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Vibrate!")
+            //Log.d(TAG, "VolumeHandler: Volume: Vibrate!")
             volumeSetting = TIME_SETTING_VIBRATE
         }else{
-            //Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Vibrate! Ignored because: $volumeSetting ")
+            //Log.d(TAG, "VolumeHandler: Volume: Vibrate! Ignored because: $volumeSetting ")
         }
     }
 
     fun setLoud(){
         if(volumeSetting != TIME_SETTING_SILENT && volumeSetting != TIME_SETTING_VIBRATE){
-            //Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Loud!")
+            //Log.d(TAG, "VolumeHandler: Volume: Loud!")
             volumeSetting = TIME_SETTING_LOUD
         }else{
-            //Log.d(Constants.APP_NAME, "VolumeHandler: Volume: Loud! Ignored because: $volumeSetting ")
+            //Log.d(TAG, "VolumeHandler: Volume: Loud! Ignored because: $volumeSetting ")
         }
     }
 
     private fun applySilent(context: Context) {
-        Log.e(APP_NAME, "VolumeHandler: Apply: Silent!")
+        Log.e(TAG, "VolumeHandler: Apply: Silent!")
         val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         if(!manager.isMusicActive || overrideMusicToZero){
@@ -132,7 +133,7 @@ class VolumeHandler(mContext: Context) {
     }
 
     private fun applyLoud(context: Context) {
-        Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Loud!")
+        Log.d(TAG, "VolumeHandler: Apply: Loud!")
         val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
@@ -189,7 +190,7 @@ class VolumeHandler(mContext: Context) {
     }
 
     private fun applyVibrate(context: Context) {
-        Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Vibrate!")
+        Log.d(TAG, "VolumeHandler: Apply: Vibrate!")
         val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         if(manager.ringerMode!= AudioManager.RINGER_MODE_VIBRATE){
@@ -250,7 +251,7 @@ class VolumeHandler(mContext: Context) {
     private fun setMediaVolume(percentage: Int, context: Context, manager: AudioManager, ignoreHeadset: Boolean){
 
 
-        Log.d(APP_NAME, "VolumeHandler: Setting Audio Volume!")
+        Log.d(TAG, "VolumeHandler: Setting Audio Volume!")
 
         val ignoreCheckWhenConnected=
             SharedPreferencesHandler.getPref(
@@ -260,7 +261,7 @@ class VolumeHandler(mContext: Context) {
             )
 
         if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
-            Log.d(APP_NAME, "VolumeHandler: Found headset, skipping...")
+            Log.d(TAG, "VolumeHandler: Found headset, skipping...")
             return
         }
 
@@ -269,12 +270,12 @@ class VolumeHandler(mContext: Context) {
             AudioManager.STREAM_MUSIC,
             percentage
         )
-        Log.d(APP_NAME, "VolumeHandler: Mediavolume set.")
+        Log.d(TAG, "VolumeHandler: Mediavolume set.")
 
     }
 
     fun isButtonClickAudible(context: Context): Boolean{
-    Log.d(APP_NAME, "VolumeHandler: Check if Buttonclicks are audible")
+    Log.d(TAG, "VolumeHandler: Check if Buttonclicks are audible")
     val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     if(0>=manager.getStreamVolume(AudioManager.STREAM_RING)){
         return false
@@ -285,17 +286,17 @@ class VolumeHandler(mContext: Context) {
     fun applyVolume(context: Context){
 
         if(context!=null){
-            Log.d(APP_NAME, "VolumeHandler: Testskip")
+            Log.d(TAG, "VolumeHandler: Testskip")
             //return
         }
-        Log.d(APP_NAME, "VolumeHandler: Testskip skipped")
+        Log.d(TAG, "VolumeHandler: Testskip skipped")
 
         if(!hasVolumePermission(context)){
-            Log.d(APP_NAME, "VolumeHandler: VolumeSetting: Do not disturb not granted! Not changing Volume!")
+            Log.d(TAG, "VolumeHandler: VolumeSetting: Do not disturb not granted! Not changing Volume!")
             return
         }
 
-        Log.d(APP_NAME, "VolumeHandler: VolumeSetting: $volumeSetting")
+        Log.d(TAG, "VolumeHandler: VolumeSetting: $volumeSetting")
         var now = System.currentTimeMillis();
         var nowF = Utils.getDate(now)
 
@@ -314,7 +315,7 @@ class VolumeHandler(mContext: Context) {
             }
             else -> {
                 LogHandler.writeVolumeManager(context,"$now,$nowF,else")
-                Log.d(Constants.APP_NAME, "VolumeHandler: Apply: Nothing, because no volume was selecteds!")
+                Log.d(TAG, "VolumeHandler: Apply: Nothing, because no volume was selecteds!")
             }
         }
     }
@@ -330,7 +331,7 @@ class VolumeHandler(mContext: Context) {
     }
 
     fun getChangeList(context: Context):ArrayList<Long> {
-        Log.e(APP_NAME, "VolumeHandler: start")
+        Log.e(TAG, "VolumeHandler: start")
 
         var list = ArrayList<Long>()
 
@@ -364,7 +365,7 @@ class VolumeHandler(mContext: Context) {
 
 
             if(lastState!=state || elem == lastElem){
-                Log.e(APP_NAME, "VolumeHandler: getChangeList: Run Minute: ${elem}; State: ${state}")
+                Log.e(TAG, "VolumeHandler: getChangeList: Run Minute: ${elem}; State: ${state}")
 
                 list.add(checkTime)
                 lastState=state

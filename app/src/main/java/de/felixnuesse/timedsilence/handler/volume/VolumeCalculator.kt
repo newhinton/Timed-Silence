@@ -25,7 +25,6 @@ import java.time.ZoneId.systemDefault
 import java.time.Instant.ofEpochMilli
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.ZoneId
 import kotlin.collections.ArrayList
 
 
@@ -60,36 +59,39 @@ import kotlin.collections.ArrayList
 
 class VolumeCalculator {
 
+    companion object {
+        private const val TAG = "VolumeCalculator"
+    }
 
     private lateinit var cachedTime: LocalDateTime
-    var nonNullContext: Context
-    var volumeHandler: VolumeHandler
-    var dbHandler: DatabaseHandler
-    var cached: Boolean = false
+    private var nonNullContext: Context
+    private var volumeHandler: VolumeHandler
+    private var dbHandler: DatabaseHandler
+    private var mCached: Boolean = false
 
-    lateinit var calendarHandler: CalendarHandler
+    private var calendarHandler: CalendarHandler
 
-    var changeReason = REASON_UNDEFINED
-    var changeReasonString = ""
+    private var changeReason = REASON_UNDEFINED
+    private var changeReasonString = ""
 
+    private var ignoreMusicPlaying = false
 
     constructor(context: Context) {
         nonNullContext = context
-        this.volumeHandler = VolumeHandler(context)
+        volumeHandler = VolumeHandler(context)
         dbHandler = DatabaseHandler(nonNullContext)
         calendarHandler= CalendarHandler(nonNullContext)
     }
 
     constructor(context: Context, cached: Boolean) {
         nonNullContext = context
-        this.volumeHandler = VolumeHandler(nonNullContext)
-        this.cached=cached
+        volumeHandler = VolumeHandler(nonNullContext)
+        mCached=cached
         dbHandler = DatabaseHandler(nonNullContext)
         dbHandler.setCaching(cached)
         calendarHandler= CalendarHandler(nonNullContext)
     }
 
-    var ignoreMusicPlaying = false
     fun ignoreMusicPlaying(ignore: Boolean) {
         ignoreMusicPlaying = ignore
     }
@@ -97,19 +99,19 @@ class VolumeCalculator {
     fun getChangeList(): ArrayList<VolumeState> {
 
         val midnight: LocalTime = LocalTime.MIDNIGHT
-        val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
+        val today: LocalDate = LocalDate.now(systemDefault())
         var todayMidnight = LocalDateTime.of(today, midnight)
 
         var stateList = arrayListOf<VolumeState>()
 
 
-        val timeInitial = todayMidnight.plusMinutes(0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val timeInitial = todayMidnight.plusMinutes(0).atZone(systemDefault()).toInstant().toEpochMilli()
         stateList.add(getStateAt(nonNullContext, timeInitial, 0))
         var lastState = stateList[0]
 
         for(elem in 0L..1440L){
 
-            val time = todayMidnight.plusMinutes(elem).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+            val time = todayMidnight.plusMinutes(elem).atZone(systemDefault()).toInstant().toEpochMilli()
 
             val currentState = getStateAt(nonNullContext, time, elem.toInt())
             if(currentState.state != lastState.state) {
@@ -259,8 +261,8 @@ class VolumeCalculator {
         loop@ for (it in dbHandler.getAllSchedules()) {
             val time = hour * 60 * 60 * 1000 + min * 60 * 1000
 
-            //Log.d(Constants.APP_NAME, "Alarmintent: Current Schedule: ${it.name}")
-            //Log.d(Constants.APP_NAME, "Alarmintent: Current Weekday: $dayLongName ($dayOfWeek)")
+            //Log.d(TAG, "Alarmintent: Current Schedule: ${it.name}")
+            //Log.d(TAG, "Alarmintent: Current Weekday: $dayLongName ($dayOfWeek)")
 
             var isAllowedDay = false
             when (dayOfWeek){
@@ -273,22 +275,22 @@ class VolumeCalculator {
                 1 -> if (it.sun) { isAllowedDay = true }
             }
 
-            //Log.d(Constants.APP_NAME, "Alarmintent: isAllowedDay: $isAllowedDay")
+            //Log.d(TAG, "Alarmintent: isAllowedDay: $isAllowedDay")
             if (!isAllowedDay) {
                 continue@loop
             }
 
             var isInInversedTimeInterval = false
             if (it.time_end <= it.time_start) {
-                //Log.e(Constants.APP_NAME, "Alarmintent: End is before or equal start")
+                //Log.e(TAG, "Alarmintent: End is before or equal start")
 
                 if (time >= it.time_start && time < 24 * 60 * 60 * 1000) {
-                    //Log.d(Constants.APP_NAME, "Alarmintent: Current time is after start time of interval but before 0:00" )
+                    //Log.d(TAG, "Alarmintent: Current time is after start time of interval but before 0:00" )
                     isInInversedTimeInterval = true
                 }
 
                 if (time < it.time_end && time >= 0) {
-                    //Log.d(Constants.APP_NAME, "Alarmintent: Current time is before end time of interval but after 0:00")
+                    //Log.d(TAG, "Alarmintent: Current time is before end time of interval but after 0:00")
                     isInInversedTimeInterval = true
                 }
             }
@@ -326,7 +328,7 @@ class VolumeCalculator {
     fun switchBasedOnWifi(){
 
         //Log.d(APP_NAME, "VolumeCalculator: Start WifiCheck")
-        //Log.d(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: " + dbHandler.getAllWifiEntries().size)
+        //Log.d(TAG, "WifiFragment: DatabaseResuluts: Size: " + dbHandler.getAllWifiEntries().size)
         if (dbHandler.getAllWifiEntries().size > 0) {
             val isLocationEnabled =
                 LocationHandler.checkIfLocationServiceIsEnabled(
@@ -334,7 +336,7 @@ class VolumeCalculator {
                 )
             if (!isLocationEnabled) {
                 with(NotificationManagerCompat.from(nonNullContext)) {
-                    //Log.d(Constants.APP_NAME, "Alarmintent: Locationstate: Disabled!")
+                    //Log.d(TAG, "Alarmintent: Locationstate: Disabled!")
                     notify(
                         LocationAccessMissingNotification.NOTIFICATION_ID,
                         LocationAccessMissingNotification.buildNotification(nonNullContext)
@@ -348,7 +350,7 @@ class VolumeCalculator {
                 dbHandler.getAllWifiEntries().forEach {
 
                     val ssidit = "\"" + it.ssid + "\""
-                    //Log.d(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
+                    //Log.d(TAG, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
                     if (currentSSID.equals(ssidit) && it.type == Constants.WIFI_TYPE_CONNECTED) {
                         setGenericVolumeWithReason(it.volume, it.ssid, REASON_WIFI)
                         return
@@ -357,5 +359,4 @@ class VolumeCalculator {
             }
         }
     }
-
 }

@@ -14,13 +14,16 @@ import de.felixnuesse.timedsilence.R
 class CalendarAccess {
 
     companion object {
+
+        private const val TAG = "CalendarAccess"
+
         fun hasCalendarReadPermission(context: Context, request: Boolean = false): Boolean {
             val permissions = ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.READ_CALENDAR
             ) == PackageManager.PERMISSION_GRANTED
             if (!permissions && request) {
-                Log.d(Constants.APP_NAME, "DoNotDisturb: Ask for DND-Access")
+                Log.d(TAG, "DoNotDisturb: Ask for DND-Access")
                 requestCalendarReadPermission(context)
 
             }
@@ -41,7 +44,7 @@ class CalendarAccess {
                 }
                 .setNegativeButton(R.string.cancel) { _, _ ->
                     Log.e(
-                        Constants.APP_NAME,
+                        TAG,
                         "DoNotDisturb: Did not get 'Do not Disturb'-Access, quitting..."
                     )
                     ActivityCompat.finishAffinity(context as Activity)

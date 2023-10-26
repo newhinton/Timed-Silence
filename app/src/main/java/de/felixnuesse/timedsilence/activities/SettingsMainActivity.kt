@@ -31,6 +31,10 @@ import de.felixnuesse.timedsilence.databinding.ActivitySettingsMainBinding
 
 class SettingsMainActivity : AppCompatActivity() {
 
+    companion object {
+        private const val TAG = "SettingsMainActivity"
+    }
+
     private val mDefaultVolumeSettings = ArrayList<String>()
     private val mDefaultVolumeSettingIDs = ArrayList<Int>()
     private lateinit var binding: ActivitySettingsMainBinding
@@ -60,12 +64,12 @@ class SettingsMainActivity : AppCompatActivity() {
 
 
         binding.volumeSettingsLayout.setOnClickListener {
-            Log.e(Constants.APP_NAME, "SettingsMain: Click volume settings")
+            Log.e(TAG, "SettingsMain: Click volume settings")
             openVolumeSettings()
         }
 
         binding.volumeSettingsImageButton.setOnClickListener {
-            Log.e(Constants.APP_NAME, "SettingsMain: Click volume settings")
+            Log.e(TAG, "SettingsMain: Click volume settings")
             openVolumeSettings()
         }
 
@@ -81,12 +85,12 @@ class SettingsMainActivity : AppCompatActivity() {
         }
 
         binding.exportButton.setOnClickListener {
-            Log.e(Constants.APP_NAME, "SettingsMain: Click export")
+            Log.e(TAG, "SettingsMain: Click export")
             Exporter.export(this)
         }
 
         binding.importButton.setOnClickListener {
-            Log.e(Constants.APP_NAME, "SettingsMain: Click import")
+            Log.e(TAG, "SettingsMain: Click import")
             Importer.importFile(this)
         }
 

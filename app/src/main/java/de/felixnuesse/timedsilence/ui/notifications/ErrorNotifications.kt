@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 
 
 /**
@@ -37,12 +36,15 @@ import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 class ErrorNotifications {
 
     companion object{
+
+        private const val TAG = "ErrorNotifications"
+
         const val NOTIFICATION_ID=11211
         const val ERROR_CHANNEL_ID="Errors"
         const val ERROR_CHANNEL_NAME="This channel will only be used to show erros in this app."
 
         fun cancelNotification(context: Context) {
-            Log.e(APP_NAME, "ErrorNotifications: Cancel Notification")
+            Log.e(TAG, "ErrorNotifications: Cancel Notification")
             var notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(NOTIFICATION_ID)
         }

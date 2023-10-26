@@ -35,17 +35,15 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
-import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 
 class PausedNotification : BroadcastReceiver(){
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.e(APP_NAME, "PausedNotification: Recieved Intent!")
+        Log.e(TAG, "PausedNotification: Recieved Intent!")
 
         val action = intent?.action
         if(action == ACTION_END_PAUSE_AND_CHECK){
@@ -65,12 +63,13 @@ class PausedNotification : BroadcastReceiver(){
 
     companion object {
 
+        private const val TAG = "PausedNotification"
         private const val ACTION_END_PAUSE = "ACTION_END_PAUSE"
         private const val ACTION_END_PAUSE_AND_CHECK = "ACTION_END_PAUSE_CHECK"
         private const val NOTIFICATION_ID = 498
 
         fun show(context: Context){
-            Log.e(APP_NAME, "PausedNotification: Show Notification")
+            Log.e(TAG, "PausedNotification: Show Notification")
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             if(SharedPreferencesHandler.getPref(context, PrefConstants.PREF_PAUSE_NOTIFICATION, PrefConstants.PREF_PAUSE_NOTIFICATION_DEFAULT)){
@@ -126,7 +125,7 @@ class PausedNotification : BroadcastReceiver(){
         }
 
         fun cancelNotification(context: Context) {
-            Log.e(APP_NAME, "PausedNotification: Cancel Notification")
+            Log.e(TAG, "PausedNotification: Cancel Notification")
             var notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(NOTIFICATION_ID)
         }

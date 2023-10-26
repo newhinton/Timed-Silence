@@ -51,9 +51,11 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
  */
 class CalendarDialog(context: Context) : Dialog(context) {
 
+    companion object {
+        private const val TAG = "CalendarDialog"
+    }
 
     private var tfrag: CalendarEventFragment? = null
-    private var update_co: CalendarObject? = null
     private lateinit var calHandler: CalendarHandler
 
 
@@ -112,7 +114,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
         rg.check(calHandler.getDeviceCalendars()[0].ext_id.toInt())
 
         binding.calendarNext.setOnClickListener {
-            Log.e(Constants.APP_NAME, "CalendarDialog: next!")
+            Log.e(TAG, "CalendarDialog: next!")
 
             hideAll()
             state++
@@ -120,7 +122,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
         }
 
         binding.calendarBack.setOnClickListener {
-            Log.e(Constants.APP_NAME, "CalendarDialog: back!")
+            Log.e(TAG, "CalendarDialog: back!")
 
             hideAll()
             state--
@@ -128,17 +130,17 @@ class CalendarDialog(context: Context) : Dialog(context) {
         }
 
         binding.calendarCancel.setOnClickListener {
-            Log.e(Constants.APP_NAME, "CalendarDialog: cancel!")
+            Log.e(TAG, "CalendarDialog: cancel!")
             this.cancel()
         }
 
         binding.calendarSave.setOnClickListener {
-            Log.e(Constants.APP_NAME, "CalendarDialog: save!")
+            Log.e(TAG, "CalendarDialog: save!")
 
             val volId = getValueForVolumeRadioGroup();
             val calId = getValueForCalendarRadioGroup();
-            Log.e(Constants.APP_NAME, "CalendarDialog: Volume: "+volId)
-            Log.e(Constants.APP_NAME, "CalendarDialog: CalID:  "+calId)
+            Log.e(TAG, "CalendarDialog: Volume: "+volId)
+            Log.e(TAG, "CalendarDialog: CalID:  "+calId)
             val so = CalendarObject(
                 0,//calendar_id_select.text.toString(),
                 calId,

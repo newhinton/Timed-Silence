@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
-import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
@@ -19,8 +18,11 @@ import de.felixnuesse.timedsilence.databinding.ActivitySettingsVolumeBinding
 
 class SettingsVolumeActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySettingsVolumeBinding
+    companion object {
+        private const val TAG = "SettingsVolumeActivity"
+    }
 
+    private lateinit var binding: ActivitySettingsVolumeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,22 +145,22 @@ class SettingsVolumeActivity : AppCompatActivity() {
 
     fun setAlarmVol(context: Context, value: Int) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_VOLUME_ALARM, value)
-        Log.e(Constants.APP_NAME, "SettingsVolume: Setting Alarm Volume: "+value)
+        Log.e(TAG, "SettingsVolume: Setting Alarm Volume: "+value)
     }
 
     fun setRingerVol(context: Context, value: Int) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_VOLUME_RINGER, value)
-        Log.e(Constants.APP_NAME, "SettingsVolume: Setting Ringer Volume: "+value)
+        Log.e(TAG, "SettingsVolume: Setting Ringer Volume: "+value)
     }
 
     fun setNotificationVol(context: Context, value: Int) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_VOLUME_NOTIFICATION, value)
-        Log.e(Constants.APP_NAME, "SettingsVolume: Setting Notification Volume: "+value)
+        Log.e(TAG, "SettingsVolume: Setting Notification Volume: "+value)
     }
 
     fun setMusicVol(context: Context, value: Int) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_VOLUME_MUSIC, value)
-        Log.e(Constants.APP_NAME, "SettingsVolume: Setting Music Volume: "+value)
+        Log.e(TAG, "SettingsVolume: Setting Music Volume: "+value)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

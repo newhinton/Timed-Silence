@@ -15,12 +15,14 @@ class DoNotDisturb {
 
     companion object {
 
+        private const val TAG = "DoNotDisturb"
+
         fun hasAccess(context: Context, request: Boolean = false): Boolean {
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val access = notificationManager.isNotificationPolicyAccessGranted
             if (!access && request) {
-                Log.d(Constants.APP_NAME, "DoNotDisturb: Ask for DND-Access")
+                Log.d(TAG, "DoNotDisturb: Ask for DND-Access")
                 requestAccess(context)
                 return access
 
@@ -36,7 +38,7 @@ class DoNotDisturb {
                 }
                 .setNegativeButton(R.string.cancel) { _, _ ->
                     Log.e(
-                        Constants.APP_NAME,
+                        TAG,
                         "DoNotDisturb: Did not get 'Do not Disturb'-Access, quitting..."
                     )
                     ActivityCompat.finishAffinity(context as Activity)

@@ -23,7 +23,7 @@ class StartStopWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
-            Log.e(Constants.APP_NAME, "PlayResumeWidget:Update Widget!")
+            Log.e(TAG, "PlayResumeWidget:Update Widget!")
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
     }
@@ -40,7 +40,7 @@ class StartStopWidget : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (PLAYPAUSECLICKED == intent.action) {
-            Log.e(Constants.APP_NAME, "PlayResumeWidget: A widget was clicked!")
+            Log.e(TAG, "PlayResumeWidget: A widget was clicked!")
 
             val appWidgetManager = AppWidgetManager.getInstance(context)
 
@@ -65,7 +65,7 @@ class StartStopWidget : AppWidgetProvider() {
 
     companion object {
 
-
+        private const val TAG = "StartStopWidget"
         val PLAYPAUSECLICKED = "playpauseClick"
 
         internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {

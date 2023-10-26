@@ -5,7 +5,6 @@ import android.graphics.drawable.Icon
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.util.Log
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
@@ -40,14 +39,14 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 
 class StartStopTileService: TileService() {
 
-
     companion object {
+        private const val TAG = "StartStopTileService"
         var icon = R.drawable.icon_av_timer
     }
 
     override fun onClick() {
         super.onClick()
-        Log.e(APP_NAME,"StartStopTileService: onClick")
+        Log.e(TAG,"StartStopTileService: onClick")
 
         val t = Trigger(this)
 
@@ -73,7 +72,7 @@ class StartStopTileService: TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        Log.e(APP_NAME,"StartStopTileService: onStartListening")
+        Log.e(TAG,"StartStopTileService: onStartListening")
         updateTile()
 
         // Called when the Tile becomes visible
@@ -81,7 +80,7 @@ class StartStopTileService: TileService() {
 
     override fun onStopListening() {
         super.onStopListening()
-        Log.e(APP_NAME,"StartStopTileService: onStopListening")
+        Log.e(TAG,"StartStopTileService: onStopListening")
 
         // Called when the tile is no longer visible
     }

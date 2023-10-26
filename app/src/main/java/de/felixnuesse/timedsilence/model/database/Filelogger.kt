@@ -66,11 +66,12 @@ class Filelogger {
 
     companion object{
 
+        private const val TAG = "Filelogger"
         private const val PERMISSION_WRITE_EXTERNAL = 443
 
         fun log(a: Activity, content: String) {
             try {
-                Log.e(Constants.APP_NAME, "Filelogger: ")
+                Log.e(TAG, "Filelogger: ")
                 storeFile(a, content)
             } catch (e: ParserConfigurationException) {
                 e.printStackTrace()
@@ -119,9 +120,9 @@ class Filelogger {
 
             val currentDateandTime = Utils.getDate(Date().time)
 
-            val filename = "${Constants.APP_NAME}_$currentDateandTime.xml"
+            val filename = "${a.getString(R.string.app_name)}_$currentDateandTime.xml"
 
-            val path = File(Environment.getExternalStorageDirectory().absolutePath + "/${Constants.APP_NAME}")
+            val path = File(Environment.getExternalStorageDirectory().absolutePath + "/${a.getString(R.string.app_name)}")
             path.mkdirs()
             val file = File(path, filename)
             val stream = FileOutputStream(file)

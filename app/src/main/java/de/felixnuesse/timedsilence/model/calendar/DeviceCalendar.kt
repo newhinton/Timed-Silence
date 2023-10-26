@@ -73,7 +73,7 @@ class DeviceCalendar(private var mContext: Context) {
                     cursor.moveToNext()
                 }
             } else {
-                Log.e(Constants.APP_NAME,"CalendarHandler: No calendar found in the device")
+                Log.e(TAG,"CalendarHandler: No calendar found in the device")
             }
         }
         cursor?.close()
@@ -98,7 +98,7 @@ class DeviceCalendar(private var mContext: Context) {
         }
 
         validEventCacheButEmptyCache = false
-        Log.e(Constants.APP_NAME, "CalendarHandler: CurrentTime in MS: "+ Utils.getDate(timeInMilliseconds.toString()))
+        Log.e(TAG, "CalendarHandler: CurrentTime in MS: "+ Utils.getDate(timeInMilliseconds.toString()))
         val startTime = Calendar.getInstance()
 
         startTime.set(Calendar.HOUR_OF_DAY, 0)
@@ -173,7 +173,7 @@ class DeviceCalendar(private var mContext: Context) {
         )
 
         if(cursor==null){
-            Log.e(Constants.APP_NAME, "CalendarHandler: readCalendarEvent: no results!")
+            Log.e(TAG, "CalendarHandler: readCalendarEvent: no results!")
             return retval;
         }
         cursor.moveToFirst()

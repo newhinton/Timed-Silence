@@ -52,6 +52,9 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
  */
 class ScheduleDialog(context: Context) : Dialog(context) {
 
+    companion object {
+        private const val TAG = "ScheduleDialog"
+    }
 
     private var timeFragment: TimeFragment? = null
     private var scheduleListHolder: ScheduleListAdapter? = null
@@ -113,7 +116,7 @@ class ScheduleDialog(context: Context) : Dialog(context) {
         binding.scheduleTitleLayout.visibility = View.VISIBLE
 
         binding.scheduleNext.setOnClickListener {
-            Log.e(Constants.APP_NAME, "ScheduleDialog: next!")
+            Log.e(TAG, "ScheduleDialog: next!")
 
             val view = binding.scheduleDialogTitle
             val imm: InputMethodManager? = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
@@ -125,7 +128,7 @@ class ScheduleDialog(context: Context) : Dialog(context) {
         }
 
         binding.scheduleBack.setOnClickListener {
-            Log.e(Constants.APP_NAME, "ScheduleDialog: back!")
+            Log.e(TAG, "ScheduleDialog: back!")
 
             hideAll()
             state--
@@ -133,12 +136,12 @@ class ScheduleDialog(context: Context) : Dialog(context) {
         }
 
         binding.scheduleCancel.setOnClickListener {
-            Log.e(Constants.APP_NAME, "ScheduleDialog: cancel!")
+            Log.e(TAG, "ScheduleDialog: cancel!")
             this.cancel()
         }
 
         binding.scheduleSave.setOnClickListener {
-            Log.e(Constants.APP_NAME, "ScheduleDialog: save!")
+            Log.e(TAG, "ScheduleDialog: save!")
 
             if (createNewSchedule) {
                 val so = ScheduleObject(

@@ -51,7 +51,6 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.Constants.Companion.MAIN_ACTIVITY_LOAD_CALENDAR_FORCE
 import de.felixnuesse.timedsilence.IntroActivity.Companion.INTRO_PREFERENCES
 import de.felixnuesse.timedsilence.activities.SettingsMainActivity
@@ -73,6 +72,9 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), TimerInterface {
 
+    companion object {
+        private const val TAG = "MainActivity"
+    }
 
     private var mDontCheckGraph = true
     private var button_check: String = ""
@@ -110,11 +112,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         //it plays a sound after the volume has changed to loud. Therefore it seems to be the main button who makes the sound
         binding.buttonButtonsoundFix.isSoundEffectsEnabled = true
         binding.buttonButtonsoundFix.setOnClickListener {
-            Log.e(APP_NAME, "MainAcitivity: HiddenButton: PerformClick to make sound")
+            Log.e(TAG, "MainAcitivity: HiddenButton: PerformClick to make sound")
         }
 
         binding.fab.setOnClickListener {
-            //Log.e(APP_NAME, "Main: fab: Clicked")
+            //Log.e(TAG, "Main: fab: Clicked")
             setHandlerState()
         }
 
@@ -326,7 +328,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     private fun buttonState() {
 
-        Log.e(APP_NAME, "Main: ButtonStartCheck: State: $button_check")
+        Log.e(TAG, "Main: ButtonStartCheck: State: $button_check")
 
         //Todo remove dummy textview
         if (mTrigger.checkIfNextAlarmExists()) {
@@ -367,7 +369,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     private fun setHandlerState() {
 
-        Log.e(APP_NAME, "Main: setHandlerState: State: $button_check")
+        Log.e(TAG, "Main: setHandlerState: State: $button_check")
 
         if (button_check == getString(R.string.timecheck_start)) {
             mTrigger.createTimecheck()

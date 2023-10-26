@@ -43,6 +43,10 @@ import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 
 class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
 
+    companion object {
+        private const val TAG = "RepeatingAlarmHandler"
+    }
+
     override fun createTimecheck() {
         val interval =
             SharedPreferencesHandler.getPref(
@@ -56,7 +60,7 @@ class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
 
     fun createRepeatingTimecheck(intervalInMinutes: Int) {
 
-        Log.d(Constants.APP_NAME, "AlarmHandler: CreateRepeatingTimecheck: Precreate")
+        Log.d(TAG, "AlarmHandler: CreateRepeatingTimecheck: Precreate")
         //todo create inexact version
         val alarms = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarms.setRepeating(
@@ -74,10 +78,10 @@ class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
         createBroadcast().cancel()
 
         if (!checkIfNextAlarmExists()) {
-            Log.d(Constants.APP_NAME, "AlarmHandler: Recurring alarm canceled")
+            Log.d(TAG, "AlarmHandler: Recurring alarm canceled")
             return
         }
-        Log.e(Constants.APP_NAME, "AlarmHandler: Error canceling recurring alarm!")
+        Log.e(TAG, "AlarmHandler: Error canceling recurring alarm!")
 
     }
 
