@@ -19,6 +19,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
+      - name: Install skd
+        run: sudo apt-get install -y android-sdk
       - name: Run Linter
         run: ./gradlew lint
       - name: Upload Reports
