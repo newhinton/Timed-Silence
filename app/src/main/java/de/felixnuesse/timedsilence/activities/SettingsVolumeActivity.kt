@@ -117,7 +117,7 @@ class SettingsVolumeActivity : AppCompatActivity() {
         checkWarningVisibility()
     }
 
-    fun checkWarningVisibility(){
+    private fun checkWarningVisibility(){
         binding.warningLowVolume.visibility = View.INVISIBLE
 
         var warning_show=false
