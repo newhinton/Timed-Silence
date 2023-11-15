@@ -11,9 +11,7 @@ import android.view.View
 import android.widget.RemoteViews
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
-import de.felixnuesse.timedsilence.services.PauseTimerService
 
 
 
@@ -25,13 +23,13 @@ class StartStopWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
-            Log.e(Constants.APP_NAME, "PlayResumeWidget:Update Widget!")
+            Log.e(TAG, "PlayResumeWidget:Update Widget!")
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
     }
 
     override fun onEnabled(context: Context) {
-        val remoteViews = RemoteViews(context.packageName, R.layout.start_stop_widget)
+        val remoteViews = RemoteViews(context.packageName, R.layout.widget_start_stop)
         updateIcon(remoteViews, context)
     }
 
@@ -42,11 +40,11 @@ class StartStopWidget : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (PLAYPAUSECLICKED == intent.action) {
-            Log.e(Constants.APP_NAME, "PlayResumeWidget: A widget was clicked!")
+            Log.e(TAG, "PlayResumeWidget: A widget was clicked!")
 
             val appWidgetManager = AppWidgetManager.getInstance(context)
 
-            var remoteViews = RemoteViews(context.packageName, R.layout.start_stop_widget)
+            var remoteViews = RemoteViews(context.packageName, R.layout.widget_start_stop)
 
 
             val watchWidget = ComponentName(context, StartStopWidget::class.java)
@@ -54,9 +52,7 @@ class StartStopWidget : AppWidgetProvider() {
             val t = Trigger(context)
             if(t.checkIfNextAlarmExists()){
                 t.removeTimecheck()
-            }else if(PauseTimerService.isTimerRunning()){
-                t.createTimecheck()
-            }else{
+            } else {
                 t.createTimecheck()
             }
             updateIcon(remoteViews, context)
@@ -69,12 +65,12 @@ class StartStopWidget : AppWidgetProvider() {
 
     companion object {
 
-
+        private const val TAG = "StartStopWidget"
         val PLAYPAUSECLICKED = "playpauseClick"
 
         internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
 
-            val views = RemoteViews(context.packageName, R.layout.start_stop_widget)
+            val views = RemoteViews(context.packageName, R.layout.widget_start_stop)
 
             views.setOnClickPendingIntent(R.id.playpausewidget_running, getPendingSelfIntent(context, PLAYPAUSECLICKED))
             views.setOnClickPendingIntent(R.id.playpausewidget_paused, getPendingSelfIntent(context, PLAYPAUSECLICKED))
@@ -89,7 +85,7 @@ class StartStopWidget : AppWidgetProvider() {
         protected fun getPendingSelfIntent(context: Context, action: String): PendingIntent {
             val intent = Intent(context, StartStopWidget::class.java)
             intent.action = action
-            return PendingIntent.getBroadcast(context, 0, intent, 0)
+            return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         }
 
         protected fun updateIcon(remoteViews: RemoteViews, context: Context){
@@ -99,9 +95,7 @@ class StartStopWidget : AppWidgetProvider() {
 
             if(Trigger(context).checkIfNextAlarmExists()){
                 remoteViews.setViewVisibility( R.id.playpausewidget_running, View.VISIBLE)
-            }else if(PauseTimerService.isTimerRunning()){
-                remoteViews.setViewVisibility( R.id.playpausewidget_paused, View.VISIBLE)
-            }else{
+            } else {
                 remoteViews.setViewVisibility( R.id.playpausewidget_stopped, View.VISIBLE)
             }
         }

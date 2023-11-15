@@ -10,9 +10,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.util.Log
 import android.widget.Toast
-import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.data.KeywordObject.Companion.ALL_CALENDAR
@@ -20,6 +20,7 @@ import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import org.xml.sax.InputSource
+import org.xml.sax.SAXParseException
 import java.io.*
 import java.util.ArrayList
 import javax.xml.parsers.DocumentBuilderFactory
@@ -65,6 +66,7 @@ class Importer {
      */
 
     companion object{
+        private const val TAG = "Importer"
         private const val READ_SUCCESS_CODE = 42
         const val PERM_REQUEST_CODE = 41
 
@@ -91,32 +93,45 @@ class Importer {
             val db = DatabaseHandler(a.applicationContext)
 
             val result = readFileFromDisk(a, requestCode, resultCode, resultData)
-            val schedulesList = getScheduleObjects(result)
-            val calendarList = getCalendarObjects(result)
-            val wifiList = getWifiObjects(result)
-            val keywordList = getKeywordList(result)
+            val schedulesList: ArrayList<ScheduleObject>
+            val calendarList: ArrayList<CalendarObject>
+            val wifiList: ArrayList<WifiObject>
+            val keywordList: ArrayList<KeywordObject>
+
+            try {
+                schedulesList = getScheduleObjects(result)
+                calendarList = getCalendarObjects(result)
+                wifiList = getWifiObjects(result)
+                keywordList = getKeywordList(result)
+                writePreferences(result, a.applicationContext)
+            }catch ( e: SAXParseException){
+                e.printStackTrace()
+                Toast.makeText(a, "Could not read config!", Toast.LENGTH_LONG).show()
+                return
+            }
 
 
-            Log.e(APP_NAME, ": $result")
+            Log.e(TAG, ": $result")
 
+            db.clean()
             for(scheduleObject in schedulesList){
-                Log.e(APP_NAME, "Create Schedule: ${scheduleObject.name}")
+                Log.e(TAG, "Create Schedule: ${scheduleObject.name}")
                 db.createScheduleEntry(scheduleObject)
             }
 
             for(calendarObject in calendarList){
-                Log.e(APP_NAME, "Create Calendar: ${calendarObject.name}")
+                Log.e(TAG, "Create Calendar: ${calendarObject.name}")
                 db.createCalendarEntry(calendarObject)
             }
 
             for(wifiObject in wifiList){
-                Log.e(APP_NAME, "Create Wifi: ${wifiObject.ssid}")
+                Log.e(TAG, "Create Wifi: ${wifiObject.ssid}")
                 db.createWifiEntry(wifiObject)
             }
 
 
             for(keywordObject in keywordList){
-                Log.e(APP_NAME, "Create Keyword: ${keywordObject.keyword}")
+                Log.e(TAG, "Create Keyword: ${keywordObject.keyword}")
                 db.createKeyword(keywordObject)
             }
 
@@ -142,10 +157,10 @@ class Importer {
 
         private fun getFileAccessPermission(activity: Activity): Boolean {
             return if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.e(APP_NAME, "Get permissions -- already granted!")
+                Log.e(TAG, "Get permissions -- already granted!")
                 true
             } else {
-                Log.e(APP_NAME, "Get permissions!")
+                Log.e(TAG, "Get permissions!")
                 ActivityCompat.requestPermissions(activity, arrayOf<String>(Manifest.permission.READ_EXTERNAL_STORAGE), PERM_REQUEST_CODE)
                 false
             }
@@ -165,7 +180,7 @@ class Importer {
 
                 val children =  nList.item(i).childNodes
 
-                val transferEObject = CalendarObject(-1,-1, Constants.TIME_SETTING_UNSET)
+                val transferEObject = CalendarObject(-1,-1, TIME_SETTING_UNSET)
 
                 for (j in 0 until children.length) {
                     val type = children.item(j)
@@ -201,7 +216,7 @@ class Importer {
 
                 val children =  nList.item(i).childNodes
 
-                val transferEObject = WifiObject(-1,"",0, Constants.TIME_SETTING_UNSET)
+                val transferEObject = WifiObject(-1,"",0, TIME_SETTING_UNSET)
 
                 for (j in 0 until children.length) {
                     val type = children.item(j)
@@ -233,7 +248,7 @@ class Importer {
             for (i in 0 until nodeList.length) {
 
                 val children =  nodeList.item(i).childNodes
-                val transferIObject = ScheduleObject("",0,0, Constants.TIME_SETTING_UNSET, -1)
+                val transferIObject = ScheduleObject("",0,0, TIME_SETTING_UNSET, -1)
                 var id = 0L
 
                 for (j in 0 until children.length) {
@@ -284,29 +299,58 @@ class Importer {
             val inputStream = InputSource(StringReader(content))
             val document = documentBuilder.parse(inputStream)
 
-            val nList = document.getElementsByTagName("keywords")
+            val nList = document.getElementsByTagName("keyword")
 
             for (i in 0 until nList.length) {
 
                 val children =  nList.item(i).childNodes
 
-                val transferEObject = KeywordObject(-1,ALL_CALENDAR,"", Constants.TIME_SETTING_UNSET)
-
+                val transferEObject = KeywordObject(-1, ALL_CALENDAR,"", TIME_SETTING_UNSET)
                 for (j in 0 until children.length) {
                     val type = children.item(j)
                     when (type.nodeName) {
-                        "keyword" -> transferEObject.keyword=type.textContent
+                        "key" -> transferEObject.keyword=type.textContent
                         "calendarid" -> transferEObject.calendarid=type.textContent.toLong()
                         "volume" -> transferEObject.volume=type.textContent.toInt()
                     }
 
                 }
 
-                val eObject = KeywordObject(transferEObject.id,transferEObject.calendarid,transferEObject.keyword,transferEObject.volume)
+                val eObject = KeywordObject(transferEObject.id, transferEObject.calendarid, transferEObject.keyword, transferEObject.volume)
                 result.add(eObject)
             }
 
             return result
+        }
+
+        private fun writePreferences(content: String, context: Context) {
+            val documentBuilderFactory = DocumentBuilderFactory.newInstance()
+            val documentBuilder = documentBuilderFactory.newDocumentBuilder()
+            val inputStream = InputSource(StringReader(content))
+            val document = documentBuilder.parse(inputStream)
+
+            val nList = document.getElementsByTagName("SETTINGS")
+
+            for (i in 0 until nList.length) {
+
+                val children =  nList.item(i).childNodes
+
+                var type = ""
+                var name = ""
+                var value = ""
+                for (j in 0 until children.length) {
+                    val item = children.item(j)
+                    when (item.nodeName) {
+                        "TYPE" -> type = item.textContent.toString()
+                        "VALUE" -> type= item.textContent.toString()
+                        "NAME" -> type = item.textContent.toString()
+                    }
+                }
+                when(type){
+                    "BOOLEAN" -> {SharedPreferencesHandler.setPref(context, name, value.toBoolean())}
+                    "INTEGER" -> {SharedPreferencesHandler.setPref(context, name, value.toInt())}
+                }
+            }
         }
 
     }

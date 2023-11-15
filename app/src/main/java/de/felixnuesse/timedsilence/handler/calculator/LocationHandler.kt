@@ -35,11 +35,14 @@ import de.felixnuesse.timedsilence.Constants
 
 class LocationHandler {
     companion object {
+
+        private const val TAG = "LocationHandler"
+
         fun checkIfLocationServiceIsEnabled(context: Context): Boolean {
             val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
             val result = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            Log.d(Constants.APP_NAME, "LocationHandler: State: $result")
+            Log.d(TAG, "LocationHandler: State: $result")
 
             return result
         }

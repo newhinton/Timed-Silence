@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.CalendarEventFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp">
+
+
+        <LinearLayout
+            android:id="@+id/loadingColumn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="32dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/loadingText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="@string/calculationg_volume_loading_indicator" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/rel_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:weightSum="1440"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView_legend_unset"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/shape_drawable_bar_legend"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView_legend_unset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/volume_setting_unset"
+                app:layout_constraintEnd_toStartOf="@+id/imageView_legend_unset"
+                app:layout_constraintTop_toTopOf="@+id/imageView_legend_unset" />
+
+            <ImageView
+                android:id="@+id/imageView_legend_silent"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/shape_drawable_bar_legend"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView_legend_unset" />
+
+            <TextView
+                android:id="@+id/textView_legend_silent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/volume_setting_silent"
+                app:layout_constraintEnd_toStartOf="@+id/imageView_legend_silent"
+                app:layout_constraintTop_toTopOf="@+id/imageView_legend_silent" />
+
+            <ImageView
+                android:id="@+id/imageView_legend_vibrate"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/shape_drawable_bar_legend"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView_legend_silent" />
+
+            <TextView
+                android:id="@+id/textView_legend_vibrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/volume_setting_vibrate"
+                app:layout_constraintEnd_toStartOf="@+id/imageView_legend_vibrate"
+                app:layout_constraintTop_toTopOf="@+id/imageView_legend_vibrate" />
+
+            <ImageView
+                android:id="@+id/imageView_legend_loud"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/shape_drawable_bar_legend"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView_legend_vibrate" />
+
+            <TextView
+                android:id="@+id/textView_legend_loud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/volume_setting_loud"
+                app:layout_constraintEnd_toStartOf="@+id/imageView_legend_loud"
+                app:layout_constraintTop_toTopOf="@+id/imageView_legend_loud" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageview_headphones_connected"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="48dp"
+                    android:src="@drawable/icon_headset"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.492"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/textfield_headset_connected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Headset connected!"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/imageview_legend_unset_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_help"
+                app:layout_constraintEnd_toEndOf="@+id/textView_legend_unset"
+                app:layout_constraintTop_toBottomOf="@+id/textView_legend_unset" />
+
+            <ImageView
+                android:id="@+id/imageview_legend_silent_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_help"
+                app:layout_constraintEnd_toEndOf="@+id/textView_legend_silent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_legend_silent" />
+
+            <ImageView
+                android:id="@+id/imageview_legend_vibrate_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_help"
+                app:layout_constraintEnd_toEndOf="@+id/textView_legend_vibrate"
+                app:layout_constraintTop_toBottomOf="@+id/textView_legend_vibrate" />
+
+            <ImageView
+                android:id="@+id/imageview_legend_loud_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_help"
+                app:layout_constraintEnd_toEndOf="@+id/textView_legend_loud"
+                app:layout_constraintTop_toBottomOf="@+id/textView_legend_loud" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

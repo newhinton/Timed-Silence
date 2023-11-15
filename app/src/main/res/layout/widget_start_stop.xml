@@ -1,0 +1,76 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools" android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="@dimen/widget_margin">
+
+    <LinearLayout
+            android:id="@+id/playpausewidget_running"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_background_circle_green"
+            android:gravity="center"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:layout_marginTop="2dp" android:layout_marginStart="2dp" android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp" android:layout_centerInParent="true">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_play_arrow"/>
+
+        <TextView
+                android:text="@string/timecheck_running"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/playpausewidget_running_text"
+                android:textAlignment="center" android:textColor="@android:color/background_light"
+                android:textSize="12sp"/>
+    </LinearLayout>
+    <LinearLayout
+            android:id="@+id/playpausewidget_paused"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_background_circle_orange"
+            android:gravity="center"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:layout_marginTop="2dp" android:layout_marginStart="2dp" android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp" android:layout_centerInParent="true">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_fast_forward"/>
+        <TextView
+                android:text="@string/timecheck_paused"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:id="@+id/playpausewidget_paused_text"
+                android:textAlignment="textStart" android:textColor="#FFFFFF" android:textSize="12sp"/>
+    </LinearLayout>
+    <LinearLayout
+            android:id="@+id/playpausewidget_stopped"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_background_circle_red"
+            android:gravity="center"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:layout_marginTop="2dp" android:layout_marginStart="2dp" android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp" android:layout_centerInParent="true">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_pause"/>
+        <TextView
+                android:text="@string/timecheck_stopped"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/playpausewidget_stopped_text"
+                android:textAlignment="center" android:textColor="@android:color/background_light"
+                android:textSize="12sp"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

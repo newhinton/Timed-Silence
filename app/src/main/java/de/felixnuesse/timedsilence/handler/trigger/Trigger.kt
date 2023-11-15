@@ -1,6 +1,7 @@
 package de.felixnuesse.timedsilence.handler.trigger
 
 import android.content.Context
+import android.util.Log
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 
@@ -22,10 +23,10 @@ class Trigger(val mContext: Context) {
         }
     }
 
-    fun getTriggertype(): String {
+    fun getTriggertype(): Int {
         val t = SharedPreferencesHandler.getPreferences(mContext)
-        val type: String? = t?.getString(PrefConstants.PREF_TRIGGERTYPE, PrefConstants.PREF_TRIGGERTYPE_DEFAULT)
-        return type?: PrefConstants.PREF_TRIGGERTYPE_DEFAULT
+        val defaultVal = PrefConstants.PREF_TRIGGERTYPE_DEFAULT
+        return t?.getInt(PrefConstants.PREF_TRIGGERTYPE, defaultVal) ?: defaultVal
     }
 
     fun createTimecheck(){

@@ -12,14 +12,9 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDUL
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_START
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_TABLE
-import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import android.content.ContentValues
 import android.database.Cursor
-import android.util.Log
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.model.data.KeywordObject
-import de.felixnuesse.timedsilence.model.data.CalendarObject
-import de.felixnuesse.timedsilence.model.data.WifiObject
+import de.felixnuesse.timedsilence.model.data.*
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ANDROID_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_NAME
@@ -81,12 +76,14 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_VO
 class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
 
-    var cachingEnabled=false
+    var cachingEnabled=true
 
-    lateinit var cachedSchedules: ArrayList<ScheduleObject>
-    lateinit var cachedCalendars: ArrayList<CalendarObject>
-    lateinit var cachedWifi: ArrayList<WifiObject>
-    lateinit var cachedKeywords: ArrayList<KeywordObject>
+    var cachedSchedules = CachedArrayList<ScheduleObject>()
+    var cachedCalendars = CachedArrayList<CalendarObject>()
+    var cachedWifi = CachedArrayList<WifiObject>()
+    var cachedKeywords = CachedArrayList<KeywordObject>()
+
+
 
     fun setCaching(caching: Boolean){
         cachingEnabled=caching
@@ -122,9 +119,27 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         onUpgrade(db, oldVersion, newVersion)
     }
 
+    fun clean() {
+        drop()
+        onCreate(writableDatabase)
+    }
+    private fun drop() {
+        val db = writableDatabase
+        val tables = arrayOf(SCHEDULE_TABLE, CALENDAR_TABLE, WIFI_TABLE, KEYWORD_TABLE)
+        val caches = arrayOf(cachedSchedules, cachedCalendars, cachedWifi, cachedKeywords)
+
+        for (table in tables){
+            db.execSQL("DROP TABLE IF EXISTS $table")
+        }
+
+        for (cache in caches){
+            cache.clear()
+        }
+    }
+
 
     fun getAllSchedules(): ArrayList<ScheduleObject> {
-        if (::cachedSchedules.isInitialized && cachingEnabled) {
+        if (cachedSchedules.cacheInitialized && cachingEnabled) {
             return cachedSchedules
         }
 
@@ -183,7 +198,9 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         cursor.close()
 
         db.close()
-        cachedSchedules=results
+        cachedSchedules.set(results)
+        //Log.e("Database", "content: ${results.size}")
+        //Log.e("Database", "content: ${cachedSchedules.size}")
         return cachedSchedules
     }
 
@@ -316,7 +333,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         // Insert the new row, returning the primary key value of the new row
         val newRowId = db.insert(SCHEDULE_TABLE, null, values)
-        Log.e(APP_NAME,"Database: Create: RowID: $newRowId")
 
         val newObject = ScheduleObject("",0,0,0,newRowId)
 
@@ -331,10 +347,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         newObject.fri=so.fri
         newObject.sat=so.sat
         newObject.sun=so.sun
-
-
-        Log.e(APP_NAME,"Database: Create: Result: ${newObject.name}")
-
 
         db.close()
         return newObject
@@ -377,7 +389,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
 
     fun getAllWifiEntries(): ArrayList<WifiObject> {
-        if (::cachedWifi.isInitialized && cachingEnabled) {
+        if (cachedWifi.cacheInitialized && cachingEnabled) {
             return cachedWifi
         }
 
@@ -421,7 +433,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         cursor.close()
 
         db.close()
-        cachedWifi=results
+        cachedWifi.set(results)
         return cachedWifi
     }
 
@@ -442,11 +454,9 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         // Insert the new row, returning the primary key value of the new row
         val newRowId = db.insert(WIFI_TABLE, null, values)
-        Log.e(APP_NAME,"Database: CreateWifi: RowID: $newRowId")
 
         val newObject = WifiObject(newRowId,wifiObject.ssid, wifiObject.type, wifiObject.volume)
 
-        Log.e(APP_NAME,"Database: CreateWifi: Result: ${newObject.type}")
 
         db.close()
         return newObject
@@ -479,7 +489,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
     fun getAllCalendarEntries(): ArrayList<CalendarObject> {
 
-        if (::cachedCalendars.isInitialized && cachingEnabled) {
+        if (cachedCalendars.cacheInitialized && cachingEnabled) {
             return cachedCalendars
         }
 
@@ -532,7 +542,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         cursor.close()
         db.close()
-        cachedCalendars=results
+        cachedCalendars.set(results)
         return cachedCalendars
     }
 
@@ -573,7 +583,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         // Insert the new row, returning the primary key value of the new row
         val newRowId = db.insert(CALENDAR_TABLE, null, values)
-        Log.e(APP_NAME,"Database: CreateCalendar: RowID     : $newRowId")
 
         val newObject = CalendarObject(newRowId,calendarObject.ext_id, calendarObject.volume)
         if(!calendarObject.name.equals("NOTSET")){
@@ -647,7 +656,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     }
 
     fun getKeywords(): ArrayList<KeywordObject> {
-        if (::cachedKeywords.isInitialized && cachingEnabled) {
+        if (cachedKeywords.cacheInitialized && cachingEnabled) {
             return cachedKeywords
         }
 
@@ -660,7 +669,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             null, null,
             "$KEYWORD_ID ASC"
         )
-        cachedKeywords=getKeywordListFromCursor(cursor)
+        cachedKeywords.set(getKeywordListFromCursor(cursor))
         db.close()
         return cachedKeywords
     }

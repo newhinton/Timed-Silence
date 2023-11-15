@@ -1,15 +1,12 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-
 android {
-    compileSdkVersion 29
     defaultConfig {
         applicationId "de.felixnuesse.timedsilence"
         minSdkVersion 26
-        targetSdkVersion 29
+        targetSdk 34
+        compileSdk 34
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -19,6 +16,15 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    namespace 'de.felixnuesse.timedsilence'
+
+    buildFeatures {
+        viewBinding true
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     applicationVariants.all { variant ->
@@ -30,7 +36,7 @@ android {
             def buildType = variant.buildType.name
             //def version = variant.versionName
             def date = new Date()
-            def formattedDate = date.format('yyyy-mm-dd_HH:mm')
+            def formattedDate = date.format('yyyy-mm-dd_HHmm')
 
             def newApkName = project + SEP + buildType + SEP + formattedDate + ".apk"
 
@@ -40,21 +46,26 @@ android {
 }
 
 // Running 'gradle wrapper' will generate gradlew - Getting gradle wrapper working and using it will save you a lot of pain.
-task wrapper(type: Wrapper) {
+tasks.register('wrapper', Wrapper) {
     gradleVersion = '2.2'
+}
+
+repositories {
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.material:material:1.3.0-alpha02'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'com.google.android.material:material:1.11.0-alpha03'
+    implementation 'com.github.skydoves:balloon:1.3.9'
+
+    implementation 'com.github.AppIntro:AppIntro:6.3.1'
 }
+

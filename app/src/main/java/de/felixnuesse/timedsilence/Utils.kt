@@ -1,19 +1,5 @@
 package de.felixnuesse.timedsilence
 
-import android.Manifest
-import android.app.Activity
-import android.content.Context
-import android.content.Context.MODE_APPEND
-import android.content.pm.PackageManager
-import android.os.Environment
-import android.util.Log
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import de.felixnuesse.timedintenttrigger.database.xml.Exporter
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStreamWriter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,54 +35,19 @@ class Utils{
 
     companion object{
 
-        fun getDate(milliSeconds: Long): String {
-            return getDate(milliSeconds.toString())
-        }
-
-        fun getDate(milliSeconds: String): String {
-            val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+        fun getDate(milliSeconds: Long, format: String): String {
+            val formatter = SimpleDateFormat(format, Locale.getDefault())
             val calendar = Calendar.getInstance()
-            calendar.timeInMillis = milliSeconds.toLong()
+            calendar.timeInMillis = milliSeconds
             return formatter.format(calendar.time)
         }
 
-        fun appendLogfile(context: Context, state: String, content: String){
-            if (!isWriteStoragePermissionGranted(context)) {
-                Log.e(APP_NAME, "No external write permission for logging.")
-                return
-            }
-            val now = Date()
-            val timestamp = now.time
-            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-            val dateStr = sdf.format(timestamp)
-
-            var text = "$dateStr - [$state]: $content\n"
-
-            val filename = "${APP_NAME}.log"
-
-            //val path = File(Environment.getExternalStorageDirectory().absolutePath + "/$APP_NAME")
-            val path = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath)
-            path.mkdirs()
-            val file = File(path, filename)
-            val stream = FileOutputStream(file, true)
-            val myOutWriter = OutputStreamWriter(stream)
-
-            try {
-                myOutWriter.append(text)
-            } finally {
-                myOutWriter.close()
-                stream.close()
-            }
+        fun getDate(milliSeconds: Long): String {
+           return getDate(milliSeconds, "dd.MM.yyyy HH:mm:ss")
         }
 
-        private fun isWriteStoragePermissionGranted(a: Context): Boolean {
-            if (a.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.v("perm", "Permission is granted")
-                return true
-            } else {
-                Log.v("perm", "Permission is revoked")
-                return false
-            }
+        fun getDate(milliSeconds: String): String {
+            return getDate(milliSeconds.toLong())
         }
 
     }

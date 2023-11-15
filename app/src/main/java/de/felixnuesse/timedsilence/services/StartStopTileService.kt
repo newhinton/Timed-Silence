@@ -5,10 +5,9 @@ import android.graphics.drawable.Icon
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.util.Log
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
+import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -40,25 +39,23 @@ import de.felixnuesse.timedsilence.handler.trigger.Trigger
 
 class StartStopTileService: TileService() {
 
-
     companion object {
-        var icon = R.drawable.ic_av_timer_black_24dp
+        private const val TAG = "StartStopTileService"
+        var icon = R.drawable.icon_av_timer
     }
 
     override fun onClick() {
         super.onClick()
-        Log.e(APP_NAME,"StartStopTileService: onClick")
+        Log.e(TAG,"StartStopTileService: onClick")
 
         val t = Trigger(this)
 
         if(t.checkIfNextAlarmExists()){
             t.removeTimecheck()
-        }else if(PauseTimerService.isTimerRunning()){
-            t.removeTimecheck()
-        }else{
+        } else {
             t.createTimecheck()
+            VolumeCalculator(this).calculateAllAndApply()
         }
-        WidgetService.updateStateWidget(applicationContext)
         updateTile()
     }
 
@@ -75,7 +72,7 @@ class StartStopTileService: TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        Log.e(APP_NAME,"StartStopTileService: onStartListening")
+        Log.e(TAG,"StartStopTileService: onStartListening")
         updateTile()
 
         // Called when the Tile becomes visible
@@ -83,7 +80,7 @@ class StartStopTileService: TileService() {
 
     override fun onStopListening() {
         super.onStopListening()
-        Log.e(APP_NAME,"StartStopTileService: onStopListening")
+        Log.e(TAG,"StartStopTileService: onStopListening")
 
         // Called when the tile is no longer visible
     }
@@ -94,10 +91,7 @@ class StartStopTileService: TileService() {
         if(Trigger(applicationContext).checkIfNextAlarmExists()){
             tile.state = Tile.STATE_ACTIVE
             tile.label = applicationContext.getString(R.string.timecheck_running)
-        }else if(PauseTimerService.isTimerRunning()){
-            tile.state = Tile.STATE_INACTIVE
-            tile.label = applicationContext.getString(R.string.timecheck_paused)
-        }else{
+        } else {
             tile.state = Tile.STATE_INACTIVE
             tile.label = applicationContext.getString(R.string.timecheck_stopped)
         }

@@ -9,42 +9,50 @@ import android.view.View
 import android.view.ViewGroup
 import de.felixnuesse.timedsilence.Constants
 import androidx.recyclerview.widget.RecyclerView
+import de.felixnuesse.timedsilence.databinding.FragmentCalendarKeywordBinding
 import de.felixnuesse.timedsilence.dialogs.KeywordDialog
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.KeywordListAdapter
 import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
-import kotlinx.android.synthetic.main.calendar_event_fragment.*
 
 
 class KeywordFragment : Fragment() {
 
+    companion object {
+        private const val TAG = "KeywordFragment"
+    }
+
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
+
+    private var _binding: FragmentCalendarKeywordBinding? = null
+    private val binding get() = _binding!!
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(de.felixnuesse.timedsilence.R.layout.calendar_keyword_fragment, container, false)
+        _binding = FragmentCalendarKeywordBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        button_calendar_fragment.setOnClickListener {
+        binding.buttonCalendarFragment.setOnClickListener {
             KeywordDialog(view.context, this).show()
-            Log.e(Constants.APP_NAME, "CalendarKeywordFragment: Add new!")
+            Log.e(TAG, "CalendarKeywordFragment: Add new!")
         }
 
         val db = DatabaseHandler(view.context)
 
-        Log.e(Constants.APP_NAME, "CalendarKeywordFragment: DatabaseResuluts: Size: "+db.getKeywords().size)
+        Log.e(TAG, "CalendarKeywordFragment: DatabaseResuluts: Size: "+db.getKeywords().size)
 
         viewManager = NestedRecyclerManager(view.context)
         viewAdapter = KeywordListAdapter(db.getKeywords())
 
-        calendar_fragment_recylcer_list_view.apply {
+        binding.calendarFragmentRecylcerListView.apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
@@ -64,7 +72,7 @@ class KeywordFragment : Fragment() {
         db.createKeyword(keywordObject)
         viewAdapter = KeywordListAdapter(db.getKeywords())
 
-        calendar_fragment_recylcer_list_view.apply {
+        binding.calendarFragmentRecylcerListView.apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
@@ -76,5 +84,10 @@ class KeywordFragment : Fragment() {
             adapter = viewAdapter
 
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

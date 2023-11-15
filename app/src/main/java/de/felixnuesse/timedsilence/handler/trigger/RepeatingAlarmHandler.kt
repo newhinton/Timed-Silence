@@ -2,18 +2,14 @@ package de.felixnuesse.timedsilence.handler.trigger
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import java.text.DateFormat
-import java.util.*
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
-import de.felixnuesse.timedsilence.handler.trigger.TriggerInterface.Companion.FLAG_NOFLAG
-import de.felixnuesse.timedsilence.ui.PausedNotification
 
 
 /**
@@ -47,6 +43,10 @@ import de.felixnuesse.timedsilence.ui.PausedNotification
 
 class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
 
+    companion object {
+        private const val TAG = "RepeatingAlarmHandler"
+    }
+
     override fun createTimecheck() {
         val interval =
             SharedPreferencesHandler.getPref(
@@ -60,7 +60,7 @@ class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
 
     fun createRepeatingTimecheck(intervalInMinutes: Int) {
 
-        Log.d(Constants.APP_NAME, "AlarmHandler: CreateRepeatingTimecheck: Precreate")
+        Log.d(TAG, "AlarmHandler: CreateRepeatingTimecheck: Precreate")
         //todo create inexact version
         val alarms = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarms.setRepeating(
@@ -75,17 +75,17 @@ class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
 
         val alarms = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarms.cancel(createBroadcast())
-        createBroadcast()?.cancel()
+        createBroadcast().cancel()
 
         if (!checkIfNextAlarmExists()) {
-            Log.d(Constants.APP_NAME, "AlarmHandler: Recurring alarm canceled")
+            Log.d(TAG, "AlarmHandler: Recurring alarm canceled")
             return
         }
-        Log.e(Constants.APP_NAME, "AlarmHandler: Error canceling recurring alarm!")
+        Log.e(TAG, "AlarmHandler: Error canceling recurring alarm!")
 
     }
 
-    override fun createBroadcast(flag: Int): PendingIntent? {
+    override fun createBroadcast(flag: Int): PendingIntent {
 
         val broadcastIntent = Intent(mContext, AlarmBroadcastReceiver::class.java)
         broadcastIntent.putExtra(
@@ -96,12 +96,12 @@ class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
         // The Pending Intent to pass in AlarmManager
         return PendingIntent.getBroadcast(
             mContext,
-            Constants.RECURRING_INTENT_ID, broadcastIntent, flag
+            Constants.RECURRING_INTENT_ID, broadcastIntent, flag or FLAG_IMMUTABLE
         )
 
     }
 
-    override fun createBroadcast(): PendingIntent? {
+    override fun createBroadcast(): PendingIntent {
 
         val broadcastIntent = Intent(mContext, AlarmBroadcastReceiver::class.java)
         broadcastIntent.putExtra(
@@ -114,7 +114,7 @@ class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
         )
 
         // The Pending Intent to pass in AlarmManager
-        return PendingIntent.getBroadcast(mContext, 0, broadcastIntent, FLAG_NOFLAG)
+        return PendingIntent.getBroadcast(mContext, 0, broadcastIntent, FLAG_IMMUTABLE)
 
     }
 

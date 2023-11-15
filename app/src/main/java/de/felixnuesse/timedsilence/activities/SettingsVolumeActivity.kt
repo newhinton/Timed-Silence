@@ -9,90 +9,96 @@ import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
-import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
-import de.felixnuesse.timedsilence.handler.ThemeHandler
-import kotlinx.android.synthetic.main.activity_settings_volume.*
-import androidx.core.app.NavUtils
 import android.view.MenuItem
+import de.felixnuesse.timedsilence.databinding.ActivitySettingsVolumeBinding
 
 
 class SettingsVolumeActivity : AppCompatActivity() {
 
+    companion object {
+        private const val TAG = "SettingsVolumeActivity"
+    }
+
+    private lateinit var binding: ActivitySettingsVolumeBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeHandler.setTheme(this, window)
+
+        binding = ActivitySettingsVolumeBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        setContentView(R.layout.activity_settings_volume)
 
         //sets the actionbartitle
         title = resources.getString(R.string.actionbar_title_settings_volume)
 
-        seekBarVolumeAlarm.max=100
-        seekBarVolumeAlarm.progress=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
-        updateTextViewPercentage(textViewPercentVolumeAlarm, seekBarVolumeAlarm.progress)
-        seekBarVolumeAlarm?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.seekBarVolumeAlarm.max=100
+        binding.seekBarVolumeAlarm.progress=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_VOLUME_ALARM, PrefConstants.PREF_VOLUME_ALARM_DEFAULT)
+        updateTextViewPercentage(binding.textViewPercentVolumeAlarm, binding.seekBarVolumeAlarm.progress)
+        binding.seekBarVolumeAlarm.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                updateTextViewPercentage(textViewPercentVolumeAlarm, seekBar.progress)
+                updateTextViewPercentage(binding.textViewPercentVolumeAlarm, seekBar.progress)
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                updateTextViewPercentage(textViewPercentVolumeAlarm, seekBar.progress)
+                updateTextViewPercentage(binding.textViewPercentVolumeAlarm, seekBar.progress)
                 setAlarmVol(applicationContext, seekBar.progress)
 
             }
         })
 
-        seekBarVolumeRinger.max=100
-        seekBarVolumeRinger.progress=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_VOLUME_RINGER, PrefConstants.PREF_VOLUME_RINGER_DEFAULT)
-        updateTextViewPercentage(textViewPercentVolumeRinger, seekBarVolumeRinger.progress)
-        seekBarVolumeRinger?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.seekBarVolumeRinger.max=100
+        binding.seekBarVolumeRinger.progress=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_VOLUME_RINGER, PrefConstants.PREF_VOLUME_RINGER_DEFAULT)
+        updateTextViewPercentage(binding.textViewPercentVolumeRinger, binding.seekBarVolumeRinger.progress)
+        binding.seekBarVolumeRinger?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                updateTextViewPercentage(textViewPercentVolumeRinger, seekBar.progress)
+                updateTextViewPercentage(binding.textViewPercentVolumeRinger, seekBar.progress)
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                updateTextViewPercentage(textViewPercentVolumeRinger, seekBar.progress)
+                updateTextViewPercentage(binding.textViewPercentVolumeRinger, seekBar.progress)
                 setRingerVol(applicationContext, seekBar.progress)
 
             }
         })
 
-        seekBarVolumeMusic.max=100
-        seekBarVolumeMusic.progress=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_VOLUME_MUSIC, PrefConstants.PREF_VOLUME_MUSIC_DEFAULT)
-        updateTextViewPercentage(textViewPercentVolumeMusic, seekBarVolumeMusic.progress)
-        seekBarVolumeMusic?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.seekBarVolumeMusic.max=100
+        binding.seekBarVolumeMusic.progress=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_VOLUME_MUSIC, PrefConstants.PREF_VOLUME_MUSIC_DEFAULT)
+        updateTextViewPercentage(binding.textViewPercentVolumeMusic, binding.seekBarVolumeMusic.progress)
+        binding.seekBarVolumeMusic?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                updateTextViewPercentage(textViewPercentVolumeMusic, seekBar.progress)
+                updateTextViewPercentage(binding.textViewPercentVolumeMusic, seekBar.progress)
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                updateTextViewPercentage(textViewPercentVolumeMusic, seekBar.progress)
+                updateTextViewPercentage(binding.textViewPercentVolumeMusic, seekBar.progress)
                 setMusicVol(applicationContext, seekBar.progress)
 
             }
         })
 
-        seekBarVolumeNotifications.max=100
-        seekBarVolumeNotifications.progress=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_VOLUME_NOTIFICATION, PrefConstants.PREF_VOLUME_NOTIFICATION_DEFAULT)
-        updateTextViewPercentage(textViewPercentVolumeNotifications, seekBarVolumeNotifications.progress)
-        seekBarVolumeNotifications?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.seekBarVolumeNotifications.max=100
+        binding.seekBarVolumeNotifications.progress=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_VOLUME_NOTIFICATION, PrefConstants.PREF_VOLUME_NOTIFICATION_DEFAULT)
+        updateTextViewPercentage(binding.textViewPercentVolumeNotifications, binding.seekBarVolumeNotifications.progress)
+        binding.seekBarVolumeNotifications?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                updateTextViewPercentage(textViewPercentVolumeNotifications, seekBar.progress)
+                updateTextViewPercentage(binding.textViewPercentVolumeNotifications, seekBar.progress)
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                updateTextViewPercentage(textViewPercentVolumeNotifications, seekBar.progress)
+                updateTextViewPercentage(binding.textViewPercentVolumeNotifications, seekBar.progress)
                 setNotificationVol(applicationContext, seekBar.progress)
 
             }
@@ -105,7 +111,7 @@ class SettingsVolumeActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     fun updateTextViewPercentage(textView: TextView, percent: Int){
         textView.text= "$percent %"
-        textView.setTextColor(textViewLabelSliderVolumeMusic.textColors)
+        textView.setTextColor(binding.textViewLabelSliderVolumeMusic.textColors)
 
         if(percent<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
             textView.setTextColor(Color.RED)
@@ -113,48 +119,48 @@ class SettingsVolumeActivity : AppCompatActivity() {
         checkWarningVisibility()
     }
 
-    fun checkWarningVisibility(){
-        warning_low_volume.visibility = View.INVISIBLE
+    private fun checkWarningVisibility(){
+        binding.warningLowVolume.visibility = View.INVISIBLE
 
         var warning_show=false
 
-        if(seekBarVolumeAlarm.progress<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
+        if(binding.seekBarVolumeAlarm.progress<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
             warning_show=true
         }
-        if(seekBarVolumeMusic.progress<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
+        if(binding.seekBarVolumeMusic.progress<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
             warning_show=true
         }
-        if(seekBarVolumeNotifications.progress<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
+        if(binding.seekBarVolumeNotifications.progress<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
             warning_show=true
         }
-        if(seekBarVolumeRinger.progress<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
+        if(binding.seekBarVolumeRinger.progress<=PrefConstants.VOLUME_LOW_WARNING_THRESHOLD){
             warning_show=true
         }
 
         if(warning_show){
-            warning_low_volume.visibility = View.VISIBLE
+            binding.warningLowVolume.visibility = View.VISIBLE
         }
 
     }
 
     fun setAlarmVol(context: Context, value: Int) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_VOLUME_ALARM, value)
-        Log.e(Constants.APP_NAME, "SettingsVolume: Setting Alarm Volume: "+value)
+        Log.e(TAG, "SettingsVolume: Setting Alarm Volume: "+value)
     }
 
     fun setRingerVol(context: Context, value: Int) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_VOLUME_RINGER, value)
-        Log.e(Constants.APP_NAME, "SettingsVolume: Setting Ringer Volume: "+value)
+        Log.e(TAG, "SettingsVolume: Setting Ringer Volume: "+value)
     }
 
     fun setNotificationVol(context: Context, value: Int) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_VOLUME_NOTIFICATION, value)
-        Log.e(Constants.APP_NAME, "SettingsVolume: Setting Notification Volume: "+value)
+        Log.e(TAG, "SettingsVolume: Setting Notification Volume: "+value)
     }
 
     fun setMusicVol(context: Context, value: Int) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_VOLUME_MUSIC, value)
-        Log.e(Constants.APP_NAME, "SettingsVolume: Setting Music Volume: "+value)
+        Log.e(TAG, "SettingsVolume: Setting Music Volume: "+value)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

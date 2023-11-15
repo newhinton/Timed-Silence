@@ -9,10 +9,14 @@ import android.view.Window
 import android.view.WindowManager
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.databinding.DialogWifiBinding
 import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.model.data.WifiObject
-import kotlinx.android.synthetic.main.wifi_dialog.*
 
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -43,11 +47,13 @@ import kotlinx.android.synthetic.main.wifi_dialog.*
  */
 class WifiDialog(context: Context) : Dialog(context) {
 
+    companion object {
+        private const val TAG = "WifiDialog"
+    }
 
     private var tfrag: WifiConnectedFragment? = null
+    private lateinit var binding: DialogWifiBinding
 
-
-    private var radioMap: HashMap<Int,Long> = HashMap()
 
     constructor(context: Context, tfragment: WifiConnectedFragment) : this(context) {
         tfrag=tfragment
@@ -60,45 +66,49 @@ class WifiDialog(context: Context) : Dialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.wifi_dialog)
+
+        binding = DialogWifiBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         setCanceledOnTouchOutside(true)
 
 
         hideAll()
-        wifi_back.visibility = View.INVISIBLE
-        wifi_dialog_title.text = context.getText(R.string.calendar_dialog_title_title)
-        wifi_ssid_layout.visibility = View.VISIBLE
+        binding.wifiBack.visibility = View.INVISIBLE
+        binding.wifiDialogTitle.text = context.getText(R.string.calendar_dialog_title_title)
+        binding.wifiSsidLayout.visibility = View.VISIBLE
 
-        wifi_next.setOnClickListener {
-            Log.e(Constants.APP_NAME, "WifiDialog: next!")
+        binding.wifiNext.setOnClickListener {
+            Log.e(TAG, "WifiDialog: next!")
 
             hideAll()
             state++
             decideState()
         }
 
-        wifi_back.setOnClickListener {
-            Log.e(Constants.APP_NAME, "WifiDialog: back!")
+        binding.wifiBack.setOnClickListener {
+            Log.e(TAG, "WifiDialog: back!")
 
             hideAll()
             state--
             decideState()
         }
 
-        wifi_cancel.setOnClickListener {
-            Log.e(Constants.APP_NAME, "WifiDialog: cancel!")
+        binding.wifiCancel.setOnClickListener {
+            Log.e(TAG, "WifiDialog: cancel!")
             this.cancel()
         }
 
-        wifi_save.setOnClickListener {
-            Log.e(Constants.APP_NAME, "WifiDialog: save!")
+        binding.wifiSave.setOnClickListener {
+            Log.e(TAG, "WifiDialog: save!")
 
             val volId = getValueForVolumeRadioGroup()
             val type = getValueForTypeRadioGroup()
             val wifiObj = WifiObject(
                 0,//calendar_id_select.text.toString(),
-                wifi_ssid_textfield.text.toString(),
+                binding.wifiSsidTextfield.text.toString(),
                 type,
                 volId
             )
@@ -109,22 +119,22 @@ class WifiDialog(context: Context) : Dialog(context) {
     }
 
     private fun hideAll() {
-        wifi_ssid_layout.visibility = View.GONE
-        wifi_dialog_rb_volume.visibility = View.GONE
-        wifi_dialog_rb_type.visibility = View.GONE
+        binding.wifiSsidLayout.visibility = View.GONE
+        binding.wifiDialogRbVolume.visibility = View.GONE
+        binding.wifiDialogRbType.visibility = View.GONE
     }
 
     private fun getValueForVolumeRadioGroup(): Int{
-        when (wifi_dialog_rb_volume.checkedRadioButtonId) {
-            R.id.wifi_dialog_rb_loud -> return Constants.TIME_SETTING_LOUD
-            R.id.wifi_dialog_rb_silent -> return Constants.TIME_SETTING_SILENT
-            R.id.wifi_dialog_rb_vibrate -> return Constants.TIME_SETTING_VIBRATE
+        when (binding.wifiDialogRbVolume.checkedRadioButtonId) {
+            R.id.wifi_dialog_rb_loud -> return TIME_SETTING_LOUD
+            R.id.wifi_dialog_rb_silent -> return TIME_SETTING_SILENT
+            R.id.wifi_dialog_rb_vibrate -> return TIME_SETTING_VIBRATE
         }
-        return Constants.TIME_SETTING_VIBRATE;
+        return TIME_SETTING_VIBRATE;
     }
 
     private fun getValueForTypeRadioGroup(): Int{
-        when (wifi_dialog_rb_type.checkedRadioButtonId) {
+        when (binding.wifiDialogRbType.checkedRadioButtonId) {
             R.id.wifi_dialog_type_searching -> return Constants.WIFI_TYPE_SEARCHING
             R.id.wifi_dialog_type_connected -> return Constants.WIFI_TYPE_CONNECTED
         }
@@ -134,32 +144,32 @@ class WifiDialog(context: Context) : Dialog(context) {
     private fun decideState() {
 
         if(state==0){
-            wifi_back.visibility = View.INVISIBLE
-            wifi_save.visibility = View.GONE
-            wifi_next.visibility = View.VISIBLE
+            binding.wifiBack.visibility = View.INVISIBLE
+            binding.wifiSave.visibility = View.GONE
+            binding.wifiNext.visibility = View.VISIBLE
         }else if (state == 2){
-            wifi_save.visibility = View.VISIBLE
-            wifi_back.visibility = View.VISIBLE
-            wifi_next.visibility = View.GONE
+            binding.wifiSave.visibility = View.VISIBLE
+            binding.wifiBack.visibility = View.VISIBLE
+            binding.wifiNext.visibility = View.GONE
         }else {
-            wifi_back.visibility = View.VISIBLE
-            wifi_next.visibility = View.VISIBLE
-            wifi_save.visibility = View.GONE
+            binding.wifiBack.visibility = View.VISIBLE
+            binding.wifiNext.visibility = View.VISIBLE
+            binding.wifiSave.visibility = View.GONE
         }
 
         when (state) {
             0 -> {
-                wifi_dialog_title.text = context.getText(R.string.schedule_dialog_title_title)
-                wifi_ssid_layout.visibility = View.VISIBLE
+                binding.wifiDialogTitle.text = context.getText(R.string.schedule_dialog_title_title)
+                binding.wifiSsidLayout.visibility = View.VISIBLE
             }
             1 -> {
-                wifi_dialog_title.text = context.getText(R.string.schedule_dialog_title_volume)
-                wifi_dialog_rb_type.visibility = View.VISIBLE
+                binding.wifiDialogTitle.text = context.getText(R.string.schedule_dialog_title_volume)
+                binding.wifiDialogRbType.visibility = View.VISIBLE
 
             }
             2 -> {
-                wifi_dialog_title.text = context.getText(R.string.schedule_dialog_title_volume)
-                wifi_dialog_rb_volume.visibility = View.VISIBLE
+                binding.wifiDialogTitle.text = context.getText(R.string.schedule_dialog_title_volume)
+                binding.wifiDialogRbVolume.visibility = View.VISIBLE
 
             }
 

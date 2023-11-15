@@ -2,18 +2,20 @@ package de.felixnuesse.timedsilence.handler.trigger
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import android.util.Log
-import java.text.DateFormat
-import java.util.*
-import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_RUN_ALARMTRIGGER_WHEN_IDLE
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.Utils
-import de.felixnuesse.timedsilence.handler.trigger.TriggerInterface.Companion.FLAG_NOFLAG
+import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
-import de.felixnuesse.timedsilence.ui.PausedNotification
+import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
+import de.felixnuesse.timedsilence.ui.notifications.ErrorNotifications
 
 
 /**
@@ -47,24 +49,28 @@ import de.felixnuesse.timedsilence.ui.PausedNotification
 
 class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
 
+    companion object {
+        private const val TAG = "TargetedAlarmHandler"
+    }
+
     override fun createTimecheck() {
         createAlarmIntime()
     }
 
     override fun removeTimecheck() {
         val alarms = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarms.cancel(createBroadcast())
+        createBroadcast()?.let { alarms.cancel(it) }
         createBroadcast()?.cancel()
 
         if(!checkIfNextAlarmExists()){
-            Log.d(Constants.APP_NAME, "AlarmHandler: Recurring alarm canceled")
+            Log.d(TAG, "AlarmHandler: Recurring alarm canceled")
             return
         }
-        Log.e(Constants.APP_NAME, "AlarmHandler: Error canceling recurring alarm!")
+        Log.e(TAG, "AlarmHandler: Error canceling recurring alarm!")
     }
 
     override fun createBroadcast(): PendingIntent? {
-        return createBroadcast(FLAG_NOFLAG)
+        return createBroadcast(FLAG_IMMUTABLE)
     }
 
     override fun createBroadcast(flag: Int): PendingIntent? {
@@ -84,33 +90,57 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
         )
 
         // The Pending Intent to pass in AlarmManager
-        return PendingIntent.getBroadcast(mContext,0, broadcastIntent,flag)
+        return PendingIntent.getBroadcast(mContext,0, broadcastIntent, flag or FLAG_IMMUTABLE)
     }
 
 
     private fun createAlarmIntime(){
-        System.err.println("start create")
         val now = System.currentTimeMillis()
         var calculatedChecktime = 0L
-        val list = VolumeHandler().getChangeList(mContext)
+        val list = VolumeHandler(mContext).getChangeList(mContext)
         for (it in list) {
-            //Log.e(Constants.APP_NAME, "Calculated time $it")
-            //Log.e(Constants.APP_NAME, "Calculated time ${Utils.getDate(calculatedChecktime)}")
+            //Log.e(TAG, "Calculated time $it")
+            //Log.e(TAG, "Calculated time ${Utils.getDate(calculatedChecktime)}")
             if(it > now && calculatedChecktime == 0L){
                 calculatedChecktime = it
             }
         }
-        Log.e(Constants.APP_NAME, "Calculated time $calculatedChecktime")
-        Log.e(Constants.APP_NAME, "Calculated time ${Utils.getDate(calculatedChecktime)}")
+        Log.e(TAG, "Calculated time $calculatedChecktime")
+        Log.e(TAG, "Calculated time ${Utils.getDate(calculatedChecktime)}")
+
+        LogHandler.writeTargeted(mContext, "$now,$calculatedChecktime,${Utils.getDate(now)},${Utils.getDate(calculatedChecktime)}")
 
         val am = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pi: PendingIntent? = createBroadcast()
+
+        if(pi == null) {
+            ErrorNotifications().showError(mContext, mContext.getString(R.string.notifications_error_title),  mContext.getString(R.string.notifications_error_description))
+            return
+        }
         am.cancel(pi)
-        am.setExact(
-            AlarmManager.RTC_WAKEUP,
-            calculatedChecktime,
-            pi
+
+
+        val sharedPreferences: SharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(mContext)
+        val allowWhileIdle = sharedPreferences.getBoolean(
+            PREF_RUN_ALARMTRIGGER_WHEN_IDLE,
+            false
         )
+
+        //todo: fix permission requesting
+        if (allowWhileIdle) {
+            am.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                calculatedChecktime,
+                pi
+            )
+        } else {
+            am.setExact(
+                AlarmManager.RTC_WAKEUP,
+                calculatedChecktime,
+                pi
+            )
+        }
     }
 
 }

@@ -1,5 +1,7 @@
 package de.felixnuesse.timedsilence;
 
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
+
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -51,16 +53,18 @@ class PrefConstants {
         const val PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT = true
 
 
+        const val PREF_IGNORE_ALL_DAY_EVENTS= "PREF_IGNORE_ALL_DAY_EVENTS"
+        const val PREF_IGNORE_ALL_DAY_EVENTS_DEFAULT = true
+
         const val PREF_DARKMODE= "PREF_DARKMODE"
-        const val PREF_DARKMODE_DEFAULT = 0
         const val PREF_DARKMODE_LIGHT = 0
         const val PREF_DARKMODE_DARK = 1
         const val PREF_DARKMODE_AUTO = 2
+        const val PREF_DARKMODE_DEFAULT = PREF_DARKMODE_AUTO
 
 
         const val PREF_PAUSE_NOTIFICATION= "PREF_PAUSE_NOTIFICATION"
         const val PREF_PAUSE_NOTIFICATION_DEFAULT = true
-
 
 
         const val VOLUME_LOW_WARNING_THRESHOLD = 15
@@ -82,10 +86,17 @@ class PrefConstants {
 
 
         const val PREF_TRIGGERTYPE = "PREF_TRIGGERTYPE"
-        const val PREF_TRIGGERTYPE_REPEATING = "PREF_TRIGGERTYPE_REPEATING"
-        const val PREF_TRIGGERTYPE_TARGETED = "PREF_TRIGGERTYPE_TARGETED"
+        const val PREF_TRIGGERTYPE_REPEATING = 0
+        const val PREF_TRIGGERTYPE_TARGETED = 1
         const val PREF_TRIGGERTYPE_DEFAULT = PREF_TRIGGERTYPE_TARGETED
 
+
+        const val TIME_SETTING_DEFAULT_PREFERENCE = "TIME_SETTING_DEFAULT_PREFERENCE"
+        const val TIME_SETTING_DEFAULT = TIME_SETTING_UNSET
+
+
+        const val PREF_RUN_ALARMTRIGGER_WHEN_IDLE = "PREF_RUN_ALARMTRIGGER_WHEN_IDLE"
+        const val PREF_RUN_ALARMTRIGGER_WHEN_IDLE_DEFAULT = true
 
     }
 }

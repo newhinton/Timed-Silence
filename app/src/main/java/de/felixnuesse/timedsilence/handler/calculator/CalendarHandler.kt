@@ -1,34 +1,10 @@
 package de.felixnuesse.timedsilence.handler.calculator
 
-import android.Manifest
-import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
-import android.database.Cursor
-import android.net.Uri
-import android.provider.CalendarContract
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import android.util.Log
-import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.descriptions
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.endDates
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.nameOfEvent
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment.Companion.startDates
 import de.felixnuesse.timedsilence.model.data.CalendarObject
-import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import java.util.*
 import kotlin.collections.ArrayList
-import android.text.format.DateUtils
-import android.content.ContentUris
-import androidx.viewpager.widget.ViewPager
-import de.felixnuesse.timedsilence.Utils
-import de.felixnuesse.timedsilence.handler.NotificationHandler
-import java.time.Duration
-import java.time.format.DateTimeParseException
-import java.util.regex.Pattern
-import kotlin.collections.HashMap
+import de.felixnuesse.timedsilence.model.calendar.DeviceCalendar
+import de.felixnuesse.timedsilence.model.calendar.SettingsCalendar
 
 
 /**
@@ -62,375 +38,58 @@ class CalendarHandler(context: Context) {
 
     companion object {
         fun getCalendarReadPermission(context: Context) {
-            var permissions = true
-            permissions = permissions && ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
-
-            //val permissionsList = Array(1) {Manifest.permission.ACCESS_FINE_LOCATION}
-            val permissionsList = Array(1) {Manifest.permission.READ_CALENDAR}
-
-            if (!permissions)
-                ActivityCompat.requestPermissions(context as Activity,permissionsList , Constants.CALENDAR_PERMISSION_REQUEST_ID)
-
+            DeviceCalendar.getCalendarReadPermission(context)
         }
 
         fun hasCalendarReadPermission(context: Context):Boolean{
-            return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
+            return DeviceCalendar.hasCalendarReadPermission(context)
         }
+
+        val DEFAULT_NAME = "NOTSET"
+        val DEFAULT_COLOR = 0
+        val DEFAULT_VOLUME = -1
     }
 
-
-    var context: Context = context
-    val db = DatabaseHandler(context)
-    val NOTSET = "NOTSET"
-
-    fun enableCaching(caching: Boolean){
-        db.setCaching(caching)
-    }
-
-    private lateinit var cachedCalendars: ArrayList<CalendarObject>
-    private lateinit var cachedCalendarEvents: ArrayList<Map<String, String>>
-    private lateinit var cachedCalendarEntry: HashMap<Long, CalendarObject>
-    private var alreadyCachedCalendars: Boolean=false
-    private var alreadyCachedEvents: Boolean=false
-    private var alreadyCachedCalendarPermission: Boolean=false
-    private var cachedCalendarPermission: Boolean=false
-    private var alreadyCachedCalendarEntry: Boolean=false
-
+    private val deviceCalendar = DeviceCalendar(context)
+    private val settingsCalendar = SettingsCalendar(context)
 
 
     fun getCalendarVolumeSetting(name: String):Int{
-        getCalendars(context)
-        getCalendarEntries(context)
-        var externalId: Long = -1
+        val calObject = settingsCalendar.getCalendars()[name]
+        return calObject?.volume ?: DEFAULT_VOLUME
+    }
 
-        //Todo: this fails when a device has more than one calendar with the same name.
-        for (c in cachedCalendars){
-            if (c.name.equals(name)){
-                externalId = c.ext_id
+    fun getCalendarColor(name: String): Int{
+        val calObject = deviceCalendar.getCalendars()[name]
+        return calObject?.color ?: DEFAULT_COLOR
+    }
+
+    fun getCalendarName(externalId: Long): String{
+        var name = DEFAULT_NAME
+        deviceCalendar.getCalendars().forEach { (_, value) ->
+            if(value.ext_id==externalId){
+                name = value.name
             }
         }
-        val calObject = cachedCalendarEntry.get(externalId)
-        return calObject?.volume ?: -1
+        return name
     }
 
-
-
-    @Deprecated("externalID is unstable. Please use Name!")
-    fun getCalendarVolumeSetting(externalId: Long):Int{
-        getCalendars(context)
-        getCalendarEntries(context)
-
-        val calObject = cachedCalendarEntry.get(externalId)
-        return calObject?.volume ?: -1
+    fun getDeviceCalendars(): ArrayList<CalendarObject>{
+        val calendars = ArrayList<CalendarObject>()
+        deviceCalendar.getCalendars().forEach { (key, value) ->
+            calendars.add(value)
+        }
+        return calendars
     }
-
-    fun getCalendarColor(externalId: Long, name: String): Int{
-        getCalendars(context)
-        for (calObject in cachedCalendars){
-            if(calObject.ext_id==externalId){
-                return calObject.color
-            }
+    fun getVolumeCalendars(): ArrayList<CalendarObject> {
+        val calendars = ArrayList<CalendarObject>()
+        settingsCalendar.getCalendars().forEach { (key, value) ->
+            calendars.add(value)
         }
-
-        for (calObject in cachedCalendars) {
-            if (calObject.name == name) {
-                return calObject.color
-            }
-        }
-        return 0
-    }
-
-    fun getCalendarName(externalId: Long, name: String): String{
-        getCalendars(context)
-        for (calObject in cachedCalendars){
-            if(calObject.ext_id==externalId){
-                return calObject.name
-            }
-        }
-
-        Log.e(APP_NAME,"CalendarHandler: getCalendarName did not find name! Try by name, not by id...")
-        for (calObject in cachedCalendars) {
-            Log.e(APP_NAME,"CalendarHandler: Check: $name - ${calObject.name}")
-            if (calObject.name == name) {
-
-                Log.e(APP_NAME,"CalendarHandler: ...found: "+calObject.name)
-                return calObject.name
-            }
-        }
-
-        Log.e(APP_NAME,"CalendarHandler: ...failed.")
-        return NOTSET
-    }
-
-    fun getCalendars(): ArrayList<CalendarObject>{
-        getCalendars(context)
-        if (::cachedCalendars.isInitialized) { return cachedCalendars }
-        return ArrayList<CalendarObject>()
-    }
-
-    private fun getCalendars(context: Context){
-        if(!alreadyCachedCalendars && hasCalendarReadPermission(context)){
-            cachedCalendars = ArrayList()
-        }else{
-            return
-        }
-
-        getCalendarReadPermission(
-            context
-        )
-
-        val contentResolver = context.contentResolver
-        val cursor = contentResolver!!.query(
-            Uri.parse("content://com.android.calendar/calendars"),
-            arrayOf("_id", "calendar_displayName",
-                CalendarContract.Calendars.CALENDAR_COLOR),
-            null,
-            null,
-            null
-        )
-
-        // Get calendars name
-        if (cursor.count > 0) {
-            cursor.moveToFirst()
-
-            for (i in 0 until cursor.count) {
-                var calentry = CalendarObject(0, 0, Constants.TIME_SETTING_SILENT)
-
-                calentry.ext_id=cursor.getInt(0).toLong()
-                calentry.color=cursor.getInt(2)
-                calentry.name=cursor.getString(1)
-
-                cachedCalendars.add(calentry)
-                cursor.moveToNext()
-            }
-            alreadyCachedCalendars=true
-        } else {
-            Log.e(APP_NAME,"CalendarHandler: No calendar found in the device")
-        }
-        cursor.close()
-    }
-
-    private fun getCalendarEntries(context: Context){
-        if(alreadyCachedCalendarEntry){
-            return
-        }else{
-            cachedCalendarEntry = HashMap<Long, CalendarObject>()
-        }
-        var dbEntries = db.getAllCalendarEntries()
-        Log.e(APP_NAME,"CalendarHandler: B")
-        verifyCalendars(dbEntries)
-        for(e in dbEntries){
-            cachedCalendarEntry[e.ext_id] = e
-        }
-        alreadyCachedCalendarEntry=true
-    }
-
-    fun readCalendarEvent(timeInMilliseconds: Long): ArrayList<Map<String, String>> {
-        return readCalendarEvent(timeInMilliseconds, true)
-    }
-
-    fun readCalendarEvent(timeInMilliseconds: Long, cached: Boolean): ArrayList<Map<String, String>> {
-
-        if(!alreadyCachedCalendarPermission){
-            cachedCalendarPermission = hasCalendarReadPermission(context)
-            alreadyCachedCalendarPermission=true;
-        }
-
-        if(!cachedCalendarPermission) {
-            return ArrayList<Map<String, String>>()
-        }
-
-        if(cached && alreadyCachedEvents){
-            return cachedCalendarEvents
-        }
-
-        Log.e(APP_NAME, "CalendarHandler: CurrentTime in MS: "+ Utils.getDate(timeInMilliseconds.toString()))
-        val startTime = Calendar.getInstance()
-
-        startTime.set(Calendar.HOUR_OF_DAY, 0)
-        startTime.set(Calendar.MINUTE, 0)
-        startTime.set(Calendar.SECOND, 0)
-
-        val endTime = Calendar.getInstance()
-        endTime.add(Calendar.DATE, 1)
-
-        val projection = arrayOf(
-            CalendarContract.Events.CALENDAR_ID,
-            CalendarContract.Events.TITLE,
-            CalendarContract.Events.DESCRIPTION,
-            CalendarContract.Events.DTSTART,
-            CalendarContract.Events.DTEND,
-            CalendarContract.Events.ALL_DAY,
-            CalendarContract.Events.DURATION,
-            CalendarContract.Events.EVENT_LOCATION
-        )
-
-        var cursor = context.contentResolver
-            .query(
-                Uri.parse("content://com.android.calendar/events"),
-                projection, // arrayOf("calendar_id", "title", "description", "dtstart", "dtend", "eventLocation"),
-                null,
-                null,
-                null
-            )
-        cursor!!.moveToFirst()
-
-
-        var retval: ArrayList<Map<String, String>> = ArrayList()
-        var lengthDummyArray = arrayOfNulls<String>(cursor.count)
-
-        // fetching calendars id
-        nameOfEvent.clear()
-        startDates.clear()
-        endDates.clear()
-        descriptions.clear()
-
-
-        for (i in lengthDummyArray) {
-            val map = HashMap<String, String>()
-            map.put("calendar_id",cursor.getString(0))
-            map.put("name_of_event",cursor.getString(1))
-            map.put("description",cursor.getString(2))
-            map.put("start_date",cursor.getString(3))
-            map.put("end_date",cursor.getString(4))
-            map.put("all_day",cursor.getString(5))
-            map.put("duration",cursor.getString(6))
-            map.put("recurring","false")
-            //retval.add(map)
-            cursor.moveToNext()
-
-        }
-        cursor.close()
-
-
-        // Construct the query with the desired date range.
-        val builder = Uri.parse("content://com.android.calendar/instances/when").buildUpon()
-        val now = Date().time // - (DateUtils.HOUR_IN_MILLIS + DateUtils.MINUTE_IN_MILLIS*30)
-        val range =  DateUtils.HOUR_IN_MILLIS*12
-        ContentUris.appendId(builder, now - range)
-        ContentUris.appendId(builder, now + range)
-
-        cursor = context.contentResolver.query(
-            builder.build(),
-            projection,
-            null,
-            null,
-            CalendarContract.Events.DTEND + " ASC"
-        )
-
-        if(cursor==null){
-            Log.e(APP_NAME, "CalendarHandler: readCalendarEvent: no results!")
-            return retval;
-        }
-        cursor.moveToFirst()
-        // fetching calendars name
-
-        lengthDummyArray = arrayOfNulls<String>(cursor.count)
-
-        // fetching calendars id
-        nameOfEvent.clear()
-        startDates.clear()
-        endDates.clear()
-        descriptions.clear()
-
-
-        for (i in lengthDummyArray) {
-            val map = HashMap<String, String>()
-            map["calendar_id"] = cursor.getString(0)
-            map["name_of_event"] = cursor.getString(1)
-            map["description"] = cursor?.getString(2) ?: "unset"
-
-            val start= cursor.getString(3).toLong()
-            //the start time is from the FIRST time the event happens, so adjust it
-            val calendar = Calendar.getInstance()
-            calendar.timeInMillis = start
-            calendar.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
-            val newStart = calendar.timeInMillis
-            map["start_date"] = newStart.toString()
-
-
-
-            map["end_date"] = cursor?.getString(4) ?: map["start_date"] as String
-            map["all_day"] = cursor.getString(5)
-
-            var recurring = cursor.getString(6) ?: ""
-
-            //Log.d(APP_NAME, "CalendarHandler: RecurringPattern: "+recurring)
-            if(recurring.equals("")){
-                map["duration"] = cursor?.getString(6) ?: "0"
-                map["recurring"] = "false"
-            }else{
-
-                //First, fix the damn issue with the missing T for seconds
-                val sPattern = Pattern.compile("P\\d+S")
-                if(sPattern.matcher(recurring).matches()){
-                    val sb = StringBuffer(recurring)
-                    sb.insert(recurring.indexOf("P")+1, "T")
-                    recurring = sb.toString()
-                    //Log.d(APP_NAME, "CalendarHandler: Fixed RecurringPattern: "+recurring)
-                }
-
-                val msEnd= Duration.parse(recurring).toMillis()
-                val t = newStart+msEnd
-                map["duration"] = msEnd.toString()
-                map["end_date"] = t.toString()
-
-                map["recurring"] = "true"
-            }
-
-            retval.add(map)
-            cursor.moveToNext()
-        }
-
-        cursor.close()
-
-        Collections.sort(retval, this.MyMapComparator())
-
-        cachedCalendarEvents=retval
-        alreadyCachedEvents=true
-        return retval
-    }
-
-    fun getAllCalendarEntries(): ArrayList<CalendarObject> {
-        var calendars = db.getAllCalendarEntries()
-        Log.e(APP_NAME,"CalendarHandler: A")
-        verifyCalendars(calendars)
         return calendars
     }
 
-    fun verifyCalendars(calendars: ArrayList<CalendarObject>){
-        Log.e(APP_NAME,"CalendarHandler: verifyCalendars")
-        var showError=false
-        for (e in calendars){
-            Log.e(APP_NAME,"CalendarHandler: verifyCalendars: "+e.name+ " "+e.color+ " "+e.ext_id+ " ")
-            if (e.name == NOTSET){
-                showError=true;
-            }
-        }
-        if(showError){
-            NotificationHandler().showNotification(context)
-        }
-    }
-
-    internal inner class MyMapComparator : Comparator<Map<String, String>> {
-        override fun compare(o1: Map<String, String>, o2: Map<String, String>): Int {
-
-            val s1 = o1["start_date"]?.toLong() ?: 0
-            val s2 = o2["start_date"]?.toLong() ?: 0
-
-            if(s1<s2){
-                return -1
-            }
-
-            if(s1>s2){
-                return 1
-            }
-
-            if(s1==s2){
-                return 0
-            }
-            return 0
-
-        }
+    fun readCalendarEvent(timeInMilliseconds: Long): ArrayList<Map<String, String>>  {
+        return deviceCalendar.readCalendarEvent(timeInMilliseconds)
     }
 }

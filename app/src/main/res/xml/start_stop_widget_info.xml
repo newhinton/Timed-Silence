@@ -4,8 +4,8 @@
                     android:minHeight="40dp"
                     android:updatePeriodMillis="86400000"
                     android:previewImage="@drawable/widget_playpause"
-                    android:initialLayout="@layout/start_stop_widget"
+                    android:initialLayout="@layout/widget_start_stop"
                     android:resizeMode="horizontal|vertical"
                     android:widgetCategory="home_screen"
-                    android:initialKeyguardLayout="@layout/start_stop_widget">
+                    android:initialKeyguardLayout="@layout/widget_start_stop">
 </appwidget-provider>

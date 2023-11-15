@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorSecondary"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/wifi_dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/wifi_ssid_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/wifi_ssid_textfield"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/wifi_dialog_ssid_textfield_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="text" />
+            </LinearLayout>
+
+
+            <RadioGroup
+                android:id="@+id/wifi_dialog_rb_type"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="0dp"
+                android:padding="10dp">
+
+                <RadioButton
+                    android:id="@+id/wifi_dialog_type_searching"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/wifi_type_searching" />
+
+                <RadioButton
+                    android:id="@+id/wifi_dialog_type_connected"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/wifi_type_connected" />
+            </RadioGroup>
+
+
+            <RadioGroup
+                android:id="@+id/wifi_dialog_rb_volume"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp">
+
+                <RadioButton
+                    android:id="@+id/wifi_dialog_rb_loud"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/volume_setting_loud" />
+
+                <RadioButton
+                    android:id="@+id/wifi_dialog_rb_silent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/volume_setting_silent" />
+
+                <RadioButton
+                    android:id="@+id/wifi_dialog_rb_vibrate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="@string/volume_setting_vibrate" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        tools:visibility="visible">
+
+        <Button
+            android:id="@+id/wifi_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:minWidth="0dp"
+            android:text="@string/cancel" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/wifi_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:minWidth="0dp"
+            android:text="@string/back" />
+
+        <Button
+            android:id="@+id/wifi_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:minWidth="0dp"
+            android:text="@string/next" />
+
+        <Button
+            android:id="@+id/wifi_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:minWidth="0dp"
+            android:text="@string/calendar_dialog_save"
+            android:visibility="gone" />
+    </LinearLayout>
+
+
+</LinearLayout>

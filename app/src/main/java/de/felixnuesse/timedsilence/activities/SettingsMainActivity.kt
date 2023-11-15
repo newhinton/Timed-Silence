@@ -2,86 +2,135 @@ package de.felixnuesse.timedsilence.activities
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.NavUtils
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import de.felixnuesse.timedintenttrigger.database.xml.Exporter
 import de.felixnuesse.timedintenttrigger.database.xml.Importer
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
-import de.felixnuesse.timedsilence.handler.ThemeHandler
-import kotlinx.android.synthetic.main.activity_settings_main.*
+import android.widget.AdapterView
 
+import android.widget.AdapterView.OnItemSelectedListener
+import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT
+import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
+import de.felixnuesse.timedsilence.databinding.ActivitySettingsMainBinding
 
 
 class SettingsMainActivity : AppCompatActivity() {
 
+    companion object {
+        private const val TAG = "SettingsMainActivity"
+    }
+
+    private val mDefaultVolumeSettings = ArrayList<String>()
+    private val mDefaultVolumeSettingIDs = ArrayList<Int>()
+    private lateinit var binding: ActivitySettingsMainBinding
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ThemeHandler.setTheme(this, window)
-        ThemeHandler.setSupportActionBarTheme(this, supportActionBar)
+        binding = ActivitySettingsMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        setContentView(R.layout.activity_settings_main)
-
-
 
         //sets the actionbartitle
         title = resources.getString(R.string.actionbar_title_settings)
 
+        mDefaultVolumeSettingIDs.add(TIME_SETTING_SILENT)
+        mDefaultVolumeSettingIDs.add(TIME_SETTING_VIBRATE)
+        mDefaultVolumeSettingIDs.add(TIME_SETTING_LOUD)
+        mDefaultVolumeSettingIDs.add(TIME_SETTING_UNSET)
 
-        volumeSettingsLayout.setOnClickListener {
-            Log.e(Constants.APP_NAME, "SettingsMain: Click volume settings")
+        mDefaultVolumeSettings.add(resources.getString(R.string.volume_setting_silent))
+        mDefaultVolumeSettings.add(resources.getString(R.string.volume_setting_vibrate))
+        mDefaultVolumeSettings.add(resources.getString(R.string.volume_setting_loud))
+        mDefaultVolumeSettings.add(resources.getString(R.string.volume_setting_unset))
+
+
+        binding.volumeSettingsLayout.setOnClickListener {
+            Log.e(TAG, "SettingsMain: Click volume settings")
             openVolumeSettings()
         }
 
-        volumeSettingsImageButton.setOnClickListener {
-            Log.e(Constants.APP_NAME, "SettingsMain: Click volume settings")
+        binding.volumeSettingsImageButton.setOnClickListener {
+            Log.e(TAG, "SettingsMain: Click volume settings")
             openVolumeSettings()
         }
 
 
-        switchHeadsetIgnoreChange.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)
-        switchHeadsetIgnoreChange.setOnCheckedChangeListener { _, checked ->
+        binding.switchHeadsetIgnoreChange.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)
+        binding.switchHeadsetIgnoreChange.setOnCheckedChangeListener { _, checked ->
             writeHeadsetSwitchSetting(this, checked)
         }
 
-        export_button.setOnClickListener {
-            Log.e(Constants.APP_NAME, "SettingsMain: Click export")
+        binding.switchIgnoreAllDay.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS_DEFAULT)
+        binding.switchIgnoreAllDay.setOnCheckedChangeListener { _, checked ->
+            writeIgnoreAlldaySwitchSetting(this, checked)
+        }
+
+        binding.exportButton.setOnClickListener {
+            Log.e(TAG, "SettingsMain: Click export")
             Exporter.export(this)
         }
 
-        import_button.setOnClickListener {
-            Log.e(Constants.APP_NAME, "SettingsMain: Click import")
+        binding.importButton.setOnClickListener {
+            Log.e(TAG, "SettingsMain: Click import")
             Importer.importFile(this)
         }
 
-        setSwitches()
-        switchThemeDark.setOnCheckedChangeListener { _, checked ->
-            if(checked) applyTheme(PrefConstants.PREF_DARKMODE_DARK)
-        }
-
-        switchThemeLight.setOnCheckedChangeListener { _, checked ->
-            if(checked) applyTheme(PrefConstants.PREF_DARKMODE_LIGHT)
-        }
-
-        switchThemeAuto.setOnCheckedChangeListener { _, checked ->
-            if(checked) applyTheme(PrefConstants.PREF_DARKMODE_AUTO)
-        }
-
-        switchPauseNotification.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_PAUSE_NOTIFICATION, PrefConstants.PREF_PAUSE_NOTIFICATION_DEFAULT)
-        switchPauseNotification.setOnCheckedChangeListener { _, checked ->
+        binding.switchPauseNotification.isChecked = SharedPreferencesHandler.getPref(this, PrefConstants.PREF_PAUSE_NOTIFICATION, PrefConstants.PREF_PAUSE_NOTIFICATION_DEFAULT)
+        binding.switchPauseNotification.setOnCheckedChangeListener { _, checked ->
             writePauseNotificationSwitchSetting(this, checked)
         }
+
+        binding.switchAllowTriggerWhileIdle.isChecked = SharedPreferencesHandler.getPref(this, PrefConstants.PREF_RUN_ALARMTRIGGER_WHEN_IDLE, PrefConstants.PREF_RUN_ALARMTRIGGER_WHEN_IDLE_DEFAULT)
+        binding.switchAllowTriggerWhileIdle.setOnCheckedChangeListener { _, checked ->
+            val sharedPreferences: SharedPreferences.Editor? =
+                PreferenceManager.getDefaultSharedPreferences(this).edit()
+            sharedPreferences?.putBoolean(
+                PrefConstants.PREF_RUN_ALARMTRIGGER_WHEN_IDLE,
+                checked
+            )
+            sharedPreferences?.apply()
+        }
+
+        val spinner: Spinner = findViewById(R.id.spinner_defaultVolume)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            this,
+            R.layout.spinner_default_volume, R.id.textview_spinner,
+            mDefaultVolumeSettings
+        )
+        spinner.adapter = arrayAdapter
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
+                SharedPreferencesHandler.setPref(baseContext, TIME_SETTING_DEFAULT_PREFERENCE, mDefaultVolumeSettingIDs[position])
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                SharedPreferencesHandler.setPref(baseContext, TIME_SETTING_DEFAULT_PREFERENCE, TIME_SETTING_DEFAULT)
+            }
+        }
+
+        val selectedDefault = mDefaultVolumeSettingIDs.indexOf(SharedPreferencesHandler.getPref(baseContext, TIME_SETTING_DEFAULT_PREFERENCE, TIME_SETTING_DEFAULT))
+        spinner.setSelection(selectedDefault)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -94,24 +143,29 @@ class SettingsMainActivity : AppCompatActivity() {
         }
     }
 
-    fun openVolumeSettings() {
+    private fun openVolumeSettings() {
         val intent = Intent(this, SettingsVolumeActivity::class.java).apply {}
         startActivity(intent)
     }
 
-    fun writeHeadsetSwitchSetting(context: Context, value: Boolean) {
+    private fun writeHeadsetSwitchSetting(context: Context, value: Boolean) {
        SharedPreferencesHandler.setPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, value)
     }
 
-    fun writeThemeSwitchSetting(context: Context, value: Int) {
+    private fun writeIgnoreAlldaySwitchSetting(context: Context, value: Boolean) {
+        SharedPreferencesHandler.setPref(context, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS, value)
+    }
+
+    private fun writeThemeSwitchSetting(context: Context, value: Int) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_DARKMODE, value)
     }
 
-    fun writePauseNotificationSwitchSetting(context: Context, value: Boolean) {
+    private fun writePauseNotificationSwitchSetting(context: Context, value: Boolean) {
         SharedPreferencesHandler.setPref(context, PrefConstants.PREF_PAUSE_NOTIFICATION, value)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Exporter.onRequestPermissionsResult(this, requestCode, permissions, grantResults)
     }
 
@@ -120,26 +174,4 @@ class SettingsMainActivity : AppCompatActivity() {
         Importer.onActivityResult(this, requestCode, resultCode, data)
     }
 
-    fun applyTheme(mode: Int){
-        writeThemeSwitchSetting(this, mode)
-        ThemeHandler.setTheme(this, window)
-        ThemeHandler.setSupportActionBarTheme(this, supportActionBar)
-        setSwitches()
-    }
-
-    fun setSwitches(){
-        switchThemeDark.isChecked=false
-        switchThemeLight.isChecked=false
-        switchThemeAuto.isChecked=false
-        switchThemeDark.isClickable = true;
-        switchThemeLight.isClickable=true
-        switchThemeAuto.isClickable=true
-
-        when(SharedPreferencesHandler.getPref(this, PrefConstants.PREF_DARKMODE, PrefConstants.PREF_DARKMODE_DEFAULT)) {
-            PrefConstants.PREF_DARKMODE_DARK -> {switchThemeDark.isChecked=true;switchThemeDark.isClickable=false}
-            PrefConstants.PREF_DARKMODE_LIGHT -> {switchThemeLight.isChecked=true;switchThemeLight.isClickable=false}
-            PrefConstants.PREF_DARKMODE_AUTO-> {switchThemeAuto.isChecked=true;switchThemeAuto.isClickable=false}
-            else -> switchThemeLight.isChecked=true
-        }
-    }
 }

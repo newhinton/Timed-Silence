@@ -1,21 +1,56 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+    <style name="BaseStyle" parent="AppTheme">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/transparent</item>
-        <item name="colorControlNormal">@color/colorTextSettingbar</item>
-        <item name="android:navigationBarColor">@color/colorAccentDark</item>
-        <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="android:textColor">@color/secondary_material_light</item>
+
+        <!-- <item name="android:statusBarColor">@color/transparent</item>
+         <item name="colorControlNormal">@color/colorTextSettingbar</item>
+         <item name="android:windowBackground">@color/colorBackground</item>
+         <item name="android:textColor">@color/secondary_material_light</item>-->
+        <item name="android:navigationBarColor">?attr/android:colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+
+
+
+        <!-- Transparent Actionbar -->
+        <item name="android:actionBarStyle">@style/TransparentActionBar</item>
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/TransparentActionBar</item>
     </style>
-    <style name="AppTheme.NoActionBar">
+
+    <style name="BaseStyle.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="BaseStyle.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="rectangularFab">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">25%</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="TransparentActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/transparent</item>
+        <!-- Support library compatibility -->
+        <item name="background">@color/transparent</item>
+    </style>
+
+
+    <style name="AddButtonCard">
+        <item name="cardBackgroundColor">?attr/colorSecondaryContainer</item>
+        <item name="cardCornerRadius">@dimen/cornerRadius</item>
+    </style>
+
+
+    <style name="tertiaryCard">
+        <item name="cardBackgroundColor">?attr/colorTertiaryContainer</item>
+        <item name="cardCornerRadius">@dimen/cornerRadius</item>
+        <item name="android:textColor">?attr/colorOnTertiaryContainer</item>
+        <item name="android:tint">?attr/colorOnTertiaryContainer</item>
+    </style>
 
 </resources>

@@ -3,16 +3,15 @@ package de.felixnuesse.timedsilence.ui;
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_LOUD
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_SILENT
-import de.felixnuesse.timedsilence.Constants.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.databinding.AdapterKeywordListBinding
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import kotlinx.android.synthetic.main.adapter_keyword_list.view.*
 import kotlin.collections.ArrayList
 
 
@@ -45,7 +44,8 @@ class KeywordListAdapter(private var myDataset: ArrayList<KeywordObject>) : Recy
 
         fun removeAt(position: Int) {
                 myDataset.removeAt(position)
-                notifyDataSetChanged()
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, myDataset.size)
         }
 
         fun update(context: Context, co: CalendarObject){
@@ -56,11 +56,9 @@ class KeywordListAdapter(private var myDataset: ArrayList<KeywordObject>) : Recy
         }
 
         // Create new views (invoked by the layout manager)
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KeywordListAdapter.CalendarKeywordViewHolder {
-                // create a new view
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_keyword_list, parent, false)
-                // set the view's size, margins, paddings and layout parameters
-                return CalendarKeywordViewHolder(view)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarKeywordViewHolder {
+                val binding = AdapterKeywordListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return CalendarKeywordViewHolder(binding)
         }
 
         // Replace the contents of a view (invoked by the layout manager)
@@ -69,20 +67,20 @@ class KeywordListAdapter(private var myDataset: ArrayList<KeywordObject>) : Recy
                 // - replace the contents of the view with that element
                 val keywordObject=myDataset.get(position)
 
-                holder.calendarKeywordView.keyword_keyword.text = keywordObject.keyword
+                holder.calendarKeywordView.keywordKeyword.text = keywordObject.keyword
 
-                holder.calendarKeywordView.delete_keyword_element.setOnClickListener {
-                        DatabaseHandler(holder.calendarKeywordView.context).deleteKeyword(keywordObject.id)
+                holder.calendarKeywordView.deleteKeywordElement.setOnClickListener {
+                        DatabaseHandler(holder.calendarKeywordView.root.context).deleteKeyword(keywordObject.id)
                         removeAt(position)
                 }
 
-                var imageID=R.drawable.ic_volume_up_black_24dp
+                var imageID=R.drawable.icon_volume_up
                 when (keywordObject.volume) {
-                        TIME_SETTING_LOUD -> imageID=R.drawable.ic_volume_up_black_24dp
-                        TIME_SETTING_VIBRATE -> imageID=R.drawable.ic_vibration_black_24dp
-                        TIME_SETTING_SILENT -> imageID=R.drawable.ic_volume_off_black_24dp
+                        TIME_SETTING_LOUD -> imageID=R.drawable.icon_volume_up
+                        TIME_SETTING_VIBRATE -> imageID=R.drawable.icon_vibration
+                        TIME_SETTING_SILENT -> imageID=R.drawable.icon_volume_off
                 }
-                holder.calendarKeywordView.keyword_state.setImageDrawable(holder.calendarKeywordView.context.getDrawable(imageID))
+                holder.calendarKeywordView.keywordState.setImageDrawable(holder.calendarKeywordView.root.context.getDrawable(imageID))
         }
 
         // Return the size of your dataset (invoked by the layout manager)
@@ -92,7 +90,7 @@ class KeywordListAdapter(private var myDataset: ArrayList<KeywordObject>) : Recy
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder.
         // Each data item is just a string in this case that is shown in a TextView.
-        class CalendarKeywordViewHolder(val calendarKeywordView: View) : RecyclerView.ViewHolder(calendarKeywordView)
+        class CalendarKeywordViewHolder(val calendarKeywordView: AdapterKeywordListBinding) : RecyclerView.ViewHolder(calendarKeywordView.root)
 
 }
 

@@ -43,23 +43,28 @@ import de.felixnuesse.timedsilence.Constants
 class WifiHandler {
 
     companion object {
+
+        private const val TAG = "WifiHandler"
+
         fun getCurrentSsid(context: Context): String? {
             var ssid: String? = null
             val connManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = connManager.activeNetworkInfo
-            if (networkInfo.isConnected) {
-                Log.d(Constants.APP_NAME, "Wifimanager: networkInfo is connected")
+            if (networkInfo != null) {
+                if (networkInfo.isConnected) {
+                    Log.d(TAG, "Wifimanager: networkInfo is connected")
 
-                val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
-                val connectionInfo = wifiManager.connectionInfo
-                if (connectionInfo != null && connectionInfo.ssid != "") {
-                    ssid = connectionInfo.ssid
+                    val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
+                    val connectionInfo = wifiManager.connectionInfo
+                    if (connectionInfo != null && connectionInfo.ssid != "") {
+                        ssid = connectionInfo.ssid
 
-                    Log.d(Constants.APP_NAME, "Wifimanager: non blank, non null ssid")
+                        Log.d(TAG, "Wifimanager: non blank, non null ssid")
+                    }
                 }
             }
 
-            Log.d(Constants.APP_NAME, "Wifimanager: Queried current ssid: $ssid")
+            Log.d(TAG, "Wifimanager: Queried current ssid: $ssid")
             return ssid
         }
 
@@ -78,7 +83,7 @@ class WifiHandler {
                     // No explanation needed; request the permission
                     ActivityCompat.requestPermissions(activity,
                         arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                        9080);
+                        9080)
 
                     // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                     // app-defined int constant. The callback method gets the

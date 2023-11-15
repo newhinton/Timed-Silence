@@ -1,21 +1,31 @@
 package de.felixnuesse.timedsilence.handler.volume
 
-import android.app.Activity
 import android.content.Context
-import androidx.core.app.NotificationManagerCompat
 import android.util.Log
+import androidx.core.app.NotificationManagerCompat
 import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.Constants.Companion.APP_NAME
-import de.felixnuesse.timedsilence.Utils
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_CALENDAR
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_KEYWORD
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_TIME
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_UNDEFINED
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_WIFI
+import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.handler.calculator.LocationHandler
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
+import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import de.felixnuesse.timedsilence.ui.LocationAccessMissingNotification
+import de.felixnuesse.timedsilence.ui.notifications.LocationAccessMissingNotification
 import java.time.LocalDateTime
 import java.util.*
 import java.time.ZoneId.systemDefault
 import java.time.Instant.ofEpochMilli
+import java.time.LocalDate
+import java.time.LocalTime
+import kotlin.collections.ArrayList
 
 
 /**
@@ -49,53 +59,104 @@ import java.time.Instant.ofEpochMilli
 
 class VolumeCalculator {
 
+    companion object {
+        private const val TAG = "VolumeCalculator"
+    }
 
     private lateinit var cachedTime: LocalDateTime
-    var nonNullContext: Context
-    var volumeHandler: VolumeHandler
-    var dbHandler: DatabaseHandler
-    var cached: Boolean = false
+    private var nonNullContext: Context
+    private var volumeHandler: VolumeHandler
+    private var dbHandler: DatabaseHandler
+    private var mCached: Boolean = false
 
-    lateinit var calendarHandler: CalendarHandler
+    private var calendarHandler: CalendarHandler
 
+    private var changeReason = REASON_UNDEFINED
+    private var changeReasonString = ""
+
+    private var ignoreMusicPlaying = false
 
     constructor(context: Context) {
         nonNullContext = context
-        this.volumeHandler = VolumeHandler()
+        volumeHandler = VolumeHandler(context)
         dbHandler = DatabaseHandler(nonNullContext)
         calendarHandler= CalendarHandler(nonNullContext)
     }
 
     constructor(context: Context, cached: Boolean) {
         nonNullContext = context
-        this.volumeHandler = VolumeHandler()
-        this.cached=cached
+        volumeHandler = VolumeHandler(nonNullContext)
+        mCached=cached
         dbHandler = DatabaseHandler(nonNullContext)
         dbHandler.setCaching(cached)
         calendarHandler= CalendarHandler(nonNullContext)
     }
 
+    fun ignoreMusicPlaying(ignore: Boolean) {
+        ignoreMusicPlaying = ignore
+    }
+
+    fun getChangeList(): ArrayList<VolumeState> {
+
+        val midnight: LocalTime = LocalTime.MIDNIGHT
+        val today: LocalDate = LocalDate.now(systemDefault())
+        val now: LocalTime = LocalTime.now(systemDefault())
+        val nowAsOffset = now.minute+now.hour*60
+        var todayMidnight = LocalDateTime.of(today, midnight)
+
+        var stateList = arrayListOf<VolumeState>()
+
+
+        val timeInitial = todayMidnight.plusMinutes(0).atZone(systemDefault()).toInstant().toEpochMilli()
+        stateList.add(getStateAt(nonNullContext, timeInitial, 0))
+        var lastState = stateList[0]
+
+        for(elem in 0L..1440L){
+
+            val time = todayMidnight.plusMinutes(elem).atZone(systemDefault()).toInstant().toEpochMilli()
+
+            val currentState = getStateAt(nonNullContext, time, elem.toInt())
+            if(currentState.state != lastState.state || elem.toInt() == nowAsOffset) {
+                Log.e(TAG, "($elem) Switch from ${lastState.stateString()} to ${currentState.stateString()} because of ${currentState.getReason()}")
+                if(elem.toInt() == nowAsOffset){
+                    Log.e(TAG, "($elem) Added because it is the current time")
+                }
+
+                lastState.endTime = currentState.startTime-1
+                lastState = currentState
+                stateList.add(currentState)
+            }
+        }
+
+
+        var lastElement = stateList.last()
+        lastElement.endTime = 1440
+
+
+        return stateList
+    }
 
     fun calculateAllAndApply(){
-        Utils.appendLogfile(nonNullContext,"VolCacl", "calculateAllAndApply called.")
-        volumeHandler= VolumeHandler()
+        LogHandler.writeAppLog(nonNullContext,"VolCacl: calculateAllAndApply called.")
+        volumeHandler = VolumeHandler(nonNullContext)
         switchBasedOnWifi()
         switchBasedOnTime()
         switchBasedOnCalendar()
         volumeHandler.applyVolume(nonNullContext)
     }
 
-    fun getState(): Int{
-        return getStateAt(Date().time)
+    fun getStateAt(context: Context, timeInMilliseconds: Long): VolumeState{
+        return getStateAt(context, timeInMilliseconds, 0)
     }
+    fun getStateAt(context: Context, timeInMilliseconds: Long, timeAsOffset: Int): VolumeState{
 
-    fun getStateAt(timeInMilliseconds: Long): Int{
-
-        volumeHandler= VolumeHandler()
+        volumeHandler = VolumeHandler(context)
         switchBasedOnTime(timeInMilliseconds)
         switchBasedOnCalendar(timeInMilliseconds)
-
-        return volumeHandler.getVolume()
+        val state = VolumeState(timeAsOffset, volumeHandler.getVolume(), changeReason, changeReasonString)
+        changeReason = REASON_UNDEFINED
+        changeReasonString = ""
+        return state
 
     }
 
@@ -104,9 +165,14 @@ class VolumeCalculator {
     }
 
     private fun switchBasedOnCalendar(timeInMilliseconds: Long){
-        calendarHandler.enableCaching(cached)
-
         //Log.d(APP_NAME, "VolumeCalculator: Start CalendarCheck")
+
+        //todo: switch to checking of calendar entries and THEN device calendar entries to increase performance
+        // for now we only check it once and abort before getting all calendars.
+        if(calendarHandler.getVolumeCalendars().size==0){
+            return
+        }
+
         for (elem in calendarHandler.readCalendarEvent(timeInMilliseconds)){
 
             val x = ""//calendarHandler.getDate(elem.get("start_date") ?: "0")
@@ -128,9 +194,9 @@ class VolumeCalculator {
                 }
 
                 for (keyword in dbHandler.getKeywords()){
-                    val desc = elem.getOrDefault("description", "").toLowerCase()
-                    val name = elem.getOrDefault("name_of_event", "").toLowerCase()
-                    val key = keyword.keyword.toLowerCase()
+                    val desc = elem.getOrDefault("description", "").toLowerCase(Locale.getDefault())
+                    val name = elem.getOrDefault("name_of_event", "").toLowerCase(Locale.getDefault())
+                    val key = keyword.keyword.toLowerCase(Locale.getDefault())
 
                     //Log.e(APP_NAME, "Check Keyword: $key")
 
@@ -138,12 +204,16 @@ class VolumeCalculator {
                         //Log.e(APP_NAME, "Keyword: $key is in current element $name")
                         if (currentMilliseconds in (starttime + 1) until endtime-1){
                             //Log.e(APP_NAME, "Keyword: $key is in time")
-                            setGenericVolume(keyword.volume)
+                            setGenericVolumeWithReason(keyword.volume, keyword.keyword, REASON_KEYWORD)
+
                         }
                     }
                 }
 
-                var volume = calendarHandler.getCalendarVolumeSetting(elem.getOrDefault("calendar_id","-1").toLong())
+                var calendar_id = elem.getOrDefault("calendar_id","-1").toLong()
+                var calendar_name = calendarHandler.getCalendarName(calendar_id)
+                var eventName =elem.get("name_of_event")
+                var volume = calendarHandler.getCalendarVolumeSetting(calendar_name)
                 //Log.i(APP_NAME, elem.get("name_of_event")+ " | " + volume  + " ")
 
                 if(volume==-1){
@@ -151,7 +221,7 @@ class VolumeCalculator {
                 }else{
                     if (currentMilliseconds in (starttime + 1) until endtime-1){
                         //Log.i(APP_NAME, elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("calendar_id")+" "+volume)
-                        setGenericVolume(volume)
+                        setGenericVolumeWithReason(volume, "$calendar_name ($eventName)", REASON_CALENDAR)
                     }
                 }
             }catch (e:Exception ){
@@ -184,7 +254,6 @@ class VolumeCalculator {
             }
         }
 
-
         //Log.d(APP_NAME, "VolumeCalculator: Start TimeCheck: "+time.toString())
 
         val hour =time.hour
@@ -197,8 +266,8 @@ class VolumeCalculator {
         loop@ for (it in dbHandler.getAllSchedules()) {
             val time = hour * 60 * 60 * 1000 + min * 60 * 1000
 
-            //Log.d(Constants.APP_NAME, "Alarmintent: Current Schedule: ${it.name}")
-            //Log.d(Constants.APP_NAME, "Alarmintent: Current Weekday: $dayLongName ($dayOfWeek)")
+            //Log.d(TAG, "Alarmintent: Current Schedule: ${it.name}")
+            //Log.d(TAG, "Alarmintent: Current Weekday: $dayLongName ($dayOfWeek)")
 
             var isAllowedDay = false
             when (dayOfWeek){
@@ -211,43 +280,50 @@ class VolumeCalculator {
                 1 -> if (it.sun) { isAllowedDay = true }
             }
 
-            //Log.d(Constants.APP_NAME, "Alarmintent: isAllowedDay: $isAllowedDay")
+            //Log.d(TAG, "Alarmintent: isAllowedDay: $isAllowedDay")
             if (!isAllowedDay) {
                 continue@loop
             }
 
             var isInInversedTimeInterval = false
             if (it.time_end <= it.time_start) {
-                //Log.e(Constants.APP_NAME, "Alarmintent: End is before or equal start")
+                //Log.e(TAG, "Alarmintent: End is before or equal start")
 
                 if (time >= it.time_start && time < 24 * 60 * 60 * 1000) {
-                    //Log.d(Constants.APP_NAME, "Alarmintent: Current time is after start time of interval but before 0:00" )
+                    //Log.d(TAG, "Alarmintent: Current time is after start time of interval but before 0:00" )
                     isInInversedTimeInterval = true
                 }
 
                 if (time < it.time_end && time >= 0) {
-                    //Log.d(Constants.APP_NAME, "Alarmintent: Current time is before end time of interval but after 0:00")
+                    //Log.d(TAG, "Alarmintent: Current time is before end time of interval but after 0:00")
                     isInInversedTimeInterval = true
                 }
             }
 
             if (time in it.time_start..it.time_end || isInInversedTimeInterval) {
-                setGenericVolume(it.time_setting)
+                setGenericVolumeWithReason(it.time_setting,it.name, REASON_TIME)
             }
         }
     }
 
+    private fun setGenericVolumeWithReason(volume: Int, reasonString: String, reason: Int){
+        changeReason = reason
+        changeReasonString = reasonString
+        setGenericVolume(volume)
+    }
+
     private fun setGenericVolume(volume: Int){
+        volumeHandler.overrideMusicToZero = ignoreMusicPlaying;
         when (volume) {
-            Constants.TIME_SETTING_LOUD -> {
+            TIME_SETTING_LOUD -> {
                 volumeHandler.setLoud()
                 //Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set loud!")
             }
-            Constants.TIME_SETTING_VIBRATE -> {
+            TIME_SETTING_VIBRATE -> {
                 volumeHandler.setVibrate()
                 //Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set vibrate!")
             }
-            Constants.TIME_SETTING_SILENT -> {
+            TIME_SETTING_SILENT -> {
                 volumeHandler.setSilent()
                 //Log.d(APP_NAME, "Alarmintent: Timecheck ($hour:$min): Set silent!")
             }
@@ -257,7 +333,7 @@ class VolumeCalculator {
     fun switchBasedOnWifi(){
 
         //Log.d(APP_NAME, "VolumeCalculator: Start WifiCheck")
-        //Log.d(Constants.APP_NAME, "WifiFragment: DatabaseResuluts: Size: " + dbHandler.getAllWifiEntries().size)
+        //Log.d(TAG, "WifiFragment: DatabaseResuluts: Size: " + dbHandler.getAllWifiEntries().size)
         if (dbHandler.getAllWifiEntries().size > 0) {
             val isLocationEnabled =
                 LocationHandler.checkIfLocationServiceIsEnabled(
@@ -265,7 +341,7 @@ class VolumeCalculator {
                 )
             if (!isLocationEnabled) {
                 with(NotificationManagerCompat.from(nonNullContext)) {
-                    //Log.d(Constants.APP_NAME, "Alarmintent: Locationstate: Disabled!")
+                    //Log.d(TAG, "Alarmintent: Locationstate: Disabled!")
                     notify(
                         LocationAccessMissingNotification.NOTIFICATION_ID,
                         LocationAccessMissingNotification.buildNotification(nonNullContext)
@@ -279,14 +355,13 @@ class VolumeCalculator {
                 dbHandler.getAllWifiEntries().forEach {
 
                     val ssidit = "\"" + it.ssid + "\""
-                    //Log.d(Constants.APP_NAME, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
+                    //Log.d(TAG, "Alarmintent: WifiCheck: check it: " + ssidit + ": " + it.type)
                     if (currentSSID.equals(ssidit) && it.type == Constants.WIFI_TYPE_CONNECTED) {
-                        setGenericVolume(it.volume)
+                        setGenericVolumeWithReason(it.volume, it.ssid, REASON_WIFI)
                         return
                     }
                 }
             }
         }
     }
-
 }

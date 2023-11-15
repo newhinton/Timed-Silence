@@ -11,4 +11,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="dimension_header_bar">45dp</dimen>
     <dimen name="height_underbar">0dp</dimen>
     <dimen name="schedule_list_font_size">12sp</dimen>
+    <dimen name="cornerRadius">8dp</dimen>
+    <dimen name="cardPadding">4dp</dimen>
+    <dimen name="cardMargin">8dp</dimen>
 </resources>
