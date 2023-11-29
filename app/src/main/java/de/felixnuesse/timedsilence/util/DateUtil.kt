@@ -69,6 +69,10 @@ class DateUtil{
             val end = LocalDateTime.ofInstant(Instant.ofEpochMilli(endMillis), ZoneId.systemDefault())
             return Duration.between(start, end)
         }
+
+        fun getMinOffsetHumanReadable(offset: Int): String {
+            return "${offset/60}H:${offset % 60}M"
+        }
     }
 
 }

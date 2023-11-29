@@ -15,7 +15,6 @@ import de.felixnuesse.timedsilence.handler.calculator.LocationHandler
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
-import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.notifications.LocationAccessMissingNotification
@@ -98,6 +97,8 @@ class VolumeCalculator {
     }
 
     fun getChangeList(): ArrayList<VolumeState> {
+        var start = System.currentTimeMillis()
+        Log.e(TAG, "Starttime: "+start)
 
         val midnight: LocalTime = LocalTime.MIDNIGHT
         val today: LocalDate = LocalDate.now(systemDefault())
@@ -134,6 +135,9 @@ class VolumeCalculator {
         lastElement.endTime = 1440
 
 
+        var end = System.currentTimeMillis()
+        Log.e(TAG, "Endtime: $end")
+        Log.e(TAG, "Diff: ${end-start}ms")
         return stateList
     }
 
@@ -176,58 +180,53 @@ class VolumeCalculator {
 
         for (elem in calendarHandler.readCalendarEvent(timeInMilliseconds)){
 
-            val x = ""//calendarHandler.getDate(elem.get("start_date") ?: "0")
-            val y = ""//calendarHandler.getDate(elem.get("end_date") ?: "0")
-
-
-            //Log.i(APP_NAME, x+ " | " + elem["duration"] + " | " +y+" | "+ elem.get("name_of_event")+ " | recurring:" + elem["recurring"]  + " | "+elem.get("calendar_id"))
-            //Log.i(APP_NAME, x+ " | " + timeInMilliseconds + " | " +y+" | "+ elem["duration"] + " | " + elem.get("name_of_event")+ " | recurring:" + elem["recurring"]  + " | "+elem.get("calendar_id"))
-
             try {
-                val currentMilliseconds =  timeInMilliseconds
-                val starttime = elem.get("start_date")!!.toLong()
 
-                var endtime: Long= 0
-                if(elem.get("end_date")!=null){
-                    endtime = elem.get("end_date")!!.toLong()
-                }else if (elem.get("duration")!=null){
-                    endtime = starttime+elem.get("duration")!!.toLong()
-                }
+                val starttime = elem.mStart
+
+                var endtime = elem.mEnd
 
                 for (keyword in dbHandler.getKeywords()){
-                    val desc = elem.getOrDefault("description", "").toLowerCase(Locale.getDefault())
-                    val name = elem.getOrDefault("name_of_event", "").toLowerCase(Locale.getDefault())
+                    val desc = elem.mDescription.toLowerCase(Locale.getDefault())
+                    val name = elem.mTitle.toLowerCase(Locale.getDefault())
                     val key = keyword.keyword.toLowerCase(Locale.getDefault())
 
-                    //Log.e(APP_NAME, "Check Keyword: $key")
+                    //Log.e(TAG, "Check Keyword: $key")
 
                     if(desc.contains(key) || name.contains(key)){
                         //Log.e(APP_NAME, "Keyword: $key is in current element $name")
-                        if (currentMilliseconds in (starttime + 1) until endtime-1){
+                        if (timeInMilliseconds in (starttime + 1) until endtime - 1) {
                             //Log.e(APP_NAME, "Keyword: $key is in time")
-                            setGenericVolumeWithReason(keyword.volume, keyword.keyword, REASON_KEYWORD)
+                            setGenericVolumeWithReason(
+                                keyword.volume,
+                                keyword.keyword,
+                                REASON_KEYWORD
+                            )
 
                         }
                     }
                 }
 
-                var calendar_id = elem.getOrDefault("calendar_id","-1").toLong()
-                var calendar_name = calendarHandler.getCalendarName(calendar_id)
-                var eventName =elem.get("name_of_event")
-                var volume = calendarHandler.getCalendarVolumeSetting(calendar_name)
-                //Log.i(APP_NAME, elem.get("name_of_event")+ " | " + volume  + " ")
+                var calendarName = calendarHandler.getCalendarName(elem.mCalendarID.toLong())
+                var eventName = elem.mTitle
+                var volume = calendarHandler.getCalendarVolumeSetting(calendarName)
+                //Log.i(TAG, elem.mTitle+ " | " + volume  + " ")
 
                 if(volume==-1){
                     continue
                 }else{
-                    if (currentMilliseconds in (starttime + 1) until endtime-1){
-                        //Log.i(APP_NAME, elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("calendar_id")+" "+volume)
-                        setGenericVolumeWithReason(volume, "$calendar_name ($eventName)", REASON_CALENDAR)
+                    //Log.i(TAG, "${DateUtil.getDate(timeInMilliseconds)}: ${elem.mTitle} ${starttime/10000} ${(timeInMilliseconds-starttime)/10000} ${(endtime-starttime)/10000} ${elem.mCalendarID} $volume")
+                    if (timeInMilliseconds in (starttime + 1) until endtime - 1) {
+                        setGenericVolumeWithReason(
+                            volume,
+                            "$calendarName ($eventName)",
+                            REASON_CALENDAR
+                        )
                     }
                 }
             }catch (e:Exception ){
                 e.printStackTrace()
-                System.err.println("ERROR: "+elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("description")+" ")
+                System.err.println("ERROR: ${elem.mTitle} ${elem.mStart} ${elem.mEnd} ${elem.mDescription}")
             }
 
         }
