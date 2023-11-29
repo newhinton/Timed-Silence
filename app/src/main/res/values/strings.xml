@@ -134,4 +134,7 @@
     <string name="intro_slide_done_description">You are now ready to start! Enjoy your interruption free time!</string>
     <string name="state_checks_are_paused">You paused this app, we currently do not control your volume!</string>
     <string name="calculationg_volume_loading_indicator">Calculating Volume…</string>
+    <string name="ignore_tentative_events">Ignore Tentative Events</string>
+    <string name="ignore_free_events">Ignore Free Events</string>
+    <string name="ignore_cancelled_events">Ignore Cancelled Events</string>
 </resources>

@@ -67,7 +67,7 @@
                 android:src="@drawable/icon_chevron_right" />
         </LinearLayout>
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchHeadsetIgnoreChange"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -102,42 +102,74 @@
             app:layout_constraintStart_toStartOf="@+id/textView7"
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-        <TextView
-            android:id="@+id/label_calendar"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/layoutCalendar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/main_tab_calendar"
-            android:textSize="20sp"
-            android:textStyle="bold|italic"
-            app:layout_constraintStart_toStartOf="@+id/switchIgnoreAllDay"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_defaultVolume" />
+            android:orientation="vertical"
 
-        <ImageView
-            android:id="@+id/divider_coalendar"
-            android:layout_width="0dp"
-            android:layout_height="2dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:scaleType="fitXY"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/label_calendar"
-            app:srcCompat="@drawable/shape_divider" />
+            app:layout_constraintTop_toBottomOf="@+id/spinner_defaultVolume"
+            >
 
-        <Switch
-            android:id="@+id/switchIgnoreAllDay"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_settings"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="@dimen/margin_settings"
-            android:minHeight="48dp"
-            android:text="@string/ignore_all_day"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/label_calendar" />
+            <TextView
+                android:id="@+id/label_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/main_tab_calendar"
+                android:textSize="20sp"
+                android:textStyle="bold|italic" />
+
+            <ImageView
+                android:id="@+id/divider_coalendar"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/shape_divider" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchIgnoreAllDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_settings"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/margin_settings"
+                android:minHeight="48dp"
+                android:text="@string/ignore_all_day" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchIgnoreTentative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_settings"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/margin_settings"
+                android:minHeight="48dp"
+                android:text="@string/ignore_tentative_events" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchIgnoreCancelled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_settings"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/margin_settings"
+                android:minHeight="48dp"
+                android:text="@string/ignore_cancelled_events" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchIgnoreFree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_settings"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/margin_settings"
+                android:minHeight="48dp"
+                android:text="@string/ignore_free_events" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/label_settings"
@@ -149,7 +181,7 @@
             android:textSize="20sp"
             android:textStyle="bold|italic"
             app:layout_constraintStart_toStartOf="@+id/layout_export"
-            app:layout_constraintTop_toBottomOf="@+id/switchIgnoreAllDay" />
+            app:layout_constraintTop_toBottomOf="@+id/layoutCalendar" />
 
         <ImageView
             android:id="@+id/divider_settings"
@@ -244,7 +276,7 @@
                 android:src="@drawable/icon_file_upload" />
         </LinearLayout>
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchAllowTriggerWhileIdle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -258,7 +290,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_import" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchPauseNotification"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

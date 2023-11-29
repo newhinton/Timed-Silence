@@ -20,6 +20,14 @@ import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
+import android.provider.CalendarContract.Events.STATUS
+import android.provider.CalendarContract.Events.AVAILABILITY
+
+
+import android.provider.CalendarContract.Events.STATUS_TENTATIVE
+import android.provider.CalendarContract.Events.STATUS_CANCELED
+import android.provider.CalendarContract.Events.AVAILABILITY_FREE
+
 class DeviceCalendar(private var mContext: Context) {
 
     companion object {
@@ -37,6 +45,11 @@ class DeviceCalendar(private var mContext: Context) {
     private var eventCache = ArrayList<Map<String, String>>()
 
     private var validEventCacheButEmptyCache = false
+
+    private var mIgnoreAllDayEvents = SharedPreferencesHandler.getPref(mContext, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS_DEFAULT)
+    private var mIgnoreTentativeEvents = SharedPreferencesHandler.getPref(mContext, PrefConstants.PREF_IGNORE_TENTATIVE_EVENTS, PrefConstants.PREF_IGNORE_TENTATIVE_EVENTS_DEFAULT)
+    private var mIgnoreCancelledEvents = SharedPreferencesHandler.getPref(mContext, PrefConstants.PREF_IGNORE_CANCELLED_EVENTS, PrefConstants.PREF_IGNORE_CANCELLED_EVENTS_DEFAULT)
+    private var mIgnoreFreeEvents = SharedPreferencesHandler.getPref(mContext, PrefConstants.PREF_IGNORE_FREE_EVENTS, PrefConstants.PREF_IGNORE_FREE_EVENTS_DEFAULT)
 
 
     fun getCalendars(): HashMap<String, CalendarObject> {
@@ -115,7 +128,9 @@ class DeviceCalendar(private var mContext: Context) {
             CalendarContract.Events.DTEND,
             CalendarContract.Events.ALL_DAY,
             CalendarContract.Events.DURATION,
-            CalendarContract.Events.EVENT_LOCATION
+            CalendarContract.Events.EVENT_LOCATION,
+            STATUS,
+            AVAILABILITY
         )
 
         var cursor = mContext.contentResolver
@@ -148,6 +163,8 @@ class DeviceCalendar(private var mContext: Context) {
             map.put("end_date",cursor.getString(4))
             map.put("all_day",cursor.getString(5))
             map.put("duration",cursor.getString(6))
+            map.put(STATUS, cursor.getString(8))
+            map.put(AVAILABILITY, cursor.getString(9))
             map.put("recurring","false")
             //retval.add(map)
             cursor.moveToNext()
@@ -208,6 +225,9 @@ class DeviceCalendar(private var mContext: Context) {
             map["end_date"] = cursor?.getString(4) ?: map["start_date"] as String
             map["all_day"] = cursor.getString(5)
 
+            map[STATUS] = cursor.getInt(8).toString()
+            map[AVAILABILITY] = cursor.getInt(9).toString()
+
             var recurring = cursor.getString(6) ?: ""
 
             //Log.d(APP_NAME, "CalendarHandler: RecurringPattern: "+recurring)
@@ -233,13 +253,31 @@ class DeviceCalendar(private var mContext: Context) {
                 map["recurring"] = "true"
             }
 
-            val isAlldayEvent = map["all_day"]?.toInt() == 1
-            Log.d(TAG, "Is ${map["name_of_event"]} all Day: $isAlldayEvent")
-            if(SharedPreferencesHandler.getPref(mContext, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS_DEFAULT)){
-                if(!isAlldayEvent){
-                    retval.add(map)
-                }
-            }else{
+
+            var isIgnoredEventType = false
+
+            if(map["all_day"]?.toInt() == 1 && mIgnoreAllDayEvents){
+                Log.d(TAG, "Event ${map["name_of_event"]} is all Day.")
+                isIgnoredEventType = true
+            }
+
+            if(map[STATUS]?.toInt() == STATUS_TENTATIVE && mIgnoreTentativeEvents){
+                Log.d(TAG, "Event ${map["name_of_event"]} is Tentative.")
+                isIgnoredEventType = true
+            }
+
+            val bc2workaround = map["description"]?.contains("BC2-Status: Cancelled") ?: false
+            if((map[STATUS]?.toInt() == STATUS_CANCELED || bc2workaround) && mIgnoreCancelledEvents){
+                Log.d(TAG, "Event ${map["name_of_event"]} is Cancelled.")
+                isIgnoredEventType = true
+            }
+
+            if(map[AVAILABILITY]?.toInt() == AVAILABILITY_FREE && mIgnoreFreeEvents){
+                Log.d(TAG, "Event ${map["name_of_event"]} is Free.")
+                isIgnoredEventType = true
+            }
+
+            if(!isIgnoredEventType){
                 retval.add(map)
             }
 

@@ -81,7 +81,22 @@ class SettingsMainActivity : AppCompatActivity() {
 
         binding.switchIgnoreAllDay.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS_DEFAULT)
         binding.switchIgnoreAllDay.setOnCheckedChangeListener { _, checked ->
-            writeIgnoreAlldaySwitchSetting(this, checked)
+            writeSwitchPreference(this, checked, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS)
+        }
+
+        binding.switchIgnoreTentative.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_IGNORE_TENTATIVE_EVENTS, PrefConstants.PREF_IGNORE_TENTATIVE_EVENTS_DEFAULT)
+        binding.switchIgnoreTentative.setOnCheckedChangeListener { _, checked ->
+            writeSwitchPreference(this, checked, PrefConstants.PREF_IGNORE_TENTATIVE_EVENTS)
+        }
+
+        binding.switchIgnoreCancelled.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_IGNORE_CANCELLED_EVENTS, PrefConstants.PREF_IGNORE_CANCELLED_EVENTS_DEFAULT)
+        binding.switchIgnoreCancelled.setOnCheckedChangeListener { _, checked ->
+            writeSwitchPreference(this, checked, PrefConstants.PREF_IGNORE_CANCELLED_EVENTS)
+        }
+
+        binding.switchIgnoreFree.isChecked=SharedPreferencesHandler.getPref(this, PrefConstants.PREF_IGNORE_FREE_EVENTS, PrefConstants.PREF_IGNORE_FREE_EVENTS_DEFAULT)
+        binding.switchIgnoreFree.setOnCheckedChangeListener { _, checked ->
+            writeSwitchPreference(this, checked, PrefConstants.PREF_IGNORE_FREE_EVENTS)
         }
 
         binding.exportButton.setOnClickListener {
@@ -152,12 +167,8 @@ class SettingsMainActivity : AppCompatActivity() {
        SharedPreferencesHandler.setPref(context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, value)
     }
 
-    private fun writeIgnoreAlldaySwitchSetting(context: Context, value: Boolean) {
-        SharedPreferencesHandler.setPref(context, PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS, value)
-    }
-
-    private fun writeThemeSwitchSetting(context: Context, value: Int) {
-        SharedPreferencesHandler.setPref(context, PrefConstants.PREF_DARKMODE, value)
+    private fun writeSwitchPreference(context: Context, value: Boolean, preference: String) {
+        SharedPreferencesHandler.setPref(context, preference, value)
     }
 
     private fun writePauseNotificationSwitchSetting(context: Context, value: Boolean) {
