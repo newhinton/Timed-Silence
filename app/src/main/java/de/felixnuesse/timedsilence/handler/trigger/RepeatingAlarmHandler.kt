@@ -67,15 +67,15 @@ class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
             AlarmManager.RTC_WAKEUP,
             System.currentTimeMillis() + 100,
             (1000 * 60 * intervalInMinutes).toLong(),
-            createBroadcast()
+            createBroadcast(0L)
         )
     }
 
     override fun removeTimecheck() {
 
         val alarms = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarms.cancel(createBroadcast())
-        createBroadcast().cancel()
+        alarms.cancel(createBroadcast(0L))
+        createBroadcast(0L).cancel()
 
         if (!checkIfNextAlarmExists()) {
             Log.d(TAG, "AlarmHandler: Recurring alarm canceled")
@@ -85,7 +85,7 @@ class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
 
     }
 
-    override fun createBroadcast(flag: Int): PendingIntent {
+    override fun createBroadcast(flag: Int, targettime: Long): PendingIntent {
 
         val broadcastIntent = Intent(mContext, AlarmBroadcastReceiver::class.java)
         broadcastIntent.putExtra(
@@ -101,7 +101,7 @@ class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
 
     }
 
-    override fun createBroadcast(): PendingIntent {
+    override fun createBroadcast(targettime: Long): PendingIntent {
 
         val broadcastIntent = Intent(mContext, AlarmBroadcastReceiver::class.java)
         broadcastIntent.putExtra(
@@ -111,6 +111,10 @@ class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
         broadcastIntent.putExtra(
             Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA,
             Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW
+        )
+        broadcastIntent.putExtra(
+            Constants.BROADCAST_INTENT_ACTION_TARGET_TIME,
+            targettime
         )
 
         // The Pending Intent to pass in AlarmManager

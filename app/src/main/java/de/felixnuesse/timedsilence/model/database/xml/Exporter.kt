@@ -21,7 +21,7 @@ import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_VOLUME_NOTIFICAT
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_VOLUME_RINGER
 import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.Utils
+import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -138,7 +138,7 @@ class Exporter {
                 return
             }
 
-            val currentDateandTime = Utils.getDate(Date().time, "yyyyMMdd-HHmmss")
+            val currentDateandTime = DateUtil.getDate(Date().time, "yyyyMMdd-HHmmss")
             val filename = "${a.getString(R.string.app_name)}_${currentDateandTime}.xml"
 
             val path = File(Environment.getExternalStorageDirectory().absolutePath + "/${a.getString(R.string.app_name)}")

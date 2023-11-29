@@ -6,10 +6,9 @@ import android.net.Uri
 import android.provider.CalendarContract
 import android.text.format.DateUtils
 import android.util.Log
-import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.Utils
+import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.permissions.CalendarAccess
@@ -98,7 +97,7 @@ class DeviceCalendar(private var mContext: Context) {
         }
 
         validEventCacheButEmptyCache = false
-        Log.e(TAG, "CalendarHandler: CurrentTime in MS: "+ Utils.getDate(timeInMilliseconds.toString()))
+        Log.e(TAG, "CalendarHandler: CurrentTime in MS: "+ DateUtil.getDate(timeInMilliseconds.toString()))
         val startTime = Calendar.getInstance()
 
         startTime.set(Calendar.HOUR_OF_DAY, 0)

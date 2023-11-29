@@ -11,7 +11,7 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_RUN_ALARMTRIGGER_WHEN_IDLE
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.Utils
+import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
@@ -59,8 +59,8 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
 
     override fun removeTimecheck() {
         val alarms = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        createBroadcast()?.let { alarms.cancel(it) }
-        createBroadcast()?.cancel()
+        createBroadcast(0L)?.let { alarms.cancel(it) }
+        createBroadcast(0L)?.cancel()
 
         if(!checkIfNextAlarmExists()){
             Log.d(TAG, "AlarmHandler: Recurring alarm canceled")
@@ -69,17 +69,15 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
         Log.e(TAG, "AlarmHandler: Error canceling recurring alarm!")
     }
 
-    override fun createBroadcast(): PendingIntent? {
-        return createBroadcast(FLAG_IMMUTABLE)
+    override fun createBroadcast(targettime: Long): PendingIntent? {
+        return createBroadcast(FLAG_IMMUTABLE, targettime)
     }
 
-    override fun createBroadcast(flag: Int): PendingIntent? {
+    // Todo: Check if this can be moved to the interface class, since it basically duplicates the repeating one.
+    override fun createBroadcast(flag: Int, targettime: Long): PendingIntent? {
 
         val broadcastIntent = Intent(mContext, AlarmBroadcastReceiver::class.java)
-        broadcastIntent.putExtra(
-            Constants.BROADCAST_INTENT_ACTION,
-            Constants.BROADCAST_INTENT_ACTION_DELAY
-        )
+
         broadcastIntent.putExtra(
             Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA,
             Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW
@@ -87,6 +85,10 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
         broadcastIntent.putExtra(
             Constants.BROADCAST_INTENT_ACTION,
             Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME
+        )
+        broadcastIntent.putExtra(
+            Constants.BROADCAST_INTENT_ACTION_TARGET_TIME,
+            targettime
         )
 
         // The Pending Intent to pass in AlarmManager
@@ -106,12 +108,12 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
             }
         }
         Log.e(TAG, "Calculated time $calculatedChecktime")
-        Log.e(TAG, "Calculated time ${Utils.getDate(calculatedChecktime)}")
+        Log.e(TAG, "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
 
-        LogHandler.writeTargeted(mContext, "$now,$calculatedChecktime,${Utils.getDate(now)},${Utils.getDate(calculatedChecktime)}")
+        LogHandler.writeLog(mContext, "TargetedAlarmHandler", "Create new Alarm", "$calculatedChecktime,${DateUtil.getDate(calculatedChecktime)}")
 
         val am = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pi: PendingIntent? = createBroadcast()
+        val pi: PendingIntent? = createBroadcast(calculatedChecktime)
 
         if(pi == null) {
             ErrorNotifications().showError(mContext, mContext.getString(R.string.notifications_error_title),  mContext.getString(R.string.notifications_error_description))

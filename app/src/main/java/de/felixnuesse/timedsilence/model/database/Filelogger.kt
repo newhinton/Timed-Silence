@@ -8,19 +8,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import de.felixnuesse.timedintenttrigger.database.xml.Importer
-import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.Utils
-import org.w3c.dom.Document
-import org.w3c.dom.Element
+import de.felixnuesse.timedsilence.util.DateUtil
 import java.io.*
 import java.util.*
-import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.parsers.ParserConfigurationException
 import javax.xml.transform.TransformerException
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.dom.DOMSource
-import javax.xml.transform.stream.StreamResult
 
 /**
  * Copyright (C) 2020  Felix Nüsse
@@ -49,6 +42,7 @@ import javax.xml.transform.stream.StreamResult
  *
  *
  */
+@Deprecated("Use LogHandler")
 class Filelogger {
 
     /*
@@ -69,6 +63,7 @@ class Filelogger {
         private const val TAG = "Filelogger"
         private const val PERMISSION_WRITE_EXTERNAL = 443
 
+        @Deprecated("Use LogHandler")
         fun log(a: Activity, content: String) {
             try {
                 Log.e(TAG, "Filelogger: ")
@@ -118,7 +113,7 @@ class Filelogger {
                 return
             }
 
-            val currentDateandTime = Utils.getDate(Date().time)
+            val currentDateandTime = DateUtil.getDate(Date().time)
 
             val filename = "${a.getString(R.string.app_name)}_$currentDateandTime.xml"
 

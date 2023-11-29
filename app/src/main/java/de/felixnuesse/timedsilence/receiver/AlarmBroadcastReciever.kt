@@ -8,6 +8,7 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
+import de.felixnuesse.timedsilence.util.DateUtil
 import java.util.*
 
 class AlarmBroadcastReceiver : BroadcastReceiver() {
@@ -16,25 +17,44 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         private const val TAG = "AlarmBroadcastReceiver"
     }
 
-    override fun onReceive(context: Context?, intent: Intent?) {
+    override fun onReceive(context: Context, intent: Intent?) {
 
-        //todo: fix this mess
-        if (context != null) {
-            LogHandler.writeAppLog(context,"Alarmintent: Recieved Alarmintent")
+        val targetTime = intent?.getLongExtra(Constants.BROADCAST_INTENT_ACTION_TARGET_TIME, 0L)?: 0L
+        // Precalculate, because writing to disk actually takes time. (In testing, 15ms)
+        val diff = System.currentTimeMillis()-targetTime
+        val duration = DateUtil.getDelta(targetTime, System.currentTimeMillis())
+
+        LogHandler.writeLog(context,
+            "AlarmBroadcastReceiver",
+            "Alarm Recieved",
+            "Was targeted at: $targetTime"
+        )
+
+        LogHandler.writeLog(context,
+            "AlarmBroadcastReceiver",
+            "Alarm Recieved",
+            "Timediff: $duration ($diff ms)"
+        )
+
+        if(diff <= 0) {
+            LogHandler.writeLog(context,
+                "AlarmBroadcastReceiver",
+                "Alarm Recieved",
+                "Danger! We are before the scheduled time! (${diff*-1} ms before)"
+            )
         }
-        val current = System.currentTimeMillis()
-        val date = Date(current)
-        val dateFormat = android.text.format.DateFormat.getDateFormat(context)
-        val currentformatted = dateFormat.format(date)
 
-        Log.e(TAG, "Alarmintent: Recieved Alarmintent at: $currentformatted")
+
+        // Todo: fix this mess
+
+        Log.e(TAG, "Alarmintent: Recieved Alarmintent at: ${DateUtil.getDate()}")
 
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)) {
             Log.d(TAG, "Alarmintent: Content is to \"check the time\"")
 
             val sharedPref = context?.getSharedPreferences("test", Context.MODE_PRIVATE)
             with(sharedPref!!.edit()) {
-                putLong("last_ExecTime", current)
+                putLong("last_ExecTime", System.currentTimeMillis())
                 apply()
             }
 
@@ -47,11 +67,11 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_DELAY)) {
 
             val extra = intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA)
-            Log.d(TAG, "Alarmintent: Content is to \"" + extra + "\"")
+            Log.d(TAG, "Alarmintent: Content is to \"$extra\"")
 
             if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
                 Log.d(TAG, "Alarmintent: Content is to \"Restart recurring alarms\"")
-                Trigger(context!!).createTimecheck()
+                Trigger(context).createTimecheck()
             }
 
         }
@@ -60,14 +80,13 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
     @Deprecated("This is just a tiny useless wrapper. Please use 'VolumeCalculator(context).calculateAllAndApply()' directly")
     fun switchVolumeMode(context: Context?) {
 
-        val nonNullContext = context
         // copy is guaranteed to be to non-nullable whatever you do
-        if (nonNullContext == null) {
+        if (context == null) {
             Log.e(TAG, "Alarmintent: Error! Context invalid! Stopping!")
             return
         }
 
-        VolumeCalculator(nonNullContext).calculateAllAndApply()
+        VolumeCalculator(context).calculateAllAndApply()
     }
 
 

@@ -81,6 +81,7 @@ class VolumeCalculator {
         volumeHandler = VolumeHandler(context)
         dbHandler = DatabaseHandler(nonNullContext)
         calendarHandler= CalendarHandler(nonNullContext)
+        LogHandler.writeLog(nonNullContext,"VolumeCalculator", "instantiate","VolumeCalculator was now instantiated")
     }
 
     constructor(context: Context, cached: Boolean) {
@@ -137,7 +138,7 @@ class VolumeCalculator {
     }
 
     fun calculateAllAndApply(){
-        LogHandler.writeAppLog(nonNullContext,"VolCacl: calculateAllAndApply called.")
+        LogHandler.writeLog(nonNullContext,"VolumeCalculator", "calculateAllAndApply called","Start Calculating")
         volumeHandler = VolumeHandler(nonNullContext)
         switchBasedOnWifi()
         switchBasedOnTime()

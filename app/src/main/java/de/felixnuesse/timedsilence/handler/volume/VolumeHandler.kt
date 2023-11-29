@@ -32,7 +32,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioManager
 import android.util.Log
-import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT
 import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
@@ -40,7 +39,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.Utils
+import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
@@ -297,25 +296,24 @@ class VolumeHandler(mContext: Context) {
         }
 
         Log.d(TAG, "VolumeHandler: VolumeSetting: $volumeSetting")
-        var now = System.currentTimeMillis();
-        var nowF = Utils.getDate(now)
+        LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","$TIME_SETTING_SILENT")
 
         when (getVolume()) {
             TIME_SETTING_SILENT -> {
                 applySilent(context)
-                LogHandler.writeVolumeManager(context,"$now,$nowF,$TIME_SETTING_SILENT")
+                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","$TIME_SETTING_SILENT")
             }
             TIME_SETTING_VIBRATE -> {
                 applyVibrate(context)
-                LogHandler.writeVolumeManager(context,"$now,$nowF,$TIME_SETTING_VIBRATE")
+                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","$TIME_SETTING_VIBRATE")
             }
             TIME_SETTING_LOUD -> {
                 applyLoud(context)
-                LogHandler.writeVolumeManager(context,"$now,$nowF,$TIME_SETTING_LOUD")
+                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","$TIME_SETTING_LOUD")
             }
             else -> {
-                LogHandler.writeVolumeManager(context,"$now,$nowF,else")
                 Log.d(TAG, "VolumeHandler: Apply: Nothing, because no volume was selecteds!")
+                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","Nothing, because no volume was selected!")
             }
         }
     }
