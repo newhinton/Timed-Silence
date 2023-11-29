@@ -41,6 +41,7 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_SS
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_TABLE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_TYPE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_VOL_MODE
+import java.time.DayOfWeek
 
 
 /**
@@ -145,23 +146,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         val db = readableDatabase
 
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        val projection = arrayOf<String>(
-            SCHEDULE_ID,
-            SCHEDULE_NAME,
-            SCHEDULE_START,
-            SCHEDULE_END,
-            SCHEDULE_SETTING,
-            SCHEDULE_MON,
-            SCHEDULE_TUE,
-            SCHEDULE_WED,
-            SCHEDULE_THU,
-            SCHEDULE_FRI,
-            SCHEDULE_SAT,
-            SCHEDULE_SUN
-        )
-
         // Filter results WHERE "title" = 'My Title'
         val selection = ""
         val selectionArgs = arrayOf<String>()
@@ -171,7 +155,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         val cursor = db.query(
             SCHEDULE_TABLE, // The table to query
-            projection, // The array of columns to return (pass null to get all)
+            getScheduleProjection(), // The array of columns to return (pass null to get all)
             selection, // The columns for the WHERE clause
             selectionArgs, // don't group the rows
             null, null, // don't filter by row groups
@@ -204,6 +188,14 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         return cachedSchedules
     }
 
+    fun getSchedulesForWeekday(weekday: DayOfWeek): ArrayList<ScheduleObject> {
+        if (cachedSchedules.cacheInitialized && cachingEnabled) {
+            return cachedSchedules.filter { it.isValidOnWeekday(weekday) } as ArrayList<ScheduleObject>
+        }
+        return getAllSchedules().filter { it.isValidOnWeekday(weekday) } as ArrayList<ScheduleObject>
+    }
+
+
     fun intToBool(value: Int): Boolean{
         if(value==0){
             return false
@@ -215,21 +207,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     fun getScheduleByID(id: Long): ScheduleObject {
         val db = readableDatabase
 
-        val projection = arrayOf<String>(
-            SCHEDULE_ID,
-            SCHEDULE_NAME,
-            SCHEDULE_START,
-            SCHEDULE_END,
-            SCHEDULE_SETTING,
-            SCHEDULE_MON,
-            SCHEDULE_TUE,
-            SCHEDULE_WED,
-            SCHEDULE_THU,
-            SCHEDULE_FRI,
-            SCHEDULE_SAT,
-            SCHEDULE_SUN
-        )
-
         val selection = SCHEDULE_ID + " = ?"
         val selectionArgs = arrayOf(id.toString())
 
@@ -238,7 +215,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         val cursor = db.query(
             SCHEDULE_TABLE, // The table to query
-            projection, // The array of columns to return (pass null to get all)
+            getScheduleProjection(), // The array of columns to return (pass null to get all)
             selection, // The columns for the WHERE clause
             selectionArgs, // don't group the rows
             null, null, // don't filter by row groups
@@ -270,6 +247,23 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         return results.get(0)
     }
 
+    private fun getScheduleProjection(): Array<String> {
+        return arrayOf(
+            SCHEDULE_ID,
+            SCHEDULE_NAME,
+            SCHEDULE_START,
+            SCHEDULE_END,
+            SCHEDULE_SETTING,
+            SCHEDULE_MON,
+            SCHEDULE_TUE,
+            SCHEDULE_WED,
+            SCHEDULE_THU,
+            SCHEDULE_FRI,
+            SCHEDULE_SAT,
+            SCHEDULE_SUN
+        )
+    }
+
     /**
      * Deletes ScheduleObject with the given id
      * @param id Switch to delete
@@ -299,22 +293,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
      */
     fun createScheduleEntry(so: ScheduleObject): ScheduleObject {
         val db = writableDatabase
-
-        val projection = arrayOf<String>(
-            SCHEDULE_ID,
-            SCHEDULE_NAME,
-            SCHEDULE_START,
-            SCHEDULE_END,
-            SCHEDULE_SETTING,
-            SCHEDULE_MON,
-            SCHEDULE_TUE,
-            SCHEDULE_WED,
-            SCHEDULE_THU,
-            SCHEDULE_FRI,
-            SCHEDULE_SAT,
-            SCHEDULE_SUN
-        )
-
 
         // Create a new map of values, where column names are the keys
         val values = ContentValues()

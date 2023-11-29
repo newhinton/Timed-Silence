@@ -116,7 +116,7 @@ class DeviceCalendar(private var mContext: Context) {
         mCachingEnabled=caching
     }
 
-    fun readCalendarEvent(
+    fun getEventsForDay(
         timeInMilliseconds: Long
     ): ArrayList<DeviceCalendarEventModel> {
         if (mEventList.cacheInitialized && mCachingEnabled) {

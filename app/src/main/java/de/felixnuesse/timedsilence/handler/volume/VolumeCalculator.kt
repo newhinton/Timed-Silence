@@ -18,12 +18,14 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.notifications.LocationAccessMissingNotification
+import de.felixnuesse.timedsilence.util.DateUtil
 import java.time.LocalDateTime
 import java.util.*
 import java.time.ZoneId.systemDefault
 import java.time.Instant.ofEpochMilli
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
@@ -102,7 +104,7 @@ class VolumeCalculator {
 
         val midnight: LocalTime = LocalTime.MIDNIGHT
         val today: LocalDate = LocalDate.now(systemDefault())
-        val now: LocalTime = LocalTime.now(systemDefault())
+        val now: LocalDateTime = LocalDateTime.now(systemDefault())
         val nowAsOffset = now.minute+now.hour*60
         var todayMidnight = LocalDateTime.of(today, midnight)
 
@@ -113,8 +115,26 @@ class VolumeCalculator {
         stateList.add(getStateAt(nonNullContext, timeInitial, 0))
         var lastState = stateList[0]
 
-        for(elem in 0L..1440L){
 
+        var possibleChangeList: ArrayList<Long> = ArrayList()
+
+        // we dont talk about this monstrosity
+        possibleChangeList.add(now.atZone(systemDefault()).toInstant().toEpochMilli()-todayMidnight.atZone(systemDefault()).toInstant().toEpochMilli())
+
+        calendarHandler.getFilteredEventsForDay(System.currentTimeMillis()).forEach {
+            Log.e(TAG, ""+it.mStart)
+            possibleChangeList.add(it.mStart-todayMidnight.atZone(systemDefault()).toInstant().toEpochMilli())
+            possibleChangeList.add(it.mEnd-todayMidnight.atZone(systemDefault()).toInstant().toEpochMilli())
+        }
+        dbHandler.getSchedulesForWeekday(now.dayOfWeek).forEach {
+            possibleChangeList.add(it.time_start)
+            possibleChangeList.add(it.time_end)
+        }
+
+        possibleChangeList.sort()
+        for(possibleChange in possibleChangeList){
+
+            var elem = TimeUnit.MILLISECONDS.toMinutes(possibleChange)
             val time = todayMidnight.plusMinutes(elem).atZone(systemDefault()).toInstant().toEpochMilli()
 
             val currentState = getStateAt(nonNullContext, time, elem.toInt())
@@ -129,7 +149,6 @@ class VolumeCalculator {
                 stateList.add(currentState)
             }
         }
-
 
         var lastElement = stateList.last()
         lastElement.endTime = 1440
@@ -153,7 +172,7 @@ class VolumeCalculator {
     fun getStateAt(context: Context, timeInMilliseconds: Long): VolumeState{
         return getStateAt(context, timeInMilliseconds, 0)
     }
-    fun getStateAt(context: Context, timeInMilliseconds: Long, timeAsOffset: Int): VolumeState{
+    fun getStateAt(context: Context, timeInMilliseconds: Long, timeAsOffset: Int): VolumeState {
 
         volumeHandler = VolumeHandler(context)
         switchBasedOnTime(timeInMilliseconds)
@@ -178,7 +197,7 @@ class VolumeCalculator {
             return
         }
 
-        for (elem in calendarHandler.readCalendarEvent(timeInMilliseconds)){
+        for (elem in calendarHandler.getFilteredEventsForDay(timeInMilliseconds)){
 
             try {
 
@@ -195,7 +214,7 @@ class VolumeCalculator {
 
                     if(desc.contains(key) || name.contains(key)){
                         //Log.e(APP_NAME, "Keyword: $key is in current element $name")
-                        if (timeInMilliseconds in (starttime + 1) until endtime - 1) {
+                        if (timeInMilliseconds in (starttime) until endtime) {
                             //Log.e(APP_NAME, "Keyword: $key is in time")
                             setGenericVolumeWithReason(
                                 keyword.volume,
@@ -216,7 +235,7 @@ class VolumeCalculator {
                     continue
                 }else{
                     //Log.i(TAG, "${DateUtil.getDate(timeInMilliseconds)}: ${elem.mTitle} ${starttime/10000} ${(timeInMilliseconds-starttime)/10000} ${(endtime-starttime)/10000} ${elem.mCalendarID} $volume")
-                    if (timeInMilliseconds in (starttime + 1) until endtime - 1) {
+                    if (timeInMilliseconds in (starttime) until endtime) {
                         setGenericVolumeWithReason(
                             volume,
                             "$calendarName ($eventName)",

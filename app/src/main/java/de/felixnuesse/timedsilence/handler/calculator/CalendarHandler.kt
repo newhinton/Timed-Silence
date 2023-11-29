@@ -94,7 +94,7 @@ class CalendarHandler(context: Context) {
         return calendars
     }
 
-    fun readCalendarEvent(timeInMilliseconds: Long): ArrayList<DeviceCalendarEventModel>  {
-        return deviceCalendar.readCalendarEvent(timeInMilliseconds)
+    fun getFilteredEventsForDay(timeInMilliseconds: Long): ArrayList<DeviceCalendarEventModel>  {
+        return deviceCalendar.getEventsForDay(timeInMilliseconds)
     }
 }

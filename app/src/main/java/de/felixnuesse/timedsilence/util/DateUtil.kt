@@ -70,7 +70,7 @@ class DateUtil{
             return Duration.between(start, end)
         }
 
-        fun getMinOffsetHumanReadable(offset: Int): String {
+        fun getMinOffsetHumanReadable(offset: Long): String {
             return "${offset/60}H:${offset % 60}M"
         }
     }
