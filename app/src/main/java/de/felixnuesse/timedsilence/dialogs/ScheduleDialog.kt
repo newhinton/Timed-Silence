@@ -50,7 +50,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
  *
  *
  */
-class ScheduleDialog(context: Context) : Dialog(context) {
+class ScheduleDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) {
 
     companion object {
         private const val TAG = "ScheduleDialog"

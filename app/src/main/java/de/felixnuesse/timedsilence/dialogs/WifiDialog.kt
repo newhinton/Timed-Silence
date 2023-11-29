@@ -45,7 +45,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
  *
  *
  */
-class WifiDialog(context: Context) : Dialog(context) {
+class WifiDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) {
 
     companion object {
         private const val TAG = "WifiDialog"
