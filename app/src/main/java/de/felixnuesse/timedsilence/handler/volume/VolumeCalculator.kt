@@ -99,6 +99,9 @@ class VolumeCalculator {
     }
 
     fun getChangeList(): ArrayList<VolumeState> {
+        return getChangeList(true)
+    }
+    fun getChangeList(addNow: Boolean): ArrayList<VolumeState> {
         var start = System.currentTimeMillis()
         Log.e(TAG, "Starttime: "+start)
 
@@ -118,8 +121,18 @@ class VolumeCalculator {
 
         var possibleChangeList: ArrayList<Long> = ArrayList()
 
-        // we dont talk about this monstrosity
-        possibleChangeList.add(now.atZone(systemDefault()).toInstant().toEpochMilli()-todayMidnight.atZone(systemDefault()).toInstant().toEpochMilli())
+        if(addNow){
+            // we dont talk about this monstrosity
+            possibleChangeList.add(
+                now.atZone(systemDefault())
+                    .toInstant()
+                    .toEpochMilli()
+                        -
+                        todayMidnight.atZone(systemDefault())
+                            .toInstant()
+                            .toEpochMilli()
+            )
+        }
 
         calendarHandler.getFilteredEventsForDay(System.currentTimeMillis()).forEach {
             Log.e(TAG, ""+it.mStart)

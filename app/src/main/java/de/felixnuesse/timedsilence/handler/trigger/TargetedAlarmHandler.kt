@@ -13,9 +13,13 @@ import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_RUN_ALARMTRIGGER
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.handler.LogHandler
-import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
+import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.ui.notifications.ErrorNotifications
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 
 
 /**
@@ -99,16 +103,23 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
     private fun createAlarmIntime(){
         val now = System.currentTimeMillis()
         var calculatedChecktime = 0L
-        val list = VolumeHandler(mContext).getChangeList(mContext)
+        val list = VolumeCalculator(mContext).getChangeList(false)
+
+        val midnight: LocalTime = LocalTime.MIDNIGHT
+        val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
+        var todayMidnight = LocalDateTime.of(today, midnight)
+
         for (it in list) {
-            //Log.e(TAG, "Calculated time $it")
+
+            var timecheck = todayMidnight.plusMinutes(it.startTime.toLong()).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+            //Log.e(TAG, "Checking time ${it.startTime} ${todayMidnight} ${it.getReason()}")
             //Log.e(TAG, "Calculated time ${Utils.getDate(calculatedChecktime)}")
-            if(it > now && calculatedChecktime == 0L){
-                calculatedChecktime = it
+            if(timecheck > now && calculatedChecktime == 0L){
+                calculatedChecktime = timecheck
             }
         }
-        Log.e(TAG, "Calculated time $calculatedChecktime")
-        Log.e(TAG, "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
+        //Log.e(TAG, "Calculated time $calculatedChecktime")
+        //Log.e(TAG, "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
 
         LogHandler.writeLog(mContext, "TargetedAlarmHandler", "Create new Alarm", "$calculatedChecktime,${DateUtil.getDate(calculatedChecktime)}")
 
