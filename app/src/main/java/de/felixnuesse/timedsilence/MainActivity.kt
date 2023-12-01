@@ -53,7 +53,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import de.felixnuesse.timedsilence.Constants.Companion.MAIN_ACTIVITY_LOAD_CALENDAR_FORCE
 import de.felixnuesse.timedsilence.IntroActivity.Companion.INTRO_PREFERENCES
-import de.felixnuesse.timedsilence.activities.SettingsMainActivity
+import de.felixnuesse.timedsilence.activities.SettingsActivity
 import de.felixnuesse.timedsilence.databinding.ActivityMainBinding
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
@@ -120,11 +120,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             setHandlerState()
         }
 
-        val interval = SharedPreferencesHandler.getPref(
-            this,
-            PrefConstants.PREF_INTERVAL_CHECK,
-            PrefConstants.PREF_INTERVAL_CHECK_DEFAULT
-        )
+        val interval = PreferencesManager(this).getTriggerInterval()
 
         binding.textviewWaittimeContent.text = interval.toString()
         binding.seekBarWaittime.progress = interval
@@ -184,9 +180,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             tabs.getTabAt(i)?.text = ""
         }
 
+        //todo: Figure out why we are waiting for changes:
+        /*
         SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
             getSharedPreferencesListener()
-        )
+        )*/
 
         buttonState()
 
@@ -213,9 +211,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         handleCalendarFragmentIntentExtra()
         buttonState()
+        //todo: Figure out why we are waiting for changes:
+        /*
         SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
             getSharedPreferencesListener()
-        )
+        )*/
 
 
         //This handler is needed. Otherwise the state is not beeing restored
@@ -283,14 +283,14 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
     private fun openSettings(): Boolean {
-        val intent = Intent(this, SettingsMainActivity::class.java).apply {}
+        val intent = Intent(this, SettingsActivity::class.java).apply {}
         startActivity(intent)
         return true
     }
 
 
     fun setInterval(interval: Int) {
-        SharedPreferencesHandler.setPref(this, PrefConstants.PREF_INTERVAL_CHECK, interval)
+        PreferencesManager(this).setTriggerInterval(interval)
         mTrigger.removeTimecheck()
         mTrigger.createTimecheck()
 
@@ -342,7 +342,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         // Generally Hide this StatusElement.
         binding.lastCheckStatus.visibility = View.GONE
-        when (mTrigger.getTriggertype()) {
+        when (PreferencesManager(this).getTriggerType()) {
             PrefConstants.PREF_TRIGGERTYPE_REPEATING -> {
                 binding.textviewWaittimeContent.visibility = View.VISIBLE
                 binding.seekBarWaittime.visibility = View.VISIBLE
@@ -373,15 +373,15 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         if (button_check == getString(R.string.timecheck_start)) {
             mTrigger.createTimecheck()
-            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
+            PreferencesManager(this).setRestartOnBoot(true)
             AlarmBroadcastReceiver().switchVolumeMode(this)
         } else if (button_check == getString(R.string.timecheck_paused)) {
             mTrigger.createTimecheck()
-            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
+            PreferencesManager(this).setRestartOnBoot(true)
             AlarmBroadcastReceiver().switchVolumeMode(this)
         } else {
             mTrigger.removeTimecheck()
-            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, false)
+            PreferencesManager(this).setRestartOnBoot(false)
         }
         buttonState()
     }

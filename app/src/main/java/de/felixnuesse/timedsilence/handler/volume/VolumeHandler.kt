@@ -32,17 +32,14 @@ import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioManager
 import android.util.Log
-import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT
-import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
-import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.util.DateUtil
+import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.LogHandler
+import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
-import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.permissions.DoNotDisturb
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -63,7 +60,7 @@ class VolumeHandler(mContext: Context) {
         private const val TAG = "VolumeHandler"
     }
 
-    var volumeSetting = SharedPreferencesHandler.getPref(mContext, TIME_SETTING_DEFAULT_PREFERENCE, TIME_SETTING_DEFAULT)
+    var volumeSetting = PreferencesManager(mContext).getDefaultVolume()
     var overrideMusicToZero = false
 
     fun setSilent(){
@@ -107,11 +104,7 @@ class VolumeHandler(mContext: Context) {
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_ALARM,
-                SharedPreferencesHandler.getPref(
-                    context,
-                    PrefConstants.PREF_VOLUME_ALARM,
-                    PrefConstants.PREF_VOLUME_ALARM_DEFAULT
-                )
+                PreferencesManager(context).getVolume(R.string.pref_volume_alarm)
             )
             setStreamToPercent(
                 manager,
@@ -142,29 +135,10 @@ class VolumeHandler(mContext: Context) {
             manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
         }
 
-        var alarmVolume= SharedPreferencesHandler.getPref(
-            context,
-            PrefConstants.PREF_VOLUME_ALARM,
-            PrefConstants.PREF_VOLUME_ALARM_DEFAULT
-        )
-        var mediaVolume= SharedPreferencesHandler.getPref(
-            context,
-            PrefConstants.PREF_VOLUME_MUSIC,
-            PrefConstants.PREF_VOLUME_MUSIC_DEFAULT
-        )
-        var notifcationVolume=
-            SharedPreferencesHandler.getPref(
-                context,
-                PrefConstants.PREF_VOLUME_NOTIFICATION,
-                PrefConstants.PREF_VOLUME_NOTIFICATION_DEFAULT
-            )
-        var ringerVolume=
-            SharedPreferencesHandler.getPref(
-                context,
-                PrefConstants.PREF_VOLUME_RINGER,
-                PrefConstants.PREF_VOLUME_RINGER_DEFAULT
-            )
-
+        val alarmVolume = PreferencesManager(context).getVolume(R.string.pref_volume_alarm)
+        val mediaVolume = PreferencesManager(context).getVolume(R.string.pref_volume_music)
+        val notifcationVolume= PreferencesManager(context).getVolume(R.string.pref_volume_notification)
+        val ringerVolume = PreferencesManager(context).getVolume(R.string.pref_volume_ringer)
 
         if(!manager.isMusicActive){
             setMediaVolume(mediaVolume, context, manager)
@@ -207,12 +181,7 @@ class VolumeHandler(mContext: Context) {
 
 
 
-        var alarmVolume=
-            SharedPreferencesHandler.getPref(
-                context,
-                PrefConstants.PREF_VOLUME_ALARM,
-                PrefConstants.PREF_VOLUME_ALARM_DEFAULT
-            )
+        var alarmVolume = PreferencesManager(context).getVolume(R.string.pref_volume_alarm)
         if(false){
             alarmVolume=0;
         }
@@ -252,12 +221,7 @@ class VolumeHandler(mContext: Context) {
 
         Log.d(TAG, "VolumeHandler: Setting Audio Volume!")
 
-        val ignoreCheckWhenConnected=
-            SharedPreferencesHandler.getPref(
-                context,
-                PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET,
-                PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT
-            )
+        val ignoreCheckWhenConnected = PreferencesManager(context).headsetCheck()
 
         if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
             Log.d(TAG, "VolumeHandler: Found headset, skipping...")

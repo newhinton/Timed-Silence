@@ -1,0 +1,43 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/icon_volume_up"
+        android:iconSpaceReserved="true"
+        android:title="@string/volume_settings">
+
+        <SeekBarPreference
+            android:key="@string/pref_volume_music"
+            android:title="@string/volume_settings_music"
+            app:defaultValue="@integer/pref_volume_default" />
+
+        <SeekBarPreference
+            android:key="@string/pref_volume_notification"
+            android:title="@string/volume_settings_notifications"
+            app:defaultValue="@integer/pref_volume_default" />
+
+        <SeekBarPreference
+            android:key="@string/pref_volume_alarm"
+            android:title="@string/volume_settings_alarm"
+            app:defaultValue="@integer/pref_volume_default" />
+
+        <SeekBarPreference
+            android:key="@string/pref_volume_ringer"
+            android:title="@string/volume_settings_ringer"
+            app:defaultValue="@integer/pref_volume_default" />
+
+
+        <ListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="-1"
+            android:title="Default Volume"
+            android:entries="@array/pref_unset_volume"
+            android:entryValues="@array/pref_unset_volume_values"
+            android:key="@string/pref_volume_unset_value" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

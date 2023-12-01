@@ -1,32 +1,21 @@
 package de.felixnuesse.timedsilence.handler.trigger
 
 import android.content.Context
-import android.util.Log
 import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import de.felixnuesse.timedsilence.handler.PreferencesManager
 
-class Trigger(val mContext: Context) {
+class Trigger(mContext: Context) {
 
-    private var mTrigger: TriggerInterface
-
-    init {
-        mTrigger = when (getTriggertype()) {
-            PrefConstants.PREF_TRIGGERTYPE_REPEATING -> {
-                RepeatingAlarmHandler(mContext)
-            }
-            PrefConstants.PREF_TRIGGERTYPE_TARGETED -> {
-                TargetedAlarmHandler(mContext)
-            }
-            else ->{
-                TargetedAlarmHandler(mContext)
-            }
+    private var mTrigger: TriggerInterface = when (PreferencesManager(mContext).getTriggerType()) {
+        PrefConstants.PREF_TRIGGERTYPE_REPEATING -> {
+            RepeatingAlarmHandler(mContext)
         }
-    }
-
-    fun getTriggertype(): Int {
-        val t = SharedPreferencesHandler.getPreferences(mContext)
-        val defaultVal = PrefConstants.PREF_TRIGGERTYPE_DEFAULT
-        return t?.getInt(PrefConstants.PREF_TRIGGERTYPE, defaultVal) ?: defaultVal
+        PrefConstants.PREF_TRIGGERTYPE_TARGETED -> {
+            TargetedAlarmHandler(mContext)
+        }
+        else ->{
+            TargetedAlarmHandler(mContext)
+        }
     }
 
     fun createTimecheck(){

@@ -17,7 +17,7 @@ import com.skydoves.balloon.*
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.FragmentGraphBinding
-import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
@@ -70,7 +70,7 @@ class GraphFragment : Fragment() {
             binding.textfieldHeadsetConnected.visibility=View.INVISIBLE
         }
 
-        if(!SharedPreferencesHandler.getPref(view.context, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)){
+        if(!PreferencesManager(view.context).headsetCheck()){
             binding.imageviewHeadphonesConnected.visibility=View.INVISIBLE
             binding.textfieldHeadsetConnected.visibility=View.INVISIBLE
         }

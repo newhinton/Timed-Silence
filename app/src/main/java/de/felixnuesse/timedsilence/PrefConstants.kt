@@ -35,7 +35,6 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 class PrefConstants {
     companion object {
 
-        const val DEFAULT_DELAY = 60
         const val PREFS_NAME = "prefsname"
 
         const val PREFS_LAST_KEY_EXEC = "last_ExecTime"
@@ -53,24 +52,6 @@ class PrefConstants {
         const val PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT = true
 
 
-        const val PREF_IGNORE_ALL_DAY_EVENTS= "PREF_IGNORE_ALL_DAY_EVENTS"
-        const val PREF_IGNORE_ALL_DAY_EVENTS_DEFAULT = true
-
-        const val PREF_IGNORE_TENTATIVE_EVENTS= "PREF_IGNORE_TENTATIVE_EVENTS"
-        const val PREF_IGNORE_TENTATIVE_EVENTS_DEFAULT = false
-
-        const val PREF_IGNORE_CANCELLED_EVENTS= "PREF_IGNORE_CANCELLED_EVENTS"
-        const val PREF_IGNORE_CANCELLED_EVENTS_DEFAULT = false
-
-        const val PREF_IGNORE_FREE_EVENTS= "PREF_IGNORE_FREE_EVENTS"
-        const val PREF_IGNORE_FREE_EVENTS_DEFAULT = false
-
-        const val PREF_DARKMODE= "PREF_DARKMODE"
-        const val PREF_DARKMODE_LIGHT = 0
-        const val PREF_DARKMODE_DARK = 1
-        const val PREF_DARKMODE_AUTO = 2
-        const val PREF_DARKMODE_DEFAULT = PREF_DARKMODE_AUTO
-
 
         const val PREF_PAUSE_NOTIFICATION= "PREF_PAUSE_NOTIFICATION"
         const val PREF_PAUSE_NOTIFICATION_DEFAULT = true
@@ -78,30 +59,11 @@ class PrefConstants {
 
         const val VOLUME_LOW_WARNING_THRESHOLD = 15
 
-        const val PREF_VOLUME_ALARM = "PREF_VOLUME_ALARM"
-        const val PREF_VOLUME_ALARM_DEFAULT = 80
-
-
-        const val PREF_VOLUME_RINGER = "PREF_VOLUME_RINGER"
-        const val PREF_VOLUME_RINGER_DEFAULT = 80
-
-
-        const val PREF_VOLUME_NOTIFICATION = "PREF_VOLUME_NOTIFICATION"
-        const val PREF_VOLUME_NOTIFICATION_DEFAULT = 80
-
-
-        const val PREF_VOLUME_MUSIC = "PREF_VOLUME_MUSIC"
-        const val PREF_VOLUME_MUSIC_DEFAULT = 80
-
 
         const val PREF_TRIGGERTYPE = "PREF_TRIGGERTYPE"
         const val PREF_TRIGGERTYPE_REPEATING = 0
         const val PREF_TRIGGERTYPE_TARGETED = 1
         const val PREF_TRIGGERTYPE_DEFAULT = PREF_TRIGGERTYPE_TARGETED
-
-
-        const val TIME_SETTING_DEFAULT_PREFERENCE = "TIME_SETTING_DEFAULT_PREFERENCE"
-        const val TIME_SETTING_DEFAULT = TIME_SETTING_UNSET
 
 
         const val PREF_RUN_ALARMTRIGGER_WHEN_IDLE = "PREF_RUN_ALARMTRIGGER_WHEN_IDLE"

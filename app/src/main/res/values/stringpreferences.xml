@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pref_calendar_ignore_allday" translatable="false">PREF_IGNORE_ALL_DAY_EVENTS</string>
+    <string name="pref_calendar_ignore_tentative" translatable="false">PREF_IGNORE_TENTATIVE_EVENTS</string>
+    <string name="pref_calendar_ignore_cancelled" translatable="false">PREF_IGNORE_CANCELLED_EVENTS</string>
+    <string name="pref_calendar_ignore_free" translatable="false">PREF_IGNORE_FREE_EVENTS</string>
+
+    <string name="pref_volume_alarm" translatable="false">PREF_VOLUME_ALARM</string>
+    <string name="pref_volume_ringer" translatable="false">PREF_VOLUME_RINGER</string>
+    <string name="pref_volume_notification" translatable="false">PREF_VOLUME_NOTIFICATION</string>
+    <string name="pref_volume_music" translatable="false">PREF_VOLUME_MUSIC</string>
+
+    <integer name="pref_volume_default">80</integer>
+
+    <string name="pref_volume_unset_value" translatable="false">TIME_SETTING_DEFAULT_PREFERENCE</string>
+    <integer name="pref_volume_unset_default">-1</integer>
+
+
+
+
+
+</resources>

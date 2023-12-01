@@ -1,0 +1,37 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/main_tab_calendar"
+        android:icon="@drawable/icon_calendar_today">
+
+        <SwitchPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:title="@string/ignore_all_day"
+            app:key="@string/pref_calendar_ignore_allday" />
+        <SwitchPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:title="@string/ignore_tentative_events"
+            app:key="@string/pref_calendar_ignore_tentative" />
+        <SwitchPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:title="@string/ignore_cancelled_events"
+            app:key="@string/pref_calendar_ignore_cancelled" />
+        <SwitchPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:title="@string/ignore_free_events"
+            android:icon="@drawable/icon_access_time"
+            app:key="@string/pref_calendar_ignore_free" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

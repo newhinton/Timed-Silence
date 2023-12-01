@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_unset_volume">
+        <item>@string/volume_setting_unset</item>
+        <item>@string/volume_setting_silent</item>
+        <item>@string/volume_setting_vibrate</item>
+        <item>@string/volume_setting_loud</item>
+    </string-array>
+    <string-array name="pref_unset_volume_values" translatable="false">
+        <item>-1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+</resources>

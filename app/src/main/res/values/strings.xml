@@ -49,10 +49,10 @@
     <string name="appwidget_text">donotdelete-placeholder</string>
     <string name="volume_while_headset_connected">Dont change volume while Headset connected</string>
     <string name="volume_settings">Volume Settings</string>
-    <string name="volume_settings_music">Volume: Music</string>
-    <string name="volume_settings_notifications">Volume: Notifications</string>
-    <string name="volume_settings_alarm">Volume: Alarm</string>
-    <string name="volume_settings_ringer">Volume: Ringer</string>
+    <string name="volume_settings_music">Music</string>
+    <string name="volume_settings_notifications">Notifications</string>
+    <string name="volume_settings_alarm">Alarm</string>
+    <string name="volume_settings_ringer">Ringer</string>
     <string name="mon">mon</string>
     <string name="tue">tue</string>
     <string name="wed">wed</string>
@@ -137,4 +137,18 @@
     <string name="ignore_tentative_events">Ignore Tentative Events</string>
     <string name="ignore_free_events">Ignore Free Events</string>
     <string name="ignore_cancelled_events">Ignore Cancelled Events</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

@@ -8,7 +8,6 @@ import android.text.format.DateUtils
 import android.util.Log
 import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.util.DateUtil
-import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.permissions.CalendarAccess
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.model.data.CalendarObject
@@ -27,6 +26,8 @@ import android.provider.CalendarContract.Events.DURATION
 import android.provider.CalendarContract.Events.EVENT_LOCATION
 import android.provider.CalendarContract.Events.STATUS
 import android.provider.CalendarContract.Events.AVAILABILITY
+import de.felixnuesse.timedsilence.handler.LogHandler
+import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.model.data.CachedArrayList
 
 
@@ -47,26 +48,12 @@ class DeviceCalendar(private var mContext: Context) {
     private var mEventList = CachedArrayList<DeviceCalendarEventModel>()
     private var mCachingEnabled = false
 
-    private var mIgnoreAllDayEvents = SharedPreferencesHandler.getPref(
-        mContext,
-        PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS,
-        PrefConstants.PREF_IGNORE_ALL_DAY_EVENTS_DEFAULT
-    )
-    private var mIgnoreTentativeEvents = SharedPreferencesHandler.getPref(
-        mContext,
-        PrefConstants.PREF_IGNORE_TENTATIVE_EVENTS,
-        PrefConstants.PREF_IGNORE_TENTATIVE_EVENTS_DEFAULT
-    )
-    private var mIgnoreCancelledEvents = SharedPreferencesHandler.getPref(
-        mContext,
-        PrefConstants.PREF_IGNORE_CANCELLED_EVENTS,
-        PrefConstants.PREF_IGNORE_CANCELLED_EVENTS_DEFAULT
-    )
-    private var mIgnoreFreeEvents = SharedPreferencesHandler.getPref(
-        mContext,
-        PrefConstants.PREF_IGNORE_FREE_EVENTS,
-        PrefConstants.PREF_IGNORE_FREE_EVENTS_DEFAULT
-    )
+    private var mPreferencesManager = PreferencesManager(mContext)
+    private var mIgnoreAllDayEvents = mPreferencesManager.ignoreAllday()
+    private var mIgnoreTentativeEvents = mPreferencesManager.ignoreTentative()
+    private var mIgnoreCancelledEvents = mPreferencesManager.ignoreCancelled()
+    private var mIgnoreFreeEvents = mPreferencesManager.ignoreFree()
+
 
 
     fun getCalendars(): HashMap<String, CalendarObject> {
@@ -167,21 +154,26 @@ class DeviceCalendar(private var mContext: Context) {
 
         for (i in 0..<cursor.count) {
 
-            var event = DeviceCalendarEventModel(mContext)
+            try {
+                var event = DeviceCalendarEventModel(mContext)
 
-            event.mCalendarID = cursor.getInt(0)
-            event.setTitle(cursor.getString(1))
-            event.setDescription(cursor.getString(2))
-            event.setDtstart(cursor.getLong(3))
-            event.setOrCalculateDtend(cursor.getLong(4), cursor.getString(6)?: "")
-            event.mAllDay = cursor.getInt(5) == 1
-            event.mStatus = cursor.getInt(8)
-            event.mAvailability = cursor.getInt(9)
+                event.mCalendarID = cursor.getInt(0)
+                event.setTitle(cursor.getString(1))
+                Log.e(TAG, "Title: ${event.mTitle}")
+                event.setDescription(cursor.getString(2))
+                event.setDtstart(cursor.getLong(3))
+                event.setOrCalculateDtend(cursor.getLong(4), cursor.getString(6)?: "")
+                event.mAllDay = cursor.getInt(5) == 1
+                event.mStatus = cursor.getInt(8)
+                event.mAvailability = cursor.getInt(9)
 
-            if (!event.shouldEventBeExcluded(mIgnoreAllDayEvents, mIgnoreTentativeEvents, mIgnoreCancelledEvents, mIgnoreFreeEvents)) {
-                eventList.add(event)
+                if (!event.shouldEventBeExcluded(mIgnoreAllDayEvents, mIgnoreTentativeEvents, mIgnoreCancelledEvents, mIgnoreFreeEvents)) {
+                    eventList.add(event)
+                }
+
+            } catch (e: Exception) {
+                LogHandler.writeLog(mContext, "DeviceCalendar", "Exception!", "${e.toString()}");
             }
-
             cursor.moveToNext()
         }
 

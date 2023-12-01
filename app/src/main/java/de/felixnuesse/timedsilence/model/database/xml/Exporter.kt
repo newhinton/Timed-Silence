@@ -9,17 +9,10 @@ import androidx.core.app.ActivityCompat
 import android.util.Log
 import android.widget.Toast
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_BOOT_RESTART
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_DARKMODE
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_IGNORE_ALL_DAY_EVENTS
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_IGNORE_CHECK_WHEN_HEADSET
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_INTERVAL_CHECK
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_PAUSE_NOTIFICATION
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_TRIGGERTYPE
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_VOLUME_ALARM
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_VOLUME_MUSIC
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_VOLUME_NOTIFICATION
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_VOLUME_RINGER
-import de.felixnuesse.timedsilence.PrefConstants.Companion.TIME_SETTING_DEFAULT_PREFERENCE
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
@@ -247,8 +240,15 @@ class Exporter {
         }
 
         private fun addPreferences(doc: Document, element: Element, context: Context){
-            var preferencesBoolean = arrayListOf(PREF_BOOT_RESTART, PREF_IGNORE_CHECK_WHEN_HEADSET, PREF_IGNORE_ALL_DAY_EVENTS, PREF_PAUSE_NOTIFICATION)
-            var preferencesInt = arrayListOf(PREF_INTERVAL_CHECK, PREF_DARKMODE, PREF_VOLUME_ALARM, PREF_VOLUME_RINGER, PREF_VOLUME_NOTIFICATION, PREF_VOLUME_MUSIC, PREF_TRIGGERTYPE, TIME_SETTING_DEFAULT_PREFERENCE)
+            var preferencesBoolean = arrayListOf(PREF_BOOT_RESTART, PREF_IGNORE_CHECK_WHEN_HEADSET, PREF_PAUSE_NOTIFICATION)
+            var preferencesInt = arrayListOf(
+                PREF_INTERVAL_CHECK,
+                context.getString(R.string.pref_volume_alarm),
+                context.getString(R.string.pref_volume_ringer),
+                context.getString(R.string.pref_volume_notification),
+                context.getString(R.string.pref_volume_music),
+                PREF_TRIGGERTYPE
+            )
 
             val sharedPrefs: SharedPreferences = context.applicationContext.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
             for (settings in preferencesBoolean) {

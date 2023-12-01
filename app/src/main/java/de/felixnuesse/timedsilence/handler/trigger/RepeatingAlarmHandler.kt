@@ -9,7 +9,7 @@ import android.util.Log
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import de.felixnuesse.timedsilence.handler.PreferencesManager
 
 
 /**
@@ -48,12 +48,7 @@ class RepeatingAlarmHandler(override var mContext: Context) : TriggerInterface {
     }
 
     override fun createTimecheck() {
-        val interval =
-            SharedPreferencesHandler.getPref(
-                mContext,
-                PrefConstants.PREF_INTERVAL_CHECK,
-                PrefConstants.PREF_INTERVAL_CHECK_DEFAULT
-            )
+        val interval = PreferencesManager(mContext).getTriggerInterval()
         createRepeatingTimecheck(interval)
     }
 

@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import android.util.Log
 import android.widget.Toast
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.data.KeywordObject
@@ -346,10 +345,12 @@ class Importer {
                         "NAME" -> type = item.textContent.toString()
                     }
                 }
-                when(type){
+
+                //Todo: Fix importer
+                /*when(type){
                     "BOOLEAN" -> {SharedPreferencesHandler.setPref(context, name, value.toBoolean())}
                     "INTEGER" -> {SharedPreferencesHandler.setPref(context, name, value.toInt())}
-                }
+                }*/
             }
         }
 

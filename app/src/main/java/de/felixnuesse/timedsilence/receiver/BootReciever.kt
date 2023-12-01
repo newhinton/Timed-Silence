@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
+import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 
 class BootReciever : BroadcastReceiver(){
@@ -19,13 +19,7 @@ class BootReciever : BroadcastReceiver(){
             Log.e(TAG, "BootReciever: Started Device!")
             AlarmBroadcastReceiver().switchVolumeMode(context)
 
-            val restartOnBoot= SharedPreferencesHandler.getPref(
-                context,
-                PrefConstants.PREF_BOOT_RESTART,
-                PrefConstants.PREF_BOOT_RESTART_DEFAULT
-            )
-
-            if(restartOnBoot){
+            if(PreferencesManager(context).shouldRestartOnBoot()){
                 Log.e(TAG, "BootReciever: Started Checks!")
                 Trigger(context).createTimecheck()
                 return
