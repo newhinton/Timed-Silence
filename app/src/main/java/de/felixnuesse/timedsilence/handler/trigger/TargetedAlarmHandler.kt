@@ -102,19 +102,20 @@ class TargetedAlarmHandler(override var mContext: Context) : TriggerInterface {
 
     private fun createAlarmIntime(){
         val now = System.currentTimeMillis()
-        var calculatedChecktime = 0L
         val list = VolumeCalculator(mContext).getChangeList(false)
 
         val midnight: LocalTime = LocalTime.MIDNIGHT
         val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
         var todayMidnight = LocalDateTime.of(today, midnight)
+        var tomorrowMidnight = todayMidnight.plusDays(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        var calculatedChecktime = tomorrowMidnight
 
         for (it in list) {
 
             var timecheck = todayMidnight.plusMinutes(it.startTime.toLong()).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
             //Log.e(TAG, "Checking time ${it.startTime} ${todayMidnight} ${it.getReason()}")
-            //Log.e(TAG, "Calculated time ${Utils.getDate(calculatedChecktime)}")
-            if(timecheck > now && calculatedChecktime == 0L){
+            //Log.e(TAG, "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
+            if(timecheck > now && calculatedChecktime == tomorrowMidnight){
                 calculatedChecktime = timecheck
             }
         }
