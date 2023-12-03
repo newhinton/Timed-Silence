@@ -10,11 +10,11 @@
         android:title="@string/volume_settings">
 
         <SeekBarPreference
-            android:key="@string/pref_volume_music"
-            android:title="@string/volume_settings_music"
+            android:key="@string/pref_volume_media"
+            android:title="@string/volume_settings_media"
             app:defaultValue="@integer/pref_volume_default"
             app:showSeekBarValue="true"
-            app:summary="@string/volume_settings_music_description" />
+            app:summary="@string/volume_settings_media_description" />
 
         <SeekBarPreference
             android:key="@string/pref_volume_notification"
@@ -42,10 +42,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="-1"
-            android:title="Default Volume"
             android:entries="@array/pref_unset_volume"
             android:entryValues="@array/pref_unset_volume_values"
-            android:key="@string/pref_volume_unset_value" />
+            android:key="@string/pref_volume_unset_value"
+            android:title="@string/volume_settings_default_volume"
+            app:summary="@string/volume_settings_unset_value_description" />
     </PreferenceCategory>
 
 </PreferenceScreen>

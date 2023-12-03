@@ -9,7 +9,7 @@
     <string name="pref_volume_alarm" translatable="false">PREF_VOLUME_ALARM</string>
     <string name="pref_volume_ringer" translatable="false">PREF_VOLUME_RINGER</string>
     <string name="pref_volume_notification" translatable="false">PREF_VOLUME_NOTIFICATION</string>
-    <string name="pref_volume_music" translatable="false">PREF_VOLUME_MUSIC</string>
+    <string name="pref_volume_media" translatable="false">PREF_VOLUME_MUSIC</string>
 
     <integer name="pref_volume_default">80</integer>
 

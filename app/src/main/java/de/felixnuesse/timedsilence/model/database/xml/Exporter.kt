@@ -1,33 +1,26 @@
 package de.felixnuesse.timedintenttrigger.database.xml
 
-import android.Manifest
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Environment
-import androidx.core.app.ActivityCompat
+import android.content.Context.MODE_PRIVATE
+import android.content.Intent
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
+import de.felixnuesse.timedsilence.PrefConstants.Companion.PREFS_NAME
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_BOOT_RESTART
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_IGNORE_CHECK_WHEN_HEADSET
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_PAUSE_NOTIFICATION
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.util.DateUtil
+import de.felixnuesse.timedsilence.handler.PreferencesManager
+import de.felixnuesse.timedsilence.model.database.AppDataStructure
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
+import de.felixnuesse.timedsilence.util.DateUtil
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import java.io.*
 import java.util.*
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.parsers.ParserConfigurationException
-import javax.xml.transform.TransformerException
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.dom.DOMSource
-import javax.xml.transform.stream.StreamResult
-import android.content.SharedPreferences
-
-import android.content.Context.MODE_PRIVATE
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREFS_NAME
 
 
 /**
@@ -59,215 +52,63 @@ import de.felixnuesse.timedsilence.PrefConstants.Companion.PREFS_NAME
  *
  */
 
-class Exporter {
+class Exporter(private var mActivity: Activity) {
 
-    /*
-    Important! set;
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    Implement this in the calling activity
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        Exporter.onRequestPermissionsResult(this, requestCode, permissions, grantResults)
-    }
-
-     */
-
-    companion object{
-
+    companion object {
         private const val TAG = "Exporter"
-        private const val PERMISSION_WRITE_EXTERNAL = 443
+        private const val OPEN_DIRECTORY_REQUEST = 443
 
-        fun export(a: Activity) {
-            try {
-                Log.e(TAG, "Export!")
-                val `val` = create(a)
-                storeFile(a, `val`)
-            } catch (e: ParserConfigurationException) {
-                e.printStackTrace()
-            } catch (e: TransformerException) {
-                e.printStackTrace()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
+    }
 
-        }
+    private val mDateString = DateUtil.getDate(Date().time, "yyyy.MM.dd")
 
-        /**
-         * This also handles the importer request!
-         */
-        fun onRequestPermissionsResult(activity: Activity, requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                when (requestCode) {
-                    Importer.PERM_REQUEST_CODE -> Importer.importFile(activity)
-                    PERMISSION_WRITE_EXTERNAL -> export(activity)
-                }
-            }
-        }
+    fun export() {
+        Log.e(TAG, "Export!")
 
-        private fun isWriteStoragePermissionGranted(a: Activity): Boolean {
-            if (a.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.v("perm", "Permission is granted")
-                return true
-            } else {
-                Log.v("perm", "Permission is revoked")
-                // <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> needs to be defined, otherwise this will always be denied
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = "application/json"
+        intent.putExtra(Intent.EXTRA_TITLE, "${mActivity.getString(R.string.app_name)}_${mDateString}.json")
 
-                ActivityCompat.requestPermissions(
-                    a,
-                    arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    PERMISSION_WRITE_EXTERNAL
-                )
-                return false
-            }
-        }
+        mActivity.startActivityForResult(intent, OPEN_DIRECTORY_REQUEST, null)
+    }
 
-        private fun storeFile(a: Activity, content: String) {
+    fun onRequestPermissionsResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == RESULT_OK && requestCode == OPEN_DIRECTORY_REQUEST) {
+            if (data != null) {
+                data.data?.let { treeUri ->
 
-            if (!isWriteStoragePermissionGranted(a)) {
-                return
-            }
+                    // treeUri is the Uri of the file
 
-            val currentDateandTime = DateUtil.getDate(Date().time, "yyyyMMdd-HHmmss")
-            val filename = "${a.getString(R.string.app_name)}_${currentDateandTime}.xml"
+                    // if life long access is required the takePersistableUriPermission() is used
+                    try {
+                        val outputStream = mActivity.contentResolver.openOutputStream(treeUri)
+                        val content = create()
+                        Log.e(TAG, content)
+                        outputStream?.write(content.toByteArray())
+                        outputStream?.close()
+                        Toast.makeText(mActivity, "Write file successfully", Toast.LENGTH_SHORT).show()
+                    } catch (e: IOException) {
+                        Toast.makeText(mActivity, "Fail to write file", Toast.LENGTH_SHORT).show()
+                    }
 
-            val path = File(Environment.getExternalStorageDirectory().absolutePath + "/${a.getString(R.string.app_name)}")
-            path.mkdirs()
-            val file = File(path, filename)
-            val stream = FileOutputStream(file)
-            val myOutWriter = OutputStreamWriter(stream)
-
-            try {
-                myOutWriter.append(content)
-                val text = a.getString(R.string.export_file_success) + file.absolutePath
-                Toast.makeText(a, text, Toast.LENGTH_LONG).show()
-            } finally {
-                myOutWriter.close()
-                stream.close()
-            }
-
-        }
-
-        private fun create(a: Activity): String {
-
-            val documentBuilderFactory = DocumentBuilderFactory.newInstance()
-            val documentBuilder = documentBuilderFactory.newDocumentBuilder()
-            val document = documentBuilder.newDocument()
-
-            val dbHandler = DatabaseHandler(a)
-
-            val rootElement = document.createElement("TimedSilence")
-            document.appendChild(rootElement)
-
-            //schedules does not work, the parser then thinks it is also an schedule
-            val scheduleElement = document.createElement("_schedules")
-            rootElement.appendChild(scheduleElement)
-
-            for (scheduleObject in dbHandler.getAllSchedules()) {
-                val em = document.createElement("schedule")
-                em.appendChild(createChild(document, "name", scheduleObject.name))
-                em.appendChild(createChild(document, "time_start", scheduleObject.time_start.toString()))
-                em.appendChild(createChild(document, "time_end", scheduleObject.time_end.toString()))
-                em.appendChild(createChild(document, "time_setting", scheduleObject.time_setting.toString()))
-                em.appendChild(createChild(document, "mon", scheduleObject.mon.toString()))
-                em.appendChild(createChild(document, "tue", scheduleObject.tue.toString()))
-                em.appendChild(createChild(document, "wed", scheduleObject.wed.toString()))
-                em.appendChild(createChild(document, "thu", scheduleObject.thu.toString()))
-                em.appendChild(createChild(document, "fri", scheduleObject.fri.toString()))
-                em.appendChild(createChild(document, "sat", scheduleObject.sat.toString()))
-                em.appendChild(createChild(document, "sun", scheduleObject.sun.toString()))
-
-                scheduleElement.appendChild(em)
-            }
-
-            //calendars does not work, the parser then thinks it is also an calendar
-            val calendarElement = document.createElement("_calendars")
-            rootElement.appendChild(calendarElement)
-
-            for (calendarEntry in dbHandler.getAllCalendarEntries()) {
-                val em = document.createElement("calendar")
-                em.appendChild(createChild(document, "name", calendarEntry.name))
-                em.appendChild(createChild(document, "ext_id", calendarEntry.ext_id.toString()))
-                em.appendChild(createChild(document, "volume", calendarEntry.volume.toString()))
-                em.appendChild(createChild(document, "color", calendarEntry.color.toString()))
-                calendarElement.appendChild(em)
-            }
-
-            //wifielements does not work, the parser then thinks it is also an _wifielement
-            val wifiElement = document.createElement("_wifielements")
-            rootElement.appendChild(wifiElement)
-
-            for (wifiObject in dbHandler.getAllWifiEntries()) {
-                val em = document.createElement("wifi")
-                em.appendChild(createChild(document, "ssid", wifiObject.ssid))
-                em.appendChild(createChild(document, "type", wifiObject.type.toString()))
-                em.appendChild(createChild(document, "volume", wifiObject.volume.toString()))
-                wifiElement.appendChild(em)
-            }
-
-            //keywords
-            val keywordsElement = document.createElement("_keywords")
-            rootElement.appendChild(keywordsElement)
-
-            for (keywordObject in dbHandler.getKeywords()) {
-                val em = document.createElement("keyword")
-                em.appendChild(createChild(document, "key", keywordObject.keyword))
-                em.appendChild(createChild(document, "calendarid", keywordObject.calendarid.toString()))
-                em.appendChild(createChild(document, "volume", keywordObject.volume.toString()))
-                keywordsElement.appendChild(em)
-            }
-
-            val settings = document.createElement("SETTINGS")
-            rootElement.appendChild(settings)
-            addPreferences(document, settings, a.applicationContext)
-
-
-            val sw = StringWriter()
-            val tf = TransformerFactory.newInstance()
-            val transformer = tf.newTransformer()
-            transformer.transform(DOMSource(document), StreamResult(sw))
-
-            return sw.toString()
-        }
-
-        private fun createChild(document: Document, name: String, content: String): Element {
-            val child = document.createElement(name)
-            child.textContent = content
-            return child
-        }
-
-        private fun addPreferences(doc: Document, element: Element, context: Context){
-            var preferencesBoolean = arrayListOf(PREF_BOOT_RESTART, PREF_IGNORE_CHECK_WHEN_HEADSET, PREF_PAUSE_NOTIFICATION)
-            var preferencesInt = arrayListOf(
-                context.getString(R.string.pref_volume_alarm),
-                context.getString(R.string.pref_volume_ringer),
-                context.getString(R.string.pref_volume_notification),
-                context.getString(R.string.pref_volume_music)
-            )
-
-            val sharedPrefs: SharedPreferences = context.applicationContext.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-            for (settings in preferencesBoolean) {
-                if(sharedPrefs.contains(settings)){
-                    val em = doc.createElement("PREFERENCE")
-                    em.setAttribute("NAME", settings)
-                    em.setAttribute("VALUE", sharedPrefs.getBoolean(settings, false).toString())
-                    em.setAttribute("TYPE", "BOOLEAN")
-                    element.appendChild(em)
-                }
-            }
-            for (settings in preferencesInt) {
-                if(sharedPrefs.contains(settings)){
-                    val em = doc.createElement("PREFERENCE")
-                    em.setAttribute("NAME", settings)
-                    em.setAttribute("VALUE", sharedPrefs.getInt(settings, -1).toString())
-                    em.setAttribute("TYPE", "INTEGER")
-                    element.appendChild(em)
                 }
             }
         }
     }
 
+    private fun create(): String {
+        val dbHandler = DatabaseHandler(mActivity)
+        val data = AppDataStructure("")
 
+        dbHandler.getAllSchedules().forEach { data.addSchedule(it) }
+        dbHandler.getAllCalendarEntries().forEach { data.addCalendar(it) }
+        dbHandler.getKeywords().forEach { data.addKeyword(it) }
+        dbHandler.getAllWifiEntries().forEach { data.addWifi(it) }
 
+        var preferences = PreferencesManager(mActivity.applicationContext)
+        data.setPreferences(preferences.getPreferenceHolder())
+
+        return data.asJSON().toString(4)
+    }
 }

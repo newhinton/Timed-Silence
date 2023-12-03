@@ -57,7 +57,7 @@
     <string name="tue">Di</string>
     <string name="volume_settings">Lautstärkeeinstellungen</string>
     <string name="volume_settings_alarm">Lautstärke: Alarm</string>
-    <string name="volume_settings_music">Lautstärke: Musik</string>
+    <string name="volume_settings_media">Lautstärke: Musik</string>
     <string name="volume_settings_notifications">Lautstärke: Benachrichtigungen</string>
     <string name="volume_settings_ringer">Lautstärke: Klingelton</string>
     <string name="volume_while_headset_connected">Musiklautstärke nicht verändern wenn Kopfhörer verbunden sind.</string>

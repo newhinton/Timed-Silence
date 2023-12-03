@@ -30,7 +30,6 @@
             android:layout_height="wrap_content"
             android:defaultValue="false"
             android:title="@string/ignore_free_events"
-            android:icon="@drawable/icon_access_time"
             app:key="@string/pref_calendar_ignore_free" />
     </PreferenceCategory>
 

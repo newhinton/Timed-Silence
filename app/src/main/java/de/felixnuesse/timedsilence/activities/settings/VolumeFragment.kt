@@ -9,8 +9,5 @@ class VolumeFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.volume_preferences, rootKey)
-
-
-        PreferencesManager(this.requireContext()).getDefaultVolume()
     }
 }

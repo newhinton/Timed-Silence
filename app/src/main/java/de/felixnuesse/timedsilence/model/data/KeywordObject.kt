@@ -1,5 +1,7 @@
 package de.felixnuesse.timedsilence.model.data;
 
+import kotlinx.serialization.Serializable
+
 /**
  * Copyright (C) 2021  Felix Nüsse
  * Created on 15.07.21 - 20:20
@@ -25,15 +27,12 @@ package de.felixnuesse.timedsilence.model.data;
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
 
-class KeywordObject(id: Long, calendarid: Long, keyword: String, volume: Int) {
+
+@Serializable
+data class KeywordObject(var id: Long, var calendarid: Long, var keyword: String, var volume: Int) {
 
         companion object {
                 const val ALL_CALENDAR: Long = -1
         }
-        var id: Long = id
-        var calendarid: Long = calendarid
-        var keyword: String = keyword
-        var volume: Int = volume
-
 
 }

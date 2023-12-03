@@ -225,7 +225,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             }
 
             R.id.action_set_manual_vibrate -> {
-                voLHandler.setVibrate(); Toast.makeText(
+                voLHandler.setVibrate()
+                Toast.makeText(
                     this, getString(
                         R.string.vibrate
                     ), Toast.LENGTH_LONG
@@ -233,7 +234,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             }
 
             R.id.action_set_manual_silent -> {
-                voLHandler.setSilent(); Toast.makeText(
+                voLHandler.setSilent()
+                Toast.makeText(
                     this, getString(
                         R.string.silent
                     ), Toast.LENGTH_LONG

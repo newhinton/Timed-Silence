@@ -72,7 +72,7 @@ class CalendarHandler(context: Context) {
     fun getCalendarName(externalId: Long): String{
         var name = DEFAULT_NAME
         deviceCalendar.getCalendars().forEach { (_, value) ->
-            if(value.ext_id==externalId){
+            if(value.externalID==externalId){
                 name = value.name
             }
         }

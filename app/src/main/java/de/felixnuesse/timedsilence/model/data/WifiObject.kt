@@ -1,5 +1,7 @@
 package de.felixnuesse.timedsilence.model.data
 
+import kotlinx.serialization.Serializable
+
 /**
  * Copyright (C) 2019  Felix Nüsse
  * Created on 12.05.19 - 19:39
@@ -28,12 +30,5 @@ package de.felixnuesse.timedsilence.model.data
  *
  */
 
-class WifiObject(id: Long, ssid: String, type: Int, volume: Int) {
-
-    var ssid: String = ssid
-    var type: Int = type
-    var volume: Int = volume
-    var id: Long = id
-
-
-}
+@Serializable
+data class WifiObject(var id: Long, var ssid: String, var type: Int, var volume: Int) {}

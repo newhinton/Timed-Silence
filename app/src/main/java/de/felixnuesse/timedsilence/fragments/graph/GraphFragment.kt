@@ -14,7 +14,6 @@ import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.skydoves.balloon.*
-import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.FragmentGraphBinding
 import de.felixnuesse.timedsilence.handler.PreferencesManager
@@ -70,7 +69,7 @@ class GraphFragment : Fragment() {
             binding.textfieldHeadsetConnected.visibility=View.INVISIBLE
         }
 
-        if(!PreferencesManager(view.context).headsetCheck()){
+        if(!PreferencesManager(view.context).checkIfHeadsetIsConnected()){
             binding.imageviewHeadphonesConnected.visibility=View.INVISIBLE
             binding.textfieldHeadsetConnected.visibility=View.INVISIBLE
         }

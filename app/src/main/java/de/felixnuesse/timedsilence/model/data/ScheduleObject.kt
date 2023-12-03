@@ -1,5 +1,6 @@
 package de.felixnuesse.timedsilence.model.data
 
+import kotlinx.serialization.Serializable
 import java.time.DayOfWeek
 
 /**
@@ -29,12 +30,13 @@ import java.time.DayOfWeek
  *
  *
  */
-class ScheduleObject(var name: String, var time_start: Long, var time_end: Long, var time_setting: Int, var id: Long) {
+@Serializable
+data class ScheduleObject(var name: String, var timeStart: Long, var timeEnd: Long, var timeSetting: Int, var id: Long) {
 
 
-    constructor(name: String, time_start: Long, time_end: Long, time_setting: Int, id: Long,
+    constructor(name: String, timeStart: Long, timeEnd: Long, timeSetting: Int, id: Long,
                 pmon: Boolean, ptue: Boolean, pwed: Boolean, pthu: Boolean, pfri: Boolean, psat: Boolean, psun: Boolean
-    ) : this(name, time_start, time_end, time_setting, id){
+    ) : this(name, timeStart, timeEnd, timeSetting, id){
 
         mon=pmon
         tue=ptue

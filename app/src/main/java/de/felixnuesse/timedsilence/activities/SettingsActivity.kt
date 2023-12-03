@@ -23,6 +23,10 @@ class SettingsActivity : AppCompatActivity() {
     private var mCurrentFragment: Fragment = mSelectorFragment
     private var mOnBackCallback: OnBackPressedCallback? = null
 
+
+    private var mExporter = Exporter(this)
+    private var mImporter = Importer(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         openFragment(mCurrentFragment)
@@ -46,14 +50,10 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Exporter.onRequestPermissionsResult(this, requestCode, permissions, grantResults)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Importer.onActivityResult(this, requestCode, resultCode, data)
+        mExporter.onRequestPermissionsResult(requestCode, resultCode, data)
+        mImporter.onRequestPermissionsResult(requestCode, resultCode, data)
     }
 
     fun openFragment(fragment: Fragment) {
@@ -66,6 +66,12 @@ class SettingsActivity : AppCompatActivity() {
         mOnBackCallback?.isEnabled = fragment !is SelectorFragment
     }
 
+    fun export() {
+        mExporter.export()
+    }
 
+    fun import() {
+        mImporter.import()
+    }
 
 }

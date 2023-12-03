@@ -36,7 +36,6 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
-import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
@@ -60,7 +59,7 @@ class VolumeHandler(mContext: Context) {
         private const val TAG = "VolumeHandler"
     }
 
-    var volumeSetting = PreferencesManager(mContext).getDefaultVolume()
+    var volumeSetting = PreferencesManager(mContext).getDefaultUnsetVolume()
     var overrideMusicToZero = false
 
     fun setSilent(){
@@ -104,7 +103,7 @@ class VolumeHandler(mContext: Context) {
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_ALARM,
-                PreferencesManager(context).getVolume(R.string.pref_volume_alarm)
+                PreferencesManager(context).getAlarmVolume()
             )
             setStreamToPercent(
                 manager,
@@ -135,14 +134,20 @@ class VolumeHandler(mContext: Context) {
             manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
         }
 
-        val alarmVolume = PreferencesManager(context).getVolume(R.string.pref_volume_alarm)
-        val mediaVolume = PreferencesManager(context).getVolume(R.string.pref_volume_music)
-        val notifcationVolume= PreferencesManager(context).getVolume(R.string.pref_volume_notification)
-        val ringerVolume = PreferencesManager(context).getVolume(R.string.pref_volume_ringer)
+        val alarmVolume = PreferencesManager(context).getAlarmVolume()
+        val mediaVolume = PreferencesManager(context).getMediaVolume()
+        val notifcationVolume = PreferencesManager(context).getNotificationVolume()
+        val ringerVolume = PreferencesManager(context).getRingerVolume()
 
         if(!manager.isMusicActive){
             setMediaVolume(mediaVolume, context, manager)
         }
+
+        Log.d(TAG, "VolumeHandler: STREAM_MEDIA: $mediaVolume")
+        Log.d(TAG, "VolumeHandler: STREAM_ALARM: $alarmVolume")
+        Log.d(TAG, "VolumeHandler: STREAM_NOTIFICATION: $notifcationVolume")
+        Log.d(TAG, "VolumeHandler: STREAM_RING: $ringerVolume")
+
 
         setStreamToPercent(
             manager,
@@ -181,11 +186,7 @@ class VolumeHandler(mContext: Context) {
 
 
 
-        var alarmVolume = PreferencesManager(context).getVolume(R.string.pref_volume_alarm)
-        if(false){
-            alarmVolume=0;
-        }
-
+        var alarmVolume = PreferencesManager(context).getAlarmVolume()
 
         setStreamToPercent(
             manager,
@@ -206,11 +207,11 @@ class VolumeHandler(mContext: Context) {
     }
 
     private fun setStreamToPercent(manager: AudioManager, stream: Int, percentage: Int) {
-    val maxVol = manager.getStreamMaxVolume(stream)*100
-    val onePercent = maxVol / 100
-    val vol = (onePercent * percentage)/100
-    manager.setStreamVolume(stream, vol, 0)
-}
+        val maxVol = manager.getStreamMaxVolume(stream)*100
+        val onePercent = maxVol / 100
+        val vol = (onePercent * percentage)/100
+        manager.setStreamVolume(stream, vol, 0)
+    }
 
     private fun setMediaVolume(percentage: Int, context: Context, manager: AudioManager){
         setMediaVolume(percentage, context, manager, false)
@@ -221,7 +222,7 @@ class VolumeHandler(mContext: Context) {
 
         Log.d(TAG, "VolumeHandler: Setting Audio Volume!")
 
-        val ignoreCheckWhenConnected = PreferencesManager(context).headsetCheck()
+        val ignoreCheckWhenConnected = PreferencesManager(context).checkIfHeadsetIsConnected()
 
         if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
             Log.d(TAG, "VolumeHandler: Found headset, skipping...")
@@ -247,13 +248,6 @@ class VolumeHandler(mContext: Context) {
 }
 
     fun applyVolume(context: Context){
-
-        if(context!=null){
-            Log.d(TAG, "VolumeHandler: Testskip")
-            //return
-        }
-        Log.d(TAG, "VolumeHandler: Testskip skipped")
-
         if(!hasVolumePermission(context)){
             Log.d(TAG, "VolumeHandler: VolumeSetting: Do not disturb not granted! Not changing Volume!")
             return

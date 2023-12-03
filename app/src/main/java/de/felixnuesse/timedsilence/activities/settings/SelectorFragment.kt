@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import de.felixnuesse.timedintenttrigger.database.xml.Exporter
+import de.felixnuesse.timedintenttrigger.database.xml.Importer
 import de.felixnuesse.timedsilence.activities.SettingsActivity
 import de.felixnuesse.timedsilence.databinding.FragmentSettingsSelectorBinding
 
@@ -37,11 +39,11 @@ class SelectorFragment(private var mParent: SettingsActivity) : Fragment() {
         }
 
         binding.exportSettings.setOnClickListener {
-            mParent.openFragment(GeneralFragment())
+            mParent.export()
         }
 
         binding.importSettings.setOnClickListener {
-            mParent.openFragment(GeneralFragment())
+            mParent.import()
         }
     }
 }

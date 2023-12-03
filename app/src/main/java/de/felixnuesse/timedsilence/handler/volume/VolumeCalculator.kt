@@ -18,7 +18,6 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.notifications.LocationAccessMissingNotification
-import de.felixnuesse.timedsilence.util.DateUtil
 import java.time.LocalDateTime
 import java.util.*
 import java.time.ZoneId.systemDefault
@@ -140,8 +139,8 @@ class VolumeCalculator {
             possibleChangeList.add(it.mEnd-todayMidnight.atZone(systemDefault()).toInstant().toEpochMilli())
         }
         dbHandler.getSchedulesForWeekday(now.dayOfWeek).forEach {
-            possibleChangeList.add(it.time_start)
-            possibleChangeList.add(it.time_end)
+            possibleChangeList.add(it.timeStart)
+            possibleChangeList.add(it.timeEnd)
         }
 
         possibleChangeList.sort()
@@ -318,22 +317,22 @@ class VolumeCalculator {
             }
 
             var isInInversedTimeInterval = false
-            if (it.time_end <= it.time_start) {
+            if (it.timeEnd <= it.timeStart) {
                 //Log.e(TAG, "Alarmintent: End is before or equal start")
 
-                if (time >= it.time_start && time < 24 * 60 * 60 * 1000) {
+                if (time >= it.timeStart && time < 24 * 60 * 60 * 1000) {
                     //Log.d(TAG, "Alarmintent: Current time is after start time of interval but before 0:00" )
                     isInInversedTimeInterval = true
                 }
 
-                if (time < it.time_end && time >= 0) {
+                if (time < it.timeEnd && time >= 0) {
                     //Log.d(TAG, "Alarmintent: Current time is before end time of interval but after 0:00")
                     isInInversedTimeInterval = true
                 }
             }
 
-            if (time in it.time_start..it.time_end || isInInversedTimeInterval) {
-                setGenericVolumeWithReason(it.time_setting,it.name, REASON_TIME)
+            if (time in it.timeStart..it.timeEnd || isInInversedTimeInterval) {
+                setGenericVolumeWithReason(it.timeSetting,it.name, REASON_TIME)
             }
         }
     }

@@ -1,5 +1,7 @@
 package de.felixnuesse.timedsilence.model.data;
 
+import kotlinx.serialization.Serializable
+
 /**
  * Copyright (C) 2019  Felix Nüsse
  * Created on 07.11.19 - 11:34
@@ -25,13 +27,9 @@ package de.felixnuesse.timedsilence.model.data;
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
 
-class CalendarObject(id: Long, ext_id: Long, volume: Int) {
+@Serializable
+data class CalendarObject(var id: Long, var externalID: Long, var volume: Int) {
 
-        var id: Long = id
-        var ext_id: Long = ext_id
-        var volume: Int = volume
         var name: String = "NOTSET"
         var color: Int = 0
-
-
 }

@@ -6,7 +6,6 @@ import android.net.Uri
 import android.provider.CalendarContract
 import android.text.format.DateUtils
 import android.util.Log
-import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.handler.permissions.CalendarAccess
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
@@ -83,7 +82,7 @@ class DeviceCalendar(private var mContext: Context) {
                 for (i in 0 until cursor.count) {
                     var calentry = CalendarObject(0, 0, TIME_SETTING_SILENT)
 
-                    calentry.ext_id = cursor.getInt(0).toLong()
+                    calentry.externalID = cursor.getInt(0).toLong()
                     calentry.color = cursor.getInt(2)
                     calentry.name = cursor.getString(1)
 

@@ -298,9 +298,9 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val values = ContentValues()
         //values.put(SCHEDULE_ID, so.id)
         values.put(SCHEDULE_NAME, so.name)
-        values.put(SCHEDULE_START, so.time_start)
-        values.put(SCHEDULE_END, so.time_end)
-        values.put(SCHEDULE_SETTING, so.time_setting)
+        values.put(SCHEDULE_START, so.timeStart)
+        values.put(SCHEDULE_END, so.timeEnd)
+        values.put(SCHEDULE_SETTING, so.timeSetting)
         values.put(SCHEDULE_MON, so.mon)
         values.put(SCHEDULE_TUE, so.tue)
         values.put(SCHEDULE_WED, so.wed)
@@ -315,9 +315,9 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val newObject = ScheduleObject("",0,0,0,newRowId)
 
         newObject.name=so.name
-        newObject.time_start=so.time_start
-        newObject.time_end=so.time_end
-        newObject.time_setting=so.time_setting
+        newObject.timeStart=so.timeStart
+        newObject.timeEnd=so.timeEnd
+        newObject.timeSetting=so.timeSetting
         newObject.mon=so.mon
         newObject.tue=so.tue
         newObject.wed=so.wed
@@ -338,9 +338,9 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val values = ContentValues()
         values.put(SCHEDULE_ID, so.id)
         values.put(SCHEDULE_NAME, so.name)
-        values.put(SCHEDULE_START, so.time_start)
-        values.put(SCHEDULE_END, so.time_end)
-        values.put(SCHEDULE_SETTING, so.time_setting)
+        values.put(SCHEDULE_START, so.timeStart)
+        values.put(SCHEDULE_END, so.timeEnd)
+        values.put(SCHEDULE_SETTING, so.timeSetting)
         values.put(SCHEDULE_MON, so.mon)
         values.put(SCHEDULE_TUE, so.tue)
         values.put(SCHEDULE_WED, so.wed)
@@ -552,7 +552,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         // Create a new map of values, where column names are the keys
         val values = ContentValues()
-        values.put(CALENDAR_ANDROID_ID, calendarObject.ext_id)
+        values.put(CALENDAR_ANDROID_ID, calendarObject.externalID)
         values.put(CALENDAR_VOL_MODE, calendarObject.volume)
         if(!calendarObject.name.equals("NOTSET")){
             values.put(CALENDAR_NAME, calendarObject.name)
@@ -562,7 +562,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         // Insert the new row, returning the primary key value of the new row
         val newRowId = db.insert(CALENDAR_TABLE, null, values)
 
-        val newObject = CalendarObject(newRowId,calendarObject.ext_id, calendarObject.volume)
+        val newObject = CalendarObject(newRowId,calendarObject.externalID, calendarObject.volume)
         if(!calendarObject.name.equals("NOTSET")){
             newObject.name=calendarObject.name
         }
@@ -576,7 +576,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         // Create a new map of values, where column names are the keys
         val values = ContentValues()
-        values.put(CALENDAR_ANDROID_ID, co.ext_id)
+        values.put(CALENDAR_ANDROID_ID, co.externalID)
         values.put(CALENDAR_VOL_MODE, co.volume)
         if(!co.name.equals("NOTSET")){
             values.put(CALENDAR_NAME, co.name)
@@ -601,7 +601,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     @Deprecated("This is inefficient. Use getAllCalendarEntries and cache in a map!")
     fun getCalendarEntryByExtId(extID:String): CalendarObject? {
         for(elem in this.getAllCalendarEntries()){
-            if(elem.ext_id.toString().equals(extID)){
+            if(elem.externalID.toString().equals(extID)){
                 return elem
             }
         }
