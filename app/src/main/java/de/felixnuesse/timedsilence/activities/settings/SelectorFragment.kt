@@ -24,18 +24,24 @@ class SelectorFragment(private var mParent: SettingsActivity) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        binding.button.setOnClickListener {
+        binding.volumeSettings.setOnClickListener {
             mParent.openFragment(VolumeFragment())
         }
-        binding.button2.setOnClickListener {
+
+        binding.calendarSettings.setOnClickListener {
             mParent.openFragment(CalendarFragment())
         }
-        binding.button3.setOnClickListener {
-            mParent.openFragment(CheckerFragment())
-        }
-        binding.button4.setOnClickListener {
-            mParent.openFragment(ExportFragment())
+
+        binding.generalSettings.setOnClickListener {
+            mParent.openFragment(GeneralFragment())
         }
 
+        binding.exportSettings.setOnClickListener {
+            mParent.openFragment(GeneralFragment())
+        }
+
+        binding.importSettings.setOnClickListener {
+            mParent.openFragment(GeneralFragment())
+        }
     }
 }

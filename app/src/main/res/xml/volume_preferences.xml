@@ -12,22 +12,30 @@
         <SeekBarPreference
             android:key="@string/pref_volume_music"
             android:title="@string/volume_settings_music"
-            app:defaultValue="@integer/pref_volume_default" />
+            app:defaultValue="@integer/pref_volume_default"
+            app:showSeekBarValue="true"
+            app:summary="@string/volume_settings_music_description" />
 
         <SeekBarPreference
             android:key="@string/pref_volume_notification"
             android:title="@string/volume_settings_notifications"
-            app:defaultValue="@integer/pref_volume_default" />
+            app:defaultValue="@integer/pref_volume_default"
+            app:showSeekBarValue="true"
+            app:summary="@string/volume_settings_notifications_description"  />
 
         <SeekBarPreference
             android:key="@string/pref_volume_alarm"
             android:title="@string/volume_settings_alarm"
-            app:defaultValue="@integer/pref_volume_default" />
+            app:defaultValue="@integer/pref_volume_default"
+            app:showSeekBarValue="true"
+            app:summary="@string/volume_settings_alarm_description"  />
 
         <SeekBarPreference
             android:key="@string/pref_volume_ringer"
             android:title="@string/volume_settings_ringer"
-            app:defaultValue="@integer/pref_volume_default" />
+            app:defaultValue="@integer/pref_volume_default"
+            app:showSeekBarValue="true"
+            app:summary="@string/volume_settings_ringer_description" />
 
 
         <ListPreference
