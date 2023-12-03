@@ -10,9 +10,7 @@ import android.util.Log
 import android.widget.Toast
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_BOOT_RESTART
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_IGNORE_CHECK_WHEN_HEADSET
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_INTERVAL_CHECK
 import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_PAUSE_NOTIFICATION
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_TRIGGERTYPE
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
@@ -242,12 +240,10 @@ class Exporter {
         private fun addPreferences(doc: Document, element: Element, context: Context){
             var preferencesBoolean = arrayListOf(PREF_BOOT_RESTART, PREF_IGNORE_CHECK_WHEN_HEADSET, PREF_PAUSE_NOTIFICATION)
             var preferencesInt = arrayListOf(
-                PREF_INTERVAL_CHECK,
                 context.getString(R.string.pref_volume_alarm),
                 context.getString(R.string.pref_volume_ringer),
                 context.getString(R.string.pref_volume_notification),
-                context.getString(R.string.pref_volume_music),
-                PREF_TRIGGERTYPE
+                context.getString(R.string.pref_volume_music)
             )
 
             val sharedPrefs: SharedPreferences = context.applicationContext.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)

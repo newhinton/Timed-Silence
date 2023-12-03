@@ -39,32 +39,14 @@ class PrefConstants {
 
         const val PREFS_LAST_KEY_EXEC = "last_ExecTime"
 
-
-        const val PREF_INTERVAL_CHECK = "PREF_INTERVAL_CHECK"
-        const val PREF_INTERVAL_CHECK_DEFAULT = 15
-
-
         const val PREF_BOOT_RESTART = "PREF_BOOT_RESTART"
         const val PREF_BOOT_RESTART_DEFAULT = false
-
 
         const val PREF_IGNORE_CHECK_WHEN_HEADSET= "PREF_IGNORE_CHECK_WHEN_HEADSET"
         const val PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT = true
 
-
-
         const val PREF_PAUSE_NOTIFICATION= "PREF_PAUSE_NOTIFICATION"
         const val PREF_PAUSE_NOTIFICATION_DEFAULT = true
-
-
-        const val VOLUME_LOW_WARNING_THRESHOLD = 15
-
-
-        const val PREF_TRIGGERTYPE = "PREF_TRIGGERTYPE"
-        const val PREF_TRIGGERTYPE_REPEATING = 0
-        const val PREF_TRIGGERTYPE_TARGETED = 1
-        const val PREF_TRIGGERTYPE_DEFAULT = PREF_TRIGGERTYPE_TARGETED
-
 
         const val PREF_RUN_ALARMTRIGGER_WHEN_IDLE = "PREF_RUN_ALARMTRIGGER_WHEN_IDLE"
         const val PREF_RUN_ALARMTRIGGER_WHEN_IDLE_DEFAULT = true

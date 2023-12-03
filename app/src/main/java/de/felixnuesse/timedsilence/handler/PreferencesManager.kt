@@ -14,20 +14,6 @@ class PreferencesManager(private var mContext: Context) {
     private var mPrefEditor = mOldPreferences!!.edit()
 
 
-
-
-    fun getTriggerType(): Int {
-        return mOldPreferences.getInt(PrefConstants.PREF_TRIGGERTYPE, PrefConstants.PREF_TRIGGERTYPE_DEFAULT)
-    }
-
-    fun getTriggerInterval(): Int {
-        return mOldPreferences.getInt(PrefConstants.PREF_INTERVAL_CHECK, PrefConstants.PREF_INTERVAL_CHECK_DEFAULT)
-    }
-    fun setTriggerInterval(interval: Int) {
-        mPrefEditor.putInt(PrefConstants.PREF_INTERVAL_CHECK, interval)
-        mPrefEditor.apply()
-    }
-
     fun headsetCheck(): Boolean {
         return mOldPreferences.getBoolean(PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET_DEFAULT)
     }

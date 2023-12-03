@@ -120,33 +120,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             setHandlerState()
         }
 
-        val interval = PreferencesManager(this).getTriggerInterval()
-
-        binding.textviewWaittimeContent.text = interval.toString()
-        binding.seekBarWaittime.progress = interval
-
-        //minimum is zero, so we need to offset by one
-        binding.seekBarWaittime.max = 179
-        binding.seekBarWaittime.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                // Write code to perform some action when progress is changed.
-
-                binding.textviewWaittimeContent.text = (seekBar.progress + 1).toString()
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                // Write code to perform some action when touch is started.
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                //Toast.makeText(this@MainActivity, "Progress is " + seekBar.progress+1 + "%", Toast.LENGTH_SHORT).show()
-                binding.textviewWaittimeContent.text = (seekBar.progress + 1).toString()
-                setInterval(seekBar.progress + 1)
-
-            }
-        })
-
-
         val tabs = binding.tabLayout
         mPager = binding.viewPager
 
@@ -281,21 +254,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         buttonState()
     }
 
-
     private fun openSettings(): Boolean {
         val intent = Intent(this, SettingsActivity::class.java).apply {}
         startActivity(intent)
         return true
     }
-
-
-    fun setInterval(interval: Int) {
-        PreferencesManager(this).setTriggerInterval(interval)
-        mTrigger.removeTimecheck()
-        mTrigger.createTimecheck()
-
-    }
-
 
     private fun updateTimeCheckDisplay() {
         binding.nextCheckDisplay.text = mTrigger.getNextAlarmTimestamp()
@@ -327,13 +290,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
     private fun buttonState() {
-
         Log.e(TAG, "Main: ButtonStartCheck: State: $button_check")
 
         //Todo remove dummy textview
         if (mTrigger.checkIfNextAlarmExists()) {
             setFabStarted(binding.fab, TextView(this))
-            binding.runningStatus.visibility = View.GONE
+            binding.runningStatus.visibility = View.INVISIBLE
         } else {
             setFabStopped(binding.fab, TextView(this))
             binding.runningStatus.visibility = View.VISIBLE
@@ -342,29 +304,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         // Generally Hide this StatusElement.
         binding.lastCheckStatus.visibility = View.GONE
-        when (PreferencesManager(this).getTriggerType()) {
-            PrefConstants.PREF_TRIGGERTYPE_REPEATING -> {
-                binding.textviewWaittimeContent.visibility = View.VISIBLE
-                binding.seekBarWaittime.visibility = View.VISIBLE
-                binding.intervalTextView.visibility = View.VISIBLE
-                binding.textView4.visibility = View.VISIBLE
-            }
-
-            PrefConstants.PREF_TRIGGERTYPE_TARGETED -> {
-                binding.textviewWaittimeContent.visibility = View.GONE
-                binding.seekBarWaittime.visibility = View.GONE
-                binding.intervalTextView.visibility = View.GONE
-                binding.textView4.visibility = View.GONE
-            }
-
-            else -> {
-                binding.textviewWaittimeContent.visibility = View.GONE
-                binding.seekBarWaittime.visibility = View.GONE
-                binding.intervalTextView.visibility = View.GONE
-                binding.textView4.visibility = View.GONE
-            }
-        }
-
     }
 
     private fun setHandlerState() {

@@ -5,7 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
+import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 
 class BluetoothBroadcastReciever : BroadcastReceiver(){
@@ -30,7 +30,7 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
                 Log.e(TAG, "BluetoothBroadcastReciever: Could not sleep!")
             }
 
-            if(TargetedAlarmHandler(context).checkIfNextAlarmExists()){
+            if(Trigger(context).checkIfNextAlarmExists()){
                 var volCalculator = VolumeCalculator(context)
                 volCalculator.ignoreMusicPlaying(true)
                 volCalculator.calculateAllAndApply()
