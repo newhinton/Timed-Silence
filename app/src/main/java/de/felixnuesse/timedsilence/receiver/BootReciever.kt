@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import de.felixnuesse.timedsilence.PrefConstants
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 

@@ -1,13 +1,14 @@
 package de.felixnuesse.timedsilence.handler
 
 import android.content.Context
+import android.util.Log
 import androidx.preference.PreferenceManager
-import de.felixnuesse.timedsilence.PrefConstants
+import de.felixnuesse.timedsilence.MainActivity
 import de.felixnuesse.timedsilence.R
 
 class PreferencesManager(private var mContext: Context) {
 
-    private var mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext)
+    private var mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext.applicationContext)
     private var mPreferencesEditor = mPreferences!!.edit()
 
     // This "Cache" is required for easy export&import
@@ -17,6 +18,7 @@ class PreferencesManager(private var mContext: Context) {
         checkIfHeadsetIsConnected()
         shouldShowNotification()
         shouldRestartOnBoot()
+        runWhenIdle()
 
         getRingerVolume()
         getAlarmVolume()
@@ -33,23 +35,33 @@ class PreferencesManager(private var mContext: Context) {
     }
 
     fun checkIfHeadsetIsConnected(): Boolean {
-        mPreferencesHolder.headsetConnectionCheck = mPreferences.getBoolean(PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, mPreferencesHolder.headsetConnectionCheck)
+        mPreferencesHolder.headsetConnectionCheck = mPreferences.getBoolean(getKey(R.string.pref_general_dont_check_with_connected_headset), mPreferencesHolder.headsetConnectionCheck)
         return mPreferencesHolder.headsetConnectionCheck
     }
 
     fun shouldRestartOnBoot(): Boolean {
-        mPreferencesHolder.shouldRestartOnBoot = mPreferences.getBoolean(PrefConstants.PREF_BOOT_RESTART, mPreferencesHolder.shouldRestartOnBoot)
+        mPreferencesHolder.shouldRestartOnBoot = mPreferences.getBoolean(getKey(R.string.pref_general_boot_restart), mPreferencesHolder.shouldRestartOnBoot)
         return mPreferencesHolder.shouldRestartOnBoot
     }
 
     fun setRestartOnBoot(restart: Boolean) {
-        mPreferencesEditor.putBoolean(PrefConstants.PREF_BOOT_RESTART, restart)
+        mPreferencesEditor.putBoolean(getKey(R.string.pref_general_boot_restart), restart)
         mPreferencesEditor.apply()
     }
 
     fun shouldShowNotification(): Boolean {
-        mPreferencesHolder.showNotifications = mPreferences.getBoolean(PrefConstants.PREF_PAUSE_NOTIFICATION, mPreferencesHolder.showNotifications)
+        mPreferencesHolder.showNotifications = mPreferences.getBoolean(getKey(R.string.pref_general_show_notifications_when_paused), mPreferencesHolder.showNotifications)
         return mPreferencesHolder.showNotifications
+    }
+
+    fun runWhenIdle(): Boolean {
+        mPreferencesHolder.runWhenIdle = mPreferences.getBoolean(getKey(R.string.pref_general_run_when_idle), mPreferencesHolder.runWhenIdle)
+        return mPreferencesHolder.runWhenIdle
+    }
+
+    fun setRunWhenIdle(shouldRun: Boolean) {
+        mPreferencesEditor.putBoolean(getKey(R.string.pref_general_run_when_idle), shouldRun)
+        mPreferencesEditor.apply()
     }
 
 
@@ -58,19 +70,19 @@ class PreferencesManager(private var mContext: Context) {
     ///////////////////////
 
     fun ignoreAllday(): Boolean {
-        return mPreferences.getBoolean(mContext.getString(R.string.pref_calendar_ignore_allday), mPreferencesHolder.ignoreAllDay)
+        return mPreferences.getBoolean(getKey(R.string.pref_calendar_ignore_allday), mPreferencesHolder.ignoreAllDay)
     }
 
     fun ignoreTentative(): Boolean {
-        return mPreferences.getBoolean(mContext.getString(R.string.pref_calendar_ignore_tentative), mPreferencesHolder.ignoreTentative)
+        return mPreferences.getBoolean(getKey(R.string.pref_calendar_ignore_tentative), mPreferencesHolder.ignoreTentative)
     }
 
     fun ignoreCancelled(): Boolean {
-        return mPreferences.getBoolean(mContext.getString(R.string.pref_calendar_ignore_cancelled), mPreferencesHolder.ignoreCancelled)
+        return mPreferences.getBoolean(getKey(R.string.pref_calendar_ignore_cancelled), mPreferencesHolder.cancelled)
     }
 
     fun ignoreFree(): Boolean {
-        return mPreferences.getBoolean(mContext.getString(R.string.pref_calendar_ignore_free), mPreferencesHolder.ignoreFree)
+        return mPreferences.getBoolean(getKey(R.string.pref_calendar_ignore_free), mPreferencesHolder.ignoreFree)
     }
 
 
@@ -96,32 +108,37 @@ class PreferencesManager(private var mContext: Context) {
     }
 
     private fun getVolume(resourceId: Int): Int {
-        return mPreferences.getInt(mContext.getString(resourceId), mContext.resources.getInteger(R.integer.pref_volume_default))
+        return mPreferences.getInt(getKey(resourceId), mContext.resources.getInteger(R.integer.pref_volume_default))
     }
 
     fun getDefaultUnsetVolume(): Int {
         var defaultValue = mContext.resources.getInteger(R.integer.pref_volume_unset_default)
-        var value = mPreferences.getString(mContext.getString(R.string.pref_volume_unset_value), defaultValue.toString())
+        var value = mPreferences.getString(getKey(R.string.pref_volume_unset_value), defaultValue.toString())
         mPreferencesHolder.defaultUnsetVolume = value?.toInt() ?: defaultValue
         return mPreferencesHolder.defaultUnsetVolume
     }
 
     fun applyPreferenceHolder(preferences: PreferencesHolder) {
         setRestartOnBoot(preferences.shouldRestartOnBoot)
-        mPreferencesEditor.putBoolean(PrefConstants.PREF_IGNORE_CHECK_WHEN_HEADSET, mPreferencesHolder.headsetConnectionCheck)
-        mPreferencesEditor.putBoolean(PrefConstants.PREF_PAUSE_NOTIFICATION, mPreferencesHolder.showNotifications)
+        setRunWhenIdle(preferences.runWhenIdle)
+        mPreferencesEditor.putBoolean(getKey(R.string.pref_general_dont_check_with_connected_headset), mPreferencesHolder.headsetConnectionCheck)
+        mPreferencesEditor.putBoolean(getKey(R.string.pref_general_show_notifications_when_paused), mPreferencesHolder.showNotifications)
 
-        mPreferencesEditor.putInt(mContext.getString(R.string.pref_volume_media), preferences.mediaVolume)
-        mPreferencesEditor.putInt(mContext.getString(R.string.pref_volume_notification), preferences.notificationVolume)
-        mPreferencesEditor.putInt(mContext.getString(R.string.pref_volume_ringer), preferences.ringerVolume)
-        mPreferencesEditor.putInt(mContext.getString(R.string.pref_volume_alarm), preferences.alarmVolume)
+        mPreferencesEditor.putInt(getKey(R.string.pref_volume_media), preferences.mediaVolume)
+        mPreferencesEditor.putInt(getKey(R.string.pref_volume_notification), preferences.notificationVolume)
+        mPreferencesEditor.putInt(getKey(R.string.pref_volume_ringer), preferences.ringerVolume)
+        mPreferencesEditor.putInt(getKey(R.string.pref_volume_alarm), preferences.alarmVolume)
 
-        mPreferencesEditor.putString(mContext.getString(R.string.pref_volume_unset_value), preferences.defaultUnsetVolume.toString())
+        mPreferencesEditor.putString(getKey(R.string.pref_volume_unset_value), preferences.defaultUnsetVolume.toString())
 
-        mPreferencesEditor.putBoolean(mContext.getString(R.string.pref_calendar_ignore_allday), preferences.ignoreAllDay)
-        mPreferencesEditor.putBoolean(mContext.getString(R.string.pref_calendar_ignore_tentative), preferences.ignoreTentative)
-        mPreferencesEditor.putBoolean(mContext.getString(R.string.pref_calendar_ignore_cancelled), preferences.ignoreCancelled)
-        mPreferencesEditor.putBoolean(mContext.getString(R.string.pref_calendar_ignore_free), preferences.ignoreFree)
+        mPreferencesEditor.putBoolean(getKey(R.string.pref_calendar_ignore_allday), preferences.ignoreAllDay)
+        mPreferencesEditor.putBoolean(getKey(R.string.pref_calendar_ignore_tentative), preferences.ignoreTentative)
+        mPreferencesEditor.putBoolean(getKey(R.string.pref_calendar_ignore_cancelled), preferences.cancelled)
+        mPreferencesEditor.putBoolean(getKey(R.string.pref_calendar_ignore_free), preferences.ignoreFree)
+        mPreferencesEditor.apply()
+    }
 
+    private fun getKey(resId: Int): String {
+        return mContext.getString(resId)
     }
 }

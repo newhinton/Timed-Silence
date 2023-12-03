@@ -31,7 +31,6 @@ package de.felixnuesse.timedsilence
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -41,7 +40,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -67,6 +65,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
+
 import java.util.*
 
 
@@ -184,12 +183,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         handleCalendarFragmentIntentExtra()
         buttonState()
-        //todo: Figure out why we are waiting for changes:
-        /*
-        SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
-            getSharedPreferencesListener()
-        )*/
-
 
         //This handler is needed. Otherwise the state is not beeing restored
         Handler().postDelayed({
@@ -367,17 +360,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         fab.setImageResource(R.drawable.icon_fast_forward)
         button_check = getString(R.string.timecheck_paused)
     }
-
-    @Deprecated("replace by callback")
-    fun getSharedPreferencesListener(): SharedPreferences.OnSharedPreferenceChangeListener {
-        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
-            if (key == PrefConstants.PREFS_LAST_KEY_EXEC) {
-                updateTimeCheckDisplay()
-            }
-        }
-        return listener
-    }
-
 
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in

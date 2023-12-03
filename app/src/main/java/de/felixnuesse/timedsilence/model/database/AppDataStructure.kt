@@ -53,7 +53,8 @@ data class AppDataStructure(var date: String) {
 
     companion object {
         fun fromJSON(data: String): AppDataStructure {
-            return Json.decodeFromString(data)
+            val json = Json { ignoreUnknownKeys = true }
+            return json.decodeFromString(data)
         }
     }
 }

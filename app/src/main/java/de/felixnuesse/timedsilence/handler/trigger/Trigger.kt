@@ -9,10 +9,10 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_RUN_ALARMTRIGGER_WHEN_IDLE
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.handler.LogHandler
+import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.ui.notifications.ErrorNotifications
@@ -135,12 +135,8 @@ class Trigger(var mContext: Context) {
         am.cancel(pi)
 
 
-        val sharedPreferences: SharedPreferences =
-            PreferenceManager.getDefaultSharedPreferences(mContext)
-        val allowWhileIdle = sharedPreferences.getBoolean(
-            PREF_RUN_ALARMTRIGGER_WHEN_IDLE,
-            false
-        )
+
+        val allowWhileIdle = PreferencesManager(mContext).runWhenIdle()
 
         //todo: fix permission requesting
         if (allowWhileIdle) {

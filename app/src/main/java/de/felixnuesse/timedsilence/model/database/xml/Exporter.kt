@@ -2,23 +2,14 @@ package de.felixnuesse.timedintenttrigger.database.xml
 
 import android.app.Activity
 import android.app.Activity.RESULT_OK
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREFS_NAME
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_BOOT_RESTART
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_IGNORE_CHECK_WHEN_HEADSET
-import de.felixnuesse.timedsilence.PrefConstants.Companion.PREF_PAUSE_NOTIFICATION
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.model.database.AppDataStructure
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.util.DateUtil
-import org.w3c.dom.Document
-import org.w3c.dom.Element
 import java.io.*
 import java.util.*
 

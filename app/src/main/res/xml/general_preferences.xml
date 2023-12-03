@@ -10,13 +10,21 @@
         <SwitchPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="false"
-            android:title="@string/allow_trigger_when_device_idle" />
+            android:defaultValue="true"
+            android:title="@string/allow_trigger_when_device_idle"
+            android:key="@string/pref_general_run_when_idle" />
         <SwitchPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="false"
-            android:title="@string/enablePauseNotification" />
+            android:defaultValue="true"
+            android:title="@string/enablePauseNotification"
+            android:key="@string/pref_general_show_notifications_when_paused"/>
+        <SwitchPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:title="@string/volume_while_headset_connected"
+            android:key="@string/pref_general_dont_check_with_connected_headset"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
