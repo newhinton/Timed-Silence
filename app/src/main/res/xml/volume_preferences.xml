@@ -23,12 +23,24 @@
             app:showSeekBarValue="true"
             app:summary="@string/volume_settings_notifications_description"  />
 
+        <Preference
+            android:key="ALERT_notification"
+            android:title="@string/volume_settings_warning"
+            app:icon="@drawable/ic_warning"
+            app:isPreferenceVisible="false" />
+
         <SeekBarPreference
             android:key="@string/pref_volume_alarm"
             android:title="@string/volume_settings_alarm"
             app:defaultValue="@integer/pref_volume_default"
             app:showSeekBarValue="true"
             app:summary="@string/volume_settings_alarm_description"  />
+
+        <Preference
+            android:key="ALERT_alarm"
+            android:title="@string/volume_settings_warning"
+            app:icon="@drawable/ic_warning"
+            app:isPreferenceVisible="false" />
 
         <SeekBarPreference
             android:key="@string/pref_volume_ringer"
@@ -37,6 +49,11 @@
             app:showSeekBarValue="true"
             app:summary="@string/volume_settings_ringer_description" />
 
+        <Preference
+            android:key="ALERT_ringer"
+            android:title="@string/volume_settings_warning"
+            app:icon="@drawable/ic_warning"
+            app:isPreferenceVisible="false" />
 
         <ListPreference
             android:layout_width="wrap_content"

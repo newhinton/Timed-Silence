@@ -169,4 +169,5 @@
     <string name="volume_settings_default_volume">Default Volume</string>
     <string name="volume_settings_unset_value_description">Select volume that is applied when no calendar or schedule influences device volume</string>
     <string name="export_fileaccess_revoked">Access to files not granted!</string>
+    <string name="volume_settings_warning">Warning! This is a very low setting!</string>
 </resources>
