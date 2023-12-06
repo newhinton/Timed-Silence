@@ -308,11 +308,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         if (button_check == getString(R.string.timecheck_start)) {
             mTrigger.createTimecheck()
             PreferencesManager(this).setRestartOnBoot(true)
-            AlarmBroadcastReceiver().switchVolumeMode(this)
+            VolumeCalculator(this).calculateAllAndApply()
         } else if (button_check == getString(R.string.timecheck_paused)) {
             mTrigger.createTimecheck()
             PreferencesManager(this).setRestartOnBoot(true)
-            AlarmBroadcastReceiver().switchVolumeMode(this)
+            VolumeCalculator(this).calculateAllAndApply()
         } else {
             mTrigger.removeTimecheck()
             PreferencesManager(this).setRestartOnBoot(false)

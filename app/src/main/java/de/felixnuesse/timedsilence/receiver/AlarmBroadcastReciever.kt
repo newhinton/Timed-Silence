@@ -51,42 +51,20 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)) {
             Log.d(TAG, "Alarmintent: Content is to \"check the time\"")
-
-            val sharedPref = context?.getSharedPreferences("test", Context.MODE_PRIVATE)
-            with(sharedPref!!.edit()) {
-                putLong("last_ExecTime", System.currentTimeMillis())
-                apply()
-            }
-
-
-            switchVolumeMode(context)
+            VolumeCalculator(context).calculateAllAndApply()
             Trigger(context).createTimecheck()
 
         }
 
         if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_DELAY)) {
-
             val extra = intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA)
             Log.d(TAG, "Alarmintent: Content is to \"$extra\"")
-
             if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
                 Log.d(TAG, "Alarmintent: Content is to \"Restart recurring alarms\"")
                 Trigger(context).createTimecheck()
             }
 
         }
-    }
-
-    @Deprecated("This is just a tiny useless wrapper. Please use 'VolumeCalculator(context).calculateAllAndApply()' directly")
-    fun switchVolumeMode(context: Context?) {
-
-        // copy is guaranteed to be to non-nullable whatever you do
-        if (context == null) {
-            Log.e(TAG, "Alarmintent: Error! Context invalid! Stopping!")
-            return
-        }
-
-        VolumeCalculator(context).calculateAllAndApply()
     }
 
 
