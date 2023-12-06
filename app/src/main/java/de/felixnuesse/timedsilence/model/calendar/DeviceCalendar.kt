@@ -66,7 +66,8 @@ class DeviceCalendar(private var mContext: Context) {
         val cursor = contentResolver!!.query(
             Uri.parse("content://com.android.calendar/calendars"),
             arrayOf(
-                "_id", "calendar_displayName",
+                "_id",
+                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
                 CalendarContract.Calendars.CALENDAR_COLOR
             ),
             null,
