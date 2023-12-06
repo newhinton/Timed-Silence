@@ -23,6 +23,15 @@ class LogHandler() {
             append(context, content, "log.txt")
         }
 
+
+        fun writeDebugFiles(context: Context, who: String, content: String) {
+            val timestamp = DateUtil.getDateFormatted("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+            val time = "${System.currentTimeMillis()}; $timestamp"
+
+            Log.e("DebugLogHandler", content)
+            append(context, content, "$time-$who.txt")
+        }
+
         fun append(context: Context, content: String, filename: String) {
             try {
                 Log.e("TAG", context.getExternalFilesDir(null).toString())

@@ -18,6 +18,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.ui.notifications.ErrorNotifications
 import de.felixnuesse.timedsilence.ui.notifications.PausedNotification
+import java.lang.StringBuilder
 import java.text.DateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -125,6 +126,10 @@ class Trigger(var mContext: Context) {
         //Log.e(TAG, "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
 
         LogHandler.writeLog(mContext, "TargetedAlarmHandler", "Create new Alarm", "$calculatedChecktime,${DateUtil.getDate(calculatedChecktime)}")
+
+        val s = StringBuilder()
+        list.forEach { s.append(it.toString()+"\n") }
+        LogHandler.writeDebugFiles(mContext, "TargetedAlarmHandler", s.toString())
 
         val am = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pi: PendingIntent? = createBroadcast(calculatedChecktime)
