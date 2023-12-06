@@ -170,4 +170,7 @@
     <string name="volume_settings_unset_value_description">Select volume that is applied when no calendar or schedule influences device volume</string>
     <string name="export_fileaccess_revoked">Access to files not granted!</string>
     <string name="volume_settings_warning">Warning! This is a very low setting!</string>
+    <string name="settings_behaviour">Behaviour</string>
+    <string name="volume_change_ringer">Change Ringer Volume</string>
+    <string name="volume_change_ringer_description">If you allow this app to change the ringer, it will not ring when set to silent. This has the consequence, that *no* noise will be made, to the extend that also exceptions to the \"Do not Disturb\"-Setting will not ring. Use with care, and verify you get the desired effect.</string>
 </resources>

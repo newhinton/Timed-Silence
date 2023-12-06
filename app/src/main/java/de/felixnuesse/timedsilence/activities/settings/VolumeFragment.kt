@@ -9,14 +9,18 @@ import de.felixnuesse.timedsilence.R
 
 class VolumeFragment : PreferenceFragmentCompat() {
 
+
+
+    private val minVol = 30
+    private var defaultVol = 100
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.volume_preferences, rootKey)
-
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        defaultVol = requireContext().resources.getInteger(R.integer.pref_volume_default)
 
         attachWarning(requireContext().getString(R.string.pref_volume_notification), "ALERT_notification")
         attachWarning(requireContext().getString(R.string.pref_volume_alarm), "ALERT_alarm")
@@ -26,8 +30,6 @@ class VolumeFragment : PreferenceFragmentCompat() {
     private fun attachWarning(sliderID: String, alertID: String) {
         val warning = findPreference(alertID) as Preference?
         val slider: SeekBarPreference? = findPreference(sliderID)
-
-        val minVol = 30
 
         slider?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, newValue ->
@@ -40,7 +42,7 @@ class VolumeFragment : PreferenceFragmentCompat() {
                 }
             }
 
-        warning?.isVisible = (slider?.value?: 80) < minVol
+        warning?.isVisible = (slider?.value?: defaultVol) < minVol
     }
 
 }

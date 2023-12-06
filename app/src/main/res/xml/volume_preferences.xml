@@ -5,6 +5,38 @@
     <PreferenceCategory
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:title="@string/settings_behaviour"
+        app:icon="@drawable/icon_manage_accounts">
+
+        <SwitchPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="@string/pref_general_dont_check_with_connected_headset"
+            android:title="@string/volume_while_headset_connected" />
+
+        <ListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="-1"
+            android:entries="@array/pref_unset_volume"
+            android:entryValues="@array/pref_unset_volume_values"
+            android:key="@string/pref_volume_unset_value"
+            android:title="@string/volume_settings_default_volume"
+            app:summary="@string/volume_settings_unset_value_description" />
+
+        <SwitchPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="@string/pref_general_change_ringer"
+            android:title="@string/volume_change_ringer"
+            app:summary="@string/volume_change_ringer_description" />
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:icon="@drawable/icon_volume_up"
         android:iconSpaceReserved="true"
         android:title="@string/volume_settings">
@@ -45,6 +77,7 @@
         <SeekBarPreference
             android:key="@string/pref_volume_ringer"
             android:title="@string/volume_settings_ringer"
+            android:dependency="@string/pref_general_change_ringer"
             app:defaultValue="@integer/pref_volume_default"
             app:showSeekBarValue="true"
             app:summary="@string/volume_settings_ringer_description" />
@@ -55,15 +88,6 @@
             app:icon="@drawable/ic_warning"
             app:isPreferenceVisible="false" />
 
-        <ListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="-1"
-            android:entries="@array/pref_unset_volume"
-            android:entryValues="@array/pref_unset_volume_values"
-            android:key="@string/pref_volume_unset_value"
-            android:title="@string/volume_settings_default_volume"
-            app:summary="@string/volume_settings_unset_value_description" />
     </PreferenceCategory>
 
 </PreferenceScreen>

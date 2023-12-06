@@ -19,6 +19,7 @@ class PreferencesManager(private var mContext: Context) {
         shouldShowNotification()
         shouldRestartOnBoot()
         runWhenIdle()
+        changeRingerVolume()
 
         getRingerVolume()
         getAlarmVolume()
@@ -29,6 +30,7 @@ class PreferencesManager(private var mContext: Context) {
         ignoreAllday()
         ignoreFree()
         ignoreTentative()
+        ignoreCancelled()
         ignoreCancelled()
 
         return mPreferencesHolder
@@ -118,6 +120,11 @@ class PreferencesManager(private var mContext: Context) {
         return mPreferencesHolder.defaultUnsetVolume
     }
 
+    fun changeRingerVolume(): Boolean {
+        mPreferencesHolder.changeRingerVolume = mPreferences.getBoolean(getKey(R.string.pref_general_change_ringer), mPreferencesHolder.changeRingerVolume)
+        return mPreferencesHolder.changeRingerVolume
+    }
+
     fun applyPreferenceHolder(preferences: PreferencesHolder) {
         setRestartOnBoot(preferences.shouldRestartOnBoot)
         setRunWhenIdle(preferences.runWhenIdle)
@@ -135,6 +142,8 @@ class PreferencesManager(private var mContext: Context) {
         mPreferencesEditor.putBoolean(getKey(R.string.pref_calendar_ignore_tentative), preferences.ignoreTentative)
         mPreferencesEditor.putBoolean(getKey(R.string.pref_calendar_ignore_cancelled), preferences.cancelled)
         mPreferencesEditor.putBoolean(getKey(R.string.pref_calendar_ignore_free), preferences.ignoreFree)
+
+        mPreferencesEditor.putBoolean(getKey(R.string.pref_general_change_ringer), preferences.changeRingerVolume)
         mPreferencesEditor.apply()
     }
 

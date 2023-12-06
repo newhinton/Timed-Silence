@@ -110,11 +110,15 @@ class VolumeHandler(mContext: Context) {
                 AudioManager.STREAM_NOTIFICATION,
                 0
             )
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_RING,
-                0
-            )
+
+            if(PreferencesManager(context).changeRingerVolume()){
+                Log.d(TAG, "VolumeHandler: Setting Ringer! This might be not what you want!")
+                setStreamToPercent(
+                    manager,
+                    AudioManager.STREAM_RING,
+                    0
+                )
+            }
         }
 
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
@@ -146,7 +150,6 @@ class VolumeHandler(mContext: Context) {
         Log.d(TAG, "VolumeHandler: STREAM_MEDIA: $mediaVolume")
         Log.d(TAG, "VolumeHandler: STREAM_ALARM: $alarmVolume")
         Log.d(TAG, "VolumeHandler: STREAM_NOTIFICATION: $notifcationVolume")
-        Log.d(TAG, "VolumeHandler: STREAM_RING: $ringerVolume")
 
 
         setStreamToPercent(
@@ -159,11 +162,16 @@ class VolumeHandler(mContext: Context) {
             AudioManager.STREAM_NOTIFICATION,
             notifcationVolume
         )
-        setStreamToPercent(
-            manager,
-            AudioManager.STREAM_RING,
-            ringerVolume
-        )
+
+        if(PreferencesManager(context).changeRingerVolume()){
+            Log.d(TAG, "VolumeHandler: STREAM_RING: $ringerVolume")
+            Log.d(TAG, "VolumeHandler: Setting Ringer! This might be not what you want!")
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_RING,
+                ringerVolume
+            )
+        }
 
     }
 
@@ -198,12 +206,15 @@ class VolumeHandler(mContext: Context) {
             AudioManager.STREAM_NOTIFICATION,
             0
         )
-        setStreamToPercent(
-            manager,
-            AudioManager.STREAM_RING,
-            0
-        )
 
+        if(PreferencesManager(context).changeRingerVolume()){
+            Log.d(TAG, "VolumeHandler: Silencing Ringer! This might be not what you want!")
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_RING,
+                0
+            )
+        }
     }
 
     private fun setStreamToPercent(manager: AudioManager, stream: Int, percentage: Int) {

@@ -20,6 +20,7 @@
     <string name="pref_general_dont_check_with_connected_headset" translatable="false">PREF_IGNORE_CHECK_WHEN_HEADSET</string>
     <string name="pref_general_run_when_idle" translatable="false">PREF_RUN_ALARMTRIGGER_WHEN_IDLE</string>
     <string name="pref_general_show_notifications_when_paused" translatable="false">PREF_PAUSE_NOTIFICATION</string>
+    <string name="pref_general_change_ringer" translatable="false">PREF_INFLUENCE_RINGER_VOLUME</string>
 
     <string name="pref_general_boot_restart" translatable="false">PREF_BOOT_RESTART</string>
 
