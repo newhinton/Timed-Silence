@@ -3,6 +3,7 @@ package de.felixnuesse.timedsilence.handler.trigger
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -98,7 +99,7 @@ class Trigger(var mContext: Context) {
         )
 
         // The Pending Intent to pass in AlarmManager
-        return PendingIntent.getBroadcast(mContext,0, broadcastIntent, flag or FLAG_IMMUTABLE)
+        return PendingIntent.getBroadcast(mContext,0, broadcastIntent, flag or FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
     }
 
     private fun createAlarmIntime(){
