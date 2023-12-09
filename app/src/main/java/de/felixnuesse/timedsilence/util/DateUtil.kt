@@ -3,7 +3,9 @@ package de.felixnuesse.timedsilence.util
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.temporal.Temporal
 import java.util.*
@@ -72,6 +74,12 @@ class DateUtil{
 
         fun getMinOffsetHumanReadable(offset: Long): String {
             return "${offset/60}H:${offset % 60}M"
+        }
+
+        fun getMidnight(): LocalDateTime {
+            val midnight: LocalTime = LocalTime.MIDNIGHT
+            val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
+            return LocalDateTime.of(today, midnight)
         }
     }
 

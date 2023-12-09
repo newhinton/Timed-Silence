@@ -28,6 +28,7 @@ import android.provider.CalendarContract.Events.AVAILABILITY
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.model.data.CachedArrayList
+import java.time.ZoneId
 
 
 class DeviceCalendar(private var mContext: Context) {
@@ -132,15 +133,18 @@ class DeviceCalendar(private var mContext: Context) {
         val builder = Uri.parse("content://com.android.calendar/instances/when").buildUpon()
         val now = Date().time // - (DateUtils.HOUR_IN_MILLIS + DateUtils.MINUTE_IN_MILLIS*30)
         val range = DateUtils.HOUR_IN_MILLIS * 12
-        ContentUris.appendId(builder, now - range)
-        ContentUris.appendId(builder, now + range)
+
+        DateUtil.getMidnight()
+        DateUtil.getMidnight().plusHours(24)
+        ContentUris.appendId(builder, DateUtil.getMidnight().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+        ContentUris.appendId(builder, DateUtil.getMidnight().plusHours(24).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
 
         var cursor = mContext.contentResolver.query(
             builder.build(),
             getProjection(),
             null,
             null,
-            "$DTEND ASC"
+            "$DTSTART ASC"
         )
 
         if (cursor == null) {
@@ -159,13 +163,14 @@ class DeviceCalendar(private var mContext: Context) {
 
                 event.mCalendarID = cursor.getInt(0)
                 event.setTitle(cursor.getString(1))
-                Log.e(TAG, "Title: ${event.mTitle}")
                 event.setDescription(cursor.getString(2))
                 event.setDtstart(cursor.getLong(3))
                 event.setOrCalculateDtend(cursor.getLong(4), cursor.getString(6)?: "")
                 event.mAllDay = cursor.getInt(5) == 1
                 event.mStatus = cursor.getInt(8)
                 event.mAvailability = cursor.getInt(9)
+
+
 
                 if (!event.shouldEventBeExcluded(mIgnoreAllDayEvents, mIgnoreTentativeEvents, mIgnoreCancelledEvents, mIgnoreFreeEvents)) {
                     eventList.add(event)

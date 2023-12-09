@@ -18,12 +18,12 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.notifications.LocationAccessMissingNotification
+import de.felixnuesse.timedsilence.util.DateUtil
 import java.time.LocalDateTime
 import java.util.*
 import java.time.ZoneId.systemDefault
 import java.time.Instant.ofEpochMilli
-import java.time.LocalDate
-import java.time.LocalTime
+import java.time.ZoneId
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
@@ -71,7 +71,9 @@ class VolumeCalculator {
 
     private var calendarHandler: CalendarHandler
 
+    @Deprecated("Replace with VolumeState")
     private var changeReason = REASON_UNDEFINED
+    @Deprecated("Replace with VolumeState")
     private var changeReasonString = ""
 
     private var ignoreMusicPlaying = false
@@ -100,15 +102,16 @@ class VolumeCalculator {
     fun getChangeList(): ArrayList<VolumeState> {
         return getChangeList(true)
     }
+
+    //Todo: cache this!
     fun getChangeList(addNow: Boolean): ArrayList<VolumeState> {
         var start = System.currentTimeMillis()
         Log.e(TAG, "Starttime: "+start)
 
-        val midnight: LocalTime = LocalTime.MIDNIGHT
-        val today: LocalDate = LocalDate.now(systemDefault())
-        val now: LocalDateTime = LocalDateTime.now(systemDefault())
+
+        val now: LocalDateTime = LocalDateTime.now(ZoneId.systemDefault())
         val nowAsOffset = now.minute+now.hour*60
-        var todayMidnight = LocalDateTime.of(today, midnight)
+        var todayMidnight = DateUtil.getMidnight()
 
         var stateList = arrayListOf<VolumeState>()
 
@@ -185,7 +188,6 @@ class VolumeCalculator {
         return getStateAt(context, timeInMilliseconds, 0)
     }
     fun getStateAt(context: Context, timeInMilliseconds: Long, timeAsOffset: Int): VolumeState {
-
         volumeHandler = VolumeHandler(context)
         switchBasedOnTime(timeInMilliseconds)
         switchBasedOnCalendar(timeInMilliseconds)
@@ -344,7 +346,7 @@ class VolumeCalculator {
     }
 
     private fun setGenericVolume(volume: Int){
-        volumeHandler.overrideMusicToZero = ignoreMusicPlaying;
+        volumeHandler.overrideMusicToZero = ignoreMusicPlaying
         when (volume) {
             TIME_SETTING_LOUD -> {
                 volumeHandler.setLoud()

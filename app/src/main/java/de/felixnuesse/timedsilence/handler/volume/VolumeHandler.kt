@@ -96,9 +96,6 @@ class VolumeHandler(mContext: Context) {
         //supress annoying vibration on Q
         //maybe this is nessessary on P, but idk
         if (android.os.Build.VERSION.SDK_INT < 29) {
-            if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
-                manager.ringerMode=AudioManager.RINGER_MODE_SILENT
-            }
 
             setStreamToPercent(
                 manager,
@@ -113,6 +110,9 @@ class VolumeHandler(mContext: Context) {
 
             if(PreferencesManager(context).changeRingerVolume()){
                 Log.d(TAG, "VolumeHandler: Setting Ringer! This might be not what you want!")
+                if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
+                    manager.ringerMode=AudioManager.RINGER_MODE_SILENT
+                }
                 setStreamToPercent(
                     manager,
                     AudioManager.STREAM_RING,
@@ -179,11 +179,6 @@ class VolumeHandler(mContext: Context) {
         Log.d(TAG, "VolumeHandler: Apply: Vibrate!")
         val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-        if(manager.ringerMode!= AudioManager.RINGER_MODE_VIBRATE){
-            manager.ringerMode=AudioManager.RINGER_MODE_VIBRATE
-        }
-
-
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
         mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
 
@@ -192,7 +187,9 @@ class VolumeHandler(mContext: Context) {
             setMediaVolume(0, context, manager)
         }
 
-
+        if(manager.ringerMode!= AudioManager.RINGER_MODE_VIBRATE){
+            manager.ringerMode=AudioManager.RINGER_MODE_VIBRATE
+        }
 
         var alarmVolume = PreferencesManager(context).getAlarmVolume()
 
@@ -264,21 +261,21 @@ class VolumeHandler(mContext: Context) {
             return
         }
 
-        Log.d(TAG, "VolumeHandler: VolumeSetting: $volumeSetting")
-        LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","$TIME_SETTING_SILENT")
+        Log.d(TAG, "VolumeHandler: VolumeSetting: ${getVolume()}")
+        LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(getVolume())}")
 
         when (getVolume()) {
             TIME_SETTING_SILENT -> {
                 applySilent(context)
-                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","$TIME_SETTING_SILENT")
+                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(TIME_SETTING_SILENT)}")
             }
             TIME_SETTING_VIBRATE -> {
                 applyVibrate(context)
-                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","$TIME_SETTING_VIBRATE")
+                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(TIME_SETTING_VIBRATE)}")
             }
             TIME_SETTING_LOUD -> {
                 applyLoud(context)
-                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","$TIME_SETTING_LOUD")
+                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(TIME_SETTING_LOUD)}")
             }
             else -> {
                 Log.d(TAG, "VolumeHandler: Apply: Nothing, because no volume was selecteds!")
@@ -294,53 +291,7 @@ class VolumeHandler(mContext: Context) {
             TIME_SETTING_LOUD -> return TIME_SETTING_LOUD
             TIME_SETTING_UNSET -> return TIME_SETTING_UNSET
         }
+
         return TIME_SETTING_UNSET
-    }
-
-    fun getChangeList(context: Context):ArrayList<Long> {
-        Log.e(TAG, "VolumeHandler: start")
-
-        var list = ArrayList<Long>()
-
-        var volCalc = VolumeCalculator(context!!, true)
-
-        val midnight: LocalTime = LocalTime.MIDNIGHT
-        val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
-        var todayMidnight = LocalDateTime.of(today, midnight)
-
-        var lastState = TIME_SETTING_UNSET
-        val lastElem = 1440 //start by 0:00 end by 23:59
-
-
-        val rightNow = Calendar.getInstance()
-        var currentHour = rightNow.get(Calendar.HOUR_OF_DAY)*60
-        currentHour += rightNow.get(Calendar.MINUTE)
-
-
-        for(elem in 0..lastElem){
-
-            val hoursFromInt = Math.floorDiv(elem, 60)
-            val minutesFromInt = elem - (60*hoursFromInt)
-
-            var localMidnight = todayMidnight.plusHours(hoursFromInt.toLong())
-            localMidnight = localMidnight.plusMinutes(minutesFromInt.toLong())
-
-            //val text = TextView(context)
-            var checkTime = localMidnight.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-            val vol_state = volCalc.getStateAt(context, checkTime)
-            val state = vol_state.state
-
-
-            if(lastState!=state || elem == lastElem){
-                Log.e(TAG, "VolumeHandler: getChangeList: Run Minute: ${elem}; State: ${state}")
-
-                list.add(checkTime)
-                lastState=state
-            }
-
-        }
-
-        list.sort()
-        return list
     }
 }
