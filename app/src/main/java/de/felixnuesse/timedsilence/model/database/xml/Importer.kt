@@ -1,26 +1,14 @@
 package de.felixnuesse.timedintenttrigger.database.xml
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.PreferencesManager
-import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
-import de.felixnuesse.timedsilence.model.data.CalendarObject
-import de.felixnuesse.timedsilence.model.data.KeywordObject
-import de.felixnuesse.timedsilence.model.data.KeywordObject.Companion.ALL_CALENDAR
-import de.felixnuesse.timedsilence.model.data.ScheduleObject
-import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.AppDataStructure
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import org.xml.sax.InputSource
-import org.xml.sax.SAXParseException
 import java.io.*
-import java.util.ArrayList
-import javax.xml.parsers.DocumentBuilderFactory
 
 /**
  * Copyright (C) 2019  Felix Nüsse

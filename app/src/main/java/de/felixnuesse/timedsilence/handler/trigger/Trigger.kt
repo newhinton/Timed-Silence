@@ -6,8 +6,6 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
@@ -15,7 +13,7 @@ import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
-import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
+import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReciever
 import de.felixnuesse.timedsilence.ui.notifications.ErrorNotifications
 import de.felixnuesse.timedsilence.ui.notifications.PausedNotification
 import java.lang.StringBuilder
@@ -84,7 +82,7 @@ class Trigger(var mContext: Context) {
 
     fun createBroadcast(flag: Int, targettime: Long): PendingIntent? {
 
-        val broadcastIntent = Intent(mContext, AlarmBroadcastReceiver::class.java)
+        val broadcastIntent = Intent(mContext, AlarmBroadcastReciever::class.java)
 
         broadcastIntent.putExtra(
             Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA,

@@ -11,7 +11,8 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.util.DateUtil
 import java.util.*
 
-class AlarmBroadcastReceiver : BroadcastReceiver() {
+
+class AlarmBroadcastReciever : BroadcastReceiver() {
 
     companion object {
         private const val TAG = "AlarmBroadcastReceiver"

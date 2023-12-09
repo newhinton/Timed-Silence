@@ -63,7 +63,6 @@ import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
-import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 
 import java.util.*
