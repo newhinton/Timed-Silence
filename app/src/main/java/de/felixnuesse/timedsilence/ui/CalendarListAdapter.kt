@@ -76,8 +76,8 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
 
                 applyTextfieldStyle(holder.calendarView.textViewCalendarRowTitle)
 
-                holder.calendarView.cardView.setCardBackgroundColor(calHandler.getCalendarColor(calObject.name))
-                holder.calendarView.deleteCalendarElement.setColorFilter(calHandler.getCalendarColor(calObject.name))
+                holder.calendarView.cardView.setCardBackgroundColor(calHandler.getCalendarColor(calObject.externalID))
+                holder.calendarView.deleteCalendarElement.setColorFilter(calHandler.getCalendarColor(calObject.externalID))
 
                 var imageID=R.drawable.icon_volume_up
                 when (calObject.volume) {

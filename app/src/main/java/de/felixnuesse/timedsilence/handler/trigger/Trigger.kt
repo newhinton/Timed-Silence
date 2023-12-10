@@ -103,7 +103,7 @@ class Trigger(var mContext: Context) {
 
     private fun createAlarmIntime(){
         val now = System.currentTimeMillis()
-        val list = StateGenerator(mContext).getLinearStates()
+        val list = StateGenerator(mContext).states()
 
         val midnight: LocalTime = LocalTime.MIDNIGHT
         val today: LocalDate = LocalDate.now(ZoneId.systemDefault())

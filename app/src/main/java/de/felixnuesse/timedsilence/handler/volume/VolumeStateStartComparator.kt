@@ -3,7 +3,7 @@ package de.felixnuesse.timedsilence.handler.volume
 import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendarEventModel
 import java.util.Comparator
 
-class VolumeStateComparator : Comparator<VolumeState> {
+class VolumeStateStartComparator : Comparator<VolumeState> {
 
     override fun compare(o1: VolumeState, o2: VolumeState): Int {
 

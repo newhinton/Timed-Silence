@@ -90,7 +90,7 @@ class GraphFragment : Fragment() {
         setLegendColor(R.color.color_graph_loud, binding.imageViewLegendLoud)
 
         val volCalc = StateGenerator(requireContext())
-        val list = volCalc.getLinearStates()
+        val list = volCalc.states()
         var isfirst = true
 
         val barElementList = arrayListOf<LinearLayout>()

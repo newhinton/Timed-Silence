@@ -61,6 +61,7 @@ open class Events(private var mContext: Context): DeterministicCalculationInterf
     private val mDeviceCalendar = DeviceCalendar(mContext)
 
 
+    //Todo: Move that out and chache it for events too. This takes a while.
     fun getEventsForDay(): ArrayList<DeviceCalendarEventModel> {
         if (mEventList.cacheInitialized) {
             return mEventList
@@ -96,9 +97,15 @@ open class Events(private var mContext: Context): DeterministicCalculationInterf
 
         var eventList: ArrayList<DeviceCalendarEventModel> = ArrayList()
 
+        Log.e(TAG, "How many events? ${cursor.count}")
+        Log.e(TAG, "How many events? ${DateUtil.getDate(date)}")
         for (i in 0..<cursor.count) {
 
             try {
+
+
+                Log.e(TAG, "How many events? ${cursor.getString(1)}")
+
                 var event = DeviceCalendarEventModel(mContext, date)
 
                 event.mCalendarID = cursor.getInt(0)
@@ -127,14 +134,14 @@ open class Events(private var mContext: Context): DeterministicCalculationInterf
         Collections.sort(eventList, this.DeviceCalendarEventModelComparator())
         mEventList.set(eventList)
 
-        mEventList.forEach {
+        /*mEventList.forEach {
 
             Log.e(TAG, "Title: ${it.mTitle}")
             Log.e(TAG, "Title: ${it.mDescription}")
             Log.e(TAG, "Title: ${DateUtil.getDate(it.mStart)}")
             Log.e(TAG, "Title: ${it.mAllDay}")
             Log.e(TAG, "-----")
-        }
+        }*/
         return mEventList
     }
 

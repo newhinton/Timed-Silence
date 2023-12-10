@@ -50,7 +50,7 @@ class DeviceCalendar(private var mContext: Context) {
     }
 
     private val TAG: String = "DeviceCalendar"
-    private var calendarCache = HashMap<String, CalendarObject>()
+    private var calendarCache = HashMap<Long, CalendarObject>()
     private val settingsCalendar = SettingsCalendar(mContext)
 
     fun getCalendarVolumeSetting(name: String):Int{
@@ -58,19 +58,14 @@ class DeviceCalendar(private var mContext: Context) {
         return calObject?.volume ?: DEFAULT_VOLUME
     }
 
-    fun getCalendarColor(name: String): Int{
-        val calObject = getCalendars()[name]
+    fun getCalendarColor(externalId: Long): Int{
+        val calObject = getCalendars()[externalId]
         return calObject?.color ?: DEFAULT_COLOR
     }
 
     fun getCalendarName(externalId: Long): String{
-        var name = DEFAULT_NAME
-        getCalendars().forEach { (_, value) ->
-            if(value.externalID==externalId){
-                name = value.name
-            }
-        }
-        return name
+        val calObject = getCalendars()[externalId]
+        return calObject?.name ?: DEFAULT_NAME
     }
     fun getVolumeCalendars(): ArrayList<CalendarObject> {
         val calendars = ArrayList<CalendarObject>()
@@ -88,7 +83,7 @@ class DeviceCalendar(private var mContext: Context) {
         return calendars
     }
 
-    fun getCalendars(): HashMap<String, CalendarObject> {
+    fun getCalendars(): HashMap<Long, CalendarObject> {
         if (calendarCache.size > 0) {
             return calendarCache
         }
@@ -120,7 +115,7 @@ class DeviceCalendar(private var mContext: Context) {
                     calentry.color = cursor.getInt(2)
                     calentry.name = cursor.getString(1)
 
-                    calendarCache[calentry.name] = calentry
+                    calendarCache[calentry.externalID] = calentry
                     cursor.moveToNext()
                 }
             } else {

@@ -110,4 +110,13 @@ class VolumeState(var state: Int) {
 
         return "VolumeState(startTime=${getFormattedStartDate()}, endTime=${getFormattedEndDate()}, duration=$duration, state=${stateString()}, reason=$stringReason, reasonDescription='$reasonDescription')"
     }
+
+    fun copy(): VolumeState {
+        val copy = VolumeState(state)
+        copy.startTime = startTime
+        copy.endTime = endTime
+        copy.reason = reason
+        copy.reasonDescription = reasonDescription
+        return copy
+    }
 }
