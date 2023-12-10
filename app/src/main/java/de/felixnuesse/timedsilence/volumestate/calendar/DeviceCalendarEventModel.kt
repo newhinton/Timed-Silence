@@ -1,14 +1,15 @@
-package de.felixnuesse.timedsilence.model.calendar
+package de.felixnuesse.timedsilence.volumestate.calendar
 
 import android.content.Context
 import android.provider.CalendarContract
-import android.util.Log
 import de.felixnuesse.timedsilence.R
 import java.time.Duration
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.regex.Pattern
 
-class DeviceCalendarEventModel(mContext: Context) {
+class DeviceCalendarEventModel(mContext: Context, private val mDate: LocalDateTime) {
 
     private val TAG: String = "DeviceCalendarEventModel"
 
@@ -62,12 +63,17 @@ class DeviceCalendarEventModel(mContext: Context) {
 
     private fun getRecurringEventTimeOffset(time: Long): Long {
         //the start time is from the FIRST time the event happens, so adjust it (recurring events)
+
+        // Also obey the mDate variable to allow other days to be caluclated.
+        val caldendarDateToCheck = Calendar.getInstance()
+        caldendarDateToCheck.timeInMillis = mDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = time
         calendar.set(
-            Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(
-                Calendar.MONTH
-            ), Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+            caldendarDateToCheck.get(Calendar.YEAR),
+            caldendarDateToCheck.get(Calendar.MONTH),
+            caldendarDateToCheck.get(Calendar.DAY_OF_MONTH)
         )
         return calendar.timeInMillis
     }

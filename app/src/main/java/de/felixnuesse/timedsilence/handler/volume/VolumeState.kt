@@ -1,6 +1,11 @@
 package de.felixnuesse.timedsilence.handler.volume
 
-import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_CALENDAR
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_KEYWORD
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_TIME
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_UNDEFINED
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_WIFI
+import de.felixnuesse.timedsilence.util.DateUtil
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -8,63 +13,78 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-class VolumeState(var startTime: Int, val state: Int, val reason: Int, val reasonDescription: String) {
-
-    var endTime: Int = startTime
-
-    val duration: Int
-        get() = endTime-startTime
+class VolumeState(var state: Int) {
 
     companion object {
         const val TIME_SETTING_SILENT = 1
         const val TIME_SETTING_VIBRATE = 2
         const val TIME_SETTING_LOUD = 3
         const val TIME_SETTING_UNSET = -1
+
+        fun timeSettingToReadable(setting: Int): String {
+            return when(setting) {
+                TIME_SETTING_SILENT -> "Silent"
+                TIME_SETTING_VIBRATE -> "Vibrate"
+                TIME_SETTING_LOUD -> "Loud"
+                else -> "unset/other"
+            }
+        }
+
+        fun isFirstLouder(first: VolumeState, second: VolumeState): Boolean {
+            return first.state > second.state && first.state != TIME_SETTING_UNSET
+        }
     }
 
+    constructor(startTime: Long, state: Int, reason: Int, reasonDescription: String): this(state) {
+        this.startTime = startTime
+        this.endTime = startTime
+        this.state = state
+        this.reason = reason
+        this.reasonDescription = reasonDescription
+    }
 
-    fun getReason(): String{
+    var startTime: Long = 0
+    var endTime: Long = startTime
+
+    private var reason: Int = REASON_UNDEFINED
+    private var reasonDescription: String = ""
+
+    val duration: Long
+        get() = endTime-startTime
+
+
+    fun setReason(reason: Int, reasonDescription: String) {
+        this.reason = reason
+        this.reasonDescription = reasonDescription
+    }
+
+    fun getReason(): String {
         var s = ""
         when (reason) {
-            Constants.REASON_CALENDAR -> s = "Volume changed because of calendar: $reasonDescription"
-            Constants.REASON_KEYWORD -> s = "Volume changed because of Keyword in calendar: $reasonDescription"
-            Constants.REASON_TIME -> s = "Volume changed because of time: $reasonDescription"
-            Constants.REASON_UNDEFINED -> s = "Default Volume."
-            Constants.REASON_WIFI -> s = "Volume changed because of wifi: $reasonDescription"
+            REASON_CALENDAR -> s = "Volume changed because of calendar: $reasonDescription"
+            REASON_KEYWORD -> s = "Volume changed because of Keyword in calendar: $reasonDescription"
+            REASON_TIME -> s = "Volume changed because of time: $reasonDescription"
+            REASON_UNDEFINED -> s = "Default Volume."
+            REASON_WIFI -> s = "Volume changed because of wifi: $reasonDescription"
         }
         return s
     }
 
     fun getFormattedStartDate(): String {
-        return getFormattedDate(startTime)
+        return DateUtil.getDate(startTime, "HH:mm")
     }
 
     fun getFormattedEndDate(): String {
-        return getFormattedDate(endTime)
+        return DateUtil.getDate(endTime, "HH:mm")
     }
 
-    private fun getFormattedDate(time: Int): String {
+    private fun getFormattedDate(time: Long): String {
         var today = LocalDate.now(ZoneId.systemDefault())
         var todayMidnight = LocalDateTime.of(today, LocalTime.MIDNIGHT)
-        val timestamp = todayMidnight.plusMinutes(time.toLong())
+        val timestamp = todayMidnight.plusMinutes(time)
 
         var shortFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
         return timestamp.toLocalTime().format(shortFormat)
-    }
-
-    override fun toString(): String {
-
-
-        var stringReason = reason.toString()
-        when (reason) {
-            Constants.REASON_CALENDAR -> stringReason = "CALENDAR"
-            Constants.REASON_KEYWORD -> stringReason = "KEYWORD"
-            Constants.REASON_TIME -> stringReason = "TIME"
-            Constants.REASON_UNDEFINED -> stringReason = "UNDEFINED"
-            Constants.REASON_WIFI -> stringReason = "WIFI"
-        }
-
-        return "VolumeState(startTime=${getFormattedStartDate()}, endTime=${getFormattedEndDate()}, duration=$duration, state=${stateString()}, reason=$stringReason, reasonDescription='$reasonDescription')"
     }
 
     fun stateString(): String {
@@ -77,5 +97,17 @@ class VolumeState(var startTime: Int, val state: Int, val reason: Int, val reaso
         }
     }
 
+    override fun toString(): String {
 
+        var stringReason = reason.toString()
+        when (reason) {
+            REASON_CALENDAR -> stringReason = "CALENDAR"
+            REASON_KEYWORD -> stringReason = "KEYWORD"
+            REASON_TIME -> stringReason = "TIME"
+            REASON_UNDEFINED -> stringReason = "UNDEFINED"
+            REASON_WIFI -> stringReason = "WIFI"
+        }
+
+        return "VolumeState(startTime=${getFormattedStartDate()}, endTime=${getFormattedEndDate()}, duration=$duration, state=${stateString()}, reason=$stringReason, reasonDescription='$reasonDescription')"
+    }
 }

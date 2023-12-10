@@ -7,7 +7,6 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
-import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.util.DateUtil
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -59,7 +58,7 @@ class AlarmBroadcastReciever : BroadcastReceiver() {
 
             if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)) {
                 Log.d(TAG, "Alarmintent: Content is to \"check the time\"")
-                VolumeCalculator(context).calculateAllAndApply()
+                //VolumeCalculator(context).calculateAllAndApply()
                 Trigger(context).createTimecheck()
 
             }

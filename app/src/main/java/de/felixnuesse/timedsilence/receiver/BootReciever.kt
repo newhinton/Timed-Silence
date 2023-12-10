@@ -6,7 +6,6 @@ import android.content.Intent
 import android.util.Log
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
-import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 
 class BootReciever : BroadcastReceiver(){
 
@@ -17,7 +16,7 @@ class BootReciever : BroadcastReceiver(){
     override fun onReceive(context: Context, intent: Intent) {
         if(intent.action==Intent.ACTION_BOOT_COMPLETED){
             Log.e(TAG, "BootReciever: Started Device!")
-            VolumeCalculator(context).calculateAllAndApply()
+            //VolumeCalculator(context).calculateAllAndApply()
 
             if(PreferencesManager(context).shouldRestartOnBoot()){
                 Log.e(TAG, "BootReciever: Started Checks!")

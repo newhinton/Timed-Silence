@@ -53,15 +53,13 @@ import de.felixnuesse.timedsilence.Constants.Companion.MAIN_ACTIVITY_LOAD_CALEND
 import de.felixnuesse.timedsilence.IntroActivity.Companion.INTRO_PREFERENCES
 import de.felixnuesse.timedsilence.activities.SettingsActivity
 import de.felixnuesse.timedsilence.databinding.ActivityMainBinding
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
+import de.felixnuesse.timedsilence.fragments.CalendarFragment
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.fragments.TimeFragment
 import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.*
-import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
-import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 
@@ -101,7 +99,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         VolumeHandler.getVolumePermission(this)
-        CalendarHandler.getCalendarReadPermission(this)
+        //CalendarHandler.getCalendarReadPermission(this)
         mTrigger = Trigger(this)
 
         button_check = getString(R.string.timecheck_stopped)
@@ -161,7 +159,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         handleCalendarFragmentIntentExtra()
         if (mDontCheckGraph) {
-            VolumeCalculator(this).calculateAllAndApply()
+            //VolumeCalculator(this).calculateAllAndApply()
         }
     }
 
@@ -307,11 +305,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         if (button_check == getString(R.string.timecheck_start)) {
             mTrigger.createTimecheck()
             PreferencesManager(this).setRestartOnBoot(true)
-            VolumeCalculator(this).calculateAllAndApply()
+            //VolumeCalculator(this).calculateAllAndApply()
         } else if (button_check == getString(R.string.timecheck_paused)) {
             mTrigger.createTimecheck()
             PreferencesManager(this).setRestartOnBoot(true)
-            VolumeCalculator(this).calculateAllAndApply()
+            //VolumeCalculator(this).calculateAllAndApply()
         } else {
             mTrigger.removeTimecheck()
             PreferencesManager(this).setRestartOnBoot(false)
@@ -374,7 +372,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             when (position) {
                 0 -> return GraphFragment()
                 1 -> return TimeFragment()
-                2 -> return CalendarEventFragment()
+                2 -> return CalendarFragment()
                 3 -> return KeywordFragment()
                 4 -> return WifiConnectedFragment()
                 else -> return TimeFragment()

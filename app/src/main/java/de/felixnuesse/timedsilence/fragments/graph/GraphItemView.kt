@@ -51,7 +51,7 @@ class GraphItemView: LinearLayout {
 
     }
 
-    fun updateVisibility(duration: Int) {
+    fun updateVisibility(duration: Long) {
         if(duration<10) {
             binding.textContainer.visibility = View.GONE
         }

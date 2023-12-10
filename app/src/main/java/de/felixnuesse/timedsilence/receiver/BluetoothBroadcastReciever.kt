@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
-import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 
 class BluetoothBroadcastReciever : BroadcastReceiver(){
 
@@ -31,9 +30,9 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
             }
 
             if(Trigger(context).checkIfNextAlarmExists()){
-                var volCalculator = VolumeCalculator(context)
-                volCalculator.ignoreMusicPlaying(true)
-                volCalculator.calculateAllAndApply()
+                //var volCalculator = VolumeCalculator(context)
+                //volCalculator.ignoreMusicPlaying(true)
+                //volCalculator.calculateAllAndApply()
             } else {
                 Log.e(TAG, "BluetoothBroadcastReciever: No next alarm scheduled, dont update!")
             }

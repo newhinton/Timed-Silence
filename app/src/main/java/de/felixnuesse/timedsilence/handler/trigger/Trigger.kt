@@ -12,10 +12,10 @@ import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.PreferencesManager
-import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReciever
 import de.felixnuesse.timedsilence.ui.notifications.ErrorNotifications
 import de.felixnuesse.timedsilence.ui.notifications.PausedNotification
+import de.felixnuesse.timedsilence.volumestate.StateGenerator
 import java.lang.StringBuilder
 import java.text.DateFormat
 import java.time.LocalDate
@@ -103,7 +103,7 @@ class Trigger(var mContext: Context) {
 
     private fun createAlarmIntime(){
         val now = System.currentTimeMillis()
-        val list = VolumeCalculator(mContext).getChangeList(false)
+        val list = StateGenerator(mContext).getLinearStates()
 
         val midnight: LocalTime = LocalTime.MIDNIGHT
         val today: LocalDate = LocalDate.now(ZoneId.systemDefault())

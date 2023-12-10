@@ -7,22 +7,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import de.felixnuesse.timedsilence.Constants
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.databinding.FragmentCalendarEventBinding
 import de.felixnuesse.timedsilence.dialogs.CalendarDialog
-import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.CalendarListAdapter
 import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
+import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
 import kotlin.collections.ArrayList
 
 
-class CalendarEventFragment : Fragment() {
+class CalendarFragment : Fragment() {
 
     companion object {
-        private const val TAG = "WifiDialog"
+        private const val TAG = "CalendarFragment"
         var nameOfEvent = ArrayList<String>()
         var startDates = ArrayList<String>()
         var endDates = ArrayList<String>()
@@ -41,14 +40,13 @@ class CalendarEventFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCalendarEventBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val calHandler =
-            CalendarHandler(view.context)
+        val calHandler = DeviceCalendar(view.context)
 
 
         checkContainer(calHandler, view.context)
@@ -61,7 +59,6 @@ class CalendarEventFragment : Fragment() {
         val db = DatabaseHandler(view.context)
 
         Log.e(TAG, "CalendarFragment: DatabaseResuluts: Size: "+db.getAllCalendarEntries().size)
-
 
 
         viewManager = NestedRecyclerManager(view.context)
@@ -82,7 +79,7 @@ class CalendarEventFragment : Fragment() {
 
     }
 
-    private fun checkContainer(calHandler: CalendarHandler, context: Context){
+    private fun checkContainer(calHandler: DeviceCalendar, context: Context){
         val emtpyMessage = binding.CalendarEmptyContainer
         val permissionMessage = binding.CalendarPermissionContainer
         val listContainer = binding.CalendarListContainer
@@ -91,8 +88,8 @@ class CalendarEventFragment : Fragment() {
         permissionMessage.visibility = View.GONE
         listContainer.visibility = View.GONE
 
-        val allowed = CalendarHandler.hasCalendarReadPermission(context)
-        val size =calHandler.getDeviceCalendars().size
+        val allowed = DeviceCalendar.hasCalendarReadPermission(context)
+        val size = calHandler.getCalendars().size
 
         if(allowed && size!=0){
             emtpyMessage.visibility = View.GONE
@@ -102,7 +99,7 @@ class CalendarEventFragment : Fragment() {
             emtpyMessage.visibility = View.VISIBLE
             permissionMessage.visibility = View.GONE
             listContainer.visibility = View.GONE
-        }else if(!CalendarHandler.hasCalendarReadPermission(context)) {
+        }else if(!DeviceCalendar.hasCalendarReadPermission(context)) {
             emtpyMessage.visibility = View.GONE
             permissionMessage.visibility = View.VISIBLE
             listContainer.visibility = View.GONE
@@ -113,7 +110,7 @@ class CalendarEventFragment : Fragment() {
         val db = DatabaseHandler(context)
         db.createCalendarEntry(co)
         viewAdapter = CalendarListAdapter(db.getAllCalendarEntries(),
-            CalendarHandler(context)
+            DeviceCalendar(context)
         )
 
         binding.calendarFragmentRecylcerListView.apply {

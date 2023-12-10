@@ -18,13 +18,14 @@ import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.FragmentGraphBinding
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
-import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.util.SizeUtil
+import de.felixnuesse.timedsilence.volumestate.StateGenerator
+import java.util.concurrent.TimeUnit
 
 
 class GraphFragment : Fragment() {
@@ -88,13 +89,13 @@ class GraphFragment : Fragment() {
         setLegendColor(R.color.color_graph_vibrate, binding.imageViewLegendVibrate)
         setLegendColor(R.color.color_graph_loud, binding.imageViewLegendLoud)
 
-        val volCalc = VolumeCalculator(requireContext(), true)
-        val list = volCalc.getChangeList()
+        val volCalc = StateGenerator(requireContext())
+        val list = volCalc.getLinearStates()
         var isfirst = true
 
         val barElementList = arrayListOf<LinearLayout>()
 
-        for (i in 0..<list.size){
+        for (i in list.indices){
             val volumeState = list[i]
 
             val color = resources.getColor(getColorFromState(volumeState.state))
@@ -120,12 +121,12 @@ class GraphFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun createBarElem(context: Context, volumeState: VolumeState, color: Int, nextColor: Int?, isFirst: Boolean): LinearLayout {
 
-
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(volumeState.duration)
         var outerLayout = LinearLayout(context)
         val outerLayoutParams = LinearLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT,
-            volumeState.duration.toFloat()
+            minutes.toFloat()
         )
 
         outerLayout.layoutParams = outerLayoutParams

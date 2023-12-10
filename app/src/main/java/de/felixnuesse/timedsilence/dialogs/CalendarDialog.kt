@@ -8,17 +8,17 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
+import de.felixnuesse.timedsilence.fragments.CalendarFragment
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import android.widget.RadioGroup
 import android.widget.RadioButton
-import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import android.widget.TextView
 import android.text.Html
 import de.felixnuesse.timedsilence.databinding.DialogCalendarBinding
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -53,8 +53,8 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
         private const val TAG = "CalendarDialog"
     }
 
-    private var tfrag: CalendarEventFragment? = null
-    private lateinit var calHandler: CalendarHandler
+    private var tfrag: CalendarFragment? = null
+    private lateinit var calHandler: DeviceCalendar
 
 
     private var radioMap: HashMap<Int,Long> = HashMap()
@@ -62,7 +62,7 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
 
     private lateinit var binding: DialogCalendarBinding
 
-    constructor(context: Context, tfragment: CalendarEventFragment, calHandler: CalendarHandler) : this(context) {
+    constructor(context: Context, tfragment: CalendarFragment, calHandler: DeviceCalendar) : this(context) {
         tfrag=tfragment
         this.calHandler=calHandler
     }

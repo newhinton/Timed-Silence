@@ -11,9 +11,9 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.AdapterCalendarListBinding
-import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
+import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
 import kotlin.collections.ArrayList
 
 
@@ -41,7 +41,7 @@ import kotlin.collections.ArrayList
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
-class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, private var calHandler: CalendarHandler) : RecyclerView.Adapter<CalendarListAdapter.CalendarViewHolder>() {
+class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, private var calHandler: DeviceCalendar) : RecyclerView.Adapter<CalendarListAdapter.CalendarViewHolder>() {
 
         fun removeAt(position: Int) {
                 myDataset.removeAt(position)
@@ -100,7 +100,7 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder.
         // Each data item is just a string in this case that is shown in a TextView.
-        class CalendarViewHolder(val calendarView: AdapterCalendarListBinding, var calHandler: CalendarHandler) : RecyclerView.ViewHolder(calendarView.root)
+        class CalendarViewHolder(val calendarView: AdapterCalendarListBinding, var calHandler: DeviceCalendar) : RecyclerView.ViewHolder(calendarView.root)
 
 }
 

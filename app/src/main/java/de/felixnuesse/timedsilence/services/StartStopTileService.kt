@@ -7,7 +7,6 @@ import android.service.quicksettings.TileService
 import android.util.Log
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
-import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -54,7 +53,7 @@ class StartStopTileService: TileService() {
             t.removeTimecheck()
         } else {
             t.createTimecheck()
-            VolumeCalculator(this).calculateAllAndApply()
+            //VolumeCalculator(this).calculateAllAndApply()
         }
         updateTile()
     }
