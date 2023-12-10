@@ -20,6 +20,15 @@ class VolumeState(var startTime: Int, val state: Int, val reason: Int, val reaso
         const val TIME_SETTING_VIBRATE = 2
         const val TIME_SETTING_LOUD = 3
         const val TIME_SETTING_UNSET = -1
+
+        fun timeSettingToReadable(setting: Int): String {
+            return when(setting) {
+                TIME_SETTING_SILENT -> "Silent"
+                TIME_SETTING_VIBRATE -> "Vibrate"
+                TIME_SETTING_LOUD -> "Loud"
+                else -> "unset/other"
+            }
+        }
     }
 
 
