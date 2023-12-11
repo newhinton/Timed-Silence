@@ -70,35 +70,37 @@
             <LinearLayout
                 android:id="@+id/linearLayout3"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:gravity="center"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_conversion_absoluteHeight="0dp"
-                tools:layout_conversion_absoluteWidth="247dp">
+                app:layout_constraintStart_toStartOf="parent">
 
-                <Button
-                    android:id="@+id/bleft"
-                    android:layout_width="72dp"
+                <ImageButton
+                    android:id="@+id/previousDay"
+                    android:layout_width="48dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="-" />
+                    android:background="@drawable/layout_background_rounded_corners"
+                    android:backgroundTint="?attr/colorPrimaryContainer"
+                    android:src="@drawable/icon_chevron_left"
+                    app:tint="@color/colorStateButtonIcon" />
 
                 <TextView
                     android:id="@+id/labelDayOffset"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:text="0"
                     android:textAlignment="center" />
 
-                <Button
-                    android:id="@+id/bright"
-                    android:layout_width="72dp"
+                <ImageButton
+                    android:id="@+id/nextDay"
+                    android:layout_width="48dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="+" />
+                    android:background="@drawable/layout_background_rounded_corners"
+                    android:backgroundTint="?attr/colorPrimaryContainer"
+                    android:src="@drawable/icon_chevron_right"
+                    app:tint="@color/colorStateButtonIcon" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

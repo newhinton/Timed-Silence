@@ -25,8 +25,11 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.util.SizeUtil
 import de.felixnuesse.timedsilence.volumestate.StateGenerator
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.concurrent.TimeUnit
 
 
@@ -49,6 +52,7 @@ class GraphFragment : Fragment(), View.OnClickListener {
         _binding = FragmentGraphBinding.inflate(inflater, container, false)
         mStateGenerator = StateGenerator(binding.root.context)
         mStateList = mStateGenerator.states()
+        updateLabel()
         return binding.root
     }
 
@@ -87,19 +91,30 @@ class GraphFragment : Fragment(), View.OnClickListener {
             buildGraph(view.context, binding.relLayout)
         }.start()
 
-        binding.bleft.setOnClickListener {
+        binding.previousDay.setOnClickListener {
             dayOffset--
-            binding.labelDayOffset.text = dayOffset.toString()
-            updateGraph(view.context)
-        }
-
-        binding.bright.setOnClickListener {
-            dayOffset++
-            binding.labelDayOffset.text = dayOffset.toString()
+            updateLabel()
             updateStateList()
             updateGraph(view.context)
         }
 
+        binding.nextDay.setOnClickListener {
+            dayOffset++
+            updateLabel()
+            updateStateList()
+            updateGraph(view.context)
+        }
+
+    }
+
+    private fun updateLabel() {
+        val dateToDisplay = LocalDateTime.now()
+            .plusDays(dayOffset.toLong())
+            .atZone(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
+
+        binding.labelDayOffset.text = DateUtil.getDate(dateToDisplay, "dd.MM.yyyy")
     }
 
     fun updateGraph(context: Context) {
