@@ -53,33 +53,20 @@ class WifiConnectedFragment : Fragment() {
         }
 
         binding.buttonWifiAddFragment.setOnClickListener {
-            Log.e(TAG, "WifiFragment: Add new!")
-            //createSSIDDialog(view.context)
             WifiDialog(view.context, this).show()
 
         }
 
 
         val db = DatabaseHandler(view.context)
-
-        Log.e(TAG, "WifiFragment: DatabaseResuluts: Size: "+db.getAllWifiEntries().size)
-
         viewManager = NestedRecyclerManager(view.context)
         viewAdapter = WifiListAdapter(db.getAllWifiEntries())
 
         binding.wifiRecylcerListView.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
             setHasFixedSize(false)
-
-            // use a linear layout manager
             layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
             adapter = viewAdapter
-
         }
-
     }
 
     private fun checkContainer(){
@@ -105,16 +92,9 @@ class WifiConnectedFragment : Fragment() {
         viewAdapter = WifiListAdapter(db.getAllWifiEntries())
 
         binding.wifiRecylcerListView.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
-
-            // use a linear layout manager
             layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
             adapter = viewAdapter
-
         }
     }
 

@@ -71,9 +71,6 @@ open class Events(private var mContext: Context): DeterministicCalculationInterf
             return ArrayList()
         }
 
-        Log.e(TAG, "CurrentTime in MS: " + DateUtil.getDate(date))
-
-
         // Construct the query with the desired date range.
         val builder = Uri.parse("content://com.android.calendar/instances/when").buildUpon()
 
@@ -96,16 +93,9 @@ open class Events(private var mContext: Context): DeterministicCalculationInterf
         cursor.moveToFirst()
 
         var eventList: ArrayList<DeviceCalendarEventModel> = ArrayList()
-
-        Log.e(TAG, "How many events? ${cursor.count}")
-        Log.e(TAG, "How many events? ${DateUtil.getDate(date)}")
         for (i in 0..<cursor.count) {
 
             try {
-
-
-                Log.e(TAG, "How many events? ${cursor.getString(1)}")
-
                 var event = DeviceCalendarEventModel(mContext, date)
 
                 event.mCalendarID = cursor.getInt(0)
@@ -116,8 +106,6 @@ open class Events(private var mContext: Context): DeterministicCalculationInterf
                 event.mAllDay = cursor.getInt(5) == 1
                 event.mStatus = cursor.getInt(8)
                 event.mAvailability = cursor.getInt(9)
-
-
 
                 if (!event.shouldEventBeExcluded(mIgnoreAllDayEvents, mIgnoreTentativeEvents, mIgnoreCancelledEvents, mIgnoreFreeEvents)) {
                     eventList.add(event)
@@ -134,14 +122,6 @@ open class Events(private var mContext: Context): DeterministicCalculationInterf
         Collections.sort(eventList, this.DeviceCalendarEventModelComparator())
         mEventList.set(eventList)
 
-        /*mEventList.forEach {
-
-            Log.e(TAG, "Title: ${it.mTitle}")
-            Log.e(TAG, "Title: ${it.mDescription}")
-            Log.e(TAG, "Title: ${DateUtil.getDate(it.mStart)}")
-            Log.e(TAG, "Title: ${it.mAllDay}")
-            Log.e(TAG, "-----")
-        }*/
         return mEventList
     }
 

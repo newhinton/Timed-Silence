@@ -34,7 +34,6 @@ class LogHandler() {
 
         fun append(context: Context, content: String, filename: String) {
             try {
-                Log.e("TAG", context.getExternalFilesDir(null).toString())
                 val log = File(context.getExternalFilesDir(null), filename)
                 val writer = FileWriter(log, true)
                 writer.append(content+"\n")

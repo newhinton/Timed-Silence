@@ -40,34 +40,16 @@ class StateGenerator(private var mContext: Context) {
     }
 
     fun states(): ArrayList<VolumeState> {
-        var lastCheckpoint = System.currentTimeMillis()
         val start = System.currentTimeMillis()
         Log.e(TAG, "Start-time: $start")
 
         val stateList = arrayListOf<VolumeState>()
 
         stateList.addAll(mEvents.states())
-
-        Log.e(TAG, "1Diff: ${System.currentTimeMillis()-lastCheckpoint}ms")
-        lastCheckpoint = System.currentTimeMillis()
-
-
         stateList.addAll(mKeywords.states())
-
-
-        Log.e(TAG, "2Diff: ${System.currentTimeMillis()-lastCheckpoint}ms")
-        lastCheckpoint = System.currentTimeMillis()
         stateList.addAll(mSchedules.states())
 
-
-        Log.e(TAG, "3Diff: ${System.currentTimeMillis()-lastCheckpoint}ms")
-        lastCheckpoint = System.currentTimeMillis()
-
         Collections.sort(stateList, VolumeStateStartComparator())
-
-
-        Log.e(TAG, "4Diff: ${System.currentTimeMillis()-lastCheckpoint}ms")
-        lastCheckpoint = System.currentTimeMillis()
 
 
         //todo: this is a bit clunky. Maybe there is a better way?
@@ -121,22 +103,7 @@ class StateGenerator(private var mContext: Context) {
             }
         }
 
-
         Collections.sort(linearList, VolumeStateStartComparator())
-
-
-        linearList.forEach {
-            Log.e(TAG, "-----")
-            Log.e(TAG, "State: ${it.state}")
-            Log.e(TAG, "reason: ${it.getReason()}")
-            Log.e(TAG, "start: ${it.startTime} - ${DateUtil.getDate(it.startTime)}")
-            Log.e(TAG, "end: ${it.endTime} - ${DateUtil.getDate(it.endTime)}")
-            Log.e(TAG, "-----")
-        }
-
-        Log.e(TAG, "5Diff: ${System.currentTimeMillis()-lastCheckpoint}ms")
-        lastCheckpoint = System.currentTimeMillis()
-
 
         val end = System.currentTimeMillis()
         Log.e(TAG, "Endtime: $end")
@@ -150,9 +117,6 @@ class StateGenerator(private var mContext: Context) {
 
 
         val first = list.firstOrNull()
-        Log.e(TAG, "DS: ${DateUtil.getDate(dayStart)}")
-        Log.e(TAG, "DE: ${DateUtil.getDate(dayEnd)}")
-        Log.e(TAG, "FS: ${first?.startTime}")
 
         if(first == null || first.startTime > dayStart) {
             val initialVolumeState = VolumeState(defaultVolume)

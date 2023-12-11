@@ -42,27 +42,16 @@ class KeywordFragment : Fragment() {
 
         binding.buttonCalendarFragment.setOnClickListener {
             KeywordDialog(view.context, this).show()
-            Log.e(TAG, "CalendarKeywordFragment: Add new!")
         }
 
         val db = DatabaseHandler(view.context)
-
-        Log.e(TAG, "CalendarKeywordFragment: DatabaseResuluts: Size: "+db.getKeywords().size)
-
         viewManager = NestedRecyclerManager(view.context)
         viewAdapter = KeywordListAdapter(db.getKeywords())
 
         binding.calendarFragmentRecylcerListView.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
-
-            // use a linear layout manager
             layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
             adapter = viewAdapter
-
         }
 
     }

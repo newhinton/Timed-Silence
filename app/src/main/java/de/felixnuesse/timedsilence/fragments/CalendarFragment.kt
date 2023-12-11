@@ -52,15 +52,10 @@ class CalendarFragment : Fragment() {
         checkContainer(calHandler, view.context)
 
         binding.buttonCalendarFragment.setOnClickListener {
-            Log.e(TAG, "CalendarFragment: Add new!")
             CalendarDialog(view.context, this, calHandler).show()
         }
 
         val db = DatabaseHandler(view.context)
-
-        Log.e(TAG, "CalendarFragment: DatabaseResuluts: Size: "+db.getAllCalendarEntries().size)
-
-
         viewManager = NestedRecyclerManager(view.context)
         viewAdapter = CalendarListAdapter(db.getAllCalendarEntries(), calHandler)
 
@@ -114,14 +109,8 @@ class CalendarFragment : Fragment() {
         )
 
         binding.calendarFragmentRecylcerListView.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
-
-            // use a linear layout manager
             layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
             adapter = viewAdapter
 
         }

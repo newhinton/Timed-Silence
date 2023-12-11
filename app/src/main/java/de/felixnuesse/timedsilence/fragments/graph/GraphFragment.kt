@@ -134,7 +134,6 @@ class GraphFragment : Fragment(), View.OnClickListener {
                 nextColor = resources.getColor(getColorFromState(mStateList[i+1].state))
             }
 
-            Log.e("TAG", "TEst: ${(volumeState.state != lastVolumeState)}")
             barElementList.add(createBarElem(context, volumeState, color, nextColor, isfirst, (volumeState.state != lastVolumeState)))
             lastVolumeState = volumeState.state
             isfirst = false
