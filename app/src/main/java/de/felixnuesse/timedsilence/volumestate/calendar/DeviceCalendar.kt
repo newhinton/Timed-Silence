@@ -50,22 +50,31 @@ class DeviceCalendar(private var mContext: Context) {
     }
 
     private val TAG: String = "DeviceCalendar"
-    private var calendarCache = HashMap<Long, CalendarObject>()
+    private var calendarCache = HashMap<String, CalendarObject>()
     private val settingsCalendar = SettingsCalendar(mContext)
 
-    fun getCalendarVolumeSetting(name: String):Int{
+    fun getCalendarVolumeSetting(name: String):Int {
         val calObject = settingsCalendar.getCalendars()[name]
         return calObject?.volume ?: DEFAULT_VOLUME
     }
 
-    fun getCalendarColor(externalId: Long): Int{
-        val calObject = getCalendars()[externalId]
+    //Todo: figure out why this is needed, and the color attribute is not used in eg. CalendarListAdapter
+    fun getCalendarColor(name: String): Int {
+        val calObject = getCalendars()[name]
         return calObject?.color ?: DEFAULT_COLOR
     }
 
-    fun getCalendarName(externalId: Long): String{
-        val calObject = getCalendars()[externalId]
-        return calObject?.name ?: DEFAULT_NAME
+    /**
+     * This function gets the local, device-specific id for a given calendar name.
+     * You can use this id to get the other information.
+     */
+    fun getCalendarName(externalId: Long): String {
+        getCalendars().forEach {(key, value) ->
+            if(value.externalID == externalId) {
+                return value.name
+            }
+        }
+        return DEFAULT_NAME
     }
     fun getVolumeCalendars(): ArrayList<CalendarObject> {
         val calendars = ArrayList<CalendarObject>()
@@ -83,7 +92,7 @@ class DeviceCalendar(private var mContext: Context) {
         return calendars
     }
 
-    fun getCalendars(): HashMap<Long, CalendarObject> {
+    fun getCalendars(): HashMap<String, CalendarObject> {
         if (calendarCache.size > 0) {
             return calendarCache
         }
@@ -115,7 +124,7 @@ class DeviceCalendar(private var mContext: Context) {
                     calentry.color = cursor.getInt(2)
                     calentry.name = cursor.getString(1)
 
-                    calendarCache[calentry.externalID] = calentry
+                    calendarCache[calentry.name] = calentry
                     cursor.moveToNext()
                 }
             } else {

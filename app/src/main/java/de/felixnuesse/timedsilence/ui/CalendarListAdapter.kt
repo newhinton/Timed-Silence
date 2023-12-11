@@ -66,7 +66,7 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
         override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
                 // - get element from your dataset at this position
                 // - replace the contents of the view with that element
-                val calObject=myDataset.get(position)
+                val calObject= myDataset[position]
 
                 holder.calendarView.textViewCalendarRowTitle.text = calObject.name
                 holder.calendarView.deleteCalendarElement.setOnClickListener {
@@ -76,8 +76,8 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
 
                 applyTextfieldStyle(holder.calendarView.textViewCalendarRowTitle)
 
-                holder.calendarView.cardView.setCardBackgroundColor(calHandler.getCalendarColor(calObject.externalID))
-                holder.calendarView.deleteCalendarElement.setColorFilter(calHandler.getCalendarColor(calObject.externalID))
+                holder.calendarView.cardView.setCardBackgroundColor(calHandler.getCalendarColor(calObject.name))
+                holder.calendarView.deleteCalendarElement.setColorFilter(calHandler.getCalendarColor(calObject.name))
 
                 var imageID=R.drawable.icon_volume_up
                 when (calObject.volume) {
