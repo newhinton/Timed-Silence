@@ -193,6 +193,12 @@ class StateGenerator(private var mContext: Context) {
         return list
     }
 
+    fun setDayOffset(dayOffset: Int) {
+        mDate = LocalDateTime.now().plusDays(dayOffset.toLong())
+        mEvents.date = mDate
+        mKeywords.date = mDate
+        mSchedules.date = mDate
+    }
 
 
 }

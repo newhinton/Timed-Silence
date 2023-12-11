@@ -35,6 +35,8 @@ class GraphFragment : Fragment() {
     private var _binding: FragmentGraphBinding? = null
     private val binding get() = _binding!!
 
+    private var dayOffset = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -78,8 +80,27 @@ class GraphFragment : Fragment() {
             buildGraph(view.context, binding.relLayout)
         }.start()
 
+        binding.bleft.setOnClickListener {
+            dayOffset--
+            binding.labelDayOffset.text = dayOffset.toString()
+            updateGraph(view.context)
+        }
 
+        binding.bright.setOnClickListener {
+            dayOffset++
+            binding.labelDayOffset.text = dayOffset.toString()
+            updateGraph(view.context)
+        }
 
+    }
+
+    fun updateGraph(context: Context) {
+        binding.relLayout.removeAllViews()
+        binding.loadingColumn.visibility = View.VISIBLE
+
+        Thread {
+            buildGraph(context, binding.relLayout)
+        }.start()
     }
 
     fun buildGraph(context:Context, relLayout: LinearLayout){
@@ -90,6 +111,7 @@ class GraphFragment : Fragment() {
         setLegendColor(R.color.color_graph_loud, binding.imageViewLegendLoud)
 
         val volCalc = StateGenerator(requireContext())
+        volCalc.setDayOffset(dayOffset)
         val list = volCalc.states()
         var isfirst = true
 
