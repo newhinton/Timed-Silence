@@ -103,4 +103,16 @@ class GraphItemView: LinearLayout {
     fun setText(s: String) {
         binding.textView3.text = s
     }
+
+    fun changeAnnotationVisibility(visible: Boolean) {
+        if(visible) {
+            binding.textContainer.visibility = View.VISIBLE
+        } else {
+            binding.textContainer.visibility = View.GONE
+        }
+    }
+
+    fun setOnBarClick(listener: OnClickListener){
+        binding.barElement.setOnClickListener(listener)
+    }
 }

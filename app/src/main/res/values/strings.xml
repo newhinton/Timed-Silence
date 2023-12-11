@@ -173,4 +173,5 @@
     <string name="settings_behaviour">Behaviour</string>
     <string name="volume_change_ringer">Change Ringer Volume instead of using Do not Disturb</string>
     <string name="volume_change_ringer_description">If you allow this app to change the ringer, it will not ring when set to silent. This has the consequence, that *no* noise will be made, to the extend that also exceptions to the \"Do not Disturb\"-Setting will not ring. Use with care, and verify you get the desired effect.</string>
+    <string name="ok">Ok</string>
 </resources>
