@@ -33,6 +33,9 @@ class SettingsActivity : AppCompatActivity() {
 
         mOnBackCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                if(mCurrentFragment is SelectorFragment) {
+                    finish()
+                }
                 openFragment(mSelectorFragment)
             }
         }
