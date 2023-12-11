@@ -36,7 +36,12 @@ class StateGenerator(private var mContext: Context) {
     }
 
     fun stateAt(timeInMs: Long): VolumeState {
-        return VolumeState(0)
+        for (state in states()) {
+            if(state.startTime <= timeInMs && timeInMs <= state.endTime) {
+                return state
+            }
+        }
+        return VolumeState(mPreferencesManager.getDefaultUnsetVolume())
     }
 
     fun states(): ArrayList<VolumeState> {

@@ -2,6 +2,7 @@ package de.felixnuesse.timedsilence.handler.volume
 
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_CALENDAR
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_KEYWORD
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_MANUALLY_SET
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_TIME
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_UNDEFINED
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_WIFI
@@ -58,6 +59,7 @@ class VolumeState(var state: Int) {
         this.reasonDescription = reasonDescription
     }
 
+    //Todo: translate this!
     fun getReason(): String {
         var s = ""
         when (reason) {
@@ -66,6 +68,7 @@ class VolumeState(var state: Int) {
             REASON_TIME -> s = "Volume changed because of time: $reasonDescription"
             REASON_UNDEFINED -> s = "Default Volume."
             REASON_WIFI -> s = "Volume changed because of wifi: $reasonDescription"
+            REASON_MANUALLY_SET -> s = "Volume was set manually: $reasonDescription"
         }
         return s
     }
@@ -106,6 +109,7 @@ class VolumeState(var state: Int) {
             REASON_TIME -> stringReason = "TIME"
             REASON_UNDEFINED -> stringReason = "UNDEFINED"
             REASON_WIFI -> stringReason = "WIFI"
+            REASON_MANUALLY_SET -> stringReason = "MANUAL"
         }
 
         return "VolumeState(startTime=${getFormattedStartDate()}, endTime=${getFormattedEndDate()}, duration=$duration, state=${stateString()}, reason=$stringReason, reasonDescription='$reasonDescription')"

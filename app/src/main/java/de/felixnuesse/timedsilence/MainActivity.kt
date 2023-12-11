@@ -29,6 +29,7 @@ package de.felixnuesse.timedsilence
  *
  */
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -43,6 +44,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -62,6 +64,7 @@ import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
+import de.felixnuesse.timedsilence.volumestate.StateGenerator
 
 import java.util.*
 
@@ -77,15 +80,14 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     private var lastTabPosition = 0
     private lateinit var mPager: ViewPager
     private lateinit var mTrigger: Trigger
+    private lateinit var mVolumeHandler: VolumeHandler
 
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-        val sharedPref =
-            applicationContext.getSharedPreferences(INTRO_PREFERENCES, Context.MODE_PRIVATE)
+        val sharedPref = applicationContext.getSharedPreferences(INTRO_PREFERENCES, Context.MODE_PRIVATE)
         if (!sharedPref.getBoolean(getString(R.string.pref_key_intro_v1_0_0), false)) {
             startActivity(Intent(this, IntroActivity::class.java))
             finish()
@@ -101,6 +103,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         VolumeHandler.getVolumePermission(this)
         //CalendarHandler.getCalendarReadPermission(this)
         mTrigger = Trigger(this)
+        mVolumeHandler = VolumeHandler(this)
 
         button_check = getString(R.string.timecheck_stopped)
 
@@ -159,7 +162,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         handleCalendarFragmentIntentExtra()
         if (mDontCheckGraph) {
-            //VolumeCalculator(this).calculateAllAndApply()
+            mVolumeHandler.setVolumeStateAndApply(StateGenerator(this).stateAt(System.currentTimeMillis()))
         }
     }
 
@@ -190,9 +193,15 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         }, 0)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
+        if (menu is MenuBuilder) {
+            var builder = menu
+            builder.setOptionalIconsVisible(true)
+        }
+
         return true
     }
 
@@ -201,13 +210,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        val voLHandler = VolumeHandler(baseContext)
 
         when (item.itemId) {
             R.id.action_settings -> openSettings()
             R.id.action_set_manual_loud -> {
-                val makeSound = !voLHandler.isButtonClickAudible(this)
-                voLHandler.setLoud()
+                val makeSound = !mVolumeHandler.isButtonClickAudible()
+                mVolumeHandler.setLoud()
                 if (makeSound) {
                     binding.buttonButtonsoundFix.performClick()
                 }
@@ -215,7 +223,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             }
 
             R.id.action_set_manual_vibrate -> {
-                voLHandler.setVibrate()
+                mVolumeHandler.setVibrate()
                 Toast.makeText(
                     this, getString(
                         R.string.vibrate
@@ -224,7 +232,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             }
 
             R.id.action_set_manual_silent -> {
-                voLHandler.setSilent()
+                mVolumeHandler.setSilent()
                 Toast.makeText(
                     this, getString(
                         R.string.silent
@@ -232,7 +240,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
                 ).show()
             }
         }
-        voLHandler.applyVolume(applicationContext)
+        mVolumeHandler.applyVolume()
         return true
     }
 
@@ -305,11 +313,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         if (button_check == getString(R.string.timecheck_start)) {
             mTrigger.createTimecheck()
             PreferencesManager(this).setRestartOnBoot(true)
-            //VolumeCalculator(this).calculateAllAndApply()
+            mVolumeHandler.setVolumeStateAndApply(StateGenerator(this).stateAt(System.currentTimeMillis()))
+
         } else if (button_check == getString(R.string.timecheck_paused)) {
             mTrigger.createTimecheck()
             PreferencesManager(this).setRestartOnBoot(true)
-            //VolumeCalculator(this).calculateAllAndApply()
+            mVolumeHandler.setVolumeStateAndApply(StateGenerator(this).stateAt(System.currentTimeMillis()))
         } else {
             mTrigger.removeTimecheck()
             PreferencesManager(this).setRestartOnBoot(false)
