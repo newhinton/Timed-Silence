@@ -53,7 +53,7 @@ class PausedNotification : BroadcastReceiver(){
 
         if(action == ACTION_END_PAUSE || action == ACTION_END_PAUSE_AND_CHECK){
             context?.let {
-                Trigger(it).createTimecheck()
+                Trigger(it).createAlarmIntime()
                 Trigger(it).checkIfNextAlarmExists()
             }
         }

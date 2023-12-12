@@ -60,10 +60,6 @@ class Trigger(var mContext: Context) {
         private const val TAG = "TargetedAlarmHandler"
     }
 
-    fun createTimecheck() {
-        createAlarmIntime()
-    }
-
     fun removeTimecheck() {
         val alarms = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         createBroadcast(0L)?.let { alarms.cancel(it) }
@@ -101,7 +97,7 @@ class Trigger(var mContext: Context) {
         return PendingIntent.getBroadcast(mContext,0, broadcastIntent, flag or FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
     }
 
-    private fun createAlarmIntime(){
+    fun createAlarmIntime(){
         val now = System.currentTimeMillis()
         val list = StateGenerator(mContext).states()
 
@@ -113,15 +109,15 @@ class Trigger(var mContext: Context) {
 
         for (it in list) {
 
-            var timecheck = todayMidnight.plusMinutes(it.startTime.toLong()).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-            //Log.e(TAG, "Checking time ${it.startTime} ${todayMidnight} ${it.getReason()}")
-            //Log.e(TAG, "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
+            var timecheck = it.startTime
+            Log.e(TAG, "Checking time ${it.startTime} ${todayMidnight} ${it.getReason()}")
+            Log.e(TAG, "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
             if(timecheck > now && calculatedChecktime == tomorrowMidnight){
                 calculatedChecktime = timecheck
             }
         }
-        //Log.e(TAG, "Calculated time $calculatedChecktime")
-        //Log.e(TAG, "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
+        Log.e(TAG, "Calculated time $calculatedChecktime")
+        Log.e(TAG, "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
 
         LogHandler.writeLog(mContext, "TargetedAlarmHandler", "Create new Alarm", "$calculatedChecktime,${DateUtil.getDate(calculatedChecktime)}")
 
@@ -176,7 +172,7 @@ class Trigger(var mContext: Context) {
         val alarms = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val clockInfo = alarms.nextAlarmClock ?: return mContext.getString(R.string.no_next_time_set)
 
-        Log.d(TAG, "TriggerInterface: Next Runtime: " + clockInfo.triggerTime)
+        Log.d(TAG, "TriggerInterface: Next Runtime: " + DateUtil.getDate(clockInfo.triggerTime))
         return DateFormat.getDateInstance().format(Date(clockInfo.triggerTime))
 
     }

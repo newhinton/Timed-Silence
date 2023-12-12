@@ -52,7 +52,7 @@ class StartStopTileService: TileService() {
         if(t.checkIfNextAlarmExists()){
             t.removeTimecheck()
         } else {
-            t.createTimecheck()
+            t.createAlarmIntime()
             //VolumeCalculator(this).calculateAllAndApply()
         }
         updateTile()

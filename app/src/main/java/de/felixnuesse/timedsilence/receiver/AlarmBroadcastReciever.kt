@@ -61,7 +61,7 @@ class AlarmBroadcastReciever : BroadcastReceiver() {
             if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)) {
                 Log.d(TAG, "Alarmintent: Content is to \"check the time\"")
                 VolumeHandler(context).setVolumeStateAndApply(StateGenerator(context).stateAt(System.currentTimeMillis()))
-                Trigger(context).createTimecheck()
+                Trigger(context).createAlarmIntime()
 
             }
 
@@ -70,7 +70,7 @@ class AlarmBroadcastReciever : BroadcastReceiver() {
                 Log.d(TAG, "Alarmintent: Content is to \"$extra\"")
                 if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
                     Log.d(TAG, "Alarmintent: Content is to \"Restart recurring alarms\"")
-                    Trigger(context).createTimecheck()
+                    Trigger(context).createAlarmIntime()
                 }
             }
         }

@@ -22,7 +22,7 @@ class BootReciever : BroadcastReceiver(){
 
             if(PreferencesManager(context).shouldRestartOnBoot()){
                 Log.e(TAG, "BootReciever: Started Checks!")
-                Trigger(context).createTimecheck()
+                Trigger(context).createAlarmIntime()
                 return
             }
             Log.e(TAG, "BootReciever: Dont check.")

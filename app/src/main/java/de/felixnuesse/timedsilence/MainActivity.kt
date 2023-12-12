@@ -311,12 +311,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         Log.e(TAG, "Main: setHandlerState: State: $button_check")
 
         if (button_check == getString(R.string.timecheck_start)) {
-            mTrigger.createTimecheck()
+            mTrigger.createAlarmIntime()
             PreferencesManager(this).setRestartOnBoot(true)
             mVolumeHandler.setVolumeStateAndApply(StateGenerator(this).stateAt(System.currentTimeMillis()))
 
         } else if (button_check == getString(R.string.timecheck_paused)) {
-            mTrigger.createTimecheck()
+            mTrigger.createAlarmIntime()
             PreferencesManager(this).setRestartOnBoot(true)
             mVolumeHandler.setVolumeStateAndApply(StateGenerator(this).stateAt(System.currentTimeMillis()))
         } else {
