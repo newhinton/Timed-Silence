@@ -9,7 +9,6 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.DialogScheduleBinding
 import de.felixnuesse.timedsilence.fragments.TimeFragment
@@ -20,7 +19,6 @@ import java.util.concurrent.TimeUnit
 
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
-import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 
 /**
@@ -50,7 +48,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
  *
  *
  */
-class ScheduleDialog(context: Context) : Dialog(context) {
+class ScheduleDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) {
 
     companion object {
         private const val TAG = "ScheduleDialog"
@@ -210,20 +208,20 @@ class ScheduleDialog(context: Context) : Dialog(context) {
     private fun prepareUpdate(so: ScheduleObject) {
         binding.scheduleTitleTextfield.setText(so.name)
 
-        var hours = TimeUnit.MILLISECONDS.toHours(so.time_start).toInt()
+        var hours = TimeUnit.MILLISECONDS.toHours(so.timeStart).toInt()
         var min =
-            TimeUnit.MILLISECONDS.toMinutes(so.time_start - TimeUnit.HOURS.toMillis(hours.toLong()))
+            TimeUnit.MILLISECONDS.toMinutes(so.timeStart - TimeUnit.HOURS.toMillis(hours.toLong()))
                 .toInt()
         binding.scheduleStartTimepicker.hour = hours
         binding.scheduleStartTimepicker.minute = min
 
-        hours = TimeUnit.MILLISECONDS.toHours(so.time_end).toInt()
-        min = TimeUnit.MILLISECONDS.toMinutes(so.time_end - TimeUnit.HOURS.toMillis(hours.toLong()))
+        hours = TimeUnit.MILLISECONDS.toHours(so.timeEnd).toInt()
+        min = TimeUnit.MILLISECONDS.toMinutes(so.timeEnd - TimeUnit.HOURS.toMillis(hours.toLong()))
             .toInt()
         binding.scheduleEndTimepicker.hour = hours
         binding.scheduleEndTimepicker.minute = min
 
-        setValueForVolumeRadioGroup(so.time_setting)
+        setValueForVolumeRadioGroup(so.timeSetting)
 
         binding.scheduleDialogDaysMonday.isChecked = so.mon
         binding.scheduleDialogDaysTuesday.isChecked = so.tue

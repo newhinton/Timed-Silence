@@ -35,9 +35,8 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.PrefConstants
-import de.felixnuesse.timedsilence.handler.SharedPreferencesHandler
-import de.felixnuesse.timedsilence.handler.trigger.TargetedAlarmHandler
+import de.felixnuesse.timedsilence.handler.PreferencesManager
+import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 
 class PausedNotification : BroadcastReceiver(){
@@ -55,8 +54,8 @@ class PausedNotification : BroadcastReceiver(){
 
         if(action == ACTION_END_PAUSE || action == ACTION_END_PAUSE_AND_CHECK){
             context?.let {
-                TargetedAlarmHandler(it).createTimecheck()
-                TargetedAlarmHandler(it).checkIfNextAlarmExists()
+                Trigger(it).createTimecheck()
+                Trigger(it).checkIfNextAlarmExists()
             }
         }
     }
@@ -72,7 +71,7 @@ class PausedNotification : BroadcastReceiver(){
             Log.e(TAG, "PausedNotification: Show Notification")
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            if(SharedPreferencesHandler.getPref(context, PrefConstants.PREF_PAUSE_NOTIFICATION, PrefConstants.PREF_PAUSE_NOTIFICATION_DEFAULT)){
+            if(PreferencesManager(context).shouldShowNotification()){
                 notificationManager.notify(NOTIFICATION_ID, buildNotification(context))
             }
         }

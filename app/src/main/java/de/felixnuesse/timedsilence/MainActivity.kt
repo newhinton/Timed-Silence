@@ -31,7 +31,6 @@ package de.felixnuesse.timedsilence
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -41,7 +40,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -53,7 +51,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import de.felixnuesse.timedsilence.Constants.Companion.MAIN_ACTIVITY_LOAD_CALENDAR_FORCE
 import de.felixnuesse.timedsilence.IntroActivity.Companion.INTRO_PREFERENCES
-import de.felixnuesse.timedsilence.activities.SettingsMainActivity
+import de.felixnuesse.timedsilence.activities.SettingsActivity
 import de.felixnuesse.timedsilence.databinding.ActivityMainBinding
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
@@ -65,8 +63,8 @@ import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
-import de.felixnuesse.timedsilence.receiver.AlarmBroadcastReceiver
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
+
 import java.util.*
 
 
@@ -120,37 +118,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             setHandlerState()
         }
 
-        val interval = SharedPreferencesHandler.getPref(
-            this,
-            PrefConstants.PREF_INTERVAL_CHECK,
-            PrefConstants.PREF_INTERVAL_CHECK_DEFAULT
-        )
-
-        binding.textviewWaittimeContent.text = interval.toString()
-        binding.seekBarWaittime.progress = interval
-
-        //minimum is zero, so we need to offset by one
-        binding.seekBarWaittime.max = 179
-        binding.seekBarWaittime.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                // Write code to perform some action when progress is changed.
-
-                binding.textviewWaittimeContent.text = (seekBar.progress + 1).toString()
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                // Write code to perform some action when touch is started.
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                //Toast.makeText(this@MainActivity, "Progress is " + seekBar.progress+1 + "%", Toast.LENGTH_SHORT).show()
-                binding.textviewWaittimeContent.text = (seekBar.progress + 1).toString()
-                setInterval(seekBar.progress + 1)
-
-            }
-        })
-
-
         val tabs = binding.tabLayout
         mPager = binding.viewPager
 
@@ -184,9 +151,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             tabs.getTabAt(i)?.text = ""
         }
 
+        //todo: Figure out why we are waiting for changes:
+        /*
         SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
             getSharedPreferencesListener()
-        )
+        )*/
 
         buttonState()
 
@@ -213,10 +182,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         handleCalendarFragmentIntentExtra()
         buttonState()
-        SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
-            getSharedPreferencesListener()
-        )
-
 
         //This handler is needed. Otherwise the state is not beeing restored
         Handler().postDelayed({
@@ -252,7 +217,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             }
 
             R.id.action_set_manual_vibrate -> {
-                voLHandler.setVibrate(); Toast.makeText(
+                voLHandler.setVibrate()
+                Toast.makeText(
                     this, getString(
                         R.string.vibrate
                     ), Toast.LENGTH_LONG
@@ -260,7 +226,8 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             }
 
             R.id.action_set_manual_silent -> {
-                voLHandler.setSilent(); Toast.makeText(
+                voLHandler.setSilent()
+                Toast.makeText(
                     this, getString(
                         R.string.silent
                     ), Toast.LENGTH_LONG
@@ -281,21 +248,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         buttonState()
     }
 
-
     private fun openSettings(): Boolean {
-        val intent = Intent(this, SettingsMainActivity::class.java).apply {}
+        val intent = Intent(this, SettingsActivity::class.java).apply {}
         startActivity(intent)
         return true
     }
-
-
-    fun setInterval(interval: Int) {
-        SharedPreferencesHandler.setPref(this, PrefConstants.PREF_INTERVAL_CHECK, interval)
-        mTrigger.removeTimecheck()
-        mTrigger.createTimecheck()
-
-    }
-
 
     private fun updateTimeCheckDisplay() {
         binding.nextCheckDisplay.text = mTrigger.getNextAlarmTimestamp()
@@ -327,13 +284,12 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
     private fun buttonState() {
-
         Log.e(TAG, "Main: ButtonStartCheck: State: $button_check")
 
         //Todo remove dummy textview
         if (mTrigger.checkIfNextAlarmExists()) {
             setFabStarted(binding.fab, TextView(this))
-            binding.runningStatus.visibility = View.GONE
+            binding.runningStatus.visibility = View.INVISIBLE
         } else {
             setFabStopped(binding.fab, TextView(this))
             binding.runningStatus.visibility = View.VISIBLE
@@ -342,29 +298,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         // Generally Hide this StatusElement.
         binding.lastCheckStatus.visibility = View.GONE
-        when (mTrigger.getTriggertype()) {
-            PrefConstants.PREF_TRIGGERTYPE_REPEATING -> {
-                binding.textviewWaittimeContent.visibility = View.VISIBLE
-                binding.seekBarWaittime.visibility = View.VISIBLE
-                binding.intervalTextView.visibility = View.VISIBLE
-                binding.textView4.visibility = View.VISIBLE
-            }
-
-            PrefConstants.PREF_TRIGGERTYPE_TARGETED -> {
-                binding.textviewWaittimeContent.visibility = View.GONE
-                binding.seekBarWaittime.visibility = View.GONE
-                binding.intervalTextView.visibility = View.GONE
-                binding.textView4.visibility = View.GONE
-            }
-
-            else -> {
-                binding.textviewWaittimeContent.visibility = View.GONE
-                binding.seekBarWaittime.visibility = View.GONE
-                binding.intervalTextView.visibility = View.GONE
-                binding.textView4.visibility = View.GONE
-            }
-        }
-
     }
 
     private fun setHandlerState() {
@@ -373,15 +306,15 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         if (button_check == getString(R.string.timecheck_start)) {
             mTrigger.createTimecheck()
-            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
-            AlarmBroadcastReceiver().switchVolumeMode(this)
+            PreferencesManager(this).setRestartOnBoot(true)
+            VolumeCalculator(this).calculateAllAndApply()
         } else if (button_check == getString(R.string.timecheck_paused)) {
             mTrigger.createTimecheck()
-            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, true)
-            AlarmBroadcastReceiver().switchVolumeMode(this)
+            PreferencesManager(this).setRestartOnBoot(true)
+            VolumeCalculator(this).calculateAllAndApply()
         } else {
             mTrigger.removeTimecheck()
-            SharedPreferencesHandler.setPref(this, PrefConstants.PREF_BOOT_RESTART, false)
+            PreferencesManager(this).setRestartOnBoot(false)
         }
         buttonState()
     }
@@ -426,17 +359,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         fab.setImageResource(R.drawable.icon_fast_forward)
         button_check = getString(R.string.timecheck_paused)
     }
-
-    @Deprecated("replace by callback")
-    fun getSharedPreferencesListener(): SharedPreferences.OnSharedPreferenceChangeListener {
-        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
-            if (key == PrefConstants.PREFS_LAST_KEY_EXEC) {
-                updateTimeCheckDisplay()
-            }
-        }
-        return listener
-    }
-
 
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in

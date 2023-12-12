@@ -46,7 +46,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
  *
  *
  */
-class KeywordDialog(context: Context) : Dialog(context) {
+class KeywordDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) {
 
     companion object {
         private const val TAG = "KeywordDialog"

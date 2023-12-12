@@ -41,13 +41,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SettingsMainActivity"
+        <activity android:name=".activities.SettingsActivity"
             android:theme="@style/BaseStyle" />
         <activity android:name=".activities.SettingsVolumeActivity"
             android:theme="@style/BaseStyle" />
 
         <!-- Registering the BroadcastReceiver ! -->
-        <receiver android:name=".receiver.AlarmBroadcastReceiver" />
+        <receiver android:name=".receiver.AlarmBroadcastReciever" />
         <receiver
             android:name=".receiver.NoisyBroadcastReciever"
             android:exported="true">

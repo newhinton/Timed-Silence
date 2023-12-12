@@ -80,9 +80,9 @@ class ScheduleListAdapter(private var myDataset: ArrayList<ScheduleObject>) :
 
         holder.scheduleView.textViewScheduleRowTitle.text = myDataset[position].name
         holder.scheduleView.scheduleStart.text =
-            df.format(myDataset[position].time_start)
+            df.format(myDataset[position].timeStart)
         holder.scheduleView.scheduleEnd.text =
-            df.format(myDataset[position].time_end)
+            df.format(myDataset[position].timeEnd)
 
         val c = holder.scheduleView.root.context
 
@@ -121,7 +121,7 @@ class ScheduleListAdapter(private var myDataset: ArrayList<ScheduleObject>) :
         }
 
         var imageID = R.drawable.icon_volume_up
-        when (myDataset[position].time_setting) {
+        when (myDataset[position].timeSetting) {
             TIME_SETTING_LOUD -> imageID = R.drawable.icon_volume_up
             TIME_SETTING_VIBRATE -> imageID = R.drawable.icon_vibration
             TIME_SETTING_SILENT -> imageID = R.drawable.icon_volume_off

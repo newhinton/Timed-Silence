@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/volume_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/volume_Settings_icon_background"
+                    android:layout_width="@dimen/settingsIconSize"
+                    android:layout_height="@dimen/settingsIconSize"
+                    android:layout_margin="@dimen/settingsIconMargin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/shape_circle"
+                    app:tint="#C71414" />
+
+                <ImageView
+                    android:id="@+id/volume_Settings_icon"
+                    android:layout_width="@dimen/settingsIconImageSize"
+                    android:layout_height="@dimen/settingsIconImageSize"
+                    android:contentDescription="@string/volume_settings_icon_content_description"
+                    android:src="@drawable/icon_volume_up"
+                    app:layout_constraintBottom_toBottomOf="@+id/volume_Settings_icon_background"
+                    app:layout_constraintEnd_toEndOf="@+id/volume_Settings_icon_background"
+                    app:layout_constraintStart_toStartOf="@+id/volume_Settings_icon_background"
+                    app:layout_constraintTop_toTopOf="@+id/volume_Settings_icon_background"
+                    app:tint="@android:color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/settingsIconMargin"
+                    android:layout_marginEnd="@dimen/settingsIconMargin"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/volume_Settings_icon_background"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/volumeTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/volume_settings"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/volumeSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/volume_settings_description" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/calendar_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/calendar_settings_icon_background"
+                    android:layout_width="@dimen/settingsIconSize"
+                    android:layout_height="@dimen/settingsIconSize"
+                    android:layout_margin="@dimen/settingsIconMargin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/shape_circle"
+                    app:tint="#3584D8" />
+
+                <ImageView
+                    android:id="@+id/calendar_settings_icon"
+                    android:layout_width="@dimen/settingsIconImageSize"
+                    android:layout_height="@dimen/settingsIconImageSize"
+                    android:contentDescription="@string/calendar_settings_icon_content_description"
+                    android:src="@drawable/icon_calendar_today"
+                    app:layout_constraintBottom_toBottomOf="@+id/calendar_settings_icon_background"
+                    app:layout_constraintEnd_toEndOf="@+id/calendar_settings_icon_background"
+                    app:layout_constraintStart_toStartOf="@+id/calendar_settings_icon_background"
+                    app:layout_constraintTop_toTopOf="@+id/calendar_settings_icon_background"
+                    app:tint="@android:color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/settingsIconMargin"
+                    android:layout_marginEnd="@dimen/settingsIconMargin"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/calendar_settings_icon_background"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/calendarTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/main_tab_calendar"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/calendarDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/calendarSettingsDescription" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/general_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/generalIconBackground"
+                    android:layout_width="@dimen/settingsIconSize"
+                    android:layout_height="@dimen/settingsIconSize"
+                    android:layout_margin="@dimen/settingsIconMargin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/shape_circle"
+                    app:tint="#E59308" />
+
+                <ImageView
+                    android:id="@+id/general_settings_icon"
+                    android:layout_width="@dimen/settingsIconImageSize"
+                    android:layout_height="@dimen/settingsIconImageSize"
+                    android:contentDescription="@string/general_settings_icon_content_description"
+                    android:src="@drawable/icon_settings"
+                    app:layout_constraintBottom_toBottomOf="@+id/generalIconBackground"
+                    app:layout_constraintEnd_toEndOf="@+id/generalIconBackground"
+                    app:layout_constraintStart_toStartOf="@+id/generalIconBackground"
+                    app:layout_constraintTop_toTopOf="@+id/generalIconBackground"
+                    app:tint="@android:color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/settingsIconMargin"
+                    android:layout_marginEnd="@dimen/settingsIconMargin"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/generalIconBackground"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/generalTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/general"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/generalSettingsDescription" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/importSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/importSettingsIconBackground"
+                    android:layout_width="@dimen/settingsIconSize"
+                    android:layout_height="@dimen/settingsIconSize"
+                    android:layout_margin="@dimen/settingsIconMargin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/shape_circle"
+                    app:tint="#2A9702" />
+
+                <ImageView
+                    android:id="@+id/importSettingsIcon"
+                    android:layout_width="@dimen/settingsIconImageSize"
+                    android:layout_height="@dimen/settingsIconImageSize"
+                    android:contentDescription="@string/import_settings_icon_content_description"
+                    android:src="@drawable/ic_import"
+                    app:layout_constraintBottom_toBottomOf="@+id/importSettingsIconBackground"
+                    app:layout_constraintEnd_toEndOf="@+id/importSettingsIconBackground"
+                    app:layout_constraintStart_toStartOf="@+id/importSettingsIconBackground"
+                    app:layout_constraintTop_toTopOf="@+id/importSettingsIconBackground"
+                    app:tint="@android:color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/settingsIconMargin"
+                    android:layout_marginEnd="@dimen/settingsIconMargin"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/importSettingsIconBackground"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/importTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/import_button"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/importDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/importSettingsDescription" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/exportSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/exportSettingsIconBackground"
+                    android:layout_width="@dimen/settingsIconSize"
+                    android:layout_height="@dimen/settingsIconSize"
+                    android:layout_margin="@dimen/settingsIconMargin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/shape_circle"
+                    app:tint="#2A9702" />
+
+                <ImageView
+                    android:id="@+id/exportSettingsIcon"
+                    android:layout_width="@dimen/settingsIconImageSize"
+                    android:layout_height="@dimen/settingsIconImageSize"
+                    android:contentDescription="@string/export_settings_icon_content_description"
+                    android:src="@drawable/ic_export"
+                    app:layout_constraintBottom_toBottomOf="@+id/exportSettingsIconBackground"
+                    app:layout_constraintEnd_toEndOf="@+id/exportSettingsIconBackground"
+                    app:layout_constraintStart_toStartOf="@+id/exportSettingsIconBackground"
+                    app:layout_constraintTop_toTopOf="@+id/exportSettingsIconBackground"
+                    app:tint="@android:color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/settingsIconMargin"
+                    android:layout_marginEnd="@dimen/settingsIconMargin"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/exportSettingsIconBackground"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/exportTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/export"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/exportDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/exportSettingsDescription" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

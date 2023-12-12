@@ -4,6 +4,7 @@ import android.content.Context
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import kotlin.collections.ArrayList
 import de.felixnuesse.timedsilence.model.calendar.DeviceCalendar
+import de.felixnuesse.timedsilence.model.calendar.DeviceCalendarEventModel
 import de.felixnuesse.timedsilence.model.calendar.SettingsCalendar
 
 
@@ -53,6 +54,10 @@ class CalendarHandler(context: Context) {
     private val deviceCalendar = DeviceCalendar(context)
     private val settingsCalendar = SettingsCalendar(context)
 
+    init {
+        deviceCalendar.setCaching(true)
+    }
+
 
     fun getCalendarVolumeSetting(name: String):Int{
         val calObject = settingsCalendar.getCalendars()[name]
@@ -67,7 +72,7 @@ class CalendarHandler(context: Context) {
     fun getCalendarName(externalId: Long): String{
         var name = DEFAULT_NAME
         deviceCalendar.getCalendars().forEach { (_, value) ->
-            if(value.ext_id==externalId){
+            if(value.externalID==externalId){
                 name = value.name
             }
         }
@@ -89,7 +94,7 @@ class CalendarHandler(context: Context) {
         return calendars
     }
 
-    fun readCalendarEvent(timeInMilliseconds: Long): ArrayList<Map<String, String>>  {
-        return deviceCalendar.readCalendarEvent(timeInMilliseconds)
+    fun getFilteredEventsForDay(timeInMilliseconds: Long): ArrayList<DeviceCalendarEventModel>  {
+        return deviceCalendar.getEventsForDay(timeInMilliseconds)
     }
 }

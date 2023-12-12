@@ -8,66 +8,76 @@ import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
-import java.util.*
+import de.felixnuesse.timedsilence.util.DateUtil
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
-class AlarmBroadcastReceiver : BroadcastReceiver() {
+
+class AlarmBroadcastReciever : BroadcastReceiver() {
 
     companion object {
         private const val TAG = "AlarmBroadcastReceiver"
     }
 
-    override fun onReceive(context: Context?, intent: Intent?) {
+    override fun onReceive(context: Context, intent: Intent?) {
 
-        //todo: fix this mess
-        if (context != null) {
-            LogHandler.writeAppLog(context,"Alarmintent: Recieved Alarmintent")
+        val targetTime = intent?.getLongExtra(Constants.BROADCAST_INTENT_ACTION_TARGET_TIME, 0L)?: 0L
+        // Precalculate, because writing to disk actually takes time. (In testing, 15ms)
+        val diff = System.currentTimeMillis()-targetTime
+        val duration = DateUtil.getDelta(targetTime, System.currentTimeMillis())
+        var executionDelay = 1000L
+
+        LogHandler.writeLog(context,
+            "AlarmBroadcastReceiver",
+            "Alarm Recieved",
+            "Was targeted at: $targetTime"
+        )
+
+        LogHandler.writeLog(context,
+            "AlarmBroadcastReceiver",
+            "Alarm Recieved",
+            "Timediff: $duration ($diff ms)"
+        )
+
+        if(diff <= 0) {
+            LogHandler.writeLog(context,
+                "AlarmBroadcastReceiver",
+                "Alarm Recieved",
+                "Danger! We are before the scheduled time! (${diff*-1} ms before)"
+            )
+            LogHandler.writeLog(context,
+                "AlarmBroadcastReceiver",
+                "Alarm Recieved",
+                "Deliberately delay another ${(diff*-1)+100}ms to reach time."
+            )
+            executionDelay+=(diff*-1)+100;
         }
-        val current = System.currentTimeMillis()
-        val date = Date(current)
-        val dateFormat = android.text.format.DateFormat.getDateFormat(context)
-        val currentformatted = dateFormat.format(date)
 
-        Log.e(TAG, "Alarmintent: Recieved Alarmintent at: $currentformatted")
+        val r = Runnable {
+            // Todo: fix this mess
+            Log.e(TAG, "Alarmintent: Recieved Alarmintent at: ${DateUtil.getDate()}")
 
-        if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)) {
-            Log.d(TAG, "Alarmintent: Content is to \"check the time\"")
+            if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)) {
+                Log.d(TAG, "Alarmintent: Content is to \"check the time\"")
+                VolumeCalculator(context).calculateAllAndApply()
+                Trigger(context).createTimecheck()
 
-            val sharedPref = context?.getSharedPreferences("test", Context.MODE_PRIVATE)
-            with(sharedPref!!.edit()) {
-                putLong("last_ExecTime", current)
-                apply()
             }
 
-
-            switchVolumeMode(context)
-            Trigger(context).createTimecheck()
-
-        }
-
-        if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_DELAY)) {
-
-            val extra = intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA)
-            Log.d(TAG, "Alarmintent: Content is to \"" + extra + "\"")
-
-            if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
-                Log.d(TAG, "Alarmintent: Content is to \"Restart recurring alarms\"")
-                Trigger(context!!).createTimecheck()
+            if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_DELAY)) {
+                val extra = intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION_DELAY_EXTRA)
+                Log.d(TAG, "Alarmintent: Content is to \"$extra\"")
+                if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
+                    Log.d(TAG, "Alarmintent: Content is to \"Restart recurring alarms\"")
+                    Trigger(context).createTimecheck()
+                }
             }
-
-        }
-    }
-
-    @Deprecated("This is just a tiny useless wrapper. Please use 'VolumeCalculator(context).calculateAllAndApply()' directly")
-    fun switchVolumeMode(context: Context?) {
-
-        val nonNullContext = context
-        // copy is guaranteed to be to non-nullable whatever you do
-        if (nonNullContext == null) {
-            Log.e(TAG, "Alarmintent: Error! Context invalid! Stopping!")
-            return
         }
 
-        VolumeCalculator(nonNullContext).calculateAllAndApply()
+        val scheduledExecutor = Executors.newScheduledThreadPool(1)
+        scheduledExecutor.schedule(r, executionDelay, TimeUnit.MILLISECONDS)
+
+
     }
 
 

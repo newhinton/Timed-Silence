@@ -14,4 +14,9 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="cornerRadius">8dp</dimen>
     <dimen name="cardPadding">4dp</dimen>
     <dimen name="cardMargin">8dp</dimen>
+
+
+    <dimen name="settingsIconImageSize">24dp</dimen>
+    <dimen name="settingsIconSize">38dp</dimen>
+    <dimen name="settingsIconMargin">16dp</dimen>
 </resources>

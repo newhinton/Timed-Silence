@@ -1,7 +1,15 @@
-package de.felixnuesse.timedsilence
+package de.felixnuesse.timedsilence.util
 
 import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.temporal.Temporal
 import java.util.*
+
 
 /**
  * Copyright (C) 2020  Felix Nüsse
@@ -31,7 +39,7 @@ import java.util.*
  *
  */
 
-class Utils{
+class DateUtil{
 
     companion object{
 
@@ -50,6 +58,29 @@ class Utils{
             return getDate(milliSeconds.toLong())
         }
 
+        fun getDate(): String {
+            return getDate(System.currentTimeMillis())
+        }
+
+        fun getDateFormatted(format: String): String {
+            return getDate(System.currentTimeMillis(), format)
+        }
+
+        fun getDelta(startMillis: Long, endMillis: Long): Duration {
+            val start = LocalDateTime.ofInstant(Instant.ofEpochMilli(startMillis), ZoneId.systemDefault())
+            val end = LocalDateTime.ofInstant(Instant.ofEpochMilli(endMillis), ZoneId.systemDefault())
+            return Duration.between(start, end)
+        }
+
+        fun getMinOffsetHumanReadable(offset: Long): String {
+            return "${offset/60}H:${offset % 60}M"
+        }
+
+        fun getMidnight(): LocalDateTime {
+            val midnight: LocalTime = LocalTime.MIDNIGHT
+            val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
+            return LocalDateTime.of(today, midnight)
+        }
     }
 
 }

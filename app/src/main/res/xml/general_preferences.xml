@@ -1,0 +1,24 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/general"
+        app:icon="@drawable/icon_settings">
+
+        <SwitchPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:title="@string/allow_trigger_when_device_idle"
+            android:key="@string/pref_general_run_when_idle" />
+        <SwitchPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:title="@string/enablePauseNotification"
+            android:key="@string/pref_general_show_notifications_when_paused"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

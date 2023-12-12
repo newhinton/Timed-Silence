@@ -15,16 +15,16 @@ import de.felixnuesse.timedsilence.handler.calculator.LocationHandler
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
-import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.notifications.LocationAccessMissingNotification
+import de.felixnuesse.timedsilence.util.DateUtil
 import java.time.LocalDateTime
 import java.util.*
 import java.time.ZoneId.systemDefault
 import java.time.Instant.ofEpochMilli
-import java.time.LocalDate
-import java.time.LocalTime
+import java.time.ZoneId
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
@@ -71,7 +71,9 @@ class VolumeCalculator {
 
     private var calendarHandler: CalendarHandler
 
+    @Deprecated("Replace with VolumeState")
     private var changeReason = REASON_UNDEFINED
+    @Deprecated("Replace with VolumeState")
     private var changeReasonString = ""
 
     private var ignoreMusicPlaying = false
@@ -81,6 +83,7 @@ class VolumeCalculator {
         volumeHandler = VolumeHandler(context)
         dbHandler = DatabaseHandler(nonNullContext)
         calendarHandler= CalendarHandler(nonNullContext)
+        LogHandler.writeLog(nonNullContext,"VolumeCalculator", "instantiate","VolumeCalculator was now instantiated")
     }
 
     constructor(context: Context, cached: Boolean) {
@@ -97,12 +100,18 @@ class VolumeCalculator {
     }
 
     fun getChangeList(): ArrayList<VolumeState> {
+        return getChangeList(true)
+    }
 
-        val midnight: LocalTime = LocalTime.MIDNIGHT
-        val today: LocalDate = LocalDate.now(systemDefault())
-        val now: LocalTime = LocalTime.now(systemDefault())
+    //Todo: cache this!
+    fun getChangeList(addNow: Boolean): ArrayList<VolumeState> {
+        var start = System.currentTimeMillis()
+        Log.e(TAG, "Starttime: "+start)
+
+
+        val now: LocalDateTime = LocalDateTime.now(ZoneId.systemDefault())
         val nowAsOffset = now.minute+now.hour*60
-        var todayMidnight = LocalDateTime.of(today, midnight)
+        var todayMidnight = DateUtil.getMidnight()
 
         var stateList = arrayListOf<VolumeState>()
 
@@ -111,8 +120,36 @@ class VolumeCalculator {
         stateList.add(getStateAt(nonNullContext, timeInitial, 0))
         var lastState = stateList[0]
 
-        for(elem in 0L..1440L){
 
+        var possibleChangeList: ArrayList<Long> = ArrayList()
+
+        if(addNow){
+            // we dont talk about this monstrosity
+            possibleChangeList.add(
+                now.atZone(systemDefault())
+                    .toInstant()
+                    .toEpochMilli()
+                        -
+                        todayMidnight.atZone(systemDefault())
+                            .toInstant()
+                            .toEpochMilli()
+            )
+        }
+
+        calendarHandler.getFilteredEventsForDay(System.currentTimeMillis()).forEach {
+            Log.e(TAG, ""+it.mStart)
+            possibleChangeList.add(it.mStart-todayMidnight.atZone(systemDefault()).toInstant().toEpochMilli())
+            possibleChangeList.add(it.mEnd-todayMidnight.atZone(systemDefault()).toInstant().toEpochMilli())
+        }
+        dbHandler.getSchedulesForWeekday(now.dayOfWeek).forEach {
+            possibleChangeList.add(it.timeStart)
+            possibleChangeList.add(it.timeEnd)
+        }
+
+        possibleChangeList.sort()
+        for(possibleChange in possibleChangeList){
+
+            var elem = TimeUnit.MILLISECONDS.toMinutes(possibleChange)
             val time = todayMidnight.plusMinutes(elem).atZone(systemDefault()).toInstant().toEpochMilli()
 
             val currentState = getStateAt(nonNullContext, time, elem.toInt())
@@ -128,16 +165,18 @@ class VolumeCalculator {
             }
         }
 
-
         var lastElement = stateList.last()
         lastElement.endTime = 1440
 
 
+        var end = System.currentTimeMillis()
+        Log.e(TAG, "Endtime: $end")
+        Log.e(TAG, "Diff: ${end-start}ms")
         return stateList
     }
 
     fun calculateAllAndApply(){
-        LogHandler.writeAppLog(nonNullContext,"VolCacl: calculateAllAndApply called.")
+        LogHandler.writeLog(nonNullContext,"VolumeCalculator", "calculateAllAndApply called","Start Calculating")
         volumeHandler = VolumeHandler(nonNullContext)
         switchBasedOnWifi()
         switchBasedOnTime()
@@ -148,8 +187,7 @@ class VolumeCalculator {
     fun getStateAt(context: Context, timeInMilliseconds: Long): VolumeState{
         return getStateAt(context, timeInMilliseconds, 0)
     }
-    fun getStateAt(context: Context, timeInMilliseconds: Long, timeAsOffset: Int): VolumeState{
-
+    fun getStateAt(context: Context, timeInMilliseconds: Long, timeAsOffset: Int): VolumeState {
         volumeHandler = VolumeHandler(context)
         switchBasedOnTime(timeInMilliseconds)
         switchBasedOnCalendar(timeInMilliseconds)
@@ -173,60 +211,55 @@ class VolumeCalculator {
             return
         }
 
-        for (elem in calendarHandler.readCalendarEvent(timeInMilliseconds)){
-
-            val x = ""//calendarHandler.getDate(elem.get("start_date") ?: "0")
-            val y = ""//calendarHandler.getDate(elem.get("end_date") ?: "0")
-
-
-            //Log.i(APP_NAME, x+ " | " + elem["duration"] + " | " +y+" | "+ elem.get("name_of_event")+ " | recurring:" + elem["recurring"]  + " | "+elem.get("calendar_id"))
-            //Log.i(APP_NAME, x+ " | " + timeInMilliseconds + " | " +y+" | "+ elem["duration"] + " | " + elem.get("name_of_event")+ " | recurring:" + elem["recurring"]  + " | "+elem.get("calendar_id"))
+        for (elem in calendarHandler.getFilteredEventsForDay(timeInMilliseconds)){
 
             try {
-                val currentMilliseconds =  timeInMilliseconds
-                val starttime = elem.get("start_date")!!.toLong()
 
-                var endtime: Long= 0
-                if(elem.get("end_date")!=null){
-                    endtime = elem.get("end_date")!!.toLong()
-                }else if (elem.get("duration")!=null){
-                    endtime = starttime+elem.get("duration")!!.toLong()
-                }
+                val starttime = elem.mStart
+
+                var endtime = elem.mEnd
 
                 for (keyword in dbHandler.getKeywords()){
-                    val desc = elem.getOrDefault("description", "").toLowerCase(Locale.getDefault())
-                    val name = elem.getOrDefault("name_of_event", "").toLowerCase(Locale.getDefault())
+                    val desc = elem.mDescription.toLowerCase(Locale.getDefault())
+                    val name = elem.mTitle.toLowerCase(Locale.getDefault())
                     val key = keyword.keyword.toLowerCase(Locale.getDefault())
 
-                    //Log.e(APP_NAME, "Check Keyword: $key")
+                    //Log.e(TAG, "Check Keyword: $key")
 
                     if(desc.contains(key) || name.contains(key)){
                         //Log.e(APP_NAME, "Keyword: $key is in current element $name")
-                        if (currentMilliseconds in (starttime + 1) until endtime-1){
+                        if (timeInMilliseconds in (starttime) until endtime) {
                             //Log.e(APP_NAME, "Keyword: $key is in time")
-                            setGenericVolumeWithReason(keyword.volume, keyword.keyword, REASON_KEYWORD)
+                            setGenericVolumeWithReason(
+                                keyword.volume,
+                                keyword.keyword,
+                                REASON_KEYWORD
+                            )
 
                         }
                     }
                 }
 
-                var calendar_id = elem.getOrDefault("calendar_id","-1").toLong()
-                var calendar_name = calendarHandler.getCalendarName(calendar_id)
-                var eventName =elem.get("name_of_event")
-                var volume = calendarHandler.getCalendarVolumeSetting(calendar_name)
-                //Log.i(APP_NAME, elem.get("name_of_event")+ " | " + volume  + " ")
+                var calendarName = calendarHandler.getCalendarName(elem.mCalendarID.toLong())
+                var eventName = elem.mTitle
+                var volume = calendarHandler.getCalendarVolumeSetting(calendarName)
+                //Log.i(TAG, elem.mTitle+ " | " + volume  + " ")
 
                 if(volume==-1){
                     continue
                 }else{
-                    if (currentMilliseconds in (starttime + 1) until endtime-1){
-                        //Log.i(APP_NAME, elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("calendar_id")+" "+volume)
-                        setGenericVolumeWithReason(volume, "$calendar_name ($eventName)", REASON_CALENDAR)
+                    //Log.i(TAG, "${DateUtil.getDate(timeInMilliseconds)}: ${elem.mTitle} ${starttime/10000} ${(timeInMilliseconds-starttime)/10000} ${(endtime-starttime)/10000} ${elem.mCalendarID} $volume")
+                    if (timeInMilliseconds in (starttime) until endtime) {
+                        setGenericVolumeWithReason(
+                            volume,
+                            "$calendarName ($eventName)",
+                            REASON_CALENDAR
+                        )
                     }
                 }
             }catch (e:Exception ){
                 e.printStackTrace()
-                System.err.println("ERROR: "+elem.get("name_of_event")+" "+elem.get("start_date")+" "+elem.get("end_date")+" "+elem.get("description")+" ")
+                System.err.println("ERROR: ${elem.mTitle} ${elem.mStart} ${elem.mEnd} ${elem.mDescription}")
             }
 
         }
@@ -286,22 +319,22 @@ class VolumeCalculator {
             }
 
             var isInInversedTimeInterval = false
-            if (it.time_end <= it.time_start) {
+            if (it.timeEnd <= it.timeStart) {
                 //Log.e(TAG, "Alarmintent: End is before or equal start")
 
-                if (time >= it.time_start && time < 24 * 60 * 60 * 1000) {
+                if (time >= it.timeStart && time < 24 * 60 * 60 * 1000) {
                     //Log.d(TAG, "Alarmintent: Current time is after start time of interval but before 0:00" )
                     isInInversedTimeInterval = true
                 }
 
-                if (time < it.time_end && time >= 0) {
+                if (time < it.timeEnd && time >= 0) {
                     //Log.d(TAG, "Alarmintent: Current time is before end time of interval but after 0:00")
                     isInInversedTimeInterval = true
                 }
             }
 
-            if (time in it.time_start..it.time_end || isInInversedTimeInterval) {
-                setGenericVolumeWithReason(it.time_setting,it.name, REASON_TIME)
+            if (time in it.timeStart..it.timeEnd || isInInversedTimeInterval) {
+                setGenericVolumeWithReason(it.timeSetting,it.name, REASON_TIME)
             }
         }
     }
@@ -313,7 +346,7 @@ class VolumeCalculator {
     }
 
     private fun setGenericVolume(volume: Int){
-        volumeHandler.overrideMusicToZero = ignoreMusicPlaying;
+        volumeHandler.overrideMusicToZero = ignoreMusicPlaying
         when (volume) {
             TIME_SETTING_LOUD -> {
                 volumeHandler.setLoud()

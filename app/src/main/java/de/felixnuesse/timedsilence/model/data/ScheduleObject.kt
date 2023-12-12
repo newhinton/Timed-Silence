@@ -1,5 +1,8 @@
 package de.felixnuesse.timedsilence.model.data
 
+import kotlinx.serialization.Serializable
+import java.time.DayOfWeek
+
 /**
  * Copyright (C) 2019  Felix Nüsse
  * Created on 13.04.19 - 19:41
@@ -27,12 +30,13 @@ package de.felixnuesse.timedsilence.model.data
  *
  *
  */
-class ScheduleObject(var name: String, var time_start: Long, var time_end: Long, var time_setting: Int, var id: Long) {
+@Serializable
+data class ScheduleObject(var name: String, var timeStart: Long, var timeEnd: Long, var timeSetting: Int, var id: Long) {
 
 
-    constructor(name: String, time_start: Long, time_end: Long, time_setting: Int, id: Long,
+    constructor(name: String, timeStart: Long, timeEnd: Long, timeSetting: Int, id: Long,
                 pmon: Boolean, ptue: Boolean, pwed: Boolean, pthu: Boolean, pfri: Boolean, psat: Boolean, psun: Boolean
-    ) : this(name, time_start, time_end, time_setting, id){
+    ) : this(name, timeStart, timeEnd, timeSetting, id){
 
         mon=pmon
         tue=ptue
@@ -52,5 +56,16 @@ class ScheduleObject(var name: String, var time_start: Long, var time_end: Long,
     var sat: Boolean = false
     var sun: Boolean = false
 
+    fun isValidOnWeekday(weekday: DayOfWeek): Boolean {
+        if(weekday == DayOfWeek.MONDAY && mon) return true
+        if(weekday == DayOfWeek.TUESDAY && tue) return true
+        if(weekday == DayOfWeek.WEDNESDAY && wed) return true
+        if(weekday == DayOfWeek.THURSDAY && thu) return true
+        if(weekday == DayOfWeek.FRIDAY && fri) return true
+        if(weekday == DayOfWeek.SATURDAY && sat) return true
+        if(weekday == DayOfWeek.SUNDAY && sun) return true
+
+        return false
+    }
 
 }

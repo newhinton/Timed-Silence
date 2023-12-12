@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.util.Log
+import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 
 class NoisyBroadcastReciever : BroadcastReceiver(){
 
@@ -15,7 +16,7 @@ class NoisyBroadcastReciever : BroadcastReceiver(){
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == AudioManager.ACTION_AUDIO_BECOMING_NOISY) {
             Log.e(TAG, "NoisyBroadcastReciever: Becoming Noisy! Checking Volume Again!")
-            AlarmBroadcastReceiver().switchVolumeMode(context)
+            VolumeCalculator(context).calculateAllAndApply()
         }
     }
 

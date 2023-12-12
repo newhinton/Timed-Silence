@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.fragments.CalendarEventFragment
 import de.felixnuesse.timedsilence.model.data.CalendarObject
@@ -19,7 +18,6 @@ import android.text.Html
 import de.felixnuesse.timedsilence.databinding.DialogCalendarBinding
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
-import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 
 /**
@@ -49,7 +47,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
  *
  *
  */
-class CalendarDialog(context: Context) : Dialog(context) {
+class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) {
 
     companion object {
         private const val TAG = "CalendarDialog"
@@ -100,8 +98,8 @@ class CalendarDialog(context: Context) : Dialog(context) {
 
             radioButton.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE)
             radioButton.id = View.generateViewId()
-            radioMap.put(radioButton.id,calObject.ext_id)
-            radioNameMap.put(calObject.ext_id,calObject.name)
+            radioMap.put(radioButton.id,calObject.externalID)
+            radioNameMap.put(calObject.externalID,calObject.name)
 
             val params = RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.WRAP_CONTENT,
@@ -111,7 +109,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
             rg.addView(radioButton, params)
         }
 
-        rg.check(calHandler.getDeviceCalendars()[0].ext_id.toInt())
+        rg.check(calHandler.getDeviceCalendars()[0].externalID.toInt())
 
         binding.calendarNext.setOnClickListener {
             Log.e(TAG, "CalendarDialog: next!")
@@ -146,7 +144,7 @@ class CalendarDialog(context: Context) : Dialog(context) {
                 calId,
                 volId
             )
-            so.ext_id=calId
+            so.externalID=calId
             so.name = radioNameMap.getOrDefault(calId, "NOTSET")
             tfrag?.saveCalendar(context,so)
 
