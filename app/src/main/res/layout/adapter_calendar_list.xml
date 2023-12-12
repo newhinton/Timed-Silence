@@ -30,7 +30,7 @@
                 android:id="@+id/volumeState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tint="@android:color/white"
+                app:tint="@android:color/white"
                 app:srcCompat="@android:drawable/btn_dialog" />
 
             <TextView

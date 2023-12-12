@@ -55,11 +55,11 @@ class Keywords(private var mContext: Context): Events(mContext) {
 
         getEventsForDay().forEach {
 
-            val desc = it.mDescription.toLowerCase(Locale.getDefault())
-            val name = it.mTitle.toLowerCase(Locale.getDefault())
+            val desc = it.mDescription.lowercase(Locale.getDefault())
+            val name = it.mTitle.lowercase(Locale.getDefault())
 
             for (keyword in mDbHandler.getKeywords()){
-                val key = keyword.keyword.toLowerCase(Locale.getDefault())
+                val key = keyword.keyword.lowercase(Locale.getDefault())
                 if(desc.contains(key) || name.contains(key)){
 
                     val vs = VolumeState(keyword.volume)
