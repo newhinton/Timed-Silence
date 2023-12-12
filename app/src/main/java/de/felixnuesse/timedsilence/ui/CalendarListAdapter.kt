@@ -1,11 +1,13 @@
 package de.felixnuesse.timedsilence.ui;
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
@@ -43,12 +45,13 @@ import kotlin.collections.ArrayList
  */
 class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, private var calHandler: DeviceCalendar) : RecyclerView.Adapter<CalendarListAdapter.CalendarViewHolder>() {
 
-        fun removeAt(position: Int) {
+        private fun removeAt(position: Int) {
                 myDataset.removeAt(position)
                 notifyItemRemoved(position)
                 notifyItemRangeChanged(position, myDataset.size)
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         fun update(context: Context, co: CalendarObject){
                 DatabaseHandler(context).updateCalendarEntry(co)
                 myDataset.clear()
@@ -85,7 +88,7 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
                         TIME_SETTING_VIBRATE -> imageID=R.drawable.icon_vibration
                         TIME_SETTING_SILENT -> imageID=R.drawable.icon_volume_off
                 }
-                holder.calendarView.volumeState.setImageDrawable(holder.calendarView.root.context.getDrawable(imageID))
+                holder.calendarView.volumeState.setImageDrawable(AppCompatResources.getDrawable(holder.calendarView.root.context, imageID))
         }
 
         private fun applyTextfieldStyle(view: TextView){

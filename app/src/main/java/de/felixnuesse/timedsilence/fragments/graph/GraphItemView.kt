@@ -3,10 +3,12 @@ package de.felixnuesse.timedsilence.fragments.graph
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.GradientDrawable
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import com.skydoves.balloon.ArrowOrientation
 import com.skydoves.balloon.Balloon
@@ -22,6 +24,20 @@ class GraphItemView: LinearLayout {
     private var binding = CustomuiGraphitemBinding.inflate(LayoutInflater.from(context), this, true)
     private var mColor: ColorStateList
 
+    // dont use
+    constructor(context: Context): super(context) {
+        mColor = ColorStateList.valueOf(0)
+    }
+
+    // dont use
+    constructor(context: Context, attrs: AttributeSet): super(context, attrs) {
+        mColor = ColorStateList.valueOf(0)
+    }
+
+    // dont use
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): super(context, attrs, defStyleAttr) {
+        mColor = ColorStateList.valueOf(0)
+    }
 
     constructor(context: Context, color: Int, isFirst: Boolean, overlapColor: Int = -1) : super(context) {
         layoutParams = LayoutParams(
@@ -31,7 +47,7 @@ class GraphItemView: LinearLayout {
         mColor = ColorStateList.valueOf(color)
 
         if(overlapColor != -1) {
-            var shape = context.getDrawable(R.drawable.shape_drawable_bar_center) as GradientDrawable
+            var shape = AppCompatResources.getDrawable(context, R.drawable.shape_drawable_bar_center) as GradientDrawable
             shape.mutate()
             shape.color = ColorStateList.valueOf(overlapColor)
             binding.below.setImageDrawable(shape)
@@ -40,9 +56,9 @@ class GraphItemView: LinearLayout {
             binding.below.visibility = View.INVISIBLE
         }
 
-        var shapeDrawable = context.getDrawable(R.drawable.shape_drawable_bar_bottomonly) as GradientDrawable
+        var shapeDrawable = AppCompatResources.getDrawable(context, R.drawable.shape_drawable_bar_bottomonly) as GradientDrawable
         if(isFirst) {
-            shapeDrawable = context.getDrawable(R.drawable.shape_drawable_bar) as GradientDrawable
+            shapeDrawable = AppCompatResources.getDrawable(context, R.drawable.shape_drawable_bar) as GradientDrawable
         }
 
         shapeDrawable.mutate()

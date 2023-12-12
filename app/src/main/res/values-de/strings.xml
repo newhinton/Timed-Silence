@@ -112,4 +112,27 @@
     <string name="volume_setting_silent_help">Stellt das Telefon auf Stumm</string>
     <string name="volume_setting_loud_help">Stellt das Telefon auf Laut</string>
     <string name="volume_setting_vibrate_help">Stellt das Telefon auf Vibrieren</string>
+    <string name="fragment_title_schedules">Zeitpläne</string>
+    <string name="fragment_title_wifi">Wifi-Einträge</string>
+    <string name="fragment_title_keywords">Stichworte</string>
+    <string name="fragment_title_calendar">Kalender</string>
+    <string name="headphones_help">Die Medienlautstärke wird nicht verändert wenn Kopfhörer verbunden sind</string>
+    <string name="event_no_title">Kein Titel</string>
+    <string name="event_no_description">Keine Beschreibung</string>
+    <string name="allow_trigger_when_device_idle">Erlaube Checks wenn das Gerät schläft</string>
+    <string name="PausedNotification_RESUME_AND_CHECK">Starte Prüfungen und setze Lautstärke</string>
+    <string name="notifications_error_title">Fehler!</string>
+    <string name="notifications_error_description">Wir konnten den nächsten Check nicht einrichten!</string>
+    <string name="intro_slide_welcome_title">Wilkommen!</string>
+    <string name="intro_slide_calendar_title">Kalender</string>
+    <string name="intro_slide_notification_title">Werde Benachrichtigt!</string>
+    <string name="intro_slide_donotdisturb_title">Nicht Stören</string>
+    <string name="intro_slide_done_title">Fertig!</string>
+    <string name="calculationg_volume_loading_indicator">Berechne Lautstärke...</string>
+    <string name="ignore_tentative_events">Ignoriere vorläufige Termine</string>
+    <string name="ignore_free_events">Ignoriere freie Termine</string>
+    <string name="ignore_cancelled_events">Ignoriere abgesagte Termine</string>
+    <string name="general">Appeinstellungen</string>
+    <string name="settings_behaviour">Verhalten</string>
+    <string name="ok">OK</string>
 </resources>

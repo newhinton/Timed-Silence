@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.skydoves.balloon.*
@@ -210,7 +211,7 @@ class GraphFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setLegendColor(color: Int, image: ImageView): View {
-        val shapeDrawable = resources.getDrawable(R.drawable.shape_drawable_bar_legend) as GradientDrawable
+        val shapeDrawable = AppCompatResources.getDrawable(requireContext(), R.drawable.shape_drawable_bar_legend) as GradientDrawable
         shapeDrawable.color = ColorStateList.valueOf(resources.getColor(color))
         image.setImageDrawable(shapeDrawable)
 
