@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.settings
+package de.felixnuesse.timedsilence.fragments.settings
 
 import android.os.Bundle
 import androidx.preference.Preference

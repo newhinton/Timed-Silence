@@ -1,12 +1,12 @@
-package de.felixnuesse.timedsilence.settings
+package de.felixnuesse.timedsilence.fragments.settings
 
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
 import de.felixnuesse.timedsilence.R
 
-class GeneralFragment : PreferenceFragmentCompat() {
+class CalendarFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.general_preferences, rootKey)
+        setPreferencesFromResource(R.xml.calendar_preferences, rootKey)
     }
 }

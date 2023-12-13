@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import de.felixnuesse.timedintenttrigger.database.xml.Exporter
 import de.felixnuesse.timedintenttrigger.database.xml.Importer
 
-import de.felixnuesse.timedsilence.settings.SelectorFragment
+import de.felixnuesse.timedsilence.fragments.settings.SelectorFragment
 
 
 class SettingsActivity : AppCompatActivity() {
