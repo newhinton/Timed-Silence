@@ -57,24 +57,27 @@
                         android:id="@+id/scheduleStart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="?attr/colorOnSecondaryContainer"
-                        android:hint="10:00" />
+                        android:fontFamily="sans-serif-light"
+                        android:hint="10:00"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
 
                     <TextView
                         android:id="@+id/scheduleDash"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:textColor="?attr/colorOnSecondaryContainer"
-                        android:text="-" />
+                        android:fontFamily="sans-serif-light"
+                        android:text="-"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
 
                     <TextView
                         android:id="@+id/scheduleEnd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:textColor="?attr/colorOnSecondaryContainer"
-                        android:hint="12:00" />
+                        android:fontFamily="sans-serif-light"
+                        android:hint="12:00"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
                 </LinearLayout>
 
                 <LinearLayout

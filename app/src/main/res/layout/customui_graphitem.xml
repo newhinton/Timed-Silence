@@ -46,7 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:gravity="center_vertical"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textColor="@color/iconColor" />
 
         <ImageView
             android:id="@+id/labelHelp"
