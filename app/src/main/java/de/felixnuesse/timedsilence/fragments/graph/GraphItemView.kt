@@ -73,17 +73,11 @@ class GraphItemView: LinearLayout {
         }
     }
 
-    private fun getPixelFromDp(dp: Int ): Int {
-        return (dp * resources.displayMetrics.density).toInt()
-    }
-
     fun setTooltip(reason: String) {
-        binding.imageView3.setOnClickListener {
+        binding.textContainer.setOnClickListener {
             handleTooltip(this.context, reason, it)
         }
     }
-
-
 
     /**
      * Required to dismiss old tooltips when a new was opened
@@ -117,7 +111,7 @@ class GraphItemView: LinearLayout {
     }
 
     fun setText(s: String) {
-        binding.textView3.text = s
+        binding.label.text = s
     }
 
     fun changeAnnotationVisibility(visible: Boolean) {
