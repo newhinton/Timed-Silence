@@ -88,12 +88,9 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
                 applyTextfieldStyle(holder.calendarView.textViewCalendarRowTitle)
 
                 if(Color.luminance(color) > 0.55) {
-
-                        val typedValue = TypedValue()
-                        val theme: Theme = context.theme
-                        theme.resolveAttribute(R.attr.colorOnPrimary, typedValue, true)
-                        holder.calendarView.textViewCalendarRowTitle.setTextColor(typedValue.data)
-                        holder.calendarView.volumeState.imageTintList = ColorStateList.valueOf(typedValue.data)
+                        val color = context.getColor(R.color.md_theme_dark_onPrimary)
+                        holder.calendarView.textViewCalendarRowTitle.setTextColor(color)
+                        holder.calendarView.volumeState.imageTintList = ColorStateList.valueOf(color)
                 }
 
 

@@ -358,7 +358,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
      */
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-        override fun getCount(): Int = 5
+        override fun getCount(): Int = 4
 
         override fun getItem(position: Int): Fragment {
 
@@ -367,7 +367,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
                 1 -> return ScheduleFragment()
                 2 -> return CalendarFragment()
                 3 -> return KeywordFragment()
-                4 -> return WifiConnectedFragment()
+                //4 -> return WifiConnectedFragment()
                 else -> return ScheduleFragment()
             }
         }
