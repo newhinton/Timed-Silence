@@ -139,7 +139,7 @@ class ScheduleListAdapter(private var myDataset: ArrayList<ScheduleObject>) :
 
         val typedValue = TypedValue()
         val theme = context.theme
-        theme.resolveAttribute(R.attr.colorTertiary, typedValue, true)
+        theme.resolveAttribute(R.attr.colorOnPrimaryContainer, typedValue, true)
         @ColorInt val color = typedValue.data
 
         view.setTextColor(color)
