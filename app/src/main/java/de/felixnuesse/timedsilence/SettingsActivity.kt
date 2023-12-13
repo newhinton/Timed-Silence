@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.activities
+package de.felixnuesse.timedsilence
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import de.felixnuesse.timedintenttrigger.database.xml.Exporter
 import de.felixnuesse.timedintenttrigger.database.xml.Importer
 
-import de.felixnuesse.timedsilence.activities.settings.SelectorFragment
+import de.felixnuesse.timedsilence.settings.SelectorFragment
 
 
 class SettingsActivity : AppCompatActivity() {

@@ -1,13 +1,11 @@
-package de.felixnuesse.timedsilence.activities.settings
+package de.felixnuesse.timedsilence.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import de.felixnuesse.timedintenttrigger.database.xml.Exporter
-import de.felixnuesse.timedintenttrigger.database.xml.Importer
-import de.felixnuesse.timedsilence.activities.SettingsActivity
+import de.felixnuesse.timedsilence.SettingsActivity
 import de.felixnuesse.timedsilence.databinding.FragmentSettingsSelectorBinding
 
 class SelectorFragment(private var mParent: SettingsActivity) : Fragment() {

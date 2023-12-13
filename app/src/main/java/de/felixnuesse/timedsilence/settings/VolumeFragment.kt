@@ -1,4 +1,4 @@
-package de.felixnuesse.timedsilence.activities.settings
+package de.felixnuesse.timedsilence.settings
 
 import android.os.Bundle
 import androidx.preference.Preference
