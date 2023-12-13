@@ -20,13 +20,13 @@ class StateGenerator(private var mContext: Context) {
         private const val TAG = "StateGenerator"
     }
 
-    var mDate: LocalDateTime = LocalDateTime.now()
-    var mPreferencesManager = PreferencesManager(mContext)
-    var defaultVolume = mPreferencesManager.getDefaultUnsetVolume()
+    private var mDate: LocalDateTime = LocalDateTime.now()
+    private var mPreferencesManager = PreferencesManager(mContext)
+    private var defaultVolume = mPreferencesManager.getDefaultUnsetVolume()
 
-    var mEvents = Events(mContext)
-    var mKeywords = Keywords(mContext)
-    var mSchedules = Schedule(mContext)
+    private var mEvents = Events(mContext)
+    private var mKeywords = Keywords(mContext)
+    private var mSchedules = Schedule(mContext)
 
     init {
         LogHandler.writeLog(mContext, TAG, "instantiate","VolumeCalculator was now instantiated")
@@ -99,7 +99,7 @@ class StateGenerator(private var mContext: Context) {
         }
 
         var linearList = ArrayList<VolumeState>()
-        map.forEach { (key, value) ->
+        map.forEach { (_, value) ->
             if(value.size > 1) {
                 Collections.sort(value, VolumeStateStateComparator())
                 linearList.addAll(arrayListOf(value.first()))

@@ -40,17 +40,10 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
-import de.felixnuesse.timedsilence.handler.permissions.DoNotDisturb
+import de.felixnuesse.timedsilence.util.PermissionManager
 
 class VolumeHandler(private var mContext: Context) {
     companion object {
-        fun getVolumePermission(context: Context) {
-            DoNotDisturb.hasAccess(context, true)
-        }
-        fun hasVolumePermission(context: Context):Boolean{
-            return DoNotDisturb.hasAccess(context)
-        }
-
         private const val TAG = "VolumeHandler"
     }
 
@@ -219,10 +212,6 @@ class VolumeHandler(private var mContext: Context) {
     }
 
     private fun setMediaVolume(percentage: Int, manager: AudioManager){
-        setMediaVolume(percentage, manager, false)
-    }
-
-    private fun setMediaVolume(percentage: Int, manager: AudioManager, ignoreHeadset: Boolean){
 
         Log.d(TAG, "VolumeHandler: Setting Audio Volume!")
         val ignoreCheckWhenConnected = mPreferencesManager.checkIfHeadsetIsConnected()
@@ -250,7 +239,7 @@ class VolumeHandler(private var mContext: Context) {
     }
 
     fun applyVolume(){
-        if(!hasVolumePermission(mContext)){
+        if(!PermissionManager(mContext).grantedDoNotDisturb()){
             Log.d(TAG, "VolumeHandler: VolumeSetting: Do not disturb not granted! Not changing Volume!")
             return
         }

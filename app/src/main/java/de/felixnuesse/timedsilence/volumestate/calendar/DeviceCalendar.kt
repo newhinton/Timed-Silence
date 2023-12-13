@@ -1,47 +1,26 @@
 package de.felixnuesse.timedsilence.volumestate.calendar
 
-import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.provider.CalendarContract
 import android.util.Log
-import de.felixnuesse.timedsilence.util.DateUtil
-import de.felixnuesse.timedsilence.handler.permissions.CalendarAccess
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.model.data.CalendarObject
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-
-
-import android.provider.CalendarContract.Events.CALENDAR_ID
-import android.provider.CalendarContract.Events.TITLE
-import android.provider.CalendarContract.Events.DESCRIPTION
-import android.provider.CalendarContract.Events.DTSTART
-import android.provider.CalendarContract.Events.DTEND
-import android.provider.CalendarContract.Events.ALL_DAY
-import android.provider.CalendarContract.Events.DURATION
-import android.provider.CalendarContract.Events.EVENT_LOCATION
-import android.provider.CalendarContract.Events.STATUS
-import android.provider.CalendarContract.Events.AVAILABILITY
-import de.felixnuesse.timedsilence.handler.LogHandler
-import de.felixnuesse.timedsilence.handler.PreferencesManager
-import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import de.felixnuesse.timedsilence.model.calendar.SettingsCalendar
-import de.felixnuesse.timedsilence.model.data.CachedArrayList
-import de.felixnuesse.timedsilence.volumestate.DeterministicCalculationInterface
-import java.time.ZoneId
+import de.felixnuesse.timedsilence.util.PermissionManager
 
 
 class DeviceCalendar(private var mContext: Context) {
 
     companion object {
         fun getCalendarReadPermission(context: Context) {
-            CalendarAccess.hasCalendarReadPermission(context, true)
+            PermissionManager(context).requestCalendarAccess()
         }
 
         fun hasCalendarReadPermission(context: Context): Boolean {
-            return CalendarAccess.hasCalendarReadPermission(context)
+            return PermissionManager(context).grantedCalendar()
         }
 
         val DEFAULT_NAME = "NOTSET"
@@ -69,7 +48,7 @@ class DeviceCalendar(private var mContext: Context) {
      * You can use this id to get the other information.
      */
     fun getCalendarName(externalId: Long): String {
-        getCalendars().forEach {(key, value) ->
+        getCalendars().forEach {(_, value) ->
             if(value.externalID == externalId) {
                 return value.name
             }
@@ -78,7 +57,7 @@ class DeviceCalendar(private var mContext: Context) {
     }
     fun getVolumeCalendars(): ArrayList<CalendarObject> {
         val calendars = ArrayList<CalendarObject>()
-        settingsCalendar.getCalendars().forEach { (key, value) ->
+        settingsCalendar.getCalendars().forEach { (_, value) ->
             calendars.add(value)
         }
         return calendars
@@ -86,7 +65,7 @@ class DeviceCalendar(private var mContext: Context) {
 
     fun getDeviceCalendars(): ArrayList<CalendarObject>{
         val calendars = ArrayList<CalendarObject>()
-        getCalendars().forEach { (key, value) ->
+        getCalendars().forEach { (_, value) ->
             calendars.add(value)
         }
         return calendars
@@ -97,7 +76,9 @@ class DeviceCalendar(private var mContext: Context) {
             return calendarCache
         }
 
-        getCalendarReadPermission(mContext)
+        if(!hasCalendarReadPermission(mContext)) {
+            getCalendarReadPermission(mContext)
+        }
 
         val contentResolver = mContext.contentResolver
         val cursor = contentResolver!!.query(
@@ -134,20 +115,4 @@ class DeviceCalendar(private var mContext: Context) {
         cursor?.close()
         return calendarCache
     }
-
-    private fun getProjection(): Array<String> {
-        return arrayOf(
-            CALENDAR_ID,
-            TITLE,
-            DESCRIPTION,
-            DTSTART,
-            DTEND,
-            ALL_DAY,
-            DURATION,
-            EVENT_LOCATION,
-            STATUS,
-            AVAILABILITY
-        )
-    }
-
 }

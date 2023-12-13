@@ -101,8 +101,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        VolumeHandler.getVolumePermission(this)
-        //CalendarHandler.getCalendarReadPermission(this)
         mTrigger = Trigger(this)
         mVolumeHandler = VolumeHandler(this)
 
