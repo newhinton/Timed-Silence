@@ -2,6 +2,8 @@ package de.felixnuesse.timedsilence.dialogs
 
 import android.app.Dialog
 import android.content.Context
+import android.content.res.Configuration
+import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
@@ -9,17 +11,20 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.content.res.AppCompatResources
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.DialogScheduleBinding
 import de.felixnuesse.timedsilence.fragments.TimeFragment
-import de.felixnuesse.timedsilence.model.data.ScheduleObject
-import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
-import java.util.*
-import java.util.concurrent.TimeUnit
-
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.model.data.ScheduleObject
+import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
+import de.felixnuesse.timedsilence.util.WindowUtils
+import java.util.*
+import java.util.concurrent.TimeUnit
+
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -77,6 +82,8 @@ class ScheduleDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        window?.let { WindowUtils.applyDialogPaddingFixForDarkmode(context, it) }
 
         binding = DialogScheduleBinding.inflate(layoutInflater)
         val view = binding.root

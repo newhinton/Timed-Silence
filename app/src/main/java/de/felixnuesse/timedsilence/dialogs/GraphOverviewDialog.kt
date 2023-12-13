@@ -12,6 +12,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import de.felixnuesse.timedsilence.ui.CalendarListAdapter
 import de.felixnuesse.timedsilence.ui.GraphOverviewAdapter
 import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
+import de.felixnuesse.timedsilence.util.WindowUtils
 import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
 
 /**
@@ -41,7 +42,7 @@ import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
  *
  *
  */
-class GraphOverviewDialog(context: Context, var mStates: ArrayList<VolumeState>) : Dialog(context, R.style.AlertDialogCustom) {
+class GraphOverviewDialog(context: Context, private var mStates: ArrayList<VolumeState>) : Dialog(context, R.style.AlertDialogCustom) {
 
     companion object {
         private const val TAG = "GraphOverviewDialog"
@@ -52,6 +53,8 @@ class GraphOverviewDialog(context: Context, var mStates: ArrayList<VolumeState>)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        window?.let { WindowUtils.applyDialogPaddingFixForDarkmode(context, it) }
 
         binding = DialogGraphoverviewBinding.inflate(layoutInflater)
         val view = binding.root

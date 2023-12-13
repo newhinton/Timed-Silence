@@ -17,6 +17,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.util.WindowUtils
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -66,6 +67,8 @@ class WifiDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        window?.let { WindowUtils.applyDialogPaddingFixForDarkmode(context, it) }
 
         binding = DialogWifiBinding.inflate(layoutInflater)
         val view = binding.root

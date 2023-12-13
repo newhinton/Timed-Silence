@@ -18,6 +18,7 @@ import de.felixnuesse.timedsilence.databinding.DialogCalendarBinding
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.util.WindowUtils
 import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
 
 /**
@@ -74,6 +75,8 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        window?.let { WindowUtils.applyDialogPaddingFixForDarkmode(context, it) }
 
         binding = DialogCalendarBinding.inflate(layoutInflater)
         val view = binding.root

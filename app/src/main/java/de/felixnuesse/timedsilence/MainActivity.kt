@@ -150,14 +150,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             tabs.getTabAt(i)?.text = ""
         }
 
-        //todo: Figure out why we are waiting for changes:
-        /*
-        SharedPreferencesHandler.getPreferences(this)?.registerOnSharedPreferenceChangeListener(
-            getSharedPreferencesListener()
-        )*/
-
         buttonState()
-
         handleCalendarFragmentIntentExtra()
         if (mDontCheckGraph) {
             mVolumeHandler.setVolumeStateAndApply(StateGenerator(this).stateAt(System.currentTimeMillis()))
@@ -325,44 +318,37 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     }
 
 
-    fun setFabStarted(fab: FloatingActionButton, text: TextView) {
+    private fun setFabStarted(fab: FloatingActionButton, text: TextView) {
         text.text = getString(R.string.timecheck_running)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_running))
         // fab.setImageResource(R.drawable.ic_play_arrow_white_24dp)
 
-        val d = AppCompatResources.getDrawable(this, R.drawable.icon_pause)
-        d?.mutate()?.setColorFilter(
-            resources.getColor(R.color.colorStateButtonIcon),
+        val drawable = AppCompatResources.getDrawable(this, R.drawable.icon_pause)
+        drawable?.mutate()?.setColorFilter(
+            resources.getColor(R.color.colorStateButtonIcon, text.context.theme),
             PorterDuff.Mode.SRC_IN
         )
 
-        fab.setImageDrawable(d)
+        fab.setImageDrawable(drawable)
 
         button_check = getString(R.string.timecheck_stop)
 
     }
 
-    fun setFabStopped(fab: FloatingActionButton, text: TextView) {
+    private fun setFabStopped(fab: FloatingActionButton, text: TextView) {
         text.text = getString(R.string.timecheck_stopped)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_stopped))
 
 
-        val d = AppCompatResources.getDrawable(this, R.drawable.icon_play_arrow)
-        d?.mutate()?.setColorFilter(
-            resources.getColor(R.color.colorStateButtonIcon),
+        val drawable = AppCompatResources.getDrawable(this, R.drawable.icon_play_arrow)
+        drawable?.mutate()?.setColorFilter(
+            resources.getColor(R.color.colorStateButtonIcon, text.context.theme),
             PorterDuff.Mode.SRC_IN
         )
 
-        fab.setImageDrawable(d)
+        fab.setImageDrawable(drawable)
         mTrigger.removeTimecheck()
         button_check = getString(R.string.timecheck_start)
-    }
-
-    fun setFabPaused(fab: FloatingActionButton, text: TextView) {
-        text.text = getString(R.string.timecheck_paused)
-        fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.colorFab_paused))
-        fab.setImageResource(R.drawable.icon_fast_forward)
-        button_check = getString(R.string.timecheck_paused)
     }
 
     /**
