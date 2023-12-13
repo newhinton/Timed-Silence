@@ -7,8 +7,9 @@ import android.util.Log
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
-import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
+import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.util.DateUtil
+import de.felixnuesse.timedsilence.volumestate.StateGenerator
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -59,8 +60,8 @@ class AlarmBroadcastReciever : BroadcastReceiver() {
 
             if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)) {
                 Log.d(TAG, "Alarmintent: Content is to \"check the time\"")
-                VolumeCalculator(context).calculateAllAndApply()
-                Trigger(context).createTimecheck()
+                VolumeHandler(context).setVolumeStateAndApply(StateGenerator(context).stateAt(System.currentTimeMillis()))
+                Trigger(context).createAlarmIntime()
 
             }
 
@@ -69,7 +70,7 @@ class AlarmBroadcastReciever : BroadcastReceiver() {
                 Log.d(TAG, "Alarmintent: Content is to \"$extra\"")
                 if (extra.equals(Constants.BROADCAST_INTENT_ACTION_DELAY_RESTART_NOW)) {
                     Log.d(TAG, "Alarmintent: Content is to \"Restart recurring alarms\"")
-                    Trigger(context).createTimecheck()
+                    Trigger(context).createAlarmIntime()
                 }
             }
         }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        style="@style/tertiaryCard"
+        style="@style/primaryCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/cardMargin"
@@ -24,7 +24,7 @@
 
             <ImageView
                 android:id="@+id/volumeState"
-                style="@style/tertiaryCard"
+                style="@style/secondaryCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -42,10 +42,10 @@
 
                 <TextView
                     android:id="@+id/textView_schedule_row_title"
-                    style="@style/tertiaryCard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="title" />
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:hint="Weekdays" />
 
                 <LinearLayout
                     android:id="@+id/scheduleBlock"
@@ -55,26 +55,29 @@
 
                     <TextView
                         android:id="@+id/scheduleStart"
-                        style="@style/tertiaryCard"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="start" />
+                        android:fontFamily="sans-serif-light"
+                        android:hint="10:00"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
 
                     <TextView
                         android:id="@+id/scheduleDash"
-                        style="@style/tertiaryCard"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="-" />
+                        android:fontFamily="sans-serif-light"
+                        android:text="-"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
 
                     <TextView
                         android:id="@+id/scheduleEnd"
-                        style="@style/tertiaryCard"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:hint="end" />
+                        android:fontFamily="sans-serif-light"
+                        android:hint="12:00"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -89,6 +92,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="sans-serif-thin"
                         android:text="@string/mon"
                         android:textSize="@dimen/schedule_list_font_size" />
 
@@ -97,6 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="sans-serif-thin"
                         android:text="@string/tue"
                         android:textSize="@dimen/schedule_list_font_size" />
 
@@ -105,6 +110,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="sans-serif-thin"
                         android:text="@string/wed"
                         android:textSize="@dimen/schedule_list_font_size" />
 
@@ -113,6 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="sans-serif-thin"
                         android:text="@string/thu"
                         android:textSize="@dimen/schedule_list_font_size" />
 
@@ -121,6 +128,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="sans-serif-thin"
                         android:text="@string/fri"
                         android:textSize="@dimen/schedule_list_font_size" />
 
@@ -129,6 +137,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="sans-serif-thin"
                         android:text="@string/sat"
                         android:textSize="@dimen/schedule_list_font_size" />
 
@@ -137,6 +146,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="sans-serif-thin"
                         android:text="@string/sun"
                         android:textSize="@dimen/schedule_list_font_size" />
                 </LinearLayout>

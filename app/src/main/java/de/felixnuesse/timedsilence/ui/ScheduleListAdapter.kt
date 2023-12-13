@@ -1,5 +1,6 @@
 package de.felixnuesse.timedsilence.ui;
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
 import android.util.TypedValue
@@ -48,13 +49,14 @@ import java.util.*
 class ScheduleListAdapter(private var myDataset: ArrayList<ScheduleObject>) :
     RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder>() {
 
-    fun removeAt(position: Int) {
+    private fun removeAt(position: Int) {
         myDataset.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, myDataset.size)
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     fun update(context: Context, so: ScheduleObject) {
         DatabaseHandler(context).updateScheduleEntry(so)
         myDataset.clear()
@@ -137,7 +139,7 @@ class ScheduleListAdapter(private var myDataset: ArrayList<ScheduleObject>) :
 
         val typedValue = TypedValue()
         val theme = context.theme
-        theme.resolveAttribute(R.attr.colorTertiary, typedValue, true)
+        theme.resolveAttribute(R.attr.colorOnPrimaryContainer, typedValue, true)
         @ColorInt val color = typedValue.data
 
         view.setTextColor(color)

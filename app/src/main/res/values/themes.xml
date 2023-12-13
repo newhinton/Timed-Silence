@@ -34,5 +34,6 @@
 
     </style>
 
-    <style name="AlertDialogCustom" parent="ThemeOverlay.Material3.Dialog"></style>
+    <style name="AlertDialogCustom" parent="ThemeOverlay.Material3.Dialog">
+    </style>
 </resources>

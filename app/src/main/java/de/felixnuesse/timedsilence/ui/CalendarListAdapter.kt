@@ -1,20 +1,25 @@
 package de.felixnuesse.timedsilence.ui;
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
+import android.content.res.Resources.Theme
+import android.graphics.Color
 import android.graphics.Typeface
-import androidx.recyclerview.widget.RecyclerView
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.recyclerview.widget.RecyclerView
+import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.databinding.AdapterCalendarListBinding
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
-import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.databinding.AdapterCalendarListBinding
-import de.felixnuesse.timedsilence.handler.calculator.CalendarHandler
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
-import kotlin.collections.ArrayList
+import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
 
 
 /**
@@ -41,14 +46,15 @@ import kotlin.collections.ArrayList
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
-class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, private var calHandler: CalendarHandler) : RecyclerView.Adapter<CalendarListAdapter.CalendarViewHolder>() {
+class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, private var calHandler: DeviceCalendar) : RecyclerView.Adapter<CalendarListAdapter.CalendarViewHolder>() {
 
-        fun removeAt(position: Int) {
+        private fun removeAt(position: Int) {
                 myDataset.removeAt(position)
                 notifyItemRemoved(position)
                 notifyItemRangeChanged(position, myDataset.size)
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         fun update(context: Context, co: CalendarObject){
                 DatabaseHandler(context).updateCalendarEntry(co)
                 myDataset.clear()
@@ -66,18 +72,30 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
         override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
                 // - get element from your dataset at this position
                 // - replace the contents of the view with that element
-                val calObject=myDataset.get(position)
+                val calObject= myDataset[position]
+                val context = holder.calendarView.root.context
 
                 holder.calendarView.textViewCalendarRowTitle.text = calObject.name
                 holder.calendarView.deleteCalendarElement.setOnClickListener {
-                        DatabaseHandler(holder.calendarView.root.context).deleteCalendarEntry(calObject.id)
+                        DatabaseHandler(context).deleteCalendarEntry(calObject.id)
                         removeAt(position)
                 }
 
+                val color = calHandler.getCalendarColor(calObject.name)
+                holder.calendarView.cardView.setCardBackgroundColor(color)
+                holder.calendarView.deleteCalendarElement.setColorFilter(color)
+
                 applyTextfieldStyle(holder.calendarView.textViewCalendarRowTitle)
 
-                holder.calendarView.cardView.setCardBackgroundColor(calHandler.getCalendarColor(calObject.name))
-                holder.calendarView.deleteCalendarElement.setColorFilter(calHandler.getCalendarColor(calObject.name))
+                if(Color.luminance(color) > 0.55) {
+
+                        val typedValue = TypedValue()
+                        val theme: Theme = context.theme
+                        theme.resolveAttribute(R.attr.colorOnPrimary, typedValue, true)
+                        holder.calendarView.textViewCalendarRowTitle.setTextColor(typedValue.data)
+                        holder.calendarView.volumeState.imageTintList = ColorStateList.valueOf(typedValue.data)
+                }
+
 
                 var imageID=R.drawable.icon_volume_up
                 when (calObject.volume) {
@@ -85,7 +103,7 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
                         TIME_SETTING_VIBRATE -> imageID=R.drawable.icon_vibration
                         TIME_SETTING_SILENT -> imageID=R.drawable.icon_volume_off
                 }
-                holder.calendarView.volumeState.setImageDrawable(holder.calendarView.root.context.getDrawable(imageID))
+                holder.calendarView.volumeState.setImageDrawable(AppCompatResources.getDrawable(context, imageID))
         }
 
         private fun applyTextfieldStyle(view: TextView){
@@ -100,7 +118,7 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder.
         // Each data item is just a string in this case that is shown in a TextView.
-        class CalendarViewHolder(val calendarView: AdapterCalendarListBinding, var calHandler: CalendarHandler) : RecyclerView.ViewHolder(calendarView.root)
+        class CalendarViewHolder(val calendarView: AdapterCalendarListBinding, var calHandler: DeviceCalendar) : RecyclerView.ViewHolder(calendarView.root)
 
 }
 

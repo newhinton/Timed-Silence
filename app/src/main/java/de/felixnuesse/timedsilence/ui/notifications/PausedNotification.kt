@@ -37,7 +37,6 @@ import androidx.core.app.NotificationCompat
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
-import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 
 class PausedNotification : BroadcastReceiver(){
 
@@ -48,13 +47,13 @@ class PausedNotification : BroadcastReceiver(){
         if(action == ACTION_END_PAUSE_AND_CHECK){
             context?.let {
                 // Set Volume now.
-                VolumeCalculator(it).calculateAllAndApply()
+                //VolumeCalculator(it).calculateAllAndApply()
             }
         }
 
         if(action == ACTION_END_PAUSE || action == ACTION_END_PAUSE_AND_CHECK){
             context?.let {
-                Trigger(it).createTimecheck()
+                Trigger(it).createAlarmIntime()
                 Trigger(it).checkIfNextAlarmExists()
             }
         }

@@ -21,8 +21,6 @@
     <string name="timecheck_paused">Paused</string>
     <string name="GrantDNDPermissionAccess">This app requires access to the \"Do not Disturb\" Permission to mute and unmute the device. Please Grant the permission and press return to get back to this app.</string>
     <string name="GrantDND">Grant!</string>
-    <string name="qs_tile_label">Pause Timed Silence</string>
-    <string name="pause_check_schedule">Pause Timed Silence</string>
     <string name="LocationAccessNotification">LocationAccessNotification</string>
     <string name="LocationAccessNotification_TITLE">Location Service required!</string>
     <string name="LocationAccessNotification_CONTENT">Because the wifissid can be used to track you, you need to enable Location Services to use wifinames as profiles!</string>
@@ -42,11 +40,6 @@
     <string name="back">back</string>
     <string name="schedule_dialog_save">Save</string>
     <string name="friday">Friday</string>
-    <string name="AutoHourWidget">8 Hours</string>
-    <string name="EightHourWidget">8 Hours</string>
-    <string name="ThreeHourWidget">3 Hours</string>
-    <string name="OneHourWidget">1 Hour</string>
-    <string name="appwidget_text">donotdelete-placeholder</string>
     <string name="volume_while_headset_connected">Dont change volume while Headset connected</string>
     <string name="volume_settings">Volume</string>
     <string name="volume_settings_media">Media</string>
@@ -64,8 +57,6 @@
     <string name="main_tab_wifi_connected">Wifi</string>
     <string name="main_tab_calendar">Calendar</string>
     <string name="main_last_check">Last Check:</string>
-    <string name="main_interval_between_checks">Interval between Checks:</string>
-    <string name="main_minutes">Minutes</string>
     <string name="wifi_request">Request</string>
     <string name="wifi_add_new">Add a new Wifi setting</string>
     <string name="schedule_add_new">Add a new schedule</string>
@@ -81,13 +72,6 @@
     <string name="main_tab_graph">Graph</string>
     <string name="export">Export settings</string>
     <string name="import_button">Import settings</string>
-    <string name="darkmode">Darkmode</string>
-    <string name="darkmode_light">Light</string>
-    <string name="darkmode_dark">Dark</string>
-    <string name="darkmode_auto">Same as Device</string>
-    <string name="actionbar_title_settings">Settings</string>
-    <string name="actionbar_title_settings_volume">Volumesettings</string>
-    <string name="export_file_success">Exported file:</string>
     <string name="import_file_success">Success!</string>
     <string name="vibrate">Vibration only!</string>
     <string name="silent">Silent!</string>
@@ -98,7 +82,6 @@
     <string name="PausedNotification_RESUME">Resume</string>
     <string name="enablePauseNotification">Enable notification when paused</string>
     <string name="open_volume_settings">Open Volume Settings</string>
-    <string name="volume_low_warning">One of your Volumes is below 15%. Depending on your device, it may be inaudible.</string>
     <string name="channel_name_calendar_error">Calendar Errors</string>
     <string name="channel_description_calendar_error">Shows errors with detecting calendars</string>
     <string name="main_tab_keyword">Keyword</string>
@@ -109,7 +92,6 @@
     <string name="GrantCalendarPermissionAccess">Grant!</string>
     <string name="GrantCalendarPermissionAccessDescription">This app makes use of the local calendar. To greatly enhance the use of this app, please allow access to your calendars!</string>
     <string name="ignore_all_day">Ignore All Day Events</string>
-    <string name="user_interface">User Interface</string>
     <string name="fragment_title_schedules">Time Entries</string>
     <string name="fragment_title_wifi">Wifi Entries</string>
     <string name="fragment_title_keywords">Keyword Entries</string>
@@ -137,20 +119,7 @@
     <string name="ignore_tentative_events">Ignore Tentative Events</string>
     <string name="ignore_free_events">Ignore Free Events</string>
     <string name="ignore_cancelled_events">Ignore Cancelled Events</string>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="general">Appsettings</string>
     <string name="exportSettingsDescription">Export all your settings for this app</string>
     <string name="importSettingsDescription">Import all your settings for this app. Warning! Replaces all current settings!</string>
@@ -173,4 +142,8 @@
     <string name="settings_behaviour">Behaviour</string>
     <string name="volume_change_ringer">Change Ringer Volume instead of using Do not Disturb</string>
     <string name="volume_change_ringer_description">If you allow this app to change the ringer, it will not ring when set to silent. This has the consequence, that *no* noise will be made, to the extend that also exceptions to the \"Do not Disturb\"-Setting will not ring. Use with care, and verify you get the desired effect.</string>
+    <string name="ok">OK</string>
+
+    <string name="pause_check_schedule" translatable="false">Pause Timed Silence</string>
+    <string name="appwidget_text" translatable="false">donotdelete-placeholder</string>
 </resources>

@@ -18,6 +18,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.util.WindowUtils
 
 /**
  * Copyright (C) 2021  Felix Nüsse
@@ -65,6 +66,8 @@ class KeywordDialog(context: Context) : Dialog(context, R.style.AlertDialogCusto
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        window?.let { WindowUtils.applyDialogPaddingFixForDarkmode(context, it) }
 
         binding = DialogKeywordBinding.inflate(layoutInflater)
         val view = binding.root

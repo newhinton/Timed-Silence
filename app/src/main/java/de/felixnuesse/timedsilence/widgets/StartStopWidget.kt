@@ -53,7 +53,7 @@ class StartStopWidget : AppWidgetProvider() {
             if(t.checkIfNextAlarmExists()){
                 t.removeTimecheck()
             } else {
-                t.createTimecheck()
+                t.createAlarmIntime()
             }
             updateIcon(remoteViews, context)
 

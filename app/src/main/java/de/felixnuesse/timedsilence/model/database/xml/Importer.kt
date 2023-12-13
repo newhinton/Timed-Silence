@@ -87,6 +87,7 @@ class Importer(private var mActivity: Activity) {
         var uri: Uri? = data.data
         val inputStream = mActivity.contentResolver.openInputStream(uri!!)
         val inputString = inputStream?.bufferedReader().use { it?.readText() }
+        inputStream?.close()
         return inputString ?: ""
     }
 

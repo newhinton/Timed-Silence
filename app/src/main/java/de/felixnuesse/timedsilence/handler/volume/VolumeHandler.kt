@@ -32,6 +32,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioManager
 import android.util.Log
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_MANUALLY_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
@@ -39,112 +40,101 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
-import de.felixnuesse.timedsilence.handler.permissions.DoNotDisturb
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneId
-import java.util.*
-import kotlin.collections.ArrayList
+import de.felixnuesse.timedsilence.util.PermissionManager
 
-class VolumeHandler(mContext: Context) {
+class VolumeHandler(private var mContext: Context) {
     companion object {
-        fun getVolumePermission(context: Context) {
-            DoNotDisturb.hasAccess(context, true)
-        }
-        fun hasVolumePermission(context: Context):Boolean{
-            return DoNotDisturb.hasAccess(context)
-        }
-
         private const val TAG = "VolumeHandler"
     }
 
-    var volumeSetting = PreferencesManager(mContext).getDefaultUnsetVolume()
-    var overrideMusicToZero = false
+    private var mPreferencesManager = PreferencesManager(mContext)
+    private var volumeState = VolumeState(PreferencesManager(mContext).getDefaultUnsetVolume())
+    private var mIgnoreMusicPlaying = false
+
+    fun setVolumeStateAndApply(state: VolumeState) {
+        setVolumeState(state)
+        applyVolume()
+    }
+    fun setVolumeState(state: VolumeState) {
+        volumeState = state
+    }
 
     fun setSilent(){
-        //Log.d(TAG, "VolumeHandler: Volume: Silent!")
-        volumeSetting = TIME_SETTING_SILENT
+        volumeState = VolumeState(TIME_SETTING_SILENT)
+        volumeState.setReason(REASON_MANUALLY_SET, "Set from Main View")
     }
 
     fun setVibrate(){
-        if(volumeSetting != TIME_SETTING_SILENT){
-            //Log.d(TAG, "VolumeHandler: Volume: Vibrate!")
-            volumeSetting = TIME_SETTING_VIBRATE
-        }else{
-            //Log.d(TAG, "VolumeHandler: Volume: Vibrate! Ignored because: $volumeSetting ")
-        }
+        volumeState = VolumeState(TIME_SETTING_VIBRATE)
+        volumeState.setReason(REASON_MANUALLY_SET, "Set from Main View")
     }
 
     fun setLoud(){
-        if(volumeSetting != TIME_SETTING_SILENT && volumeSetting != TIME_SETTING_VIBRATE){
-            //Log.d(TAG, "VolumeHandler: Volume: Loud!")
-            volumeSetting = TIME_SETTING_LOUD
-        }else{
-            //Log.d(TAG, "VolumeHandler: Volume: Loud! Ignored because: $volumeSetting ")
-        }
+        volumeState = VolumeState(TIME_SETTING_LOUD)
+        volumeState.setReason(REASON_MANUALLY_SET, "Set from Main View")
     }
 
-    private fun applySilent(context: Context) {
-        Log.e(TAG, "VolumeHandler: Apply: Silent!")
-        val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    fun ignoreMusicPlaying(ignore: Boolean) {
+        mIgnoreMusicPlaying = ignore
+    }
 
-        if(!manager.isMusicActive || overrideMusicToZero){
-            setMediaVolume(0, context, manager)
+    private fun applySilent() {
+        Log.e(TAG, "VolumeHandler: Apply: Silent!")
+        val manager = mContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        if(!manager.isMusicActive || mIgnoreMusicPlaying){
+            setMediaVolume(0, manager)
         }
 
         //supress annoying vibration on Q
         //maybe this is nessessary on P, but idk
         if (android.os.Build.VERSION.SDK_INT < 29) {
 
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_ALARM,
-                PreferencesManager(context).getAlarmVolume()
-            )
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_NOTIFICATION,
-                0
-            )
 
-            if(PreferencesManager(context).changeRingerVolume()){
-                Log.d(TAG, "VolumeHandler: Setting Ringer! This might be not what you want!")
-                if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
-                    manager.ringerMode=AudioManager.RINGER_MODE_SILENT
-                }
-                setStreamToPercent(
-                    manager,
-                    AudioManager.STREAM_RING,
-                    0
-                )
-            }
         }
 
-        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_ALARM,
+            PreferencesManager(mContext).getAlarmVolume()
+        )
+
+        if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
+            manager.ringerMode=AudioManager.RINGER_MODE_SILENT
+        }
+        if(mPreferencesManager.changeRingerVolume()){
+            Log.d(TAG, "VolumeHandler: Setting Ringer! This might be not what you want!")
+            setStreamToPercent(
+                manager,
+                AudioManager.STREAM_RING,
+                0
+            )
+        }
+
+        val mNotificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
         mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
         mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
 
     }
 
-    private fun applyLoud(context: Context) {
+    private fun applyLoud() {
         Log.d(TAG, "VolumeHandler: Apply: Loud!")
-        val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val manager = mContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+        val mNotificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
         mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
 
         if(manager.ringerMode!= AudioManager.RINGER_MODE_NORMAL){
             manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
         }
 
-        val alarmVolume = PreferencesManager(context).getAlarmVolume()
-        val mediaVolume = PreferencesManager(context).getMediaVolume()
-        val notifcationVolume = PreferencesManager(context).getNotificationVolume()
-        val ringerVolume = PreferencesManager(context).getRingerVolume()
+        val alarmVolume = mPreferencesManager.getAlarmVolume()
+        val mediaVolume = mPreferencesManager.getMediaVolume()
+        val notifcationVolume = mPreferencesManager.getNotificationVolume()
+        val ringerVolume = mPreferencesManager.getRingerVolume()
 
         if(!manager.isMusicActive){
-            setMediaVolume(mediaVolume, context, manager)
+            setMediaVolume(mediaVolume, manager)
         }
 
         Log.d(TAG, "VolumeHandler: STREAM_MEDIA: $mediaVolume")
@@ -163,7 +153,7 @@ class VolumeHandler(mContext: Context) {
             notifcationVolume
         )
 
-        if(PreferencesManager(context).changeRingerVolume()){
+        if(mPreferencesManager.changeRingerVolume()){
             Log.d(TAG, "VolumeHandler: STREAM_RING: $ringerVolume")
             Log.d(TAG, "VolumeHandler: Setting Ringer! This might be not what you want!")
             setStreamToPercent(
@@ -175,23 +165,23 @@ class VolumeHandler(mContext: Context) {
 
     }
 
-    private fun applyVibrate(context: Context) {
+    private fun applyVibrate() {
         Log.d(TAG, "VolumeHandler: Apply: Vibrate!")
-        val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val manager = mContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+        val mNotificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
         mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
 
 
-        if(!manager.isMusicActive || overrideMusicToZero){
-            setMediaVolume(0, context, manager)
+        if(!manager.isMusicActive || mIgnoreMusicPlaying){
+            setMediaVolume(0, manager)
         }
 
         if(manager.ringerMode!= AudioManager.RINGER_MODE_VIBRATE){
             manager.ringerMode=AudioManager.RINGER_MODE_VIBRATE
         }
 
-        var alarmVolume = PreferencesManager(context).getAlarmVolume()
+        var alarmVolume = mPreferencesManager.getAlarmVolume()
 
         setStreamToPercent(
             manager,
@@ -204,7 +194,7 @@ class VolumeHandler(mContext: Context) {
             0
         )
 
-        if(PreferencesManager(context).changeRingerVolume()){
+        if(mPreferencesManager.changeRingerVolume()){
             Log.d(TAG, "VolumeHandler: Silencing Ringer! This might be not what you want!")
             setStreamToPercent(
                 manager,
@@ -221,18 +211,12 @@ class VolumeHandler(mContext: Context) {
         manager.setStreamVolume(stream, vol, 0)
     }
 
-    private fun setMediaVolume(percentage: Int, context: Context, manager: AudioManager){
-        setMediaVolume(percentage, context, manager, false)
-    }
-
-    private fun setMediaVolume(percentage: Int, context: Context, manager: AudioManager, ignoreHeadset: Boolean){
-
+    private fun setMediaVolume(percentage: Int, manager: AudioManager){
 
         Log.d(TAG, "VolumeHandler: Setting Audio Volume!")
+        val ignoreCheckWhenConnected = mPreferencesManager.checkIfHeadsetIsConnected()
 
-        val ignoreCheckWhenConnected = PreferencesManager(context).checkIfHeadsetIsConnected()
-
-        if(HeadsetHandler.headphonesConnected(context) && ignoreCheckWhenConnected){
+        if(HeadsetHandler.headphonesConnected(mContext) && ignoreCheckWhenConnected){
             Log.d(TAG, "VolumeHandler: Found headset, skipping...")
             return
         }
@@ -243,49 +227,48 @@ class VolumeHandler(mContext: Context) {
             percentage
         )
         Log.d(TAG, "VolumeHandler: Mediavolume set.")
-
     }
 
-    fun isButtonClickAudible(context: Context): Boolean{
-    Log.d(TAG, "VolumeHandler: Check if Buttonclicks are audible")
-    val manager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    if(0>=manager.getStreamVolume(AudioManager.STREAM_RING)){
-        return false
+    fun isButtonClickAudible(): Boolean{
+        Log.d(TAG, "VolumeHandler: Check if Buttonclicks are audible")
+        val manager = mContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        if(0>=manager.getStreamVolume(AudioManager.STREAM_RING)){
+            return false
+        }
+        return true
     }
-    return true
-}
 
-    fun applyVolume(context: Context){
-        if(!hasVolumePermission(context)){
+    fun applyVolume(){
+        if(!PermissionManager(mContext).grantedDoNotDisturb()){
             Log.d(TAG, "VolumeHandler: VolumeSetting: Do not disturb not granted! Not changing Volume!")
             return
         }
 
         Log.d(TAG, "VolumeHandler: VolumeSetting: ${getVolume()}")
-        LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(getVolume())}")
+        LogHandler.writeLog(mContext,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(getVolume())} - ${volumeState.getReason()}")
 
         when (getVolume()) {
             TIME_SETTING_SILENT -> {
-                applySilent(context)
-                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(TIME_SETTING_SILENT)}")
+                applySilent()
+                LogHandler.writeLog(mContext,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(TIME_SETTING_SILENT)} - ${volumeState.getReason()}")
             }
             TIME_SETTING_VIBRATE -> {
-                applyVibrate(context)
-                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(TIME_SETTING_VIBRATE)}")
+                applyVibrate()
+                LogHandler.writeLog(mContext,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(TIME_SETTING_VIBRATE)} - ${volumeState.getReason()}")
             }
             TIME_SETTING_LOUD -> {
-                applyLoud(context)
-                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(TIME_SETTING_LOUD)}")
+                applyLoud()
+                LogHandler.writeLog(mContext,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(TIME_SETTING_LOUD)} - ${volumeState.getReason()}")
             }
             else -> {
                 Log.d(TAG, "VolumeHandler: Apply: Nothing, because no volume was selecteds!")
-                LogHandler.writeLog(context,"VolumeHandler", "because applyVolume was called","Nothing, because no volume was selected!")
+                LogHandler.writeLog(mContext,"VolumeHandler", "because applyVolume was called","Nothing, because no volume was selected!")
             }
         }
     }
 
-    fun getVolume(): Int{
-        when (volumeSetting) {
+    private fun getVolume(): Int{
+        when (volumeState.state) {
             TIME_SETTING_SILENT -> return TIME_SETTING_SILENT
             TIME_SETTING_VIBRATE -> return TIME_SETTING_VIBRATE
             TIME_SETTING_LOUD -> return TIME_SETTING_LOUD

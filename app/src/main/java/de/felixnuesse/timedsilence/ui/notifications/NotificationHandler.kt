@@ -46,19 +46,15 @@ class NotificationHandler {
     var CHANNEL_ID_CALENDAR_ERROR = "CHANNEL_ID_CALENDAR_ERROR"
 
     private fun createNotificationChannel(c: Context) {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = c.getString(R.string.channel_name_calendar_error)
-            val descriptionText = c.getString(R.string.channel_description_calendar_error)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID_CALENDAR_ERROR, name, importance).apply {
-                description = descriptionText
-            }
-            // Register the channel with the system
-            val notificationManager: NotificationManager = c.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        val name = c.getString(R.string.channel_name_calendar_error)
+        val descriptionText = c.getString(R.string.channel_description_calendar_error)
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(CHANNEL_ID_CALENDAR_ERROR, name, importance).apply {
+            description = descriptionText
         }
+        // Register the channel with the system
+        val notificationManager: NotificationManager = c.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     fun showNotification(c: Context){
@@ -80,7 +76,7 @@ class NotificationHandler {
 
         val intent = PendingIntent.getActivity(
             c, 0,
-            notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT
+            notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
 
@@ -88,7 +84,7 @@ class NotificationHandler {
 
         with(NotificationManagerCompat.from(c)) {
             // notificationId is a unique int for each notification that you must define
-            notify(5614468+Math.random().toInt(), builder.build())
+            //notify(5614468+Math.random().toInt(), builder.build())
         }
 
     }

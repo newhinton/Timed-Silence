@@ -8,6 +8,7 @@ import java.io.File
 import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 
 class LogHandler() {
@@ -32,9 +33,8 @@ class LogHandler() {
             append(context, content, "$time-$who.txt")
         }
 
-        fun append(context: Context, content: String, filename: String) {
+        private fun append(context: Context, content: String, filename: String) {
             try {
-                Log.e("TAG", context.getExternalFilesDir(null).toString())
                 val log = File(context.getExternalFilesDir(null), filename)
                 val writer = FileWriter(log, true)
                 writer.append(content+"\n")
@@ -43,16 +43,6 @@ class LogHandler() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }
-
-        fun writeAppLog(context: Context, content: String) {
-            val now = Date()
-            val timestamp = now.time
-            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-            val dateStr = sdf.format(timestamp)
-
-            val text = "$dateStr;;$content"
-            append(context, text, "log.txt")
         }
     }
 }

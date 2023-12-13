@@ -1,9 +1,11 @@
 package de.felixnuesse.timedsilence.ui;
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
@@ -42,12 +44,13 @@ import kotlin.collections.ArrayList
 
 class KeywordListAdapter(private var myDataset: ArrayList<KeywordObject>) : RecyclerView.Adapter<KeywordListAdapter.CalendarKeywordViewHolder>() {
 
-        fun removeAt(position: Int) {
+        private fun removeAt(position: Int) {
                 myDataset.removeAt(position)
                 notifyItemRemoved(position)
                 notifyItemRangeChanged(position, myDataset.size)
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         fun update(context: Context, co: CalendarObject){
                 DatabaseHandler(context).updateCalendarEntry(co)
                 myDataset.clear()
@@ -80,7 +83,7 @@ class KeywordListAdapter(private var myDataset: ArrayList<KeywordObject>) : Recy
                         TIME_SETTING_VIBRATE -> imageID=R.drawable.icon_vibration
                         TIME_SETTING_SILENT -> imageID=R.drawable.icon_volume_off
                 }
-                holder.calendarKeywordView.keywordState.setImageDrawable(holder.calendarKeywordView.root.context.getDrawable(imageID))
+                holder.calendarKeywordView.keywordState.setImageDrawable(AppCompatResources.getDrawable(holder.calendarKeywordView.root.context, imageID))
         }
 
         // Return the size of your dataset (invoked by the layout manager)

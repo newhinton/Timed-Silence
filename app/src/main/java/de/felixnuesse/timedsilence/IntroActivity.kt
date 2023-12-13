@@ -8,7 +8,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
-import de.felixnuesse.timedsilence.handler.permissions.DoNotDisturb
+import de.felixnuesse.timedsilence.util.PermissionManager
 
 class IntroActivity : AppIntro() {
 
@@ -17,6 +17,7 @@ class IntroActivity : AppIntro() {
         const val INTRO_PREFERENCES = "IntroPreferences"
     }
 
+    private var permissionManager = PermissionManager(this)
     private var isDoNotDisturbSlide = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +56,6 @@ class IntroActivity : AppIntro() {
             required = false)
 
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             addSlide(
                 AppIntroFragment.createInstance(
@@ -92,8 +92,8 @@ class IntroActivity : AppIntro() {
     override fun onPageSelected(position: Int) {
         //check if we *were* on the dnd slide on the last slide, and ask for dnd. Then update slide.
         if(isDoNotDisturbSlide) {
-            if(!DoNotDisturb.hasAccess(this)) {
-                DoNotDisturb.directRequest(this)
+            if(!permissionManager.grantedDoNotDisturb()) {
+                permissionManager.requestDoNotDisturb()
             }
         }
 

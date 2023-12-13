@@ -5,40 +5,55 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.skydoves.balloon.*
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.FragmentGraphBinding
+import de.felixnuesse.timedsilence.dialogs.GraphOverviewDialog
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
-import de.felixnuesse.timedsilence.handler.volume.VolumeCalculator
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.util.SizeUtil
+import de.felixnuesse.timedsilence.volumestate.StateGenerator
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.concurrent.TimeUnit
 
 
-class GraphFragment : Fragment() {
+class GraphFragment : Fragment(), View.OnClickListener {
 
     private lateinit var viewObject: View
 
     private var _binding: FragmentGraphBinding? = null
     private val binding get() = _binding!!
 
+    private var dayOffset = 0
+    private lateinit var mStateGenerator: StateGenerator
+    private lateinit var mStateList: ArrayList<VolumeState>
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGraphBinding.inflate(inflater, container, false)
+        mStateGenerator = StateGenerator(binding.root.context)
+        mStateList = mStateGenerator.states()
+        updateLabel()
         return binding.root
     }
 
@@ -77,8 +92,39 @@ class GraphFragment : Fragment() {
             buildGraph(view.context, binding.relLayout)
         }.start()
 
+        binding.previousDay.setOnClickListener {
+            dayOffset--
+            updateLabel()
+            updateStateList()
+            updateGraph(view.context)
+        }
 
+        binding.nextDay.setOnClickListener {
+            dayOffset++
+            updateLabel()
+            updateStateList()
+            updateGraph(view.context)
+        }
 
+    }
+
+    private fun updateLabel() {
+        val dateToDisplay = LocalDateTime.now()
+            .plusDays(dayOffset.toLong())
+            .atZone(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
+
+        binding.labelDayOffset.text = DateUtil.getDate(dateToDisplay, "dd.MM.yyyy")
+    }
+
+    fun updateGraph(context: Context) {
+        binding.relLayout.removeAllViews()
+        binding.loadingColumn.visibility = View.VISIBLE
+
+        Thread {
+            buildGraph(context, binding.relLayout)
+        }.start()
     }
 
     fun buildGraph(context:Context, relLayout: LinearLayout){
@@ -88,23 +134,24 @@ class GraphFragment : Fragment() {
         setLegendColor(R.color.color_graph_vibrate, binding.imageViewLegendVibrate)
         setLegendColor(R.color.color_graph_loud, binding.imageViewLegendLoud)
 
-        val volCalc = VolumeCalculator(requireContext(), true)
-        val list = volCalc.getChangeList()
         var isfirst = true
 
         val barElementList = arrayListOf<LinearLayout>()
 
-        for (i in 0..<list.size){
-            val volumeState = list[i]
+        var lastVolumeState = TIME_SETTING_UNSET
+
+        for (i in mStateList.indices){
+            val volumeState = mStateList[i]
 
             val color = resources.getColor(getColorFromState(volumeState.state))
             var nextColor: Int? = null
 
-            if(list.size-1>i){
-                nextColor = resources.getColor(getColorFromState(list[i+1].state))
+            if(mStateList.size-1>i){
+                nextColor = resources.getColor(getColorFromState(mStateList[i+1].state))
             }
 
-            barElementList.add(createBarElem(context, volumeState, color, nextColor, isfirst))
+            barElementList.add(createBarElem(context, volumeState, color, nextColor, isfirst, (volumeState.state != lastVolumeState)))
+            lastVolumeState = volumeState.state
             isfirst = false
         }
 
@@ -116,16 +163,20 @@ class GraphFragment : Fragment() {
         }
     }
 
+    private fun updateStateList() {
+        mStateGenerator.setDayOffset(dayOffset)
+        mStateList = mStateGenerator.states()
+    }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun createBarElem(context: Context, volumeState: VolumeState, color: Int, nextColor: Int?, isFirst: Boolean): LinearLayout {
+    private fun createBarElem(context: Context, volumeState: VolumeState, color: Int, nextColor: Int?, isFirst: Boolean, showTooltip: Boolean): LinearLayout {
 
-
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(volumeState.duration)
         var outerLayout = LinearLayout(context)
         val outerLayoutParams = LinearLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT,
-            volumeState.duration.toFloat()
+            minutes.toFloat()
         )
 
         outerLayout.layoutParams = outerLayoutParams
@@ -137,9 +188,13 @@ class GraphFragment : Fragment() {
             GraphItemView(context.applicationContext, color, isFirst)
         }
 
+        if(!showTooltip) {
+            item.changeAnnotationVisibility(false)
+        }
+
         item.setTooltip(volumeState.getReason())
         item.updateVisibility(volumeState.duration)
-
+        item.setOnBarClick(this)
 
         var text_addition=""
         when (volumeState.state) {
@@ -156,7 +211,7 @@ class GraphFragment : Fragment() {
     }
 
     private fun setLegendColor(color: Int, image: ImageView): View {
-        val shapeDrawable = resources.getDrawable(R.drawable.shape_drawable_bar_legend) as GradientDrawable
+        val shapeDrawable = AppCompatResources.getDrawable(requireContext(), R.drawable.shape_drawable_bar_legend) as GradientDrawable
         shapeDrawable.color = ColorStateList.valueOf(resources.getColor(color))
         image.setImageDrawable(shapeDrawable)
 
@@ -208,5 +263,9 @@ class GraphFragment : Fragment() {
             TIME_SETTING_LOUD -> id = R.color.color_graph_loud
         }
         return id
+    }
+
+    override fun onClick(view: View) {
+        GraphOverviewDialog(requireContext(), mStateList).show()
     }
 }

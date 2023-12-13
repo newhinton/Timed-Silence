@@ -3,11 +3,9 @@ package de.felixnuesse.timedsilence.fragments
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import de.felixnuesse.timedsilence.Constants
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.databinding.FragmentCalendarKeywordBinding
 import de.felixnuesse.timedsilence.dialogs.KeywordDialog
@@ -33,7 +31,7 @@ class KeywordFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCalendarKeywordBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -42,27 +40,19 @@ class KeywordFragment : Fragment() {
 
         binding.buttonCalendarFragment.setOnClickListener {
             KeywordDialog(view.context, this).show()
-            Log.e(TAG, "CalendarKeywordFragment: Add new!")
+        }
+        binding.buttonIcon.setOnClickListener {
+            KeywordDialog(view.context, this).show()
         }
 
         val db = DatabaseHandler(view.context)
-
-        Log.e(TAG, "CalendarKeywordFragment: DatabaseResuluts: Size: "+db.getKeywords().size)
-
         viewManager = NestedRecyclerManager(view.context)
         viewAdapter = KeywordListAdapter(db.getKeywords())
 
         binding.calendarFragmentRecylcerListView.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
-
-            // use a linear layout manager
             layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
             adapter = viewAdapter
-
         }
 
     }

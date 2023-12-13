@@ -1,5 +1,6 @@
 package de.felixnuesse.timedsilence.util
 
+import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
@@ -50,6 +51,10 @@ class DateUtil{
             return formatter.format(calendar.time)
         }
 
+        fun getDate(datetime: LocalDateTime): String {
+            return getDate(datetime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), "dd.MM.yyyy HH:mm:ss")
+        }
+
         fun getDate(milliSeconds: Long): String {
            return getDate(milliSeconds, "dd.MM.yyyy HH:mm:ss")
         }
@@ -80,6 +85,11 @@ class DateUtil{
             val midnight: LocalTime = LocalTime.MIDNIGHT
             val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
             return LocalDateTime.of(today, midnight)
+        }
+
+        fun getMidnight(date: LocalDateTime): LocalDateTime {
+            val midnight: LocalTime = LocalTime.MIDNIGHT
+            return LocalDateTime.of(date.toLocalDate(), midnight)
         }
     }
 

@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.databinding.FragmentWifiConnectedBinding
 import de.felixnuesse.timedsilence.dialogs.WifiDialog
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
@@ -35,7 +34,7 @@ class WifiConnectedFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentWifiConnectedBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -53,33 +52,22 @@ class WifiConnectedFragment : Fragment() {
         }
 
         binding.buttonWifiAddFragment.setOnClickListener {
-            Log.e(TAG, "WifiFragment: Add new!")
-            //createSSIDDialog(view.context)
             WifiDialog(view.context, this).show()
-
+        }
+        binding.buttonIcon.setOnClickListener {
+            WifiDialog(view.context, this).show()
         }
 
 
         val db = DatabaseHandler(view.context)
-
-        Log.e(TAG, "WifiFragment: DatabaseResuluts: Size: "+db.getAllWifiEntries().size)
-
         viewManager = NestedRecyclerManager(view.context)
         viewAdapter = WifiListAdapter(db.getAllWifiEntries())
 
         binding.wifiRecylcerListView.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
             setHasFixedSize(false)
-
-            // use a linear layout manager
             layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
             adapter = viewAdapter
-
         }
-
     }
 
     private fun checkContainer(){
@@ -105,16 +93,9 @@ class WifiConnectedFragment : Fragment() {
         viewAdapter = WifiListAdapter(db.getAllWifiEntries())
 
         binding.wifiRecylcerListView.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
-
-            // use a linear layout manager
             layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
             adapter = viewAdapter
-
         }
     }
 

@@ -58,7 +58,7 @@
         <Preference
             android:key="ALERT_notification"
             android:title="@string/volume_settings_warning"
-            app:icon="@drawable/ic_warning"
+            app:icon="@drawable/icon_warning"
             app:isPreferenceVisible="false" />
 
         <SeekBarPreference
@@ -71,7 +71,7 @@
         <Preference
             android:key="ALERT_alarm"
             android:title="@string/volume_settings_warning"
-            app:icon="@drawable/ic_warning"
+            app:icon="@drawable/icon_warning"
             app:isPreferenceVisible="false" />
 
         <SeekBarPreference
@@ -85,7 +85,7 @@
         <Preference
             android:key="ALERT_ringer"
             android:title="@string/volume_settings_warning"
-            app:icon="@drawable/ic_warning"
+            app:icon="@drawable/icon_warning"
             app:isPreferenceVisible="false" />
 
     </PreferenceCategory>

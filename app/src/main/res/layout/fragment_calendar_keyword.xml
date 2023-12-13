@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".fragments.CalendarEventFragment">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.CalendarFragment">
 
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/CalendarListContainer"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,11 +38,11 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/button_calendar_fragment"
+                style="@style/AddButtonCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="30dp"
-                style="@style/AddButtonCard">
+                android:layout_margin="30dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -54,6 +52,7 @@
                     android:orientation="horizontal">
 
                     <ImageButton
+                        android:id="@+id/buttonIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
@@ -61,13 +60,13 @@
                         app:tint="?attr/colorOnSecondaryContainer" />
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/buttonText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="4dp"
                         android:paddingEnd="4dp"
-                        android:textColor="?attr/colorOnSecondaryContainer"
-                        android:text="@string/keyword_add_new" />
+                        android:text="@string/keyword_add_new"
+                        android:textColor="?attr/colorOnSecondaryContainer" />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

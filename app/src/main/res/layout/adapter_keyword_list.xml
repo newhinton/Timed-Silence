@@ -7,7 +7,7 @@
 
 
     <androidx.cardview.widget.CardView
-        style="@style/tertiaryCard"
+        style="@style/primaryCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/cardMargin"
@@ -26,16 +26,16 @@
 
             <ImageView
                 android:id="@+id/keyword_state"
-                style="@style/tertiaryCard"
+                style="@style/primaryCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/icon_volume_off" />
 
             <TextView
                 android:id="@+id/keyword_keyword"
-                style="@style/tertiaryCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/primaryCard"
                 android:paddingStart="12dp"
                 android:text="keyword" />
         </LinearLayout>
@@ -44,7 +44,6 @@
 
     <ImageButton
         android:id="@+id/delete_keyword_element"
-        style="@style/tertiaryCard"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@null"
