@@ -2,8 +2,6 @@ package de.felixnuesse.timedsilence.dialogs
 
 import android.app.Dialog
 import android.content.Context
-import android.content.res.Configuration
-import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
@@ -11,11 +9,9 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.content.res.AppCompatResources
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.DialogScheduleBinding
-import de.felixnuesse.timedsilence.fragments.TimeFragment
+import de.felixnuesse.timedsilence.fragments.ScheduleFragment
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
@@ -59,15 +55,15 @@ class ScheduleDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
         private const val TAG = "ScheduleDialog"
     }
 
-    private var timeFragment: TimeFragment? = null
+    private var scheduleFragment: ScheduleFragment? = null
     private var scheduleListHolder: ScheduleListAdapter? = null
     private var createNewSchedule: Boolean = true
     private var existingSchedule: ScheduleObject? = null
 
     private lateinit var binding: DialogScheduleBinding
 
-    constructor(context: Context, timeFragment: TimeFragment) : this(context) {
-        this.timeFragment = timeFragment
+    constructor(context: Context, scheduleFragment: ScheduleFragment) : this(context) {
+        this.scheduleFragment = scheduleFragment
         createNewSchedule = true
     }
 
@@ -163,7 +159,7 @@ class ScheduleDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
                     binding.scheduleDialogDaysSaturday.isChecked,
                     binding.scheduleDialogDaysSunday.isChecked
                 )
-                timeFragment?.saveSchedule(context, so)
+                scheduleFragment?.saveSchedule(context, so)
             } else {
                 val so = ScheduleObject(
                     binding.scheduleTitleTextfield.text.toString(),

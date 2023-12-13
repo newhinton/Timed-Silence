@@ -57,7 +57,7 @@ import de.felixnuesse.timedsilence.IntroActivity.Companion.INTRO_PREFERENCES
 import de.felixnuesse.timedsilence.databinding.ActivityMainBinding
 import de.felixnuesse.timedsilence.fragments.CalendarFragment
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
-import de.felixnuesse.timedsilence.fragments.TimeFragment
+import de.felixnuesse.timedsilence.fragments.ScheduleFragment
 import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.*
@@ -364,11 +364,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
             when (position) {
                 0 -> return GraphFragment()
-                1 -> return TimeFragment()
+                1 -> return ScheduleFragment()
                 2 -> return CalendarFragment()
                 3 -> return KeywordFragment()
                 4 -> return WifiConnectedFragment()
-                else -> return TimeFragment()
+                else -> return ScheduleFragment()
             }
         }
     }

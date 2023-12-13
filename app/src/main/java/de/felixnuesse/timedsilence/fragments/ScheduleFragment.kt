@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import de.felixnuesse.timedsilence.databinding.FragmentTimeBinding
+import de.felixnuesse.timedsilence.databinding.FragmentSchedulesBinding
 import de.felixnuesse.timedsilence.dialogs.ScheduleDialog
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
@@ -15,7 +15,7 @@ import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
 import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 
 
-class TimeFragment : Fragment() {
+class ScheduleFragment : Fragment() {
 
     companion object {
         private const val TAG = "TimeFragment"
@@ -24,7 +24,7 @@ class TimeFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private var _binding: FragmentTimeBinding? = null
+    private var _binding: FragmentSchedulesBinding? = null
     private val binding get() = _binding!!
 
 
@@ -32,7 +32,7 @@ class TimeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentTimeBinding.inflate(inflater, container, false)
+        _binding = FragmentSchedulesBinding.inflate(inflater, container, false)
         return binding.root
     }
 

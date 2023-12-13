@@ -1,7 +1,7 @@
 # Timed Silence - Dont let your phone rattle you!
 [![license: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/newhinton/timed-silence/blob/master/LICENSE) [![Latest Downloads](https://img.shields.io/github/downloads/newhinton/timed-silence/latest/total
 )](https://github.com/newhinton/timed-silence/releases) [![GitHub release](https://img.shields.io/github/v/release/newhinton/timed-silence?include_prereleases)](https://github.com/newhinton/timed-silence/releases/latest)
-[![Documentation](https://img.shields.io/badge/Documentation-roundsync.com-4aad4e)](https://roundsync.com) [![supportive flags](https://img.shields.io/badge/support-🇺🇦_🏳️‍⚧_🏳️‍🌈-4aad4e)](https://roundsync.com)
+[![supportive flags](https://img.shields.io/badge/support-🇺🇦_🏳️‍⚧_🏳️‍🌈-4aad4e)](https://roundsync.com)
 
 [![Android Lint](https://github.com/newhinton/timed-silence/actions/workflows/lint.yml/badge.svg)](https://github.com/newhinton/timed-silence/actions/workflows/lint.yml)
 -----------
@@ -16,13 +16,16 @@ Screenshots
 <table>
   <tr style="border:none">
     <td style="border:none">
-      <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="360vh" />
+      <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="180vh" />
     </td>
     <td style="border:none">
-      <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="360vh" />
+      <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="180vh" />
     </td>
     <td style="border:none">
-      <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width="360vh" />
+      <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width="180vh" />
+    </td>
+    <td style="border:none">
+      <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width="180vh" />
     </td>
   </tr>
 </table>
@@ -75,12 +78,12 @@ Donations
 If you like my work, either this app or in general, you are more than welcome to leave a donation.
 It helps me to dedicate time to further improve my apps!
 
-[Paypal](https://www.paypal.com/paypalme/felixnuesse)
-Other ways are available too, check the sidebar for the donations-section.
+[Paypal](https://www.paypal.com/paypalme/felixnuesse) | [Liberapay](https://liberapay.com/newhinton) | [Github Sponsor](https://github.com/sponsors/newhinton)
 
-License
+
+About this app
 -----------------
-### About this app
+### License
 This app is released under the terms of the [GPLv3 license](https://github.com/newhinton/timed-silence/blob/master/LICENSE). 
 
 ### Libraries
