@@ -3,7 +3,6 @@ package de.felixnuesse.timedsilence.fragments
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,18 +14,12 @@ import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.CalendarListAdapter
 import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
-import kotlin.collections.ArrayList
 
 
 class CalendarFragment : Fragment() {
 
     companion object {
         private const val TAG = "CalendarFragment"
-        var nameOfEvent = ArrayList<String>()
-        var startDates = ArrayList<String>()
-        var endDates = ArrayList<String>()
-        var descriptions = ArrayList<String>()
-
     }
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
@@ -52,6 +45,9 @@ class CalendarFragment : Fragment() {
         checkContainer(calHandler, view.context)
 
         binding.buttonCalendarFragment.setOnClickListener {
+            CalendarDialog(view.context, this, calHandler).show()
+        }
+        binding.buttonIcon.setOnClickListener {
             CalendarDialog(view.context, this, calHandler).show()
         }
 

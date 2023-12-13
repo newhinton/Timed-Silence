@@ -2,7 +2,6 @@ package de.felixnuesse.timedsilence.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,13 +31,16 @@ class TimeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTimeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.buttonTimeFragment.setOnClickListener {
+            ScheduleDialog(view.context, this).show()
+        }
+        binding.buttonIcon.setOnClickListener {
             ScheduleDialog(view.context, this).show()
         }
 

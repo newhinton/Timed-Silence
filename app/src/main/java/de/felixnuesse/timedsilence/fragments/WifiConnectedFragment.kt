@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.databinding.FragmentWifiConnectedBinding
 import de.felixnuesse.timedsilence.dialogs.WifiDialog
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
@@ -35,7 +34,7 @@ class WifiConnectedFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentWifiConnectedBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -54,7 +53,9 @@ class WifiConnectedFragment : Fragment() {
 
         binding.buttonWifiAddFragment.setOnClickListener {
             WifiDialog(view.context, this).show()
-
+        }
+        binding.buttonIcon.setOnClickListener {
+            WifiDialog(view.context, this).show()
         }
 
 

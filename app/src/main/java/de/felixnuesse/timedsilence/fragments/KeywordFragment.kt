@@ -3,11 +3,9 @@ package de.felixnuesse.timedsilence.fragments
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import de.felixnuesse.timedsilence.Constants
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.databinding.FragmentCalendarKeywordBinding
 import de.felixnuesse.timedsilence.dialogs.KeywordDialog
@@ -33,7 +31,7 @@ class KeywordFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCalendarKeywordBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,6 +39,9 @@ class KeywordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.buttonCalendarFragment.setOnClickListener {
+            KeywordDialog(view.context, this).show()
+        }
+        binding.buttonIcon.setOnClickListener {
             KeywordDialog(view.context, this).show()
         }
 
