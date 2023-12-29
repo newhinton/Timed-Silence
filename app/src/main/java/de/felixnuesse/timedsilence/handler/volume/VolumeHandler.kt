@@ -32,15 +32,17 @@ import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioManager
 import android.util.Log
+import androidx.core.content.ContextCompat.getSystemService
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_MANUALLY_SET
+import de.felixnuesse.timedsilence.handler.LogHandler
+import de.felixnuesse.timedsilence.handler.PreferencesManager
+import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
-import de.felixnuesse.timedsilence.handler.LogHandler
-import de.felixnuesse.timedsilence.handler.PreferencesManager
-import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.util.PermissionManager
+
 
 class VolumeHandler(private var mContext: Context) {
     companion object {
@@ -82,15 +84,9 @@ class VolumeHandler(private var mContext: Context) {
         Log.e(TAG, "VolumeHandler: Apply: Silent!")
         val manager = mContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
+
         if(!manager.isMusicActive || mIgnoreMusicPlaying){
             setMediaVolume(0, manager)
-        }
-
-        //supress annoying vibration on Q
-        //maybe this is nessessary on P, but idk
-        if (android.os.Build.VERSION.SDK_INT < 29) {
-
-
         }
 
         setStreamToPercent(
@@ -99,9 +95,8 @@ class VolumeHandler(private var mContext: Context) {
             PreferencesManager(mContext).getAlarmVolume()
         )
 
-        if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
-            manager.ringerMode=AudioManager.RINGER_MODE_SILENT
-        }
+
+
         if(mPreferencesManager.changeRingerVolume()){
             Log.d(TAG, "VolumeHandler: Setting Ringer! This might be not what you want!")
             setStreamToPercent(
@@ -109,7 +104,11 @@ class VolumeHandler(private var mContext: Context) {
                 AudioManager.STREAM_RING,
                 0
             )
+            if(manager.ringerMode!= AudioManager.RINGER_MODE_SILENT){
+                manager.ringerMode=AudioManager.RINGER_MODE_SILENT
+            }
         }
+
 
         val mNotificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
         mNotificationManager?.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
