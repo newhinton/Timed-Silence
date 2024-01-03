@@ -1,8 +1,11 @@
-package de.felixnuesse.timedsilence.handler.calculator
+package de.felixnuesse.timedsilence.model.data
+
+
+import kotlinx.serialization.Serializable
 
 /**
- * Copyright (C) 2019  Felix Nüsse
- * Created on  18.05.2019
+ * Copyright (C) 2024  Felix Nüsse
+ * Created on 03.01.24 - 21:10
  *
  * Edited by: Felix Nüsse felix.nuesse(at)t-online.de
  *
@@ -28,23 +31,12 @@ package de.felixnuesse.timedsilence.handler.calculator
  *
  */
 
-import android.content.Context
-import android.location.LocationManager
-import android.util.Log
-import de.felixnuesse.timedsilence.Constants
-
-class LocationHandler {
-    companion object {
-
-        private const val TAG = "LocationHandler"
-
-        fun checkIfLocationServiceIsEnabled(context: Context): Boolean {
-            val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-            val result = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            Log.d(TAG, "LocationHandler: State: $result")
-
-            return result
-        }
+@Serializable
+data class BluetoothObject(var name: String, var address: String, var alias: String) {
+    constructor(name: String, address: String) : this(name, address, name) {}
+    override fun toString(): String {
+        return "BluetoothObject(name='$name', address='$address', alias='$alias')"
     }
+
+
 }
