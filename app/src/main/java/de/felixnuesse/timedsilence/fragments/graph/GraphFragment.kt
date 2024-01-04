@@ -20,7 +20,7 @@ import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.FragmentGraphBinding
 import de.felixnuesse.timedsilence.dialogs.GraphOverviewDialog
 import de.felixnuesse.timedsilence.handler.PreferencesManager
-import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
+import de.felixnuesse.timedsilence.handler.calculator.BluetoothHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
@@ -79,7 +79,7 @@ class GraphFragment : Fragment(), View.OnClickListener {
             it.showAlignTop(builder.build())
         }
 
-        if(!HeadsetHandler.headphonesConnected(view.context)){
+        if(!BluetoothHandler.headphonesConnected(view.context)){
             binding.imageviewHeadphonesConnected.visibility=View.INVISIBLE
             binding.textfieldHeadsetConnected.visibility=View.INVISIBLE
         }

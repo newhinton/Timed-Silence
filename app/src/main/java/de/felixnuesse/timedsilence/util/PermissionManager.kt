@@ -124,4 +124,35 @@ class PermissionManager(private var mContext: Context) {
             }
         builder.create().show()
     }
+
+    fun grantedBluetoothAccess(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ContextCompat.checkSelfPermission(
+                mContext,
+                Manifest.permission.BLUETOOTH_CONNECT
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            return true
+        }
+    }
+
+    fun requestBluetooth() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            return
+        }
+        val builder = AlertDialog.Builder(mContext)
+        builder.setMessage(R.string.GrantCalendarPermissionAccessDescription)
+            .setPositiveButton(R.string.GrantCalendarPermissionAccess) { _, _ ->
+                val permissionsList = Array(1) { Manifest.permission.BLUETOOTH_CONNECT }
+                ActivityCompat.requestPermissions(
+                    mContext as Activity,
+                    permissionsList,
+                    Constants.BLUETOOTH_CONNECT_PERMISSION_REQUEST_ID
+                )
+            }
+            .setNegativeButton(R.string.cancel) { _, _ ->
+                ActivityCompat.finishAffinity(mContext as Activity)
+            }
+        builder.create().show()
+    }
 }

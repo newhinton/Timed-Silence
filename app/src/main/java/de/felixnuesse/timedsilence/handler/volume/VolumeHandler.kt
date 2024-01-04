@@ -36,7 +36,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_MANUALLY_SET
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.PreferencesManager
-import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
+import de.felixnuesse.timedsilence.handler.calculator.BluetoothHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
@@ -212,7 +212,7 @@ class VolumeHandler(private var mContext: Context) {
         Log.d(TAG(), "VolumeHandler: Setting Audio Volume!")
         val ignoreCheckWhenConnected = mPreferencesManager.checkIfHeadsetIsConnected()
 
-        if(HeadsetHandler.headphonesConnected(mContext) && ignoreCheckWhenConnected){
+        if(BluetoothHandler.headphonesConnected(mContext) && ignoreCheckWhenConnected){
             Log.d(TAG(), "VolumeHandler: Found headset, skipping...")
             return
         }
