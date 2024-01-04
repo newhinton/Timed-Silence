@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- Needed for statechange of icon in graphview -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" /> <!-- Needed for detecting bluetooth devices that should mute the phone -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> <!-- Needed for headset identification -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
