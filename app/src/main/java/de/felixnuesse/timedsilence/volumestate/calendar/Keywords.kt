@@ -11,9 +11,6 @@ import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 
 class Keywords(private var mContext: Context): Events(mContext) {
 
-
-    private val TAG: String = "Keywords"
-
     private val mDbHandler = DatabaseHandler(mContext)
 
 

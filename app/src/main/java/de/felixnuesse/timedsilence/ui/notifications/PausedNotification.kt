@@ -35,13 +35,14 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 
 class PausedNotification : BroadcastReceiver(){
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.e(TAG, "PausedNotification: Recieved Intent!")
+        Log.e(TAG(), "PausedNotification: Recieved Intent!")
 
         val action = intent?.action
         if(action == ACTION_END_PAUSE_AND_CHECK){
@@ -60,14 +61,12 @@ class PausedNotification : BroadcastReceiver(){
     }
 
     companion object {
-
-        private const val TAG = "PausedNotification"
         private const val ACTION_END_PAUSE = "ACTION_END_PAUSE"
         private const val ACTION_END_PAUSE_AND_CHECK = "ACTION_END_PAUSE_CHECK"
         private const val NOTIFICATION_ID = 498
 
         fun show(context: Context){
-            Log.e(TAG, "PausedNotification: Show Notification")
+            Log.e(TAG(), "PausedNotification: Show Notification")
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             if(PreferencesManager(context).shouldShowNotification()){
@@ -123,7 +122,7 @@ class PausedNotification : BroadcastReceiver(){
         }
 
         fun cancelNotification(context: Context) {
-            Log.e(TAG, "PausedNotification: Cancel Notification")
+            Log.e(TAG(), "PausedNotification: Cancel Notification")
             var notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(NOTIFICATION_ID)
         }

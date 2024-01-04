@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.DialogScheduleBinding
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.fragments.ScheduleFragment
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
@@ -50,10 +51,6 @@ import java.util.concurrent.TimeUnit
  *
  */
 class ScheduleDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) {
-
-    companion object {
-        private const val TAG = "ScheduleDialog"
-    }
 
     private var scheduleFragment: ScheduleFragment? = null
     private var scheduleListHolder: ScheduleListAdapter? = null
@@ -117,7 +114,7 @@ class ScheduleDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
         binding.scheduleTitleLayout.visibility = View.VISIBLE
 
         binding.scheduleNext.setOnClickListener {
-            Log.e(TAG, "ScheduleDialog: next!")
+            Log.e(TAG(), "ScheduleDialog: next!")
 
             val view = binding.scheduleDialogTitle
             val imm: InputMethodManager? = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
@@ -129,7 +126,7 @@ class ScheduleDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
         }
 
         binding.scheduleBack.setOnClickListener {
-            Log.e(TAG, "ScheduleDialog: back!")
+            Log.e(TAG(), "ScheduleDialog: back!")
 
             hideAll()
             state--
@@ -137,12 +134,12 @@ class ScheduleDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
         }
 
         binding.scheduleCancel.setOnClickListener {
-            Log.e(TAG, "ScheduleDialog: cancel!")
+            Log.e(TAG(), "ScheduleDialog: cancel!")
             this.cancel()
         }
 
         binding.scheduleSave.setOnClickListener {
-            Log.e(TAG, "ScheduleDialog: save!")
+            Log.e(TAG(), "ScheduleDialog: save!")
 
             if (createNewSchedule) {
                 val so = ScheduleObject(

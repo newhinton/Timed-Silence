@@ -11,8 +11,6 @@ import java.util.regex.Pattern
 
 class DeviceCalendarEventModel(mContext: Context, private val mDate: LocalDateTime) {
 
-    private val TAG: String = "DeviceCalendarEventModel"
-
     var mCalendarID = 0
     var mTitle = mContext.getString(R.string.event_no_title)
     var mDescription = mContext.getString(R.string.event_no_description)
@@ -82,23 +80,23 @@ class DeviceCalendarEventModel(mContext: Context, private val mDate: LocalDateTi
     fun shouldEventBeExcluded(ignoreAllday: Boolean, ignoreTentative: Boolean, ignoreCancelled: Boolean, ignoreFree: Boolean): Boolean {
         var isIgnoredEventType = false
         if (mAllDay && ignoreAllday) {
-            //Log.d(TAG, "Event $mTitle is all Day.")
+            //Log.d(TAG(), "Event $mTitle is all Day.")
             isIgnoredEventType = true
         }
 
         if (mStatus == CalendarContract.Events.STATUS_TENTATIVE && ignoreTentative) {
-            //Log.d(TAG, "Event $mTitle is Tentative.")
+            //Log.d(TAG(), "Event $mTitle is Tentative.")
             isIgnoredEventType = true
         }
 
         val bc2workaround = mDescription.contains("BC2-Status: Cancelled")
         if ((mStatus == CalendarContract.Events.STATUS_CANCELED || bc2workaround) && ignoreCancelled) {
-            //Log.d(TAG, "Event $mTitle is Cancelled.")
+            //Log.d(TAG(), "Event $mTitle is Cancelled.")
             isIgnoredEventType = true
         }
 
         if (mAvailability == CalendarContract.Events.AVAILABILITY_FREE && ignoreFree) {
-            //Log.d(TAG, "Event $mTitle is Free.")
+            //Log.d(TAG(), "Event $mTitle is Free.")
             isIgnoredEventType = true
         }
 

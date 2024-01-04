@@ -15,6 +15,7 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.text.Html
 import de.felixnuesse.timedsilence.databinding.DialogCalendarBinding
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
@@ -49,10 +50,6 @@ import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
  *
  */
 class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) {
-
-    companion object {
-        private const val TAG = "CalendarDialog"
-    }
 
     private var tfrag: CalendarFragment? = null
     private lateinit var calHandler: DeviceCalendar
@@ -115,7 +112,7 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
         rg.check(calHandler.getDeviceCalendars()[0].externalID.toInt())
 
         binding.calendarNext.setOnClickListener {
-            Log.e(TAG, "CalendarDialog: next!")
+            Log.e(TAG(), "CalendarDialog: next!")
 
             hideAll()
             state++
@@ -123,7 +120,7 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
         }
 
         binding.calendarBack.setOnClickListener {
-            Log.e(TAG, "CalendarDialog: back!")
+            Log.e(TAG(), "CalendarDialog: back!")
 
             hideAll()
             state--
@@ -131,17 +128,17 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
         }
 
         binding.calendarCancel.setOnClickListener {
-            Log.e(TAG, "CalendarDialog: cancel!")
+            Log.e(TAG(), "CalendarDialog: cancel!")
             this.cancel()
         }
 
         binding.calendarSave.setOnClickListener {
-            Log.e(TAG, "CalendarDialog: save!")
+            Log.e(TAG(), "CalendarDialog: save!")
 
             val volId = getValueForVolumeRadioGroup();
             val calId = getValueForCalendarRadioGroup();
-            Log.e(TAG, "CalendarDialog: Volume: "+volId)
-            Log.e(TAG, "CalendarDialog: CalID:  "+calId)
+            Log.e(TAG(), "CalendarDialog: Volume: "+volId)
+            Log.e(TAG(), "CalendarDialog: CalID:  "+calId)
             val so = CalendarObject(
                 0,//calendar_id_select.text.toString(),
                 calId,

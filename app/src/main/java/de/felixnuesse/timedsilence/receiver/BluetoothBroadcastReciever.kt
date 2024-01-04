@@ -5,30 +5,27 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.volumestate.StateGenerator
 
 class BluetoothBroadcastReciever : BroadcastReceiver(){
 
-    companion object {
-        private const val TAG = "BluetoothBroadcastReciever"
-    }
-
     override fun onReceive(context: Context, intent: Intent) {
-        Log.e(TAG, "BluetoothBroadcastReciever: ${intent.action}")
+        Log.e(TAG(), "BluetoothBroadcastReciever: ${intent.action}")
 
         if (intent.action == BluetoothDevice.ACTION_ACL_CONNECTED) {
-            Log.e(TAG, "BluetoothBroadcastReciever: Device connected!")
+            Log.e(TAG(), "BluetoothBroadcastReciever: Device connected!")
         }
 
         if (intent.action == BluetoothDevice.ACTION_ACL_DISCONNECTED) {
-            Log.e(TAG, "BluetoothBroadcastReciever: Device disconnected!")
+            Log.e(TAG(), "BluetoothBroadcastReciever: Device disconnected!")
 
             try {
                 Thread.sleep(1000)
             } catch (ex: InterruptedException) {
-                Log.e(TAG, "BluetoothBroadcastReciever: Could not sleep!")
+                Log.e(TAG(), "BluetoothBroadcastReciever: Could not sleep!")
             }
 
             if(Trigger(context).checkIfNextAlarmExists()){
@@ -36,7 +33,7 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
                 volumeHandler.ignoreMusicPlaying(true)
                 volumeHandler.setVolumeStateAndApply(StateGenerator(context).stateAt(System.currentTimeMillis()))
             } else {
-                Log.e(TAG, "BluetoothBroadcastReciever: No next alarm scheduled, dont update!")
+                Log.e(TAG(), "BluetoothBroadcastReciever: No next alarm scheduled, dont update!")
             }
         }
     }

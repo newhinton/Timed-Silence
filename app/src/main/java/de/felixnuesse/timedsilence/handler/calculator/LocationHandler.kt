@@ -31,18 +31,15 @@ package de.felixnuesse.timedsilence.handler.calculator
 import android.content.Context
 import android.location.LocationManager
 import android.util.Log
-import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.extensions.TAG
 
 class LocationHandler {
     companion object {
-
-        private const val TAG = "LocationHandler"
-
         fun checkIfLocationServiceIsEnabled(context: Context): Boolean {
             val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
             val result = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            Log.d(TAG, "LocationHandler: State: $result")
+            Log.d(TAG(), "LocationHandler: State: $result")
 
             return result
         }

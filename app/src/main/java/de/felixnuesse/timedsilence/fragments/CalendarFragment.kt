@@ -18,10 +18,6 @@ import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
 
 class CalendarFragment : Fragment() {
 
-    companion object {
-        private const val TAG = "CalendarFragment"
-    }
-
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 

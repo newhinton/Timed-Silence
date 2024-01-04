@@ -14,10 +14,6 @@ import de.felixnuesse.timedsilence.fragments.settings.SelectorFragment
 
 class SettingsActivity : AppCompatActivity() {
 
-    companion object {
-        private const val TAG = "SettingsActivity"
-    }
-
     private var mSelectorFragment = SelectorFragment(this)
     private var mCurrentFragment: Fragment = mSelectorFragment
     private var mOnBackCallback: OnBackPressedCallback? = null

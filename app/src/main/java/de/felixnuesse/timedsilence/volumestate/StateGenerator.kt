@@ -2,6 +2,7 @@ package de.felixnuesse.timedsilence.volumestate
 
 import android.content.Context
 import android.util.Log
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
@@ -16,10 +17,6 @@ import java.util.Collections
 
 class StateGenerator(private var mContext: Context) {
 
-    companion object {
-        private const val TAG = "StateGenerator"
-    }
-
     private var mDate: LocalDateTime = LocalDateTime.now()
     private var mPreferencesManager = PreferencesManager(mContext)
     private var defaultVolume = mPreferencesManager.getDefaultUnsetVolume()
@@ -29,7 +26,7 @@ class StateGenerator(private var mContext: Context) {
     private var mSchedules = Schedule(mContext)
 
     init {
-        LogHandler.writeLog(mContext, TAG, "instantiate","VolumeCalculator was now instantiated")
+        LogHandler.writeLog(mContext, TAG(), "instantiate","VolumeCalculator was now instantiated")
         mEvents.date = mDate
         mKeywords.date = mDate
         mSchedules.date = mDate
@@ -46,7 +43,7 @@ class StateGenerator(private var mContext: Context) {
 
     fun states(): ArrayList<VolumeState> {
         val start = System.currentTimeMillis()
-        Log.e(TAG, "Start-time: $start")
+        Log.e(TAG(), "Start-time: $start")
 
         val stateList = arrayListOf<VolumeState>()
 
@@ -111,8 +108,8 @@ class StateGenerator(private var mContext: Context) {
         Collections.sort(linearList, VolumeStateStartComparator())
 
         val end = System.currentTimeMillis()
-        Log.e(TAG, "Endtime: $end")
-        Log.e(TAG, "Diff: ${end-start}ms")
+        Log.e(TAG(), "Endtime: $end")
+        Log.e(TAG(), "Diff: ${end-start}ms")
         return padList(linearList)
     }
 

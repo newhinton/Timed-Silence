@@ -8,6 +8,7 @@ import android.view.Window
 import android.view.WindowManager
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.DialogGraphoverviewBinding
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import de.felixnuesse.timedsilence.ui.CalendarListAdapter
 import de.felixnuesse.timedsilence.ui.GraphOverviewAdapter
@@ -44,10 +45,6 @@ import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
  */
 class GraphOverviewDialog(context: Context, private var mStates: ArrayList<VolumeState>) : Dialog(context, R.style.AlertDialogCustom) {
 
-    companion object {
-        private const val TAG = "GraphOverviewDialog"
-    }
-
     private lateinit var binding: DialogGraphoverviewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +66,7 @@ class GraphOverviewDialog(context: Context, private var mStates: ArrayList<Volum
     }
 
     private fun setList() {
-        Log.e(TAG, "States: ${mStates.size}")
+        Log.e(TAG(), "States: ${mStates.size}")
 
         var viewManager = NestedRecyclerManager(binding.root.context)
         var viewAdapter = GraphOverviewAdapter(mStates)

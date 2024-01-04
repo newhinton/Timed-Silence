@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.model.database.AppDataStructure
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
@@ -46,15 +47,13 @@ import java.util.*
 class Exporter(private var mActivity: Activity) {
 
     companion object {
-        private const val TAG = "Exporter"
         private const val OPEN_DIRECTORY_REQUEST = 443
-
     }
 
     private val mDateString = DateUtil.getDate(Date().time, "yyyy.MM.dd")
 
     fun export() {
-        Log.e(TAG, "Export!")
+        Log.e(TAG(), "Export!")
 
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -75,7 +74,7 @@ class Exporter(private var mActivity: Activity) {
                     try {
                         val outputStream = mActivity.contentResolver.openOutputStream(treeUri)
                         val content = create()
-                        Log.e(TAG, content)
+                        Log.e(TAG(), content)
                         outputStream?.write(content.toByteArray())
                         outputStream?.close()
                         Toast.makeText(mActivity, "Write file successfully", Toast.LENGTH_SHORT).show()

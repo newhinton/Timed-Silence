@@ -10,6 +10,7 @@ import android.view.WindowManager
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.DialogWifiBinding
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.model.data.WifiObject
 
@@ -48,10 +49,6 @@ import de.felixnuesse.timedsilence.util.WindowUtils
  */
 class WifiDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) {
 
-    companion object {
-        private const val TAG = "WifiDialog"
-    }
-
     private var tfrag: WifiConnectedFragment? = null
     private lateinit var binding: DialogWifiBinding
 
@@ -84,7 +81,7 @@ class WifiDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) 
         binding.wifiSsidLayout.visibility = View.VISIBLE
 
         binding.wifiNext.setOnClickListener {
-            Log.e(TAG, "WifiDialog: next!")
+            Log.e(TAG(), "WifiDialog: next!")
 
             hideAll()
             state++
@@ -92,7 +89,7 @@ class WifiDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) 
         }
 
         binding.wifiBack.setOnClickListener {
-            Log.e(TAG, "WifiDialog: back!")
+            Log.e(TAG(), "WifiDialog: back!")
 
             hideAll()
             state--
@@ -100,12 +97,12 @@ class WifiDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) 
         }
 
         binding.wifiCancel.setOnClickListener {
-            Log.e(TAG, "WifiDialog: cancel!")
+            Log.e(TAG(), "WifiDialog: cancel!")
             this.cancel()
         }
 
         binding.wifiSave.setOnClickListener {
-            Log.e(TAG, "WifiDialog: save!")
+            Log.e(TAG(), "WifiDialog: save!")
 
             val volId = getValueForVolumeRadioGroup()
             val type = getValueForTypeRadioGroup()

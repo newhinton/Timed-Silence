@@ -23,6 +23,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.util.Date
+import de.felixnuesse.timedsilence.extensions.TAG
 
 
 /**
@@ -56,20 +57,16 @@ import java.util.Date
 
 class Trigger(var mContext: Context) {
 
-    companion object {
-        private const val TAG = "TargetedAlarmHandler"
-    }
-
     fun removeTimecheck() {
         val alarms = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         createBroadcast(0L)?.let { alarms.cancel(it) }
         createBroadcast(0L)?.cancel()
 
         if(!checkIfNextAlarmExists()){
-            Log.d(TAG, "AlarmHandler: Recurring alarm canceled")
+            Log.d(TAG(), "AlarmHandler: Recurring alarm canceled")
             return
         }
-        Log.e(TAG, "AlarmHandler: Error canceling recurring alarm!")
+        Log.e(TAG(), "AlarmHandler: Error canceling recurring alarm!")
     }
 
     fun createBroadcast(targettime: Long): PendingIntent? {
@@ -110,14 +107,14 @@ class Trigger(var mContext: Context) {
         for (it in list) {
 
             var timecheck = it.startTime
-            Log.e(TAG, "Checking time ${it.startTime} ${todayMidnight} ${it.getReason()}")
-            Log.e(TAG, "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
+            Log.e(TAG(), "Checking time ${it.startTime} ${todayMidnight} ${it.getReason()}")
+            Log.e(TAG(), "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
             if(timecheck > now && calculatedChecktime == tomorrowMidnight){
                 calculatedChecktime = timecheck
             }
         }
-        Log.e(TAG, "Calculated time $calculatedChecktime")
-        Log.e(TAG, "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
+        Log.e(TAG(), "Calculated time $calculatedChecktime")
+        Log.e(TAG(), "Calculated time ${DateUtil.getDate(calculatedChecktime)}")
 
         LogHandler.writeLog(mContext, "TargetedAlarmHandler", "Create new Alarm", "$calculatedChecktime,${DateUtil.getDate(calculatedChecktime)}")
 
@@ -158,11 +155,11 @@ class Trigger(var mContext: Context) {
     fun checkIfNextAlarmExists(): Boolean {
         val pIntent = createBroadcast(PendingIntent.FLAG_NO_CREATE, 0L)
         return if (pIntent == null) {
-            Log.d(TAG, "TriggerInterface: There is no next Alarm set!")
+            Log.d(TAG(), "TriggerInterface: There is no next Alarm set!")
             PausedNotification.show(mContext)
             false
         } else {
-            Log.d(TAG, "TriggerInterface: There is an upcoming Alarm!")
+            Log.d(TAG(), "TriggerInterface: There is an upcoming Alarm!")
             PausedNotification.cancelNotification(mContext)
             true
         }
@@ -172,7 +169,7 @@ class Trigger(var mContext: Context) {
         val alarms = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val clockInfo = alarms.nextAlarmClock ?: return mContext.getString(R.string.no_next_time_set)
 
-        Log.d(TAG, "TriggerInterface: Next Runtime: " + DateUtil.getDate(clockInfo.triggerTime))
+        Log.d(TAG(), "TriggerInterface: Next Runtime: " + DateUtil.getDate(clockInfo.triggerTime))
         return DateFormat.getDateInstance().format(Date(clockInfo.triggerTime))
 
     }

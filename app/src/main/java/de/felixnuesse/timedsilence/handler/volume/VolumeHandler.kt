@@ -42,12 +42,9 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.util.PermissionManager
-
+import de.felixnuesse.timedsilence.extensions.TAG
 
 class VolumeHandler(private var mContext: Context) {
-    companion object {
-        private const val TAG = "VolumeHandler"
-    }
 
     private var mPreferencesManager = PreferencesManager(mContext)
     private var volumeState = VolumeState(PreferencesManager(mContext).getDefaultUnsetVolume())
@@ -81,7 +78,7 @@ class VolumeHandler(private var mContext: Context) {
     }
 
     private fun applySilent() {
-        Log.e(TAG, "VolumeHandler: Apply: Silent!")
+        Log.e(TAG(), "VolumeHandler: Apply: Silent!")
         val manager = mContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
 
@@ -98,7 +95,7 @@ class VolumeHandler(private var mContext: Context) {
 
 
         if(mPreferencesManager.changeRingerVolume()){
-            Log.d(TAG, "VolumeHandler: Setting Ringer! This might be not what you want!")
+            Log.d(TAG(), "VolumeHandler: Setting Ringer! This might be not what you want!")
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_RING,
@@ -117,7 +114,7 @@ class VolumeHandler(private var mContext: Context) {
     }
 
     private fun applyLoud() {
-        Log.d(TAG, "VolumeHandler: Apply: Loud!")
+        Log.d(TAG(), "VolumeHandler: Apply: Loud!")
         val manager = mContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         val mNotificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
@@ -136,9 +133,9 @@ class VolumeHandler(private var mContext: Context) {
             setMediaVolume(mediaVolume, manager)
         }
 
-        Log.d(TAG, "VolumeHandler: STREAM_MEDIA: $mediaVolume")
-        Log.d(TAG, "VolumeHandler: STREAM_ALARM: $alarmVolume")
-        Log.d(TAG, "VolumeHandler: STREAM_NOTIFICATION: $notifcationVolume")
+        Log.d(TAG(), "VolumeHandler: STREAM_MEDIA: $mediaVolume")
+        Log.d(TAG(), "VolumeHandler: STREAM_ALARM: $alarmVolume")
+        Log.d(TAG(), "VolumeHandler: STREAM_NOTIFICATION: $notifcationVolume")
 
 
         setStreamToPercent(
@@ -153,8 +150,8 @@ class VolumeHandler(private var mContext: Context) {
         )
 
         if(mPreferencesManager.changeRingerVolume()){
-            Log.d(TAG, "VolumeHandler: STREAM_RING: $ringerVolume")
-            Log.d(TAG, "VolumeHandler: Setting Ringer! This might be not what you want!")
+            Log.d(TAG(), "VolumeHandler: STREAM_RING: $ringerVolume")
+            Log.d(TAG(), "VolumeHandler: Setting Ringer! This might be not what you want!")
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_RING,
@@ -165,7 +162,7 @@ class VolumeHandler(private var mContext: Context) {
     }
 
     private fun applyVibrate() {
-        Log.d(TAG, "VolumeHandler: Apply: Vibrate!")
+        Log.d(TAG(), "VolumeHandler: Apply: Vibrate!")
         val manager = mContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         val mNotificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
@@ -194,7 +191,7 @@ class VolumeHandler(private var mContext: Context) {
         )
 
         if(mPreferencesManager.changeRingerVolume()){
-            Log.d(TAG, "VolumeHandler: Silencing Ringer! This might be not what you want!")
+            Log.d(TAG(), "VolumeHandler: Silencing Ringer! This might be not what you want!")
             setStreamToPercent(
                 manager,
                 AudioManager.STREAM_RING,
@@ -212,11 +209,11 @@ class VolumeHandler(private var mContext: Context) {
 
     private fun setMediaVolume(percentage: Int, manager: AudioManager){
 
-        Log.d(TAG, "VolumeHandler: Setting Audio Volume!")
+        Log.d(TAG(), "VolumeHandler: Setting Audio Volume!")
         val ignoreCheckWhenConnected = mPreferencesManager.checkIfHeadsetIsConnected()
 
         if(HeadsetHandler.headphonesConnected(mContext) && ignoreCheckWhenConnected){
-            Log.d(TAG, "VolumeHandler: Found headset, skipping...")
+            Log.d(TAG(), "VolumeHandler: Found headset, skipping...")
             return
         }
 
@@ -225,11 +222,11 @@ class VolumeHandler(private var mContext: Context) {
             AudioManager.STREAM_MUSIC,
             percentage
         )
-        Log.d(TAG, "VolumeHandler: Mediavolume set.")
+        Log.d(TAG(), "VolumeHandler: Mediavolume set.")
     }
 
     fun isButtonClickAudible(): Boolean{
-        Log.d(TAG, "VolumeHandler: Check if Buttonclicks are audible")
+        Log.d(TAG(), "VolumeHandler: Check if Buttonclicks are audible")
         val manager = mContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         if(0>=manager.getStreamVolume(AudioManager.STREAM_RING)){
             return false
@@ -239,11 +236,11 @@ class VolumeHandler(private var mContext: Context) {
 
     fun applyVolume(){
         if(!PermissionManager(mContext).grantedDoNotDisturb()){
-            Log.d(TAG, "VolumeHandler: VolumeSetting: Do not disturb not granted! Not changing Volume!")
+            Log.d(TAG(), "VolumeHandler: VolumeSetting: Do not disturb not granted! Not changing Volume!")
             return
         }
 
-        Log.d(TAG, "VolumeHandler: VolumeSetting: ${getVolume()}")
+        Log.d(TAG(), "VolumeHandler: VolumeSetting: ${getVolume()}")
         LogHandler.writeLog(mContext,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(getVolume())} - ${volumeState.getReason()}")
 
         when (getVolume()) {
@@ -260,7 +257,7 @@ class VolumeHandler(private var mContext: Context) {
                 LogHandler.writeLog(mContext,"VolumeHandler", "because applyVolume was called","${VolumeState.timeSettingToReadable(TIME_SETTING_LOUD)} - ${volumeState.getReason()}")
             }
             else -> {
-                Log.d(TAG, "VolumeHandler: Apply: Nothing, because no volume was selecteds!")
+                Log.d(TAG(), "VolumeHandler: Apply: Nothing, because no volume was selecteds!")
                 LogHandler.writeLog(mContext,"VolumeHandler", "because applyVolume was called","Nothing, because no volume was selected!")
             }
         }

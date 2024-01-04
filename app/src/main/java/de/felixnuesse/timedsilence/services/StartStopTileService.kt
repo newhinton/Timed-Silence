@@ -7,6 +7,7 @@ import android.service.quicksettings.TileService
 import android.util.Log
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
+import de.felixnuesse.timedsilence.extensions.TAG
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -39,13 +40,12 @@ import de.felixnuesse.timedsilence.handler.trigger.Trigger
 class StartStopTileService: TileService() {
 
     companion object {
-        private const val TAG = "StartStopTileService"
         var icon = R.drawable.icon_av_timer
     }
 
     override fun onClick() {
         super.onClick()
-        Log.e(TAG,"StartStopTileService: onClick")
+        Log.e(TAG(),"StartStopTileService: onClick")
 
         val t = Trigger(this)
 
@@ -71,7 +71,7 @@ class StartStopTileService: TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        Log.e(TAG,"StartStopTileService: onStartListening")
+        Log.e(TAG(),"StartStopTileService: onStartListening")
         updateTile()
 
         // Called when the Tile becomes visible
@@ -79,7 +79,7 @@ class StartStopTileService: TileService() {
 
     override fun onStopListening() {
         super.onStopListening()
-        Log.e(TAG,"StartStopTileService: onStopListening")
+        Log.e(TAG(),"StartStopTileService: onStopListening")
 
         // Called when the tile is no longer visible
     }

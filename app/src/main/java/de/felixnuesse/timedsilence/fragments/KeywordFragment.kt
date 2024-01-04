@@ -17,10 +17,6 @@ import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 
 class KeywordFragment : Fragment() {
 
-    companion object {
-        private const val TAG = "KeywordFragment"
-    }
-
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 

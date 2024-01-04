@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.CalendarContract
 import android.util.Log
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import kotlin.collections.ArrayList
@@ -28,7 +29,6 @@ class DeviceCalendar(private var mContext: Context) {
         val DEFAULT_VOLUME = -1
     }
 
-    private val TAG: String = "DeviceCalendar"
     private var calendarCache = HashMap<String, CalendarObject>()
     private val settingsCalendar = SettingsCalendar(mContext)
 
@@ -109,7 +109,7 @@ class DeviceCalendar(private var mContext: Context) {
                     cursor.moveToNext()
                 }
             } else {
-                Log.e(TAG, "CalendarHandler: No calendar found in the device")
+                Log.e(TAG(), "CalendarHandler: No calendar found in the device")
             }
         }
         cursor?.close()

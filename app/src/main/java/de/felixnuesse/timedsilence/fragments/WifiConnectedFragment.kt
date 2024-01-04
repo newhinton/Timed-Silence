@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import de.felixnuesse.timedsilence.databinding.FragmentWifiConnectedBinding
 import de.felixnuesse.timedsilence.dialogs.WifiDialog
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
 import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
@@ -19,10 +20,6 @@ import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 
 
 class WifiConnectedFragment : Fragment() {
-
-    companion object {
-        private const val TAG = "WifiConnectedFragment"
-    }
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -46,7 +43,7 @@ class WifiConnectedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.buttonRequestWifiPermissions.setOnClickListener {
-            Log.e(TAG, "WifiConnectedFragment: Request Location Permission!")
+            Log.e(TAG(), "WifiConnectedFragment: Request Location Permission!")
             WifiHandler.requestPermissions(view.context as Activity)
             checkContainer()
         }

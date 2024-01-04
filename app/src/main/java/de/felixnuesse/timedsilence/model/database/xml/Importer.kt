@@ -42,7 +42,6 @@ class Importer(private var mActivity: Activity) {
 
 
     companion object{
-        private const val TAG = "Importer"
         private const val OPEN_FILE_REQUEST = 4443
     }
 

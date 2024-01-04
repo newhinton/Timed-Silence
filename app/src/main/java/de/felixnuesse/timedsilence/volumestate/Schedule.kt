@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit
 
 class Schedule(private var mContext: Context): DeterministicCalculationInterface() {
 
-    private val TAG: String = "Schedule"
     private val mDbHandler = DatabaseHandler(mContext)
 
     override fun stateAt(timeInMs: Long): ArrayList<VolumeState> {

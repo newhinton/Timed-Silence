@@ -20,19 +20,16 @@ import android.provider.CalendarContract.Events.EVENT_LOCATION
 import android.provider.CalendarContract.Events.STATUS
 import android.provider.CalendarContract.Events.AVAILABILITY
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_CALENDAR
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.handler.LogHandler
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import de.felixnuesse.timedsilence.model.data.CachedArrayList
-import de.felixnuesse.timedsilence.util.PermissionManager
 import de.felixnuesse.timedsilence.volumestate.DeterministicCalculationInterface
 import java.time.ZoneId
 
 
 open class Events(private var mContext: Context): DeterministicCalculationInterface() {
-
-
-    private val TAG: String = "Events"
 
     private var mEventList = CachedArrayList<DeviceCalendarEventModel>()
 
@@ -70,7 +67,7 @@ open class Events(private var mContext: Context): DeterministicCalculationInterf
         )
 
         if (cursor == null) {
-            Log.e(TAG, "readCalendarEvent: no results!")
+            Log.e(TAG(),"readCalendarEvent: no results!")
             return ArrayList()
         }
 

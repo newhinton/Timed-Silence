@@ -55,10 +55,10 @@ import com.google.android.material.tabs.TabLayout
 import de.felixnuesse.timedsilence.Constants.Companion.MAIN_ACTIVITY_LOAD_CALENDAR_FORCE
 import de.felixnuesse.timedsilence.IntroActivity.Companion.INTRO_PREFERENCES
 import de.felixnuesse.timedsilence.databinding.ActivityMainBinding
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.fragments.CalendarFragment
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.fragments.ScheduleFragment
-import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
@@ -70,10 +70,6 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity(), TimerInterface {
-
-    companion object {
-        private const val TAG = "MainActivity"
-    }
 
     private var mDontCheckGraph = true
     private var button_check: String = ""
@@ -109,11 +105,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         //it plays a sound after the volume has changed to loud. Therefore it seems to be the main button who makes the sound
         binding.buttonButtonsoundFix.isSoundEffectsEnabled = true
         binding.buttonButtonsoundFix.setOnClickListener {
-            Log.e(TAG, "MainAcitivity: HiddenButton: PerformClick to make sound")
+            Log.e(TAG(), "MainAcitivity: HiddenButton: PerformClick to make sound")
         }
 
         binding.fab.setOnClickListener {
-            //Log.e(TAG, "Main: fab: Clicked")
+            //Log.e(TAG(), "Main: fab: Clicked")
             setHandlerState()
         }
 
@@ -281,7 +277,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
     private fun buttonState() {
-        Log.e(TAG, "Main: ButtonStartCheck: State: $button_check")
+        Log.e(TAG(), "Main: ButtonStartCheck: State: $button_check")
 
         //Todo remove dummy textview
         if (mTrigger.checkIfNextAlarmExists()) {
@@ -299,7 +295,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
     private fun setHandlerState() {
 
-        Log.e(TAG, "Main: setHandlerState: State: $button_check")
+        Log.e(TAG(), "Main: setHandlerState: State: $button_check")
 
         if (button_check == getString(R.string.timecheck_start)) {
             mTrigger.createAlarmIntime()

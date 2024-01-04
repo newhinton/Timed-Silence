@@ -31,12 +31,11 @@ import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.extensions.TAG
 
 class LocationAccessMissingNotification {
 
     companion object {
-
-        private const val TAG = "LocationAccessMissingNotification"
         const val NOTIFICATION_ID = 231
 
 
@@ -67,7 +66,7 @@ class LocationAccessMissingNotification {
 
         fun cancelNotification(context: Context) {
 
-            Log.e(TAG, "LocationAccessNotification: Cancel Notification")
+            Log.e(TAG(), "LocationAccessNotification: Cancel Notification")
             var notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(NOTIFICATION_ID)
 

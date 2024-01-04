@@ -10,6 +10,7 @@ import android.view.WindowManager
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.DialogKeywordBinding
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.data.KeywordObject.Companion.ALL_CALENDAR
@@ -49,10 +50,6 @@ import de.felixnuesse.timedsilence.util.WindowUtils
  */
 class KeywordDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) {
 
-    companion object {
-        private const val TAG = "KeywordDialog"
-    }
-
     private var tfrag: KeywordFragment? = null
 
     private lateinit var binding: DialogKeywordBinding
@@ -83,7 +80,7 @@ class KeywordDialog(context: Context) : Dialog(context, R.style.AlertDialogCusto
         binding.keywordKeywordLayout.visibility = View.VISIBLE
 
         binding.keywordNext.setOnClickListener {
-            Log.e(TAG, "KeywordDialog: next!")
+            Log.e(TAG(), "KeywordDialog: next!")
 
             hideAll()
             state++
@@ -91,7 +88,7 @@ class KeywordDialog(context: Context) : Dialog(context, R.style.AlertDialogCusto
         }
 
         binding.keywordBack.setOnClickListener {
-            Log.e(TAG, "KeywordDialog: back!")
+            Log.e(TAG(), "KeywordDialog: back!")
 
             hideAll()
             state--
@@ -99,12 +96,12 @@ class KeywordDialog(context: Context) : Dialog(context, R.style.AlertDialogCusto
         }
 
         binding.keywordCancel.setOnClickListener {
-            Log.e(TAG, "KeywordDialog: cancel!")
+            Log.e(TAG(), "KeywordDialog: cancel!")
             this.cancel()
         }
 
         binding.keywordSave.setOnClickListener {
-            Log.e(TAG, "KeywordDialog: save!")
+            Log.e(TAG(), "KeywordDialog: save!")
 
             val volId = getValueForVolumeRadioGroup()
             val keyword = KeywordObject(

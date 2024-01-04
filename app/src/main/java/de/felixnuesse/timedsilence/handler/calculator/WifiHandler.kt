@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants
+import de.felixnuesse.timedsilence.extensions.TAG
 
 
 /**
@@ -44,27 +45,25 @@ class WifiHandler {
 
     companion object {
 
-        private const val TAG = "WifiHandler"
-
         fun getCurrentSsid(context: Context): String? {
             var ssid: String? = null
             val connManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = connManager.activeNetworkInfo
             if (networkInfo != null) {
                 if (networkInfo.isConnected) {
-                    Log.d(TAG, "Wifimanager: networkInfo is connected")
+                    Log.d(TAG(), "Wifimanager: networkInfo is connected")
 
                     val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
                     val connectionInfo = wifiManager.connectionInfo
                     if (connectionInfo != null && connectionInfo.ssid != "") {
                         ssid = connectionInfo.ssid
 
-                        Log.d(TAG, "Wifimanager: non blank, non null ssid")
+                        Log.d(TAG(), "Wifimanager: non blank, non null ssid")
                     }
                 }
             }
 
-            Log.d(TAG, "Wifimanager: Queried current ssid: $ssid")
+            Log.d(TAG(), "Wifimanager: Queried current ssid: $ssid")
             return ssid
         }
 
