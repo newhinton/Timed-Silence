@@ -3,7 +3,7 @@ package de.felixnuesse.timedsilence.model.contacts
 import android.content.ContentResolver
 import android.content.Context
 import android.provider.ContactsContract
-import android.util.Log
+import de.felixnuesse.timedsilence.extensions.e
 import de.felixnuesse.timedsilence.util.PermissionManager
 
 
@@ -22,6 +22,11 @@ class ContactUtil(private var mContext: Context) {
 
     fun getContactList(): ArrayList<Contact> {
         val contactList = arrayListOf<Contact>()
+
+        if(!PermissionManager(mContext).grantedContacts()) {
+            e("We dont have access to the contacts!")
+            return contactList
+        }
 
         val cr: ContentResolver = mContext.contentResolver
         val cursor = cr.query(

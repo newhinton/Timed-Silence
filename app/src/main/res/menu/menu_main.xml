@@ -6,7 +6,7 @@
         android:id="@+id/action_goto_dnd"
         android:icon="@drawable/icon_dnd"
         android:orderInCategory="100"
-        android:title="@string/action_goto_dnd"
+        android:title="@string/go_to_dnd_settings"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_settings"

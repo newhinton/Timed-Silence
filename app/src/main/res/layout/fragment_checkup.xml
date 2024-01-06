@@ -88,21 +88,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="You have Priority Contacts." />
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/priority_contacts_available" />
 
                 <CheckBox
                     android:id="@+id/checkboxPriorityContactsCanBypass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="Priority Contacts can bypass dnd" />
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/priority_contacts_can_bypass_dnd" />
 
                 <CheckBox
                     android:id="@+id/checkboxRepeatCallerCanBypass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="Repeat Caller can bypass dnd" />
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/repeat_caller_can_bypass_dnd" />
 
 
                 <CheckBox
@@ -110,7 +116,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="Messages can interrupt" />
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/messages_can_bypass_dnd" />
 
 
                 <CheckBox
@@ -118,22 +126,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="Alarms can interrupt" />
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/alarms_can_bypass_dnd" />
 
 
                 <CheckBox
-                    android:id="@+id/checkboxNotificationsInvisible"
+                    android:id="@+id/checkboxNotificationsVisible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:text="notifications are invisible" />
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/notifications_visiblity" />
 
                 <Button
                     android:id="@+id/gotoDND"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Go To DnD Settings" />
+                    android:layout_marginTop="18dp"
+                    android:text="@string/go_to_dnd_settings" />
             </LinearLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

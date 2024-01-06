@@ -150,5 +150,11 @@
     <string name="pause_check_schedule" translatable="false">Pause Timed Silence</string>
     <string name="appwidget_text" translatable="false">donotdelete-placeholder</string>
     <string name="fragment_title_checkup">Checkup Overview</string>
-    <string name="action_goto_dnd">Go to DoNotDisturb</string>
+    <string name="go_to_dnd_settings">Go to \"Do not Disturb\"-Settings</string>
+    <string name="alarms_can_bypass_dnd">Alarms can interrupt \"Do not Disturb\"</string>
+    <string name="messages_can_bypass_dnd">Messages can bypass \"Do not Disturb\"</string>
+    <string name="repeat_caller_can_bypass_dnd">Repeat Caller can bypass \"Do not Disturb\"</string>
+    <string name="priority_contacts_can_bypass_dnd">Priority Contacts can bypass \"Do not Disturb\"</string>
+    <string name="priority_contacts_available">You have Priority Contacts</string>
+    <string name="notifications_visiblity">Notifications are visible during \"Do not Disturb\"</string>
 </resources>

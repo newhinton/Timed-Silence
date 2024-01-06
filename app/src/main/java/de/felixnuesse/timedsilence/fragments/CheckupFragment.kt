@@ -160,7 +160,7 @@ class CheckupFragment : Fragment() {
         binding.checkboxRepeatMessengerCanBypass.isChecked = repeatMessenger != 0
         binding.checkboxRepeatMessengerCanBypass.isChecked = repeatMessenger != 0
         binding.checkboxAlarmsCanBypass.isChecked = alarms != 0
-        binding.checkboxNotificationsInvisible.isChecked = areAllVisualEffectsSuppressed(suppressedVisuals)
+        binding.checkboxNotificationsVisible.isChecked = !areAllVisualEffectsSuppressed(suppressedVisuals)
 
     }
 
