@@ -57,7 +57,7 @@
     <string name="main_tab_wifi_connected">Wifi</string>
     <string name="main_tab_calendar">Calendar</string>
     <string name="main_last_check">Last Check:</string>
-    <string name="wifi_request">Request</string>
+    <string name="Request">Request</string>
     <string name="wifi_add_new">Add a new Wifi setting</string>
     <string name="schedule_add_new">Add a new schedule</string>
     <string name="wifi_permission_hint">You need location access because wifi can be used to identify a location. We are not doing that, see X</string>
@@ -85,12 +85,15 @@
     <string name="channel_name_calendar_error">Calendar Errors</string>
     <string name="channel_description_calendar_error">Shows errors with detecting calendars</string>
     <string name="main_tab_keyword">Keyword</string>
+    <string name="main_tab_checkup">Checkup</string>
     <string name="keyword_add_new">Add new Keyword</string>
     <string name="keyword_dialog_textfield_hint">Enter the keyword here</string>
     <string name="keyword_dialog_title_title">Create a Keyword</string>
     <string name="import_deletion_warning">Importing deletes ALL old configurations!</string>
     <string name="GrantCalendarPermissionAccess">Grant!</string>
     <string name="GrantCalendarPermissionAccessDescription">This app makes use of the local calendar. To greatly enhance the use of this app, please allow access to your calendars!</string>
+    <string name="GrantContactsPermissionAccessDescription">This app makes use of the local contacts. To verify that your calls do not get blocked during emergencies, please grant access to the contacts. This is optional, and we will only use this to show you a warning, if required.</string>
+    <string name="contact_permission_hint">You need contact permissions for this feature.</string>
     <string name="ignore_all_day">Ignore All Day Events</string>
     <string name="fragment_title_schedules">Schedules</string>
     <string name="fragment_title_wifi">Wifi Entries</string>
@@ -146,4 +149,6 @@
 
     <string name="pause_check_schedule" translatable="false">Pause Timed Silence</string>
     <string name="appwidget_text" translatable="false">donotdelete-placeholder</string>
+    <string name="fragment_title_checkup">Checkup Overview</string>
+    <string name="action_goto_dnd">Go to DoNotDisturb</string>
 </resources>

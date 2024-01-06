@@ -30,10 +30,12 @@ package de.felixnuesse.timedsilence
  */
 
 import android.annotation.SuppressLint
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.format.DateFormat
@@ -57,12 +59,14 @@ import de.felixnuesse.timedsilence.IntroActivity.Companion.INTRO_PREFERENCES
 import de.felixnuesse.timedsilence.databinding.ActivityMainBinding
 import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.fragments.CalendarFragment
+import de.felixnuesse.timedsilence.fragments.CheckupFragment
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.fragments.ScheduleFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
+import de.felixnuesse.timedsilence.model.contacts.ContactUtil
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import de.felixnuesse.timedsilence.volumestate.StateGenerator
 
@@ -151,6 +155,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         if (mDontCheckGraph) {
             mVolumeHandler.setVolumeStateAndApply(StateGenerator(this).stateAt(System.currentTimeMillis()))
         }
+
     }
 
 
@@ -199,6 +204,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
         when (item.itemId) {
+            R.id.action_goto_dnd -> openDnDSettings()
             R.id.action_settings -> openSettings()
             R.id.action_set_manual_loud -> {
                 val makeSound = !mVolumeHandler.isButtonClickAudible()
@@ -244,6 +250,13 @@ class MainActivity : AppCompatActivity(), TimerInterface {
     private fun openSettings(): Boolean {
         val intent = Intent(this, SettingsActivity::class.java).apply {}
         startActivity(intent)
+        return true
+    }
+
+
+
+    private fun openDnDSettings(): Boolean {
+        startActivity(Intent("android.settings.ZEN_MODE_SETTINGS"))
         return true
     }
 
@@ -352,9 +365,9 @@ class MainActivity : AppCompatActivity(), TimerInterface {
      * sequence.
      * FragmentStatePagerAdapter
      */
-    private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+    private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-        override fun getCount(): Int = 4
+        override fun getCount(): Int = 5
 
         override fun getItem(position: Int): Fragment {
 
@@ -364,6 +377,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
                 2 -> return CalendarFragment()
                 3 -> return KeywordFragment()
                 //4 -> return WifiConnectedFragment()
+                4 -> return CheckupFragment()
                 else -> return ScheduleFragment()
             }
         }

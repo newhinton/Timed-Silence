@@ -53,6 +53,10 @@ class PermissionManager(private var mContext: Context) {
             return false
         }
 
+        if(!grantedContacts()) {
+            return false
+        }
+
         return hasAllRequiredPermissions()
     }
 
@@ -91,6 +95,13 @@ class PermissionManager(private var mContext: Context) {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    fun grantedContacts(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            mContext,
+            Manifest.permission.READ_CONTACTS
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
     fun requestDoNotDisturb() {
         val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
         mContext.startActivity(intent)
@@ -117,6 +128,24 @@ class PermissionManager(private var mContext: Context) {
                     mContext as Activity,
                     permissionsList,
                     Constants.CALENDAR_PERMISSION_REQUEST_ID
+                )
+            }
+            .setNegativeButton(R.string.cancel) { _, _ ->
+                ActivityCompat.finishAffinity(mContext as Activity)
+            }
+        builder.create().show()
+    }
+
+
+    fun requestContactsAccess() {
+        val builder = AlertDialog.Builder(mContext)
+        builder.setMessage(R.string.GrantContactsPermissionAccessDescription)
+            .setPositiveButton(R.string.GrantCalendarPermissionAccess) { _, _ ->
+                val permissionsList = Array(1) { Manifest.permission.READ_CONTACTS }
+                ActivityCompat.requestPermissions(
+                    mContext as Activity,
+                    permissionsList,
+                    Constants.CONTACT_PERMISSION_REQUEST_ID
                 )
             }
             .setNegativeButton(R.string.cancel) { _, _ ->

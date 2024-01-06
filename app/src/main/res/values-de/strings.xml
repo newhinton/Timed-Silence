@@ -56,7 +56,7 @@
     <string name="wifi_add_new">Neue Wlan-Einstellung hinzufügen</string>
     <string name="wifi_permission_hint">"Du benötigst Ortungsdienstzugriff da Wlan genutzt werden kann um dich zu tracken. "
     </string>
-    <string name="wifi_request">Anfordern!</string>
+    <string name="Request">Anfordern!</string>
     <string name="schedule_add_new">Füge neuen Zeitplan hinzu</string>
     <string name="calendar_add_new">Füge neue Kalendereinstellung hinzu</string>
     <string name="calendar_dialog_save">Speichern</string>
