@@ -68,7 +68,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
-            android:id="@+id/scrollView2"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="@dimen/fragmentSideMargins"
@@ -91,6 +90,18 @@
                     android:button="@null"
                     android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/priority_contacts_available" />
+
+                <Button
+                    android:id="@+id/contactsShowButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_contacts" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/contactsListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
 
                 <CheckBox
                     android:id="@+id/checkboxPriorityContactsCanBypass"

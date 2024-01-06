@@ -157,4 +157,5 @@
     <string name="priority_contacts_can_bypass_dnd">Priority Contacts can bypass \"Do not Disturb\"</string>
     <string name="priority_contacts_available">You have Priority Contacts</string>
     <string name="notifications_visiblity">Notifications are visible during \"Do not Disturb\"</string>
+    <string name="show_contacts">Show</string>
 </resources>

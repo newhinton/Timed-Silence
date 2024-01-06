@@ -23,21 +23,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.databinding.FragmentCheckupBinding
-import de.felixnuesse.timedsilence.extensions.e
 import de.felixnuesse.timedsilence.model.contacts.Contact
 import de.felixnuesse.timedsilence.model.contacts.ContactUtil
+import de.felixnuesse.timedsilence.ui.ContactsListAdapter
+import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 import de.felixnuesse.timedsilence.util.PermissionManager
 
 
 class CheckupFragment : Fragment() {
 
-    companion object {
-        private const val TAG = "CheckupFragment"
-    }
+
+    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewManager: RecyclerView.LayoutManager
 
     private var _binding: FragmentCheckupBinding? = null
     private val binding get() = _binding!!
+
+    private var showContacts = false
 
 
     override fun onCreateView(
@@ -54,6 +58,12 @@ class CheckupFragment : Fragment() {
         binding.gotoDND.setOnClickListener {
             startActivity(Intent("android.settings.ZEN_MODE_SETTINGS"))
         }
+
+        binding.contactsShowButton.setOnClickListener {
+            binding.contactsListView.visibility = View.VISIBLE
+            binding.contactsShowButton.visibility = View.GONE
+            showContacts = true
+        }
     }
 
     override fun onDestroyView() {
@@ -69,14 +79,18 @@ class CheckupFragment : Fragment() {
     private fun updateData() {
         val context = binding.root.context
 
-        var l = arrayListOf<Contact>()
+        var contactsList = arrayListOf<Contact>()
 
+        if(showContacts) {
+            binding.contactsListView.visibility = View.VISIBLE
+            binding.contactsShowButton.visibility = View.GONE
+        }
 
         var permissionManager = PermissionManager(context)
         if(permissionManager.grantedContacts()) {
             binding.CheckupContentContainer.visibility = View.VISIBLE
             binding.CheckupPermissionCheckContainer.visibility = View.GONE
-            l = ContactUtil(context).getContactList()
+            contactsList = ContactUtil(context).getContactList()
         } else{
             binding.CheckupContentContainer.visibility = View.GONE
             binding.buttonRequestContactPermissions.setOnClickListener{
@@ -90,8 +104,6 @@ class CheckupFragment : Fragment() {
         } else {
             mNotificationManager?.notificationPolicy
         }
-
-
         /*
         The following is the current (api 33) list of available categories:
 
@@ -153,14 +165,26 @@ class CheckupFragment : Fragment() {
             1
         }
 
+        if(contactsList.size == 0) {
+            binding.contactsShowButton.visibility = View.GONE
+        }
 
-        binding.checkboxHavePriorityContacts.isChecked = l.size > 0
+        binding.checkboxHavePriorityContacts.isChecked = contactsList.size > 0
         binding.checkboxPriorityContactsCanBypass.isChecked = priorityCaller != 0
         binding.checkboxRepeatCallerCanBypass.isChecked = repeatCaller != 0
         binding.checkboxRepeatMessengerCanBypass.isChecked = repeatMessenger != 0
         binding.checkboxRepeatMessengerCanBypass.isChecked = repeatMessenger != 0
         binding.checkboxAlarmsCanBypass.isChecked = alarms != 0
         binding.checkboxNotificationsVisible.isChecked = !areAllVisualEffectsSuppressed(suppressedVisuals)
+
+        viewManager = NestedRecyclerManager(context)
+        viewAdapter = ContactsListAdapter(contactsList)
+
+        binding.contactsListView.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
 
     }
 
