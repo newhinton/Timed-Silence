@@ -146,4 +146,6 @@
 
     <string name="pause_check_schedule" translatable="false">Pause Timed Silence</string>
     <string name="appwidget_text" translatable="false">donotdelete-placeholder</string>
+    <string name="fragment_title_bluetooth">Bluetooth</string>
+    <string name="main_tab_bluetooth">Bluetooth</string>
 </resources>
