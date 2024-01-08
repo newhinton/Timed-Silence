@@ -71,6 +71,7 @@ class Constants {
         const val REASON_WIFI = 2
         const val REASON_KEYWORD = 3
         const val REASON_MANUALLY_SET = 4
+        const val REASON_BLUETOOTH_CONNECTED = 5
     }
 
 }
