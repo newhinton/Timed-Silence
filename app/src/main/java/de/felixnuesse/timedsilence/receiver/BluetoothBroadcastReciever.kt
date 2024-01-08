@@ -37,7 +37,12 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
 
                     var state = VolumeState(it.volumeState)
                     state.setReason(REASON_BLUETOOTH_CONNECTED, it.alias)
-                    volumeHandler.setVolumeStateAndApply(state)
+                    var supposedState = StateGenerator(context).stateAt(System.currentTimeMillis())
+
+                    if (supposedState.state > state.state) {
+                        volumeHandler.setVolumeStateAndApply(state)
+                    }
+
                 }
             }
         }
