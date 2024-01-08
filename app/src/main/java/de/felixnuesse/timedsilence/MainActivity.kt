@@ -60,6 +60,7 @@ import de.felixnuesse.timedsilence.fragments.BluetoothFragment
 import de.felixnuesse.timedsilence.fragments.CalendarFragment
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.fragments.ScheduleFragment
+import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
@@ -367,7 +368,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
                 3 -> return KeywordFragment()
                 4 -> return WifiConnectedFragment()
                 5 -> return BluetoothFragment()
-                else -> return TimeFragment()
+                else -> return ScheduleFragment()
             }
         }
     }
