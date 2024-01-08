@@ -165,4 +165,6 @@
     <string name="made_by">Made by:</string>
     <string name="help">Help</string>
     <string name="copyright">"GPLv3 - ©%1$s "</string>
+    <string name="fragment_title_bluetooth">Bluetooth</string>
+    <string name="main_tab_bluetooth">Bluetooth</string>
 </resources>

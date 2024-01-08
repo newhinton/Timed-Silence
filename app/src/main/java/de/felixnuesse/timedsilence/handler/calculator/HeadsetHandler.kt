@@ -54,6 +54,7 @@ class BluetoothHandler {
             }
 
             val btManager = context.getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
+            //todo: Fix this. When the device does not have bluetooth, the app crashes
             val pairedDevices = btManager.adapter.bondedDevices
 
 
@@ -68,11 +69,10 @@ class BluetoothHandler {
                     } else {
                         deviceName
                     }
-                    Log.e(TAG,"paired device: $deviceName at $macAddress + $aliasing ")
 
-                    if( isConnected(device)){
-                        list.add(BluetoothObject(deviceName, macAddress, aliasing))
-                    }
+                    val bluetoothObject = BluetoothObject(deviceName, macAddress, aliasing, isConnected(device))
+                    list.add(bluetoothObject)
+                    Log.e(TAG,"paired device: $bluetoothObject")
                 }
             }
             return list
