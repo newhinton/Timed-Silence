@@ -32,10 +32,10 @@ import kotlinx.serialization.Serializable
  */
 
 @Serializable
-data class BluetoothObject(var name: String, var address: String, var alias: String) {
-    constructor(name: String, address: String) : this(name, address, name) {}
+data class BluetoothObject(var name: String, var address: String, var alias: String, var connected: Boolean) {
+    constructor(name: String, address: String) : this(name, address, name, false) {}
     override fun toString(): String {
-        return "BluetoothObject(name='$name', address='$address', alias='$alias')"
+        return "BluetoothObject(name='$name', address='$address', alias='$alias', connected='$connected')"
     }
 
 
