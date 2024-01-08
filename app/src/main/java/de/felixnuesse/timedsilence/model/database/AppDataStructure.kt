@@ -1,6 +1,7 @@
 package de.felixnuesse.timedsilence.model.database
 
 import de.felixnuesse.timedsilence.handler.PreferencesHolder
+import de.felixnuesse.timedsilence.model.data.BluetoothObject
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
@@ -19,6 +20,7 @@ data class AppDataStructure(var date: String) {
     var calendars = arrayListOf<CalendarObject>()
     var keywords = arrayListOf<KeywordObject>()
     var wifi = arrayListOf<WifiObject>()
+    var bluetooth = arrayListOf<BluetoothObject>()
 
 
     private var preferences: PreferencesHolder? = null
@@ -37,6 +39,10 @@ data class AppDataStructure(var date: String) {
 
     fun addWifi(wifi: WifiObject) {
         this.wifi.add(wifi)
+    }
+
+    fun addBluetooth(bluetooth: BluetoothObject) {
+        this.bluetooth.add(bluetooth)
     }
 
     fun setPreferences(prefs: PreferencesHolder) {

@@ -10,6 +10,7 @@ import android.media.AudioManager
 import android.os.Build
 import android.util.Log
 import de.felixnuesse.timedsilence.model.data.BluetoothObject
+import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.util.PermissionManager
 import java.lang.reflect.Method
 
@@ -76,6 +77,20 @@ class BluetoothHandler {
                 }
             }
             return list
+        }
+
+        fun getPairedDevicesWithDatabaseState(context: Context): ArrayList<BluetoothObject> {
+
+            var db = DatabaseHandler(context)
+            var result = arrayListOf<BluetoothObject>()
+
+            getPairedDevices(context).forEach { bl ->
+                val found = db.getBluetoothEntries().find { it.address ==  bl.address}
+                bl.volumeState = found?.volumeState ?: bl.volumeState
+                result.add(bl)
+            }
+
+            return result
         }
 
         private fun isConnected(device: BluetoothDevice): Boolean {
