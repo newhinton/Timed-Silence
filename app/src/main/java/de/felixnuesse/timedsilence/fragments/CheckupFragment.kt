@@ -53,11 +53,12 @@ class CheckupFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        updateData()
 
         binding.gotoDND.setOnClickListener {
             startActivity(Intent("android.settings.ZEN_MODE_SETTINGS"))
         }
+
+        updateData()
 
         binding.contactsShowButton.setOnClickListener {
             binding.contactsListView.visibility = View.VISIBLE
