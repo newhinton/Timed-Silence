@@ -61,6 +61,7 @@ import de.felixnuesse.timedsilence.fragments.CalendarFragment
 import de.felixnuesse.timedsilence.fragments.CheckupFragment
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.fragments.ScheduleFragment
+import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
