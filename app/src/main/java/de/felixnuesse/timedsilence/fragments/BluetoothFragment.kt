@@ -31,7 +31,8 @@ class BluetoothFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewManager = NestedRecyclerManager(view.context)
-        viewAdapter = BluetoothListAdapter(BluetoothHandler.getPairedDevices(view.context))
+
+        viewAdapter = BluetoothListAdapter(BluetoothHandler.getPairedDevicesWithDatabaseState(view.context), view.context)
 
         binding.bluetoothFragmentRecylcerListView.apply {
             setHasFixedSize(true)

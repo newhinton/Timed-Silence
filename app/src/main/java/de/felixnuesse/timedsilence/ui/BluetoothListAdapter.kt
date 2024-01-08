@@ -1,12 +1,17 @@
 package de.felixnuesse.timedsilence.ui;
 
+import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.AdapterBluetoothListBinding
 import de.felixnuesse.timedsilence.model.data.BluetoothObject
+import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 
 
 /**
@@ -33,18 +38,20 @@ import de.felixnuesse.timedsilence.model.data.BluetoothObject
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
-class BluetoothListAdapter(private var myDataset: ArrayList<BluetoothObject>) : RecyclerView.Adapter<BluetoothListAdapter.BluetoothViewHolder>() {
+class BluetoothListAdapter(private var myDataset: ArrayList<BluetoothObject>, private var mContext: Context) : RecyclerView.Adapter<BluetoothListAdapter.BluetoothViewHolder>() {
 
+
+        private var db = DatabaseHandler(mContext)
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BluetoothViewHolder {
                 val binding = AdapterBluetoothListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return BluetoothViewHolder(binding)
         }
 
         override fun onBindViewHolder(holder: BluetoothViewHolder, position: Int) {
-                val calObject= myDataset[position]
                 val context = holder.view.root.context
+                val bluetoothDevice = myDataset[position]
 
-                holder.view.rowTitle.text = calObject.name
+                holder.view.rowTitle.text = bluetoothDevice.name
 
                 val spinnerArray = listOf(
                         context.getString(R.string.volume_setting_unset),
@@ -61,6 +68,19 @@ class BluetoothListAdapter(private var myDataset: ArrayList<BluetoothObject>) : 
                 )
 
                 spinner.adapter = adapter
+
+                spinner.setSelection(bluetoothDevice.volumeState)
+
+                spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                               bluetoothDevice.volumeState = position
+                                db.addOrUpdateBluetooth(bluetoothDevice)
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                        }
+                }
         }
 
         override fun getItemCount() = myDataset.size

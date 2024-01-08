@@ -14,7 +14,11 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CRE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_TABLE
 import android.content.ContentValues
 import android.database.Cursor
+import de.felixnuesse.timedsilence.extensions.e
 import de.felixnuesse.timedsilence.model.data.*
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.BLUETOOTH_MAC
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.BLUETOOTH_TABLE
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.BLUETOOTH_VOL_MODE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ANDROID_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.CALENDAR_NAME
@@ -32,6 +36,7 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDUL
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_FRI
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_SAT
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_SUN
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_BLUETOOTH
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_CALENDAR
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_KEYWORD
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_WIFI
@@ -83,6 +88,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     var cachedCalendars = CachedArrayList<CalendarObject>()
     var cachedWifi = CachedArrayList<WifiObject>()
     var cachedKeywords = CachedArrayList<KeywordObject>()
+    var cachedBluetooth = CachedArrayList<BluetoothObject>()
 
 
 
@@ -96,12 +102,14 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         db.execSQL(SQL_CREATE_ENTRIES_CALENDAR)
         db.execSQL(SQL_UPDATE_CALENDAR_ADD_NAME)
         db.execSQL(SQL_CREATE_ENTRIES_KEYWORD)
+        db.execSQL(SQL_CREATE_ENTRIES_BLUETOOTH)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
         //db.execSQL(SQL_DELETE_ENTRIES)
+        e("Database: $oldVersion > $newVersion")
 
         if(oldVersion<6){
             db.execSQL(SQL_CREATE_ENTRIES_CALENDAR)
@@ -113,6 +121,10 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         if(oldVersion<8){
             db.execSQL(SQL_CREATE_ENTRIES_KEYWORD)
+        }
+
+        if(oldVersion<9){
+            db.execSQL(SQL_CREATE_ENTRIES_BLUETOOTH)
         }
     }
 
@@ -126,8 +138,8 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     }
     private fun drop() {
         val db = writableDatabase
-        val tables = arrayOf(SCHEDULE_TABLE, CALENDAR_TABLE, WIFI_TABLE, KEYWORD_TABLE)
-        val caches = arrayOf(cachedSchedules, cachedCalendars, cachedWifi, cachedKeywords)
+        val tables = arrayOf(SCHEDULE_TABLE, CALENDAR_TABLE, WIFI_TABLE, KEYWORD_TABLE, BLUETOOTH_TABLE)
+        val caches = arrayOf(cachedSchedules, cachedCalendars, cachedWifi, cachedKeywords, cachedBluetooth)
 
         for (table in tables){
             db.execSQL("DROP TABLE IF EXISTS $table")
@@ -697,4 +709,57 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         db.close()
         return retcode
     }
+
+    fun getBluetoothEntries(): ArrayList<BluetoothObject> {
+        if (cachedBluetooth.cacheInitialized && cachingEnabled) {
+            return cachedBluetooth
+        }
+
+        val db = readableDatabase
+        val cursor = db.query(
+            BLUETOOTH_TABLE,
+            arrayOf(
+                BLUETOOTH_MAC,
+                BLUETOOTH_VOL_MODE
+            ),
+            "",
+            arrayOf<String>(),
+            null, null,
+            "$BLUETOOTH_MAC ASC"
+        )
+        cachedBluetooth.set(getBluetoothObjectFromCursor(cursor))
+        db.close()
+        return cachedBluetooth
+    }
+
+    private fun getBluetoothObjectFromCursor(cursor: Cursor): ArrayList<BluetoothObject> {
+        val results = arrayListOf<BluetoothObject>()
+        while (cursor.moveToNext()) {
+            val cko = BluetoothObject(
+                "",
+                cursor.getString(0)
+            )
+            cko.volumeState = cursor.getInt(1)
+            results.add(cko)
+        }
+        cursor.close()
+        return results
+    }
+
+    fun addOrUpdateBluetooth(bluetoothObject: BluetoothObject){
+        val db = writableDatabase
+
+        val values = ContentValues()
+        values.put(BLUETOOTH_MAC, bluetoothObject.address)
+        values.put(BLUETOOTH_VOL_MODE, bluetoothObject.volumeState)
+
+        db.insertWithOnConflict(
+            BLUETOOTH_TABLE,
+            null,
+            values,
+            SQLiteDatabase.CONFLICT_REPLACE
+        )
+        db.close()
+    }
+
 }

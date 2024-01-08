@@ -384,8 +384,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         override fun getItem(position: Int): Fragment {
 
-
-
             return if(position > elements.size) {
                 elements[0]
             } else {

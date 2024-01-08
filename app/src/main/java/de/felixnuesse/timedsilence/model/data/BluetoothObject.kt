@@ -1,6 +1,7 @@
 package de.felixnuesse.timedsilence.model.data
 
 
+import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import kotlinx.serialization.Serializable
 
 /**
@@ -33,9 +34,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BluetoothObject(var name: String, var address: String, var alias: String, var connected: Boolean) {
+
+    var volumeState: Int = VolumeState.TIME_SETTING_UNSET
     constructor(name: String, address: String) : this(name, address, name, false) {}
     override fun toString(): String {
-        return "BluetoothObject(name='$name', address='$address', alias='$alias', connected='$connected')"
+        return "BluetoothObject(name='$name', address='$address', alias='$alias', connected='$connected', volumeState='$volumeState')"
     }
 
 

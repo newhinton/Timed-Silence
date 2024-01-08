@@ -95,6 +95,7 @@ class Exporter(private var mActivity: Activity) {
         dbHandler.getAllCalendarEntries().forEach { data.addCalendar(it) }
         dbHandler.getKeywords().forEach { data.addKeyword(it) }
         dbHandler.getAllWifiEntries().forEach { data.addWifi(it) }
+        dbHandler.getBluetoothEntries().forEach { data.addBluetooth(it) }
 
         var preferences = PreferencesManager(mActivity.applicationContext)
         data.setPreferences(preferences.getPreferenceHolder())

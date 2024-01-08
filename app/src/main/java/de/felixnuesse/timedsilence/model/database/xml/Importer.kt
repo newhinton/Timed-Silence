@@ -72,6 +72,7 @@ class Importer(private var mActivity: Activity) {
         data.calendars.forEach { db.createCalendarEntry(it) }
         data.wifi.forEach { db.createWifiEntry(it) }
         data.keywords.forEach { db.createKeyword(it) }
+        data.bluetooth.forEach { db.addOrUpdateBluetooth(it) }
 
         PreferencesManager(mActivity.applicationContext).applyPreferenceHolder(data.getPreferences())
 
