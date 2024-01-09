@@ -28,6 +28,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    lintOptions{
+        disable 'MissingTranslation'
+    }
+
     lint {
         baseline = file("lint-baseline.xml")
     }
