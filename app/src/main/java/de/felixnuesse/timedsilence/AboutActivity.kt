@@ -32,7 +32,7 @@ class AboutActivity : AppCompatActivity() {
         }
 
         binding.copyright.setOnClickListener {
-            openURL("https://github.com/newhinton/Timed-Silence")
+            openURL("https://github.com/newhinton/Timed-Silence/blob/master/LICENSE")
         }
 
         binding.copyright.text = this.getString(R.string.copyright, Calendar.getInstance().get(Calendar.YEAR).toString())
