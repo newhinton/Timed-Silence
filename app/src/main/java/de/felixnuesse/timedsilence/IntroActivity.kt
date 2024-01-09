@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
 import de.felixnuesse.timedsilence.util.PermissionManager
+import de.felixnuesse.timedsilence.util.PrepareDefaultsUtil
 
 class IntroActivity : AppIntro() {
 
@@ -122,6 +123,7 @@ class IntroActivity : AppIntro() {
             putBoolean(getString(R.string.pref_key_intro_v1_0_0), true)
             apply()
         }
+        PrepareDefaultsUtil.addDefaults(this)
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }

@@ -116,7 +116,7 @@
     <string name="intro_slide_donotdisturb_title">Do not Disturb</string>
     <string name="intro_slide_donotdisturb_description">To make your Phone truly silent, we need access to the Do not Disturb-Settings.</string>
     <string name="intro_slide_done_title">Done!</string>
-    <string name="intro_slide_done_description">You are now ready to start! Enjoy your interruption free time!</string>
+    <string name="intro_slide_done_description">You are now ready to start! Enjoy your interruption free time! We have already created a few settings for you.</string>
     <string name="state_checks_are_paused">You paused this app, we currently do not control your volume!</string>
     <string name="calculationg_volume_loading_indicator">Calculating Volume…</string>
     <string name="ignore_tentative_events">Ignore Tentative Events</string>
@@ -158,4 +158,11 @@
     <string name="priority_contacts_available">You have Priority Contacts</string>
     <string name="notifications_visiblity">Notifications are visible during \"Do not Disturb\"</string>
     <string name="show_contacts">Show</string>
+    <string name="about">About this App</string>
+    <string name="default_schedule_night">Night</string>
+    <string name="default_schedule_day">Day</string>
+    <string name="donate">Donate</string>
+    <string name="made_by">Made by:</string>
+    <string name="help">Help</string>
+    <string name="copyright">"GPLv3 - ©%1$s "</string>
 </resources>

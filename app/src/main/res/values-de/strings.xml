@@ -114,7 +114,7 @@
     <string name="intro_slide_donotdisturb_title">Nicht Stören</string>
     <string name="intro_slide_donotdisturb_description">Um dein Smartphone stummzuschalten brauchen wir zugriff auf die \"Nicht Stören\"-Einstellung.</string>
     <string name="intro_slide_done_title">Fertig!</string>
-    <string name="intro_slide_done_description">Du bist bereit durchzustarten! Genieße die Ruhe!</string>
+    <string name="intro_slide_done_description">Du bist bereit durchzustarten! Genieße die Ruhe! Wir haben uns die Freiheit genommen einige Voreinstellungen zu machen. Teste sie!</string>
     <string name="state_checks_are_paused">Du hast die App pausiert, wir kontrollieren deine Lautstärke nicht!</string>
     <string name="calculationg_volume_loading_indicator">Berechne Lautstärke...</string>
     <string name="ignore_tentative_events">Ignoriere vorläufige Termine</string>
@@ -143,4 +143,19 @@
     <string name="volume_change_ringer">Verändere die Klingeltonlautstärke anstelle des \"Nicht Stören\"-Modus</string>
     <string name="volume_change_ringer_description">Wenn du dieser App erlaubst die Klingeltonlautstärke zu ändern, wird es niemals Klingeln wenn es auf Stumm geschaltet wird. Dies hat die Konsequenz das \"kein\" Geräusch gemacht wird, auch nicht für ausnahmen des \"Nicht Stören\"-Modus. Du bist \"unnerreichbar\". Benutze mit Vorischt, und prüfe ob das Smartphone sich wie gewünscht verhält!</string>
     <string name="ok">OK</string>
+    <string name="main_tab_checkup">Überprüfung</string>
+    <string name="GrantContactsPermissionAccessDescription">Kontaktzugriff wird benötigt um zu prüfen ob du in Notfällen erreichbar bist. Dies ist optional. Prüfe auch selbst nach!</string>
+    <string name="contact_permission_hint">Du musst den Kontaktezugriff für dieses Feature erlauben!</string>
+    <string name="fragment_title_checkup">Überprüfung</string>
+    <string name="go_to_dnd_settings">Gehe zu den \"Nicht Stören\"-Einstellungen</string>
+    <string name="alarms_can_bypass_dnd">Alarme können \"Nicht Stören\" unterbrechen</string>
+    <string name="messages_can_bypass_dnd">Nachrichten können \"Nicht Stören\" unterbrechen</string>
+    <string name="repeat_caller_can_bypass_dnd">Wiederholte Anrufer können \"Nicht Stören\" unterbrechen</string>
+    <string name="priority_contacts_can_bypass_dnd">Priorisierte Kontakte können \"Nicht Stören\" unterbrechen</string>
+    <string name="priority_contacts_available">Du hast priorisierte Kontakte</string>
+    <string name="notifications_visiblity">Benachrichtigungen sind während \"Nicht Stören\" sichtbar</string>
+    <string name="show_contacts">Anzeigen</string>
+    <string name="about">Über diese App</string>
+    <string name="default_schedule_night">Nacht</string>
+    <string name="default_schedule_day">Tagsüber</string>
 </resources>

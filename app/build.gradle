@@ -4,7 +4,7 @@ apply plugin: 'kotlinx-serialization'
 
 android {
     defaultConfig {
-        applicationId "de.felixnuesse.timedsilence"
+        applicationId "de.felixnuesse.timedsilence.debug"
         minSdkVersion 26
         targetSdk 34
         compileSdk 34

@@ -30,12 +30,10 @@ package de.felixnuesse.timedsilence
  */
 
 import android.annotation.SuppressLint
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.format.DateFormat
@@ -66,7 +64,6 @@ import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
-import de.felixnuesse.timedsilence.model.contacts.ContactUtil
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
 import de.felixnuesse.timedsilence.volumestate.StateGenerator
 
@@ -204,6 +201,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
 
         when (item.itemId) {
+            R.id.action_about -> openAbout()
             R.id.action_goto_dnd -> openDnDSettings()
             R.id.action_settings -> openSettings()
             R.id.action_set_manual_loud -> {
@@ -253,7 +251,11 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         return true
     }
 
-
+    private fun openAbout(): Boolean {
+        val intent = Intent(this, AboutActivity::class.java).apply {}
+        startActivity(intent)
+        return true
+    }
 
     private fun openDnDSettings(): Boolean {
         startActivity(Intent("android.settings.ZEN_MODE_SETTINGS"))

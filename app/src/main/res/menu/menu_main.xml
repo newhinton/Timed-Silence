@@ -3,6 +3,12 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="de.felixnuesse.timedsilence.MainActivity">
     <item
+        android:id="@+id/action_about"
+        android:icon="@drawable/icon_help"
+        android:orderInCategory="100"
+        android:title="@string/about"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_goto_dnd"
         android:icon="@drawable/icon_dnd"
         android:orderInCategory="100"

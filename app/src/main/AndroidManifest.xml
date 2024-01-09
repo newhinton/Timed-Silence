@@ -15,37 +15,39 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
-    <uses-permission android:name="android.permission.READ_CONTACTS" /> <!-- Needed for warnings if dnd is set -->
-
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".AboutActivity"
+            android:theme="@style/AboutStyle"
+            android:exported="false" />
+        <activity
             android:name=".IntroActivity"
-            android:exported="true">
-        </activity>
+            android:theme="@style/BaseStyle.NoActionBar"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/BaseStyle.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity"
-            android:theme="@style/BaseStyle" />
-
-        <!-- Registering the BroadcastReceiver ! -->
+        <activity
+            android:name=".SettingsActivity"
+            android:theme="@style/BaseStyle" /> <!-- Registering the BroadcastReceiver ! -->
         <receiver android:name=".receiver.AlarmBroadcastReciever" />
         <receiver
             android:name=".receiver.NoisyBroadcastReciever"
@@ -74,7 +76,6 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".ui.notifications.PausedNotification" />
-
         <receiver
             android:name=".widgets.StartStopWidget"
             android:exported="true">

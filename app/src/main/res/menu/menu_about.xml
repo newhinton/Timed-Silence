@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="de.felixnuesse.timedsilence.MainActivity">
+    <item
+        android:id="@+id/action_exit"
+        android:icon="@drawable/icon_close"
+        android:orderInCategory="1"
+        android:title="@string/back"
+        app:showAsAction="always" />
+
+</menu>
