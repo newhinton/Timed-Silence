@@ -69,9 +69,7 @@ class WifiConnectedFragment : Fragment() {
 
     private fun checkContainer(){
 
-        //val a = activity.findViewById(R.id.WifiContentContainer) as ConstraintLayout
         val a = binding.WifiContentContainer
-        //val b = activity.findViewById(R.id.WifiRequestLocationContainer) as ConstraintLayout
         val b = binding.WifiRequestLocationContainer
 
 
