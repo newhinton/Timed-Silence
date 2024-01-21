@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.content.Context
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.databinding.FragmentSchedulesBinding
 import de.felixnuesse.timedsilence.dialogs.ScheduleDialog
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
-import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 
 
 class ScheduleFragment : Fragment() {
@@ -42,7 +42,7 @@ class ScheduleFragment : Fragment() {
 
         val db = DatabaseHandler(view.context)
 
-        viewManager = NestedRecyclerManager(view.context)
+        viewManager = LinearLayoutManager(view.context)
         viewAdapter = ScheduleListAdapter(db.getAllSchedules())
 
         binding.timeFragmentRecylcerListView.apply {

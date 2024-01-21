@@ -6,15 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Window
 import android.view.WindowManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.DialogGraphoverviewBinding
 import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
-import de.felixnuesse.timedsilence.ui.CalendarListAdapter
 import de.felixnuesse.timedsilence.ui.GraphOverviewAdapter
-import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 import de.felixnuesse.timedsilence.util.WindowUtils
-import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
 
 /**
  * Copyright (C) 2023  Felix Nüsse
@@ -68,11 +66,10 @@ class GraphOverviewDialog(context: Context, private var mStates: ArrayList<Volum
     private fun setList() {
         Log.e(TAG(), "States: ${mStates.size}")
 
-        var viewManager = NestedRecyclerManager(binding.root.context)
+        var viewManager = LinearLayoutManager(binding.root.context)
         var viewAdapter = GraphOverviewAdapter(mStates)
 
         binding.states.apply {
-            setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
         }

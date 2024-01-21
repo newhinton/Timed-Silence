@@ -6,13 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.databinding.FragmentCalendarEventBinding
 import de.felixnuesse.timedsilence.dialogs.CalendarDialog
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.CalendarListAdapter
-import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
 
 
@@ -48,7 +48,7 @@ class CalendarFragment : Fragment() {
         }
 
         val db = DatabaseHandler(view.context)
-        viewManager = NestedRecyclerManager(view.context)
+        viewManager = LinearLayoutManager(view.context)
         viewAdapter = CalendarListAdapter(db.getAllCalendarEntries(), calHandler)
 
         binding.calendarFragmentRecylcerListView.apply {

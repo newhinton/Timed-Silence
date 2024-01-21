@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import de.felixnuesse.timedsilence.databinding.FragmentWifiConnectedBinding
 import de.felixnuesse.timedsilence.dialogs.WifiDialog
 import de.felixnuesse.timedsilence.extensions.TAG
@@ -16,7 +17,6 @@ import de.felixnuesse.timedsilence.handler.calculator.WifiHandler
 import de.felixnuesse.timedsilence.model.data.WifiObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.WifiListAdapter
-import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 
 
 class WifiConnectedFragment : Fragment() {
@@ -57,7 +57,7 @@ class WifiConnectedFragment : Fragment() {
 
 
         val db = DatabaseHandler(view.context)
-        viewManager = NestedRecyclerManager(view.context)
+        viewManager = LinearLayoutManager(view.context)
         viewAdapter = WifiListAdapter(db.getAllWifiEntries())
 
         binding.wifiRecylcerListView.apply {

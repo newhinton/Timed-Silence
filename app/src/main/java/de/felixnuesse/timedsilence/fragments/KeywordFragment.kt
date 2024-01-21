@@ -6,13 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.databinding.FragmentCalendarKeywordBinding
 import de.felixnuesse.timedsilence.dialogs.KeywordDialog
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.KeywordListAdapter
-import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 
 
 class KeywordFragment : Fragment() {
@@ -42,7 +42,7 @@ class KeywordFragment : Fragment() {
         }
 
         val db = DatabaseHandler(view.context)
-        viewManager = NestedRecyclerManager(view.context)
+        viewManager = LinearLayoutManager(view.context)
         viewAdapter = KeywordListAdapter(db.getKeywords())
 
         binding.calendarFragmentRecylcerListView.apply {
