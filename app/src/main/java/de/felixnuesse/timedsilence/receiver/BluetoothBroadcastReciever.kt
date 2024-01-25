@@ -8,7 +8,7 @@ import android.os.Build
 import android.util.Log
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_BLUETOOTH_CONNECTED
 import de.felixnuesse.timedsilence.extensions.TAG
-import de.felixnuesse.timedsilence.handler.calculator.BluetoothHandler
+import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
@@ -30,7 +30,7 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
 
             val address = bluetoothDevice?.address ?: ""
 
-            BluetoothHandler.getPairedDevicesWithDatabaseState(context).forEach {
+            HeadsetHandler.getPairedDevicesWithDatabaseState(context).forEach {
                 if(address == it.address) {
                     var volumeHandler = VolumeHandler(context)
                     volumeHandler.ignoreMusicPlaying(true)

@@ -5,11 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.databinding.FragmentBluetoothBinding
-import de.felixnuesse.timedsilence.handler.calculator.BluetoothHandler
+import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.ui.BluetoothListAdapter
-import de.felixnuesse.timedsilence.ui.custom.NestedRecyclerManager
 
 
 class BluetoothFragment : Fragment() {
@@ -30,9 +30,9 @@ class BluetoothFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewManager = NestedRecyclerManager(view.context)
+        viewManager = LinearLayoutManager(view.context)
 
-        viewAdapter = BluetoothListAdapter(BluetoothHandler.getPairedDevicesWithDatabaseState(view.context), view.context)
+        viewAdapter = BluetoothListAdapter(HeadsetHandler.getPairedDevicesWithDatabaseState(view.context), view.context)
 
         binding.bluetoothFragmentRecylcerListView.apply {
             setHasFixedSize(true)
