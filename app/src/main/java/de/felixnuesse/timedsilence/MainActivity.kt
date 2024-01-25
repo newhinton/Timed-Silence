@@ -376,7 +376,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
             ScheduleFragment(),
             CalendarFragment(),
             KeywordFragment(),
-            WifiConnectedFragment(),
+            //WifiConnectedFragment(),
             BluetoothFragment(),
             CheckupFragment()
         )
