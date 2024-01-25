@@ -142,10 +142,10 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         // The pager adapter, which provides the pages to the view pager widget.
         val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
-        mPager.offscreenPageLimit = 4
+        mPager.offscreenPageLimit = 6
         mPager.adapter = pagerAdapter
 
-        for(i in 0..4) {
+        for(i in 0..6) {
             tabs.getTabAt(i)?.text = ""
         }
 
