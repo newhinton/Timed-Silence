@@ -15,7 +15,7 @@ import de.felixnuesse.timedsilence.util.PermissionManager
 import java.lang.reflect.Method
 
 
-class BluetoothHandler {
+class HeadsetHandler {
     companion object {
 
         private const val TAG = "BluetoothHandler"
