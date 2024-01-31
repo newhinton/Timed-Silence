@@ -56,6 +56,9 @@ class HeadsetHandler {
 
             val btManager = context.getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
             //todo: Fix this. When the device does not have bluetooth, the app crashes
+            if(btManager.adapter == null){
+                return arrayListOf()
+            }
             val pairedDevices = btManager.adapter.bondedDevices
 
 
