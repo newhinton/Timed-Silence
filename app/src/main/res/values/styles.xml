@@ -11,7 +11,7 @@
 
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:windowLightStatusBar">?attr/useDarkStatusbarText</item>
 
 
 
@@ -25,12 +25,14 @@
     <style name="BaseStyle.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+        <item name="android:windowLightStatusBar">?attr/useDarkStatusbarText</item>
     </style>
 
     <style name="AboutStyle" parent="AppTheme">
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:windowLightStatusBar">?attr/useDarkStatusbarText</item>
     </style>
 
     <style name="BaseStyle.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>

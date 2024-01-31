@@ -60,7 +60,6 @@ import de.felixnuesse.timedsilence.fragments.BluetoothFragment
 import de.felixnuesse.timedsilence.fragments.CheckupFragment
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.fragments.ScheduleFragment
-import de.felixnuesse.timedsilence.fragments.WifiConnectedFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.fragments.settings.CalendarFragment
 import de.felixnuesse.timedsilence.handler.*

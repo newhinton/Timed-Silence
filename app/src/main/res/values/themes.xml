@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
 
         <item name="colorPrimary">@color/md_theme_light_primary</item>
@@ -32,6 +32,10 @@
         <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
 
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@drawable/ic_launcher_foreground_colored</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">?attr/colorPrimary</item>
+
+        <item name="useDarkStatusbarText">true</item>
     </style>
 
     <style name="AlertDialogCustom" parent="ThemeOverlay.Material3.Dialog">
