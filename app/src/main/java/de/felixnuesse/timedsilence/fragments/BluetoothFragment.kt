@@ -1,5 +1,6 @@
 package de.felixnuesse.timedsilence.fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -30,17 +31,32 @@ class BluetoothFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewManager = LinearLayoutManager(view.context)
+        setList(view.context)
+    }
 
-        viewAdapter = BluetoothListAdapter(HeadsetHandler.getPairedDevicesWithDatabaseState(view.context), view.context)
+    override fun onResume() {
+        super.onResume()
+        setList(requireContext())
+    }
+
+    private fun setList(context: Context) {
+        viewManager = LinearLayoutManager(context)
+
+        val pairedDevices = HeadsetHandler.getPairedDevicesWithDatabaseState(context)
+        viewAdapter = BluetoothListAdapter(pairedDevices, context)
 
         binding.bluetoothFragmentRecylcerListView.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
         }
-    }
 
+        binding.noPairedMessage.visibility = if(pairedDevices.size == 0) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
