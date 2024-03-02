@@ -53,7 +53,7 @@ class ContactsListAdapter(private val myDataset: ArrayList<Contact>): RecyclerVi
         val context = holder.contactView.root.context
         var contact = myDataset[position]
         holder.contactView.name.text = contact.name
-        holder.contactView.profile.setImageBitmap(contact.photo)
+        holder.contactView.profile.setImageDrawable(contact.photo)
 
     }
 

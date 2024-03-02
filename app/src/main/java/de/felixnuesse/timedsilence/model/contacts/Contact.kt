@@ -1,7 +1,7 @@
 package de.felixnuesse.timedsilence.model.contacts
 
-import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 
 class Contact(var name: String) {
-    var photo: Bitmap? = null
+    var photo: Drawable? = null
 }

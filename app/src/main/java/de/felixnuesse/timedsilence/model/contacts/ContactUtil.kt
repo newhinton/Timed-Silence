@@ -5,7 +5,11 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.provider.ContactsContract
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.extensions.e
 import de.felixnuesse.timedsilence.util.PermissionManager
@@ -60,8 +64,9 @@ class ContactUtil(private var mContext: Context) {
         )
     }
 
-    private fun getPhoto(id: Long): Bitmap {
-        var photo = BitmapFactory.decodeResource(mContext.resources, R.drawable.icon_person)
+    private fun getPhoto(id: Long): Drawable? {
+        var default = ResourcesCompat.getDrawable(mContext.resources, R.drawable.icon_person, mContext.theme)
+        var photo: Drawable? = null
 
         val uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id)
 
@@ -71,13 +76,13 @@ class ContactUtil(private var mContext: Context) {
                 uri
             )
             if (inputStream != null) {
-                photo = BitmapFactory.decodeStream(inputStream)
+                photo = BitmapDrawable(mContext.resources, BitmapFactory.decodeStream(inputStream))
             }
             inputStream?.close()
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return photo
+        return photo?: default
     }
 
 }
