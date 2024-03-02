@@ -29,7 +29,7 @@ class SelectorFragment(private var mParent: SettingsActivity) : Fragment() {
         }
 
         binding.calendarSettings.setOnClickListener {
-            mParent.openFragment(CalendarFragment())
+            mParent.openFragment(CalendarSettingsFragment())
         }
 
         binding.generalSettings.setOnClickListener {
