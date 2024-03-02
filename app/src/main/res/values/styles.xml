@@ -6,8 +6,8 @@
 
         <!-- <item name="android:statusBarColor">@color/transparent</item>
          <item name="colorControlNormal">@color/colorTextSettingbar</item>
-         <item name="android:windowBackground">@color/colorBackground</item>
-         <item name="android:textColor">@color/secondary_material_light</item>-->
+         <item name="android:windowBackground">@color/colorBackground</item>-->
+         <item name="android:textColor">?attr/colorOnBackground</item>
 
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -22,7 +22,7 @@
         <item name="actionBarStyle">@style/TransparentActionBar</item>
     </style>
 
-    <style name="BaseStyle.NoActionBar">
+    <style name="BaseStyle.NoActionBar" parent="BaseStyle">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
@@ -73,6 +73,10 @@
         <item name="cardCornerRadius">@dimen/cornerRadius</item>
         <item name="android:textColor">?attr/colorOnTertiaryContainer</item>
         <item name="android:tint">?attr/colorOnTertiaryContainer</item>
+    </style>
+
+    <style name="checkBoxAsIndicator" parent="BaseStyle">
+        <item name="android:textColorPrimaryDisableOnly">?attr/colorOnBackground</item>
     </style>
 
 </resources>

@@ -68,7 +68,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_conversion_absoluteHeight="659dp"
-                tools:layout_conversion_absoluteWidth="215dp"></LinearLayout>
+                tools:layout_conversion_absoluteWidth="215dp" />
 
             <LinearLayout
                 android:id="@+id/linearLayout3"
@@ -94,6 +94,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
+                    android:text="test"
                     android:textAlignment="center" />
 
                 <ImageButton

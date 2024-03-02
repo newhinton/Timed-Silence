@@ -85,11 +85,12 @@
 
                 <CheckBox
                     android:id="@+id/checkboxHavePriorityContacts"
+                    style="@style/checkBoxAsIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
                     android:button="@null"
-                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:clickable="false"
+                    android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/priority_contacts_available" />
 
                 <Button
@@ -106,50 +107,55 @@
 
                 <CheckBox
                     android:id="@+id/checkboxPriorityContactsCanBypass"
+                    style="@style/checkBoxAsIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:button="@null"
-                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/priority_contacts_can_bypass_dnd" />
 
                 <CheckBox
                     android:id="@+id/checkboxRepeatCallerCanBypass"
+                    style="@style/checkBoxAsIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:button="@null"
-                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/repeat_caller_can_bypass_dnd" />
 
 
                 <CheckBox
                     android:id="@+id/checkboxRepeatMessengerCanBypass"
+                    style="@style/checkBoxAsIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:button="@null"
-                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/messages_can_bypass_dnd" />
 
 
                 <CheckBox
                     android:id="@+id/checkboxAlarmsCanBypass"
+                    style="@style/checkBoxAsIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:button="@null"
-                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/alarms_can_bypass_dnd" />
 
 
                 <CheckBox
                     android:id="@+id/checkboxNotificationsVisible"
+                    style="@style/checkBoxAsIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:button="@null"
-                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/notifications_visiblity" />
 
                 <Button
