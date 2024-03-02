@@ -50,7 +50,7 @@ class DatabaseInfo{
         val SCHEDULE_SUN= "schedule_active_sun"
 
         val SQL_CREATE_ENTRIES =
-            "CREATE TABLE ${SCHEDULE_TABLE} (" +
+            "CREATE TABLE IF NOT EXISTS ${SCHEDULE_TABLE} (" +
                     "${SCHEDULE_ID} INTEGER PRIMARY KEY," +
                     "${SCHEDULE_START} LONG," +
                     "${SCHEDULE_END} LONG," +
@@ -72,7 +72,7 @@ class DatabaseInfo{
         val WIFI_SSID= "wifi_ssid"
 
         val SQL_CREATE_ENTRIES_WIFI =
-            "CREATE TABLE ${WIFI_TABLE} (" +
+            "CREATE TABLE IF NOT EXISTS ${WIFI_TABLE} (" +
                     "${WIFI_ID} INTEGER PRIMARY KEY," +
                     "${WIFI_SSID} TEXT," +
                     "${WIFI_TYPE} INT," +
@@ -85,7 +85,7 @@ class DatabaseInfo{
         val CALENDAR_NAME= "calendar_name"
 
         val SQL_CREATE_ENTRIES_CALENDAR =
-            "CREATE TABLE ${CALENDAR_TABLE} (" +
+            "CREATE TABLE IF NOT EXISTS ${CALENDAR_TABLE} (" +
                     "${CALENDAR_ID} INTEGER PRIMARY KEY," +
                     "${CALENDAR_ANDROID_ID} INTEGER," +
                     "${CALENDAR_VOL_MODE} INT)"
@@ -100,7 +100,7 @@ class DatabaseInfo{
         val KEYWORD_CALENDAR= "KEYWORD_CALENDAR"
 
         val SQL_CREATE_ENTRIES_KEYWORD =
-            "CREATE TABLE $KEYWORD_TABLE (" +
+            "CREATE TABLE IF NOT EXISTS $KEYWORD_TABLE (" +
                     "$KEYWORD_ID INTEGER PRIMARY KEY," +
                     "$KEYWORD_KEYWORD TEXT," +
                     "$KEYWORD_CALENDAR INT," +
@@ -112,7 +112,7 @@ class DatabaseInfo{
         val BLUETOOTH_VOL_MODE= "BLUETOOTH_VOL_MODE"
 
         val SQL_CREATE_ENTRIES_BLUETOOTH =
-            "CREATE TABLE $BLUETOOTH_TABLE (" +
+            "CREATE TABLE IF NOT EXISTS $BLUETOOTH_TABLE (" +
                     "$BLUETOOTH_MAC TEXT PRIMARY KEY," +
                     "$BLUETOOTH_VOL_MODE INT)"
     }
