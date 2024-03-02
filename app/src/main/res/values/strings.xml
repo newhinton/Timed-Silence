@@ -167,4 +167,5 @@
     <string name="copyright">"GPLv3 - ©%1$s "</string>
     <string name="fragment_title_bluetooth">Bluetooth</string>
     <string name="main_tab_bluetooth">Bluetooth</string>
+    <string name="checkup_collapse_priority_contacts">collapse list of priority contacts</string>
 </resources>

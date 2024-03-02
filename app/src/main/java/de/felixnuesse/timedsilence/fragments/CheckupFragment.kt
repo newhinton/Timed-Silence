@@ -62,8 +62,16 @@ class CheckupFragment : Fragment() {
 
         binding.contactsShowButton.setOnClickListener {
             binding.contactsListView.visibility = View.VISIBLE
+            binding.contactsHideButton.visibility = View.VISIBLE
             binding.contactsShowButton.visibility = View.GONE
             showContacts = true
+        }
+
+        binding.contactsHideButton.setOnClickListener {
+            binding.contactsListView.visibility = View.GONE
+            binding.contactsHideButton.visibility = View.GONE
+            binding.contactsShowButton.visibility = View.VISIBLE
+            showContacts = false
         }
     }
 
@@ -84,6 +92,7 @@ class CheckupFragment : Fragment() {
 
         if(showContacts) {
             binding.contactsListView.visibility = View.VISIBLE
+            binding.contactsHideButton.visibility = View.VISIBLE
             binding.contactsShowButton.visibility = View.GONE
         }
 

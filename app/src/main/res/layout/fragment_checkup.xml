@@ -105,6 +105,15 @@
                     android:layout_height="match_parent"
                     android:visibility="gone" />
 
+                <Button
+                    android:id="@+id/contactsHideButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:visibility="gone"
+                    android:contentDescription="@string/checkup_collapse_priority_contacts"
+                    app:icon="@drawable/icon_collapse" />
+
                 <CheckBox
                     android:id="@+id/checkboxPriorityContactsCanBypass"
                     style="@style/checkBoxAsIndicator"
