@@ -119,8 +119,9 @@
                     style="@style/checkBoxAsIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
+                    android:layout_marginTop="8dp"
                     android:button="@null"
+                    android:clickable="false"
                     android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/priority_contacts_can_bypass_dnd" />
 
