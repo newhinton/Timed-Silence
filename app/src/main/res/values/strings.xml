@@ -180,4 +180,7 @@
     <string name="adapter_bluetooth_device_description_toy">Toy</string>
     <string name="adapter_bluetooth_device_description_health">Health</string>
     <string name="adapter_bluetooth_device_description_misc">Misc</string>
+    <string name="bluetooth_add_new">Add new bluetooth setting</string>
+    <string name="bluetooth_dialog_title_title">Add a bluetooth device</string>
+    <string name="dialog_bluetooth_select_device">Select a paired device</string>
 </resources>

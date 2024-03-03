@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.databinding.FragmentBluetoothBinding
+import de.felixnuesse.timedsilence.dialogs.BluetoothDialog
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.ui.BluetoothListAdapter
 
@@ -32,6 +33,10 @@ class BluetoothFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setList(view.context)
+
+        binding.buttonAddDevice.setOnClickListener {
+            BluetoothDialog(view.context, this).show()
+        }
     }
 
     override fun onResume() {
@@ -50,15 +55,23 @@ class BluetoothFragment : Fragment() {
             layoutManager = viewManager
             adapter = viewAdapter
         }
-
-        binding.noPairedMessage.visibility = if(pairedDevices.size == 0) {
-            View.VISIBLE
+        if(HeadsetHandler.getPairedDevices(context).size == 0) {
+            binding.noPairedMessage.visibility = View.VISIBLE
+            binding.bluetoothFragmentRecylcerListView.visibility = View.GONE
+            binding.buttonAddDevice.visibility = View.GONE
         } else {
-            View.GONE
+            binding.noPairedMessage.visibility = View.GONE
+            binding.bluetoothFragmentRecylcerListView.visibility = View.VISIBLE
+            binding.buttonAddDevice.visibility = View.VISIBLE
         }
+
     }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun notifyChange() {
+        setList(requireContext())
     }
 }
