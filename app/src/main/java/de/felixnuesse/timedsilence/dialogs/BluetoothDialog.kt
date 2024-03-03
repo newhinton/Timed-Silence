@@ -190,6 +190,12 @@ class BluetoothDialog(context: Context) : Dialog(context, R.style.AlertDialogCus
 
     fun setBluetoothObject(bluetoothDevice: BluetoothObject) {
         selectedDeviceName = bluetoothDevice.name
-        binding.deviceSpinner.setText(selectedDeviceName, false);
+        binding.deviceSpinner.setText(selectedDeviceName, false)
+        binding.deviceSpinner.isEnabled = false
+
+        hideAll()
+        state = 1
+        decideState()
+
     }
 }
