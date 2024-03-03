@@ -36,6 +36,8 @@ import kotlinx.serialization.Serializable
 data class BluetoothObject(var name: String, var address: String, var alias: String, var connected: Boolean) {
 
     var volumeState: Int = VolumeState.TIME_SETTING_UNSET
+    var type: Int = 0
+
     constructor(name: String, address: String) : this(name, address, name, false) {}
     override fun toString(): String {
         return "BluetoothObject(name='$name', address='$address', alias='$alias', connected='$connected', volumeState='$volumeState')"

@@ -1,5 +1,6 @@
 package de.felixnuesse.timedsilence.ui;
 
+import android.bluetooth.BluetoothClass
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +53,23 @@ class BluetoothListAdapter(private var myDataset: ArrayList<BluetoothObject>, pr
                 val bluetoothDevice = myDataset[position]
 
                 holder.view.rowTitle.text = bluetoothDevice.name
+                val resourceId = when(bluetoothDevice.type) {
+                        BluetoothClass.Device.Major.COMPUTER -> R.drawable.icon_computer
+                        BluetoothClass.Device.Major.PHONE -> R.drawable.icon_phone
+                        BluetoothClass.Device.Major.NETWORKING -> R.drawable.icon_lan
+                        BluetoothClass.Device.Major.AUDIO_VIDEO -> R.drawable.icon_audio
+                        BluetoothClass.Device.Major.PERIPHERAL -> R.drawable.icon_keyboard
+                        BluetoothClass.Device.Major.IMAGING -> R.drawable.icon_pause
+                        BluetoothClass.Device.Major.WEARABLE -> R.drawable.icon_watch
+                        BluetoothClass.Device.Major.TOY -> R.drawable.icon_toy
+                        BluetoothClass.Device.Major.HEALTH -> R.drawable.icon_health
+
+                        else -> {
+                                R.drawable.icon_bluetooth
+                        }
+                }
+
+                holder.view.volumeState.setImageDrawable(mContext.getDrawable(resourceId))
 
                 val spinnerArray = listOf(
                         context.getString(R.string.volume_setting_unset),

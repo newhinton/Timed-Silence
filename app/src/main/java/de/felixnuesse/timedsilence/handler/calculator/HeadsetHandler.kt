@@ -75,6 +75,7 @@ class HeadsetHandler {
                     }
 
                     val bluetoothObject = BluetoothObject(deviceName, macAddress, aliasing, isConnected(device))
+                    bluetoothObject.type = device.bluetoothClass.majorDeviceClass
                     list.add(bluetoothObject)
                     Log.e(TAG,"paired device: $bluetoothObject")
                 }
