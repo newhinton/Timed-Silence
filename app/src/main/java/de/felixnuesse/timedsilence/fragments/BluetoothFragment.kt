@@ -48,7 +48,7 @@ class BluetoothFragment : Fragment() {
         viewManager = LinearLayoutManager(context)
 
         val pairedDevices = HeadsetHandler.getPairedDevicesWithChangesInVolume(context)
-        viewAdapter = BluetoothListAdapter(pairedDevices, context)
+        viewAdapter = BluetoothListAdapter(pairedDevices, context, this)
 
         binding.bluetoothFragmentRecylcerListView.apply {
             setHasFixedSize(true)

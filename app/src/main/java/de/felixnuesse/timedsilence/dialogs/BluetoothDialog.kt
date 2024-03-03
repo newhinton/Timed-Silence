@@ -89,10 +89,10 @@ class BluetoothDialog(context: Context) : Dialog(context, R.style.AlertDialogCus
         }
 
         ArrayAdapter(context, android.R.layout.simple_list_item_1, devices).also {
-                adapter -> binding.filledExposedDropdown.setAdapter(adapter)
+                adapter -> binding.deviceSpinner.setAdapter(adapter)
         }
 
-        binding.filledExposedDropdown.setOnItemClickListener{ adapter, _, position, _ ->
+        binding.deviceSpinner.setOnItemClickListener{ adapter, _, position, _ ->
             selectedDeviceName = adapter.adapter.getItem(position).toString()
         }
 
@@ -150,9 +150,9 @@ class BluetoothDialog(context: Context) : Dialog(context, R.style.AlertDialogCus
 
     private fun getValueForVolumeRadioGroup(): Int{
         when (binding.bluetoothDialogRbVolume.checkedRadioButtonId) {
-            R.id.keyword_dialog_rb_loud -> return TIME_SETTING_LOUD
-            R.id.keyword_dialog_rb_silent -> return TIME_SETTING_SILENT
-            R.id.keyword_dialog_rb_vibrate -> return TIME_SETTING_VIBRATE
+            R.id.bluetooth_dialog_rb_loud -> return TIME_SETTING_LOUD
+            R.id.bluetooth_dialog_rb_silent -> return TIME_SETTING_SILENT
+            R.id.bluetooth_dialog_rb_vibrate -> return TIME_SETTING_VIBRATE
         }
         return TIME_SETTING_VIBRATE
     }
@@ -186,5 +186,10 @@ class BluetoothDialog(context: Context) : Dialog(context, R.style.AlertDialogCus
 
         }
 
+    }
+
+    fun setBluetoothObject(bluetoothDevice: BluetoothObject) {
+        selectedDeviceName = bluetoothDevice.name
+        binding.deviceSpinner.setText(selectedDeviceName, false);
     }
 }

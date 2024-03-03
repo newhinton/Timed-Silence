@@ -14,6 +14,8 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CRE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_TABLE
 import android.content.ContentValues
 import android.database.Cursor
+import android.util.Log
+import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.extensions.e
 import de.felixnuesse.timedsilence.model.data.*
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.BLUETOOTH_MAC
@@ -763,8 +765,10 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     }
 
     fun deleteBluetoothDevice(macadress: String): Int {
+        Log.e(TAG(), "delete: $macadress")
+
         val db = writableDatabase
-        val selection = BLUETOOTH_MAC + " LIKE ?"
+        val selection = "$BLUETOOTH_MAC LIKE ?"
         val selectionArgs = arrayOf(macadress)
         val retcode: Int = db.delete(BLUETOOTH_TABLE, selection, selectionArgs)
         db.close()
