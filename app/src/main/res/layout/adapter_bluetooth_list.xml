@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -21,30 +22,38 @@
             android:id="@+id/layoutWeekdays"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:weightSum="10">
 
             <ImageView
                 android:id="@+id/volumeState"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/btn_dialog"
-                app:tint="@android:color/white" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                style="@style/primaryCard"
+                app:srcCompat="@drawable/icon_bluetooth" />
 
             <TextView
                 android:id="@+id/rowTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingStart="12dp"
+                android:layout_weight="5"
                 android:text="title"
-                android:textColor="@android:color/white" />
+                style="@style/primaryCard" />
 
             <Spinner
                 android:id="@+id/volumeSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp" />
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="4" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
