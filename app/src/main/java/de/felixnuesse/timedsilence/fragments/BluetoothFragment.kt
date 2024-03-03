@@ -51,7 +51,7 @@ class BluetoothFragment : Fragment() {
         viewAdapter = BluetoothListAdapter(pairedDevices, context, this)
 
         binding.bluetoothFragmentRecylcerListView.apply {
-            setHasFixedSize(true)
+            setHasFixedSize(false)
             layoutManager = viewManager
             adapter = viewAdapter
         }

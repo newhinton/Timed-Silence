@@ -94,11 +94,16 @@ class HeadsetHandler {
 
         fun getPairedDevicesWithChangesInVolume(context: Context): ArrayList<BluetoothObject> {
             var result = arrayListOf<BluetoothObject>()
-            var devices = getPairedDevicesWithDatabaseState(context)
 
-            devices.forEach { bl ->
-                if(bl.volumeState != 0) {
-                    result.add(bl)
+            var pairedDevices = getPairedDevices(context)
+
+            var db = DatabaseHandler(context)
+            db.getBluetoothEntries().forEach { bluetoothObject ->
+                pairedDevices.forEach {
+                    if(it.address ==  bluetoothObject.address){
+                        it.volumeState = bluetoothObject.volumeState
+                        result.add(it)
+                    }
                 }
             }
 
