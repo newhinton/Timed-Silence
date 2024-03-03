@@ -9,6 +9,8 @@ import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.os.Build
 import android.util.Log
+import de.felixnuesse.timedsilence.extensions.TAG
+import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import de.felixnuesse.timedsilence.model.data.BluetoothObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.util.PermissionManager
@@ -18,18 +20,16 @@ import java.lang.reflect.Method
 class HeadsetHandler {
     companion object {
 
-        private const val TAG = "BluetoothHandler"
-
         //https://stackoverflow.com/questions/16395054/check-whether-headphones-are-plugged-in
         fun headphonesConnected(context: Context): Boolean {
             val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
 
             var isConnected = false
 
-            Log.d(TAG, "Checking devices")
+            Log.d(TAG(), "Checking devices")
             for (deviceInfo in audioManager!!.getDevices(AudioManager.GET_DEVICES_OUTPUTS)) {
 
-                Log.d(TAG, "Devicetype: "+deviceInfo.type)
+                Log.d(TAG(), "Devicetype: "+deviceInfo.type)
 
                 when (deviceInfo.type) {
                     AudioDeviceInfo.TYPE_WIRED_HEADPHONES -> isConnected = true
@@ -38,7 +38,7 @@ class HeadsetHandler {
                     AudioDeviceInfo.TYPE_BLUETOOTH_A2DP -> isConnected = true
                 }
             }
-            Log.d(TAG, "Found Headset: $isConnected")
+            Log.d(TAG(), "Found Headset: $isConnected")
             return isConnected
         }
 
@@ -47,9 +47,7 @@ class HeadsetHandler {
         fun getPairedDevices(context: Context): ArrayList<BluetoothObject> {
             val list = arrayListOf<BluetoothObject>()
 
-            Log.e(TAG, "paired dev")
             if(!PermissionManager(context).grantedBluetoothAccess()) {
-                Log.e(TAG, "no perm")
                 PermissionManager(context).requestBluetooth()
                 return list
             }
@@ -61,8 +59,6 @@ class HeadsetHandler {
             }
             val pairedDevices = btManager.adapter.bondedDevices
 
-
-            Log.e(TAG, "paired dev ${pairedDevices.size}")
             if (pairedDevices.size > 0) {
 
                 for (device in pairedDevices) {
@@ -77,7 +73,6 @@ class HeadsetHandler {
                     val bluetoothObject = BluetoothObject(deviceName, macAddress, aliasing, isConnected(device))
                     bluetoothObject.type = device.bluetoothClass.majorDeviceClass
                     list.add(bluetoothObject)
-                    Log.e(TAG,"paired device: $bluetoothObject")
                 }
             }
             return list
@@ -92,6 +87,19 @@ class HeadsetHandler {
                 val found = db.getBluetoothEntries().find { it.address ==  bl.address}
                 bl.volumeState = found?.volumeState ?: bl.volumeState
                 result.add(bl)
+            }
+
+            return result
+        }
+
+        fun getPairedDevicesWithChangesInVolume(context: Context): ArrayList<BluetoothObject> {
+            var result = arrayListOf<BluetoothObject>()
+            var devices = getPairedDevicesWithDatabaseState(context)
+
+            devices.forEach { bl ->
+                if(bl.volumeState != 0) {
+                    result.add(bl)
+                }
             }
 
             return result

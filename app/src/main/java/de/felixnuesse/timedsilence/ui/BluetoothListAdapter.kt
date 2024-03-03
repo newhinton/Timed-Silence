@@ -5,12 +5,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.AdapterBluetoothListBinding
+import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import de.felixnuesse.timedsilence.model.data.BluetoothObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 
@@ -41,19 +41,16 @@ import de.felixnuesse.timedsilence.model.database.DatabaseHandler
  */
 class BluetoothListAdapter(private var myDataset: ArrayList<BluetoothObject>, private var mContext: Context) : RecyclerView.Adapter<BluetoothListAdapter.BluetoothViewHolder>() {
 
-
-        private var db = DatabaseHandler(mContext)
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BluetoothViewHolder {
                 val binding = AdapterBluetoothListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return BluetoothViewHolder(binding)
         }
 
         override fun onBindViewHolder(holder: BluetoothViewHolder, position: Int) {
-                val context = holder.view.root.context
                 val bluetoothDevice = myDataset[position]
 
                 holder.view.rowTitle.text = bluetoothDevice.name
-                val resourceId = when(bluetoothDevice.type) {
+                val resourceIdDeviceType = when(bluetoothDevice.type) {
                         BluetoothClass.Device.Major.COMPUTER -> R.drawable.icon_computer
                         BluetoothClass.Device.Major.PHONE -> R.drawable.icon_phone
                         BluetoothClass.Device.Major.NETWORKING -> R.drawable.icon_lan
@@ -63,42 +60,52 @@ class BluetoothListAdapter(private var myDataset: ArrayList<BluetoothObject>, pr
                         BluetoothClass.Device.Major.WEARABLE -> R.drawable.icon_watch
                         BluetoothClass.Device.Major.TOY -> R.drawable.icon_toy
                         BluetoothClass.Device.Major.HEALTH -> R.drawable.icon_health
-
-                        else -> {
-                                R.drawable.icon_bluetooth
-                        }
+                        else -> R.drawable.icon_bluetooth
                 }
 
-                holder.view.volumeState.setImageDrawable(mContext.getDrawable(resourceId))
+                holder.view.deviceType.setImageDrawable(AppCompatResources.getDrawable(mContext, resourceIdDeviceType))
 
-                val spinnerArray = listOf(
-                        context.getString(R.string.volume_setting_unset),
-                        context.getString(R.string.volume_setting_silent),
-                        context.getString(R.string.volume_setting_vibrate),
-                        context.getString(R.string.volume_setting_loud)
-                )
-
-                val spinner = holder.view.volumeSpinner
-                val adapter = ArrayAdapter(
-                        context,
-                        android.R.layout.simple_spinner_item,
-                        spinnerArray
-                )
-
-                spinner.adapter = adapter
-
-                spinner.setSelection(bluetoothDevice.volumeState)
-
-                spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                               bluetoothDevice.volumeState = position
-                                db.addOrUpdateBluetooth(bluetoothDevice)
-                        }
-
-                        override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                        }
+                val stringIdDeviceDescription = when(bluetoothDevice.type) {
+                        BluetoothClass.Device.Major.COMPUTER -> R.string.adapter_bluetooth_device_description_computer
+                        BluetoothClass.Device.Major.PHONE -> R.string.adapter_bluetooth_device_description_phone
+                        BluetoothClass.Device.Major.NETWORKING -> R.string.adapter_bluetooth_device_description_networking
+                        BluetoothClass.Device.Major.AUDIO_VIDEO -> R.string.adapter_bluetooth_device_description_audio_video
+                        BluetoothClass.Device.Major.PERIPHERAL -> R.string.adapter_bluetooth_device_description_peripheral
+                        BluetoothClass.Device.Major.IMAGING -> R.string.adapter_bluetooth_device_description_imaging
+                        BluetoothClass.Device.Major.WEARABLE -> R.string.adapter_bluetooth_device_description_wearable
+                        BluetoothClass.Device.Major.TOY -> R.string.adapter_bluetooth_device_description_toy
+                        BluetoothClass.Device.Major.HEALTH -> R.string.adapter_bluetooth_device_description_health
+                        else -> R.string.adapter_bluetooth_device_description_misc
                 }
+
+                holder.view.deviceTypeDescription.text = mContext.getString(stringIdDeviceDescription)
+
+                val resourceIdVolumeState = when (bluetoothDevice.volumeState) {
+                        VolumeState.TIME_SETTING_LOUD -> R.drawable.icon_volume_up
+                        VolumeState.TIME_SETTING_VIBRATE -> R.drawable.icon_vibration
+                        VolumeState.TIME_SETTING_SILENT -> R.drawable.icon_volume_off
+                        else -> R.drawable.icon_volume_up
+                }
+
+                holder.view.volumeState.setImageDrawable(AppCompatResources.getDrawable(mContext, resourceIdVolumeState))
+
+                holder.view.editElement.setOnClickListener {
+                        //todo: Implement adding bluetooth device
+                        Toast.makeText(mContext, "Not Implemented! Todo!", Toast.LENGTH_SHORT).show()
+                        //db.addOrUpdateBluetooth(bluetoothDevice)
+                }
+
+                holder.view.deleteElement.setOnClickListener {
+                        DatabaseHandler(mContext).deleteBluetoothDevice(bluetoothDevice.address)
+                        removeAt(position)
+                }
+        }
+
+
+        private fun removeAt(position: Int) {
+                myDataset.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, myDataset.size)
         }
 
         override fun getItemCount() = myDataset.size

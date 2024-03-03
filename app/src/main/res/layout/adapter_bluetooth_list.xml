@@ -8,55 +8,93 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
+        style="@style/primaryCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/cardMargin"
         android:padding="@dimen/cardPadding"
-        style="@style/primaryCard"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/edit_element"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/layoutWeekdays"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:gravity="center"
-            android:weightSum="10">
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/volumeState"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
                 style="@style/primaryCard"
-                app:srcCompat="@drawable/icon_bluetooth" />
-
-            <TextView
-                android:id="@+id/rowTitle"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:text="title"
-                style="@style/primaryCard" />
+                app:srcCompat="@android:drawable/btn_dialog" />
 
-            <Spinner
-                android:id="@+id/volumeSpinner"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="4" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/rowTitle"
+                    style="@style/primaryCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/adapter_bluetooth_device_name"
+                    android:text="title" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/deviceType"
+                        style="@style/primaryCard"
+                        android:layout_width="16dp"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/icon_bluetooth" />
+
+                    <TextView
+                        android:id="@+id/deviceTypeDescription"
+                        style="@style/primaryCard"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/adapter_bluetooth_description_of_bluetooth_device_type"
+                        android:text="TextView" />
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
+
+    <ImageButton
+        android:id="@+id/delete_element"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@null"
+        android:src="@drawable/icon_delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/edit_element"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@null"
+        android:src="@drawable/icon_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/delete_element"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,7 +42,7 @@ class BluetoothFragment : Fragment() {
     private fun setList(context: Context) {
         viewManager = LinearLayoutManager(context)
 
-        val pairedDevices = HeadsetHandler.getPairedDevicesWithDatabaseState(context)
+        val pairedDevices = HeadsetHandler.getPairedDevicesWithChangesInVolume(context)
         viewAdapter = BluetoothListAdapter(pairedDevices, context)
 
         binding.bluetoothFragmentRecylcerListView.apply {

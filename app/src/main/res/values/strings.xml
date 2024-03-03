@@ -168,4 +168,16 @@
     <string name="fragment_title_bluetooth">Bluetooth</string>
     <string name="main_tab_bluetooth">Bluetooth</string>
     <string name="checkup_collapse_priority_contacts">collapse list of priority contacts</string>
+    <string name="adapter_bluetooth_description_of_bluetooth_device_type">Description of bluetooth device type</string>
+    <string name="adapter_bluetooth_device_name">bluetooth device name</string>
+    <string name="adapter_bluetooth_device_description_computer">Computer</string>
+    <string name="adapter_bluetooth_device_description_phone">Phone</string>
+    <string name="adapter_bluetooth_device_description_networking">Networking</string>
+    <string name="adapter_bluetooth_device_description_audio_video">Audio/Video</string>
+    <string name="adapter_bluetooth_device_description_peripheral">Peripheral</string>
+    <string name="adapter_bluetooth_device_description_imaging">Imaging</string>
+    <string name="adapter_bluetooth_device_description_wearable">Wearable</string>
+    <string name="adapter_bluetooth_device_description_toy">Toy</string>
+    <string name="adapter_bluetooth_device_description_health">Health</string>
+    <string name="adapter_bluetooth_device_description_misc">Misc</string>
 </resources>

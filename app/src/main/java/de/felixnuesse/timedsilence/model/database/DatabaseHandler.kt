@@ -762,4 +762,13 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         db.close()
     }
 
+    fun deleteBluetoothDevice(macadress: String): Int {
+        val db = writableDatabase
+        val selection = BLUETOOTH_MAC + " LIKE ?"
+        val selectionArgs = arrayOf(macadress)
+        val retcode: Int = db.delete(BLUETOOTH_TABLE, selection, selectionArgs)
+        db.close()
+        return retcode
+    }
+
 }
