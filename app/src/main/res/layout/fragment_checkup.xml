@@ -80,6 +80,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -110,8 +111,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:visibility="gone"
                     android:contentDescription="@string/checkup_collapse_priority_contacts"
+                    android:visibility="gone"
                     app:icon="@drawable/icon_collapse" />
 
                 <CheckBox
@@ -130,8 +131,8 @@
                     style="@style/checkBoxAsIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
                     android:button="@null"
+                    android:clickable="false"
                     android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/repeat_caller_can_bypass_dnd" />
 
@@ -141,8 +142,8 @@
                     style="@style/checkBoxAsIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
                     android:button="@null"
+                    android:clickable="false"
                     android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/messages_can_bypass_dnd" />
 
@@ -152,8 +153,8 @@
                     style="@style/checkBoxAsIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
                     android:button="@null"
+                    android:clickable="false"
                     android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/alarms_can_bypass_dnd" />
 
@@ -163,8 +164,8 @@
                     style="@style/checkBoxAsIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
                     android:button="@null"
+                    android:clickable="false"
                     android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/notifications_visiblity" />
 
