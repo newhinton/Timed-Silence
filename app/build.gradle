@@ -36,20 +36,9 @@ android {
         baseline = file("lint-baseline.xml")
     }
 
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            //TimedSilence 2020-02-11-12_32
-            def project = "TimedSilence"
-            def SEP = " "
-            //def flavor = variant.productFlavors[0].name
-            def buildType = variant.buildType.name
-            //def version = variant.versionName
-            def date = new Date()
-            def formattedDate = date.format('yyyy-mm-dd_HHmm')
-
-            def newApkName = project + SEP + buildType + SEP + formattedDate + ".apk"
-
-            outputFileName = new File(newApkName)
+    applicationVariants.all {
+        outputs.all { output ->
+            outputFileName = new File("TimedSilence-release-v"+versionName+".apk")
         }
     }
 }
