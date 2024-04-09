@@ -21,6 +21,7 @@ class AboutActivity : AppCompatActivity() {
         binding.toolbar.title = "";
         setSupportActionBar(binding.toolbar)
 
+        binding.version.text = BuildConfig.VERSION_NAME
 
         binding.help.setOnClickListener {
             openURL("https://github.com/newhinton/Timed-Silence/issues")
@@ -28,7 +29,7 @@ class AboutActivity : AppCompatActivity() {
 
 
         binding.donate.setOnClickListener {
-            openURL("https://github.com/sponsors/newhinton")
+            openURL("https://felixnuesse.de/donate")
         }
 
         binding.copyright.setOnClickListener {
