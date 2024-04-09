@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
@@ -21,10 +22,18 @@ class IntroActivity : AppIntro() {
     private var permissionManager = PermissionManager(this)
     private var isDoNotDisturbSlide = false
 
+
+    override fun onResume() {
+        enableEdgeToEdge()
+        super.onResume()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Make sure you don't call setContentView!
 
+        setImmersiveMode()
+        showStatusBar(true)
         isWizardMode = true
         isColorTransitionsEnabled = true
 
