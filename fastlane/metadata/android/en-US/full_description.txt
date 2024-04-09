@@ -1,0 +1,16 @@
+An app that manages your phones volume. It will mute your phone for you, so that you never get disturbed when doing important things!
+
+<b>Time</b>
+Create schedules for when your phone should be muted or loud
+
+<b>Calendar</b>
+Let your calendar manage the volume for you. Depending on events, your phone will be silent!
+
+<b>Keywords</b>
+If you have specific events, keywords will help you get the silence you need!
+
+<b>Bluetooth</b>
+When a bluetooth device connects, your phone can react to it!
+
+<b>Sanity Check</b>
+Just so that you don't miss anything important, we have a checkup that you can use to verify your settings!

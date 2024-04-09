@@ -6,8 +6,6 @@
 [![Android Lint](https://github.com/newhinton/timed-silence/actions/workflows/lint.yml/badge.svg)](https://github.com/newhinton/timed-silence/actions/workflows/lint.yml)
 -----------
 An app that manages your phones volume. It will mute your phone for you, so that you never get disturbed when doing important things!
-
-<br/>
 <br/>
 
 Screenshots
@@ -30,15 +28,15 @@ Screenshots
   </tr>
 </table>
 
-
-
-
 Features
 --------
 
 - **Time** Create schedules for when your phone should be muted or loud
 - **Calendar** Let your calendar manage the volume for you. Depending on events, your phone will be silent!
 - **Keywords** If you have specific events, keywords will help you get the silence you need!
+- **Bluetooth** When a bluetooth device connects, your phone can react to it!
+- **Sanity Check** Just so that you don't miss anything important, we have a checkup that you can use to verify your settings!
+
 
 Installation
 ------------
