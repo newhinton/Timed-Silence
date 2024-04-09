@@ -1,9 +1,19 @@
-# Timed Silence - Dont let your phone rattle you!
+<div align="center">
+<p><img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" width="100"></p>
+
+---
+# Timed Silence
+### Dont let your phone rattle you!
+
+---
+
 [![license: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/newhinton/timed-silence/blob/master/LICENSE) [![Latest Downloads](https://img.shields.io/github/downloads/newhinton/timed-silence/latest/total
 )](https://github.com/newhinton/timed-silence/releases) [![GitHub release](https://img.shields.io/github/v/release/newhinton/timed-silence?include_prereleases)](https://github.com/newhinton/timed-silence/releases/latest)
-[![supportive flags](https://img.shields.io/badge/support-🇺🇦_🏳️‍⚧_🏳️‍🌈-4aad4e)](https://roundsync.com)
+[![supportive flags](https://img.shields.io/badge/support-🇺🇦_🏳️‍⚧_🏳️‍🌈-4aad4e)](https://roundsync.com) [![Android Lint](https://github.com/newhinton/timed-silence/actions/workflows/lint.yml/badge.svg)](https://github.com/newhinton/timed-silence/actions/workflows/lint.yml)
 
-[![Android Lint](https://github.com/newhinton/timed-silence/actions/workflows/lint.yml/badge.svg)](https://github.com/newhinton/timed-silence/actions/workflows/lint.yml)
+
+</div>
+
 -----------
 An app that manages your phones volume. It will mute your phone for you, so that you never get disturbed when doing important things!
 <br/>
