@@ -36,6 +36,7 @@
         <item name="android:windowSplashScreenBackground" tools:targetApi="31">?attr/colorSurface</item>
 
         <item name="useDarkStatusbarText">true</item>
+        <item name="popupMenuBackgroundColor">?attr/colorSurface</item>
     </style>
 
     <style name="AlertDialogCustom" parent="ThemeOverlay.Material3.Dialog">

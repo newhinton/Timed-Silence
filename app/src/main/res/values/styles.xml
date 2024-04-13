@@ -13,8 +13,7 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">?attr/useDarkStatusbarText</item>
 
-
-
+        <item name="actionOverflowMenuStyle">@style/PopupMenu</item>
 
         <!-- Transparent Actionbar -->
         <item name="android:actionBarStyle">@style/TransparentActionBar</item>
@@ -79,4 +78,7 @@
         <item name="android:textColorPrimaryDisableOnly">?attr/colorOnBackground</item>
     </style>
 
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">">
+        <item name="android:popupBackground">@drawable/shape_menu_background</item>
+    </style>
 </resources>
