@@ -234,7 +234,7 @@ class VolumeHandler(private var mContext: Context) {
     }
 
     fun applyVolume(){
-        if(!PermissionManager(mContext).grantedDoNotDisturb()){
+        if(!PermissionManager(mContext).grantedDoNotDisturbAndNotify()){
             Log.d(TAG(), "VolumeHandler: VolumeSetting: Do not disturb not granted! Not changing Volume!")
             return
         }

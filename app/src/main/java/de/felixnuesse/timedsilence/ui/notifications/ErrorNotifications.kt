@@ -3,7 +3,9 @@ package de.felixnuesse.timedsilence.ui.notifications
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.extensions.TAG
@@ -61,6 +63,30 @@ class ErrorNotifications {
             .setContentText(content)
             .setSmallIcon(R.drawable.icon_error)
             .setOnlyAlertOnce(true)
+
+        notificationManager.notify(
+            NOTIFICATION_ID,
+            notification.build()
+        )
+    }
+
+    fun showErrorWithAction(context: Context, title: String, content: String, actiontitle: String, intent: Intent) {
+
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channel = NotificationChannel(ERROR_CHANNEL_ID, ERROR_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
+        notificationManager.createNotificationChannel(channel)
+
+
+        val pendingIntent = PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_IMMUTABLE)
+        val action = Notification.Action(R.drawable.icon_settings, actiontitle, pendingIntent)
+
+
+        val notification = Notification.Builder(context, ERROR_CHANNEL_ID)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setSmallIcon(R.drawable.icon_error)
+            .setOnlyAlertOnce(true)
+            .setActions(action)
 
         notificationManager.notify(
             NOTIFICATION_ID,

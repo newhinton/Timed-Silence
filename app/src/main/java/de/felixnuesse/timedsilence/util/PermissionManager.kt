@@ -2,6 +2,9 @@ package de.felixnuesse.timedsilence.util
 
 import android.Manifest
 import android.app.Activity
+import android.app.ActivityManager
+import android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+import android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE
 import android.app.AlarmManager
 import android.app.AlertDialog
 import android.app.NotificationManager
@@ -13,10 +16,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import de.felixnuesse.timedsilence.Constants
 import de.felixnuesse.timedsilence.R
+import de.felixnuesse.timedsilence.ui.notifications.ErrorNotifications
 
 
 class PermissionManager(private var mContext: Context) {
@@ -64,6 +69,30 @@ class PermissionManager(private var mContext: Context) {
         val notificationManager =
             mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         return notificationManager.isNotificationPolicyAccessGranted
+    }
+
+    fun grantedDoNotDisturbAndNotify(): Boolean {
+        val granted = grantedDoNotDisturb()
+        if(!granted) {
+            val appinfo = ActivityManager.RunningAppProcessInfo()
+            ActivityManager.getMyMemoryState(appinfo)
+            if((appinfo.importance == IMPORTANCE_FOREGROUND || appinfo.importance == IMPORTANCE_VISIBLE)) {
+                Toast.makeText(mContext, mContext.getText(R.string.dnd_missing_permissions), Toast.LENGTH_LONG).show()
+                requestDoNotDisturb()
+            } else {
+                ErrorNotifications()
+                    .showErrorWithAction(
+                        mContext,
+                        mContext.getString(R.string.dnd_missing_permissions_title),
+                        mContext.getString(R.string.dnd_missing_permissions),
+                        mContext.getString(R.string.dnd_missing_permission_action_title),
+                        Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+                    )
+                Toast.makeText(mContext, mContext.getText(R.string.dnd_missing_permissions), Toast.LENGTH_LONG).show()
+            }
+
+        }
+        return granted
     }
 
     fun grantedAlarms(): Boolean {

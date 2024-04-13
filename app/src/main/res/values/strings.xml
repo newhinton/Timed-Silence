@@ -183,4 +183,7 @@
     <string name="bluetooth_add_new">Add new bluetooth setting</string>
     <string name="bluetooth_dialog_title_title">Add a bluetooth device</string>
     <string name="dialog_bluetooth_select_device">Select a paired device</string>
+    <string name="dnd_missing_permissions">You did not grant \"Do not Disturb\"-access. We can\'t change your volume!</string>
+    <string name="dnd_missing_permissions_title">Missing Permissions!</string>
+    <string name="dnd_missing_permission_action_title">Fix!</string>
 </resources>
