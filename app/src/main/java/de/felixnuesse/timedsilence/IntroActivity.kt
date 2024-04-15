@@ -26,6 +26,7 @@ class IntroActivity : AppIntro() {
     override fun onResume() {
         enableEdgeToEdge()
         super.onResume()
+        setImmersiveMode()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
