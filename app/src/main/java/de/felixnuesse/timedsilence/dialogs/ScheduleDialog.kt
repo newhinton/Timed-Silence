@@ -18,6 +18,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.model.data.ScheduleObject
 import de.felixnuesse.timedsilence.ui.ScheduleListAdapter
+import de.felixnuesse.timedsilence.util.VibrationUtil
 import de.felixnuesse.timedsilence.util.WindowUtils
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -87,6 +88,10 @@ class ScheduleDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
             WindowManager.LayoutParams.WRAP_CONTENT
         )
         setCanceledOnTouchOutside(true)
+
+        if(!VibrationUtil.canVibrate(context)) {
+            binding.scheduleDialogRbVibrate.visibility = View.GONE
+        }
 
 
         if (!createNewSchedule) {

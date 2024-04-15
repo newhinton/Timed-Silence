@@ -27,6 +27,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.util.DateUtil
 import de.felixnuesse.timedsilence.util.SizeUtil
+import de.felixnuesse.timedsilence.util.VibrationUtil
 import de.felixnuesse.timedsilence.volumestate.StateGenerator
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -132,6 +133,12 @@ class GraphFragment : Fragment(), View.OnClickListener {
         setLegendColor(R.color.color_graph_silent, binding.imageViewLegendSilent)
         setLegendColor(R.color.color_graph_vibrate, binding.imageViewLegendVibrate)
         setLegendColor(R.color.color_graph_loud, binding.imageViewLegendLoud)
+
+        if(!VibrationUtil.canVibrate(context)) {
+            binding.imageViewLegendVibrate.visibility = View.GONE
+            binding.textViewLegendVibrate.visibility = View.GONE
+            binding.imageviewLegendVibrateHelp.visibility = View.GONE
+        }
 
         var isfirst = true
 

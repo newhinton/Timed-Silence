@@ -19,6 +19,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_UNSET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.util.VibrationUtil
 import de.felixnuesse.timedsilence.util.WindowUtils
 
 /**
@@ -69,6 +70,10 @@ class KeywordDialog(context: Context) : Dialog(context, R.style.AlertDialogCusto
         binding = DialogKeywordBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        if(!VibrationUtil.canVibrate(context)) {
+            binding.keywordDialogRbVibrate.visibility = View.GONE
+        }
 
         window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         setCanceledOnTouchOutside(true)

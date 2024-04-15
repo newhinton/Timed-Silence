@@ -19,6 +19,7 @@ import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.util.VibrationUtil
 import de.felixnuesse.timedsilence.util.WindowUtils
 import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
 
@@ -78,6 +79,11 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
         binding = DialogCalendarBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+
+        if(!VibrationUtil.canVibrate(context)) {
+            binding.calendarDialogRbVibrate.visibility = View.GONE
+        }
 
         window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         setCanceledOnTouchOutside(true)

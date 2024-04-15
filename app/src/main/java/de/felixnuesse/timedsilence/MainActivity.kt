@@ -46,6 +46,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.view.menu.MenuBuilder
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -66,6 +67,7 @@ import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
+import de.felixnuesse.timedsilence.util.VibrationUtil
 import de.felixnuesse.timedsilence.volumestate.StateGenerator
 
 import java.util.*
@@ -154,7 +156,6 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         if (mDontCheckGraph) {
             mVolumeHandler.setVolumeStateAndApply(StateGenerator(this).stateAt(System.currentTimeMillis()))
         }
-
     }
 
 
@@ -191,6 +192,14 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         if (menu is MenuBuilder) {
             var builder = menu
             builder.setOptionalIconsVisible(true)
+        }
+
+        if(!VibrationUtil.canVibrate(this)) {
+            menu.children.forEach {
+                if(it.itemId == R.id.action_set_manual_vibrate) {
+                    it.setVisible(false)
+                }
+            }
         }
 
         return true
