@@ -67,6 +67,7 @@ import de.felixnuesse.timedsilence.handler.*
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.services.`interface`.TimerInterface
+import de.felixnuesse.timedsilence.util.BluetoothUtil
 import de.felixnuesse.timedsilence.util.VibrationUtil
 import de.felixnuesse.timedsilence.volumestate.StateGenerator
 
@@ -120,6 +121,10 @@ class MainActivity : AppCompatActivity(), TimerInterface {
 
         val tabs = binding.tabLayout
         mPager = binding.viewPager
+
+        if(!BluetoothUtil.hasBluetooth(this@MainActivity)) {
+            tabs.removeTabAt(4)
+        }
 
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -380,15 +385,18 @@ class MainActivity : AppCompatActivity(), TimerInterface {
      */
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-        var elements = arrayListOf(
-            GraphFragment(),
-            ScheduleFragment(),
-            CalendarFragment(),
-            KeywordFragment(),
-            //WifiConnectedFragment(),
-            BluetoothFragment(),
-            CheckupFragment()
-        )
+        var elements = arrayListOf<Fragment>()
+
+        init {
+            elements.add(GraphFragment())
+            elements.add(ScheduleFragment())
+            elements.add(CalendarFragment())
+            elements.add(KeywordFragment())
+            if(BluetoothUtil.hasBluetooth(this@MainActivity)) {
+                elements.add(BluetoothFragment())
+            }
+            elements.add(CheckupFragment())
+        }
 
         override fun getCount(): Int = elements.size
 
