@@ -89,6 +89,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         if (!sharedPref.getBoolean(getString(R.string.pref_key_intro_v1_0_0), false)) {
             startActivity(Intent(this, IntroActivity::class.java))
             finish()
+            return
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
