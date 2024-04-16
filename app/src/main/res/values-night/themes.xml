@@ -43,5 +43,19 @@
 
 
     <style name="AlertDialogCustom" parent="ThemeOverlay.Material3.Dialog">
+        <!--Name Field textcolor-->
+        <item name="android:textColorPrimary">?attr/colorOnSurfaceVariant</item>
+        <item name="radioButtonStyle">@style/DarkRadioButton</item>
+        <item name="checkboxStyle">@style/DarkCheckBox</item>
     </style>
+
+    <style name="DarkRadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+    <style name="DarkCheckBox" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+
+
 </resources>
