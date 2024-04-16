@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
@@ -34,6 +36,11 @@ class IntroActivity : AppIntro() {
         // Make sure you don't call setContentView!
 
         setImmersiveMode()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+        }
+
         showStatusBar(true)
         isWizardMode = true
         isColorTransitionsEnabled = true
