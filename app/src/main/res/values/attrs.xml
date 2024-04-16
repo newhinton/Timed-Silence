@@ -1,4 +1,5 @@
  <resources>
      <attr name="useDarkStatusbarText" format="boolean"/>
      <attr format="color" name="popupMenuBackgroundColor"/>
+     <attr format="color" name="timePickerBackgroundColor"/>
  </resources>

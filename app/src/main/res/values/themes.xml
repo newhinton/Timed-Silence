@@ -37,6 +37,7 @@
 
         <item name="useDarkStatusbarText">true</item>
         <item name="popupMenuBackgroundColor">?attr/colorSurface</item>
+        <item name="timePickerBackgroundColor">?attr/colorSurfaceVariant</item>
     </style>
 
     <style name="AlertDialogCustom" parent="ThemeOverlay.Material3.Dialog">

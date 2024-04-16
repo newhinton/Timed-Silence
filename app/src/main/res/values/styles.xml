@@ -81,4 +81,13 @@
     <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">">
         <item name="android:popupBackground">@drawable/shape_menu_background</item>
     </style>
+
+    <!--Guide by: https://stackoverflow.com/a/32550150-->
+    <style name="TimePicker" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:headerBackground">?colorPrimaryContainer</item> // annotate everything here
+        <item name="android:numbersSelectorColor">?colorPrimaryContainer</item>
+        <item name="android:numbersTextColor">?colorOnPrimaryContainer</item>
+        <item name="android:amPmTextColor">?android:attr/textColorSecondary</item>
+        <item name="android:numbersBackgroundColor">?timePickerBackgroundColor</item> // Fix this in either dark or light mode
+    </style>
 </resources>

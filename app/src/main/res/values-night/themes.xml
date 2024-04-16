@@ -37,6 +37,7 @@
 
         <item name="useDarkStatusbarText">false</item>
         <item name="popupMenuBackgroundColor">?attr/colorSurfaceVariant</item>
+        <item name="timePickerBackgroundColor">?attr/colorSurface</item>
     </style>
 
 
