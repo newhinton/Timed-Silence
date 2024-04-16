@@ -37,7 +37,7 @@
     <string name="wednesday">Wednesday</string>
     <string name="schedule_dialog_title_textfield_hint">Name</string>
     <string name="next">Next</string>
-    <string name="back">back</string>
+    <string name="back">Back</string>
     <string name="schedule_dialog_save">Save</string>
     <string name="friday">Friday</string>
     <string name="volume_while_headset_connected">Dont change volume while Headset connected</string>
