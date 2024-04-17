@@ -13,6 +13,7 @@ import de.felixnuesse.timedsilence.dialogs.KeywordDialog
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.ui.KeywordListAdapter
+import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
 
 
 class KeywordFragment : Fragment() {
@@ -33,6 +34,8 @@ class KeywordFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        checkContainer(DeviceCalendar(view.context), view.context)
 
         binding.buttonCalendarFragment.setOnClickListener {
             KeywordDialog(view.context, this).show()
@@ -75,5 +78,36 @@ class KeywordFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    // Same as in Calendar Fragment.
+    private fun checkContainer(calHandler: DeviceCalendar, context: Context){
+        val emtpyMessage = binding.CalendarEmptyContainer
+        val permissionMessage = binding.CalendarPermissionContainer
+        val listContainer = binding.CalendarListContainer
+
+        emtpyMessage.visibility = View.GONE
+        permissionMessage.visibility = View.GONE
+        listContainer.visibility = View.GONE
+
+        val allowed = DeviceCalendar.hasCalendarReadPermission(context)
+        val size = calHandler.getCalendars().size
+
+        if(allowed && size!=0){
+            emtpyMessage.visibility = View.GONE
+            permissionMessage.visibility = View.GONE
+            listContainer.visibility = View.VISIBLE
+        } else if(!allowed) {
+            emtpyMessage.visibility = View.GONE
+            permissionMessage.visibility = View.VISIBLE
+            listContainer.visibility = View.GONE
+            binding.permissionNotGrantedButton.setOnClickListener {
+                DeviceCalendar.getCalendarReadPermission(context)
+            }
+        } else if(size==0){
+            emtpyMessage.visibility = View.VISIBLE
+            permissionMessage.visibility = View.GONE
+            listContainer.visibility = View.GONE
+        }
     }
 }

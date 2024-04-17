@@ -66,6 +66,7 @@ class CalendarFragment : Fragment() {
 
     }
 
+    // Same as in Keyword Fragment.
     private fun checkContainer(calHandler: DeviceCalendar, context: Context){
         val emtpyMessage = binding.CalendarEmptyContainer
         val permissionMessage = binding.CalendarPermissionContainer
