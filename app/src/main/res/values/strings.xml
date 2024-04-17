@@ -57,7 +57,7 @@
     <string name="main_tab_wifi_connected">Wifi</string>
     <string name="main_tab_calendar">Calendar</string>
     <string name="main_last_check">Last Check:</string>
-    <string name="Request">Request</string>
+    <string name="Request">Request!</string>
     <string name="wifi_add_new">Add a new Wifi setting</string>
     <string name="schedule_add_new">Add a new schedule</string>
     <string name="wifi_permission_hint">You need location access because wifi can be used to identify a location. We are not doing that, see X</string>
@@ -95,7 +95,7 @@
     <string name="GrantContactsPermissionAccessDescription">This app makes use of the local contacts. To verify that your calls do not get blocked during emergencies, please grant access to the contacts. This is optional, and we will only use this to show you a warning, if required.</string>
     <string name="GrantBluetoothPermissionAccessDescription">This app makes use of Bluetooth to mute your device if connected to a car, as an example. This is an optional permission. It will show up as a request to find "nearby" devices. This is because bluetooth can be abused to track your location. This app does not track you.</string>
     <string name="GrantBluetoothPermissionAccess">Request!</string>
-    <string name="contact_permission_hint">You need contact permissions for this feature.</string>
+    <string name="contact_permission_hint">You need the contact access permissions for this feature.</string>
     <string name="ignore_all_day">Ignore All Day Events</string>
     <string name="fragment_title_schedules">Schedules</string>
     <string name="fragment_title_wifi">Wifi Entries</string>
