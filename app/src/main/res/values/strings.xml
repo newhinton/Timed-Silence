@@ -24,7 +24,7 @@
     <string name="LocationAccessNotification">LocationAccessNotification</string>
     <string name="LocationAccessNotification_TITLE">Location Service required!</string>
     <string name="LocationAccessNotification_CONTENT">Because the wifissid can be used to track you, you need to enable Location Services to use wifinames as profiles!</string>
-    <string name="schedule_dialog_title_title">Set the name</string>
+    <string name="schedule_dialog_title_title">Set the Name</string>
     <string name="schedule_dialog_title_start">Set the Starttime</string>
     <string name="schedule_dialog_title_end">Set the Endtime</string>
     <string name="schedule_dialog_title_volume">Set the Volume</string>
