@@ -118,10 +118,7 @@ class PermissionManager(private var mContext: Context) {
     }
 
     fun grantedCalendar(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            mContext,
-            Manifest.permission.READ_CALENDAR
-        ) == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
     }
 
     fun grantedContacts(): Boolean {

@@ -82,13 +82,16 @@ class CalendarFragment : Fragment() {
             emtpyMessage.visibility = View.GONE
             permissionMessage.visibility = View.GONE
             listContainer.visibility = View.VISIBLE
-        }else if(size==0){
-            emtpyMessage.visibility = View.VISIBLE
-            permissionMessage.visibility = View.GONE
-            listContainer.visibility = View.GONE
-        }else if(!DeviceCalendar.hasCalendarReadPermission(context)) {
+        } else if(!allowed) {
             emtpyMessage.visibility = View.GONE
             permissionMessage.visibility = View.VISIBLE
+            listContainer.visibility = View.GONE
+            binding.permissionNotGrantedButton.setOnClickListener {
+                DeviceCalendar.getCalendarReadPermission(context)
+            }
+        } else if(size==0){
+            emtpyMessage.visibility = View.VISIBLE
+            permissionMessage.visibility = View.GONE
             listContainer.visibility = View.GONE
         }
     }

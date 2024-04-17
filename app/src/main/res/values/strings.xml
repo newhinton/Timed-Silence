@@ -68,7 +68,7 @@
     <string name="wifi_type_connected">When Connected</string>
     <string name="wifi_type_searching">When Searching</string>
     <string name="calendar_list_empty">You do not have calendars.</string>
-    <string name="calendar_missing_permissions">Permissions not granted.</string>
+    <string name="calendar_missing_permissions">Calendar-Access not granted.</string>
     <string name="main_tab_graph">Graph</string>
     <string name="export">Export settings</string>
     <string name="import_button">Import settings</string>
@@ -90,7 +90,7 @@
     <string name="keyword_dialog_textfield_hint">Enter the keyword here</string>
     <string name="keyword_dialog_title_title">Create a Keyword</string>
     <string name="import_deletion_warning">Importing deletes ALL old configurations!</string>
-    <string name="GrantCalendarPermissionAccess">Grant!</string>
+    <string name="GrantCalendarPermissionAccess">Request!</string>
     <string name="GrantCalendarPermissionAccessDescription">This app makes use of the local calendar. To greatly enhance the use of this app, please allow access to your calendars!</string>
     <string name="GrantContactsPermissionAccessDescription">This app makes use of the local contacts. To verify that your calls do not get blocked during emergencies, please grant access to the contacts. This is optional, and we will only use this to show you a warning, if required.</string>
     <string name="contact_permission_hint">You need contact permissions for this feature.</string>

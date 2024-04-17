@@ -77,7 +77,8 @@ class DeviceCalendar(private var mContext: Context) {
         }
 
         if(!hasCalendarReadPermission(mContext)) {
-            getCalendarReadPermission(mContext)
+            // don't request permission here! That would spam the user.
+            return HashMap<String, CalendarObject>()
         }
 
         val contentResolver = mContext.contentResolver
