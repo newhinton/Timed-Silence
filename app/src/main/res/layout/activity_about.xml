@@ -64,6 +64,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/made_by"
+        android:alpha="0.8"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleLayout" />
@@ -74,6 +76,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Felix Nüsse"
+        android:alpha="0.8"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -104,6 +108,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:text="TextView"
+        android:alpha="0.8"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
