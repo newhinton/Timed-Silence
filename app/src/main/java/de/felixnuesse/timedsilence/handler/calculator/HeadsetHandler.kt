@@ -48,7 +48,6 @@ class HeadsetHandler {
             val list = arrayListOf<BluetoothObject>()
 
             if(!PermissionManager(context).grantedBluetoothAccess()) {
-                PermissionManager(context).requestBluetooth()
                 return list
             }
 

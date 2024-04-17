@@ -196,7 +196,7 @@ class PermissionManager(private var mContext: Context) {
             return
         }
         val builder = AlertDialog.Builder(mContext)
-        builder.setMessage(R.string.GrantCalendarPermissionAccessDescription)
+        builder.setMessage(R.string.GrantBluetoothPermissionAccessDescription)
             .setPositiveButton(R.string.GrantCalendarPermissionAccess) { _, _ ->
                 val permissionsList = Array(1) { Manifest.permission.BLUETOOTH_CONNECT }
                 ActivityCompat.requestPermissions(

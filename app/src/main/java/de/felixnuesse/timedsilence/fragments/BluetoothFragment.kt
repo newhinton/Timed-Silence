@@ -12,6 +12,8 @@ import de.felixnuesse.timedsilence.databinding.FragmentBluetoothBinding
 import de.felixnuesse.timedsilence.dialogs.BluetoothDialog
 import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.ui.BluetoothListAdapter
+import de.felixnuesse.timedsilence.util.PermissionManager
+import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
 
 
 class BluetoothFragment : Fragment() {
@@ -45,16 +47,17 @@ class BluetoothFragment : Fragment() {
     }
 
     private fun setList(context: Context) {
-        viewManager = LinearLayoutManager(context)
-
-        val pairedDevices = HeadsetHandler.getPairedDevicesWithChangesInVolume(context)
-        viewAdapter = BluetoothListAdapter(pairedDevices, context, this)
-
-        binding.bluetoothFragmentRecylcerListView.apply {
-            setHasFixedSize(false)
-            layoutManager = viewManager
-            adapter = viewAdapter
+        val permissionManager = PermissionManager(context)
+        if(!permissionManager.grantedBluetoothAccess()) {
+            binding.permissionNotGrantedButton.setOnClickListener {
+                permissionManager.requestBluetooth()
+            }
+            binding.bluetoothListContainer.visibility = View.GONE
+            return
+        } else {
+            binding.BluetoothPermissionContainer.visibility = View.GONE
         }
+
         if(HeadsetHandler.getPairedDevices(context).size == 0) {
             binding.noPairedMessage.visibility = View.VISIBLE
             binding.bluetoothFragmentRecylcerListView.visibility = View.GONE
@@ -63,9 +66,20 @@ class BluetoothFragment : Fragment() {
             binding.noPairedMessage.visibility = View.GONE
             binding.bluetoothFragmentRecylcerListView.visibility = View.VISIBLE
             binding.buttonAddDevice.visibility = View.VISIBLE
-        }
 
+            val pairedDevices = HeadsetHandler.getPairedDevicesWithChangesInVolume(context)
+            viewManager = LinearLayoutManager(context)
+            viewAdapter = BluetoothListAdapter(pairedDevices, context, this)
+
+            binding.bluetoothFragmentRecylcerListView.apply {
+                setHasFixedSize(false)
+                layoutManager = viewManager
+                adapter = viewAdapter
+            }
+        }
     }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -93,6 +93,8 @@
     <string name="GrantCalendarPermissionAccess">Request!</string>
     <string name="GrantCalendarPermissionAccessDescription">This app makes use of the local calendar. To greatly enhance the use of this app, please allow access to your calendars!</string>
     <string name="GrantContactsPermissionAccessDescription">This app makes use of the local contacts. To verify that your calls do not get blocked during emergencies, please grant access to the contacts. This is optional, and we will only use this to show you a warning, if required.</string>
+    <string name="GrantBluetoothPermissionAccessDescription">This app makes use of Bluetooth to mute your device if connected to a car, as an example. This is an optional permission. It will show up as a request to find 'nearby' devices. This is because bluetooth can be abused to track your location. This app does not track you.</string>
+    <string name="GrantBluetoothPermissionAccess">Request!</string>
     <string name="contact_permission_hint">You need contact permissions for this feature.</string>
     <string name="ignore_all_day">Ignore All Day Events</string>
     <string name="fragment_title_schedules">Schedules</string>
@@ -186,4 +188,5 @@
     <string name="dnd_missing_permissions">You did not grant \"Do not Disturb\"-access. We can\'t change your volume!</string>
     <string name="dnd_missing_permissions_title">Missing Permissions!</string>
     <string name="dnd_missing_permission_action_title">Fix!</string>
+    <string name="bluetooth_missing_permissions">Bluetooth Access not granted.</string>
 </resources>
