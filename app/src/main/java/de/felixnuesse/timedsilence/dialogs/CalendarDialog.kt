@@ -3,25 +3,28 @@ package de.felixnuesse.timedsilence.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import de.felixnuesse.timedsilence.R
-import de.felixnuesse.timedsilence.fragments.CalendarFragment
-import de.felixnuesse.timedsilence.model.data.CalendarObject
-import android.widget.RadioGroup
 import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
-import android.text.Html
+import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.DialogCalendarBinding
 import de.felixnuesse.timedsilence.extensions.TAG
+import de.felixnuesse.timedsilence.fragments.CalendarFragment
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
+import de.felixnuesse.timedsilence.model.data.CalendarObject
+import de.felixnuesse.timedsilence.util.SizeUtil
 import de.felixnuesse.timedsilence.util.VibrationUtil
 import de.felixnuesse.timedsilence.util.WindowUtils
 import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
+
 
 /**
  * Copyright (C) 2019  Felix Nüsse
@@ -96,20 +99,21 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
 
 
         val rg = findViewById<RadioGroup>(R.id.calendar_radio_group)
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         for(calObject in calHandler.getDeviceCalendars()){
-            val radioButton = RadioButton(context)
+            val radioButton = inflater.inflate(R.layout.customui_radiobutton, null) as RadioButton
             val hexColor = String.format("#%06X", 0xFFFFFF and calObject.color)
             val text = "<font color=\"$hexColor\">&#9612;</font>${calObject.name}"
 
-            radioButton.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE)
+            radioButton.setText(Html.fromHtml(text), TextView.BufferType.NORMAL)
             radioButton.id = View.generateViewId()
             radioMap.put(radioButton.id,calObject.externalID)
             radioNameMap.put(calObject.externalID,calObject.name)
 
             val params = RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.WRAP_CONTENT,
-                RadioGroup.LayoutParams.WRAP_CONTENT
+                SizeUtil.getSizeInDP(context, 32)
             )
 
             rg.addView(radioButton, params)
