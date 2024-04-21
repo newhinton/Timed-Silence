@@ -8,8 +8,8 @@ android {
         minSdkVersion 26
         targetSdk 34
         compileSdk 34
-        versionCode 6
-        versionName "3.1.0"
+        versionCode 7
+        versionName "3.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
