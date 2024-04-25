@@ -34,7 +34,7 @@ class ContactUtil(private var mContext: Context) {
         val contactList = arrayListOf<Contact>()
 
         if(!PermissionManager(mContext).grantedContacts()) {
-            e("We dont have access to the contacts!")
+            e("We don't have access to the contacts!")
             return contactList
         }
 
