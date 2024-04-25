@@ -3,7 +3,7 @@
 
 ---
 # Timed Silence
-### Dont let your phone rattle you!
+### Don't let your phone rattle you!
 
 ---
 
