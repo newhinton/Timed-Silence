@@ -110,14 +110,22 @@ class StateGenerator(private var mContext: Context) {
         val end = System.currentTimeMillis()
         Log.e(TAG(), "Endtime: $end")
         Log.e(TAG(), "Diff: ${end-start}ms")
-        return padList(linearList)
+        return padSortedList(linearList)
     }
 
-    private fun padList(list: ArrayList<VolumeState>): ArrayList<VolumeState> {
+    /**
+     * This function adds padding to the volume state list and returns that padded list.
+     * With padding, we mean that we add volume states filling "gaps" between two volume states,
+     * so that a day is fully covered. It might still contain gaps with the length of 1 minute.
+     *
+     * Important: list needs to be sorted
+     *
+     */
+    private fun padSortedList(list: ArrayList<VolumeState>): ArrayList<VolumeState> {
         val dayStart = DateUtil.getMidnight(mDate).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
         val dayEnd = DateUtil.getMidnight(mDate).plusHours(24).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
-
+        // first, check if the first element is starting at 00:00. Otherwise, pad.
         val first = list.firstOrNull()
 
         if(first == null || first.startTime > dayStart) {
@@ -127,6 +135,7 @@ class StateGenerator(private var mContext: Context) {
             list.add(0, initialVolumeState)
         }
 
+        // If the last element ends on the next day, set the enddate to midnight.
         val last = list.last()
         if(last.endTime > dayEnd) {
             list.remove(last)
@@ -134,6 +143,7 @@ class StateGenerator(private var mContext: Context) {
             list.add(last)
         }
 
+        // if the last element ends before midnight, pad it.
         if(last.endTime < dayEnd) {
             val lastVolumeState = VolumeState(defaultVolume)
             lastVolumeState.startTime = last.endTime
@@ -141,8 +151,10 @@ class StateGenerator(private var mContext: Context) {
             list.add(lastVolumeState)
         }
 
+        // if we have more elements than one, pad the elements in between.
         if(list.size>1) {
-            for (i in 0..<list.size) {
+            // exclude the "last" element, it will always end on midnight.
+            for (i in 0..<list.size-1) {
                 val current = list[i].endTime
                 val next = list[i+1].startTime
 
