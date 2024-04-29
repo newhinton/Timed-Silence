@@ -3,7 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="no_next_time_set">Not Set</string>
     <string name="cancel">Cancel</string>
-    <string name="volume_setting_unset">Dont Change</string>
+    <string name="volume_setting_unset">Don't Change</string>
     <string name="volume_setting_silent">Silent</string>
     <string name="volume_setting_loud">Loud</string>
     <string name="volume_setting_vibrate">Vibrate</string>
@@ -40,7 +40,7 @@
     <string name="back">Back</string>
     <string name="schedule_dialog_save">Save</string>
     <string name="friday">Friday</string>
-    <string name="volume_while_headset_connected">Dont change volume while Headset connected</string>
+    <string name="volume_while_headset_connected">Don't change volume while Headset connected</string>
     <string name="volume_settings">Volume</string>
     <string name="volume_settings_media">Media</string>
     <string name="volume_settings_notifications">Notifications</string>

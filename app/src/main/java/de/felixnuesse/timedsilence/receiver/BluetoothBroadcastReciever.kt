@@ -61,7 +61,7 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
                 volumeHandler.ignoreMusicPlaying(true)
                 volumeHandler.setVolumeStateAndApply(StateGenerator(context).stateAt(System.currentTimeMillis()))
             } else {
-                Log.e(TAG(), "BluetoothBroadcastReciever: No next alarm scheduled, dont update!")
+                Log.e(TAG(), "BluetoothBroadcastReciever: No next alarm scheduled, don't update!")
             }
         }
     }

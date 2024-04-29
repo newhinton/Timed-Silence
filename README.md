@@ -3,7 +3,7 @@
 
 ---
 # Timed Silence
-### Dont let your phone rattle you!
+### Don't let your phone rattle you!
 
 ---
 
@@ -11,6 +11,12 @@
 )](https://github.com/newhinton/timed-silence/releases) [![GitHub release](https://img.shields.io/github/v/release/newhinton/timed-silence?include_prereleases)](https://github.com/newhinton/timed-silence/releases/latest)
 [![supportive flags](https://img.shields.io/badge/support-🇺🇦_🏳️‍⚧_🏳️‍🌈-4aad4e)](https://roundsync.com) [![Android Lint](https://github.com/newhinton/timed-silence/actions/workflows/lint.yml/badge.svg)](https://github.com/newhinton/timed-silence/actions/workflows/lint.yml)
 
+
+
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+alt="Get it on F-Droid"
+height="80">](https://f-droid.org/packages/de.felixnuesse.timedsilence)
 
 </div>
 

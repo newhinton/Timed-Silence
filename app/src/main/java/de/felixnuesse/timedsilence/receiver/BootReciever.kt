@@ -22,7 +22,7 @@ class BootReciever : BroadcastReceiver(){
                 Trigger(context).createAlarmIntime()
                 return
             }
-            Log.e(TAG(), "BootReciever: Dont check.")
+            Log.e(TAG(), "BootReciever: Don't check.")
         }
     }
 
