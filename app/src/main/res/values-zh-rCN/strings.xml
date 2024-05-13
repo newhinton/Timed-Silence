@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="action_settings">设置</string>
+    <string name="no_next_time_set">未设置</string>
+    <string name="cancel">取消</string>
+    <string name="app_name">定时静音</string>
+    <string name="intro_slide_welcome_title">欢迎！</string>
+    <string name="intro_slide_welcome_description">我们将助您专注于您的任务，心无杂念！但首先，让我们设置这个应用程序！</string>
+</resources>
