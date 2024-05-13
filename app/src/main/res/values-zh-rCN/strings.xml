@@ -6,4 +6,8 @@
     <string name="app_name">定时静音</string>
     <string name="intro_slide_welcome_title">欢迎！</string>
     <string name="intro_slide_welcome_description">我们将助您专注于您的任务，心无杂念！但首先，让我们设置这个应用程序！</string>
+    <string name="notifications_error_title">错误</string>
+    <string name="timecheck_start">开始</string>
+    <string name="main_last_check">上次检查</string>
+    <string name="pref_key_intro_v1_0_0" translatable="false"></string>
 </resources>
