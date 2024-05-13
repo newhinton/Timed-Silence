@@ -15,4 +15,7 @@
     <string name="schedule_dialog_save">保存</string>
     <string name="main_tab_time">时间</string>
     <string name="calendar_dialog_save">保存</string>
+    <string name="ok">好的</string>
+    <string name="default_schedule_day">天</string>
+    <string name="help">帮助</string>
 </resources>
