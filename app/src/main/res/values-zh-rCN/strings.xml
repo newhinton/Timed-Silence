@@ -18,4 +18,6 @@
     <string name="ok">好的</string>
     <string name="default_schedule_day">天</string>
     <string name="help">帮助</string>
+    <string name="pause_check_schedule" translatable="false"></string>
+    <string name="appwidget_text" translatable="false"></string>
 </resources>
