@@ -6,12 +6,12 @@
     <string name="app_name">定时静音</string>
     <string name="intro_slide_welcome_title">欢迎！</string>
     <string name="intro_slide_welcome_description">我们将助您专注于您的任务，心无杂念！但首先，让我们设置这个应用程序！</string>
-    <string name="notifications_error_title">错误</string>
+    <string name="notifications_error_title">错误！</string>
     <string name="timecheck_start">开始</string>
     <string name="main_last_check">上次检查</string>
     <string name="schedule_dialog_title_textfield_hint">名称</string>
     <string name="next">下一个</string>
-    <string name="back">返回（Back）</string>
+    <string name="back">返回</string>
     <string name="schedule_dialog_save">保存</string>
     <string name="main_tab_time">时间</string>
     <string name="calendar_dialog_save">保存</string>
