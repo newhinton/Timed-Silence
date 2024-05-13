@@ -10,4 +10,10 @@
     <string name="timecheck_start">开始</string>
     <string name="main_last_check">上次检查</string>
     <string name="pref_key_intro_v1_0_0" translatable="false"></string>
+    <string name="schedule_dialog_title_textfield_hint">名称</string>
+    <string name="next">下一个</string>
+    <string name="back">返回（Back）</string>
+    <string name="schedule_dialog_save">保存</string>
+    <string name="main_tab_time">时间</string>
+    <string name="calendar_dialog_save">保存</string>
 </resources>
