@@ -42,4 +42,5 @@
     <string name="donate">捐赠</string>
     <string name="made_by">制作者：</string>
     <string name="copyright">"GPLv3 - ©%1$s "</string>
+    <string name="volume_setting_unset">不要更改</string>
 </resources>
