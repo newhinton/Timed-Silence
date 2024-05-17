@@ -118,7 +118,7 @@
     <string name="wifi_permission_hint">你需要启用位置访问权限，因为 Wi-Fi 可以用来识别位置。我们并没有这样做，请参见 X</string>
     <string name="wifi_dialog_ssid_textfield_hint">Wi-Fi 名称</string>
     <string name="wifi_type_connected">当连接时</string>
-    <string name="wifi_type_searching">当搜索时</string>
+    <string name="wifi_type_searching">当搜寻时</string>
     <string name="calendar_missing_permissions">未授予日历访问权限。</string>
     <string name="main_tab_graph">图标</string>
     <string name="export">导出设定</string>
