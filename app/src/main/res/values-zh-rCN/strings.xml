@@ -8,7 +8,7 @@
     <string name="intro_slide_welcome_description">我们将助您专注于您的任务，心无杂念！但首先，让我们设置这个应用程序！</string>
     <string name="notifications_error_title">错误！</string>
     <string name="timecheck_start">开始</string>
-    <string name="main_last_check">上次检查</string>
+    <string name="main_last_check">上次检查：</string>
     <string name="schedule_dialog_title_textfield_hint">名称</string>
     <string name="next">下一个</string>
     <string name="back">返回</string>
@@ -55,7 +55,7 @@
     <string name="action_set_manual_silent">设置静音</string>
     <string name="timecheck_stopped">已暂停</string>
     <string name="timecheck_running">运行中</string>
-    <string name="timecheck_paused">暂停</string>
+    <string name="timecheck_paused">已暂停</string>
     <string name="GrantDNDPermissionAccess">此应用需要访问“请勿打扰”权限来静音和恢复铃声设备。请授予权限，然后按返回键回到此应用。</string>
     <string name="GrantDND">已授予！</string>
     <string name="bluetooth_missing_permissions">没给俺蓝牙访问权限。</string>
@@ -65,4 +65,23 @@
     <string name="bluetooth_dialog_title_title">添加蓝牙设备</string>
     <string name="bluetooth_add_new">添加新的蓝牙设置</string>
     <string name="adapter_bluetooth_device_description_misc">杂项</string>
+    <string name="LocationAccessNotification">LocationAccessNotification</string>
+    <string name="calendar_settings_icon_content_description">日历图标</string>
+    <string name="calculationg_volume_loading_indicator">正在计算音量…</string>
+    <string name="ignore_tentative_events">忽略暂定事件</string>
+    <string name="ignore_free_events">忽略空闲事件</string>
+    <string name="adapter_bluetooth_device_description_phone">手机</string>
+    <string name="adapter_bluetooth_device_description_computer">电脑</string>
+    <string name="adapter_bluetooth_device_name">蓝牙设备名</string>
+    <string name="adapter_bluetooth_description_of_bluetooth_device_type">蓝牙设备类型的描述</string>
+    <string name="checkup_collapse_priority_contacts">折叠优先联系人列表</string>
+    <string name="main_tab_bluetooth">蓝牙</string>
+    <string name="adapter_bluetooth_device_description_wearable">可穿戴</string>
+    <string name="adapter_bluetooth_device_description_toy">玩具</string>
+    <string name="adapter_bluetooth_device_description_health">健康</string>
+    <string name="adapter_bluetooth_device_description_peripheral">外围设备</string>
+    <string name="adapter_bluetooth_device_description_audio_video">音视频</string>
+    <string name="adapter_bluetooth_device_description_networking">网络</string>
+    <string name="fragment_title_bluetooth">蓝牙</string>
+    <string name="adapter_bluetooth_device_description_imaging">成像</string>
 </resources>
