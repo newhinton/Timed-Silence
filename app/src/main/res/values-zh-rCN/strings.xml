@@ -130,4 +130,10 @@
     <string name="PausedNotification">暂停通知</string>
     <string name="PausedNotification_TITLE">已暂停！</string>
     <string name="PausedNotification_CONTENT">音量检查已暂停。</string>
+    <string name="event_no_title">无标题</string>
+    <string name="event_no_description">无描述</string>
+    <string name="allow_trigger_when_device_idle">允许设备空闲时检查</string>
+    <string name="PausedNotification_RESUME_AND_CHECK">恢复并检查</string>
+    <string name="notifications_error_description">我们无法安排下一次检查！</string>
+    <string name="pref_key_intro_v1_0_0" translatable="false">pref_key_intro_v1_0_0</string>
 </resources>
