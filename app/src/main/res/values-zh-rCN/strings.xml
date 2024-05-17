@@ -43,4 +43,19 @@
     <string name="made_by">制作者：</string>
     <string name="copyright">"GPLv3 - ©%1$s "</string>
     <string name="volume_setting_unset">不要更改</string>
+    <string name="volume_setting_silent">静音</string>
+    <string name="volume_setting_unset_help">这表明没有规则覆盖这个时间段。因此，这个应用程序不会改变你的音量。</string>
+    <string name="volume_setting_silent_help">将手机静音</string>
+    <string name="volume_setting_loud">响铃</string>
+    <string name="volume_setting_loud_help">将手机响铃</string>
+    <string name="volume_setting_vibrate_help">将手机静音</string>
+    <string name="timecheck_stop">暂停</string>
+    <string name="action_set_manual_loud">设置响铃</string>
+    <string name="action_set_manual_vibrate">设置振动</string>
+    <string name="action_set_manual_silent">设置静音</string>
+    <string name="timecheck_stopped">已暂停</string>
+    <string name="timecheck_running">运行中</string>
+    <string name="timecheck_paused">暂停</string>
+    <string name="GrantDNDPermissionAccess">此应用需要访问“请勿打扰”权限来静音和恢复铃声设备。请授予权限，然后按返回键回到此应用。</string>
+    <string name="GrantDND">已授予！</string>
 </resources>
