@@ -118,7 +118,7 @@
     <string name="wifi_permission_hint">你需要启用位置访问权限，因为 Wi-Fi 可以用来识别位置。我们并没有这样做，请参见 X</string>
     <string name="wifi_dialog_ssid_textfield_hint">Wi-Fi 名称</string>
     <string name="wifi_type_connected">当连接 Wi-Fi 时</string>
-    <string name="wifi_type_searching">当搜寻时</string>
+    <string name="wifi_type_searching">当搜寻 Wi-Fi 时</string>
     <string name="calendar_missing_permissions">未授予日历访问权限。</string>
     <string name="main_tab_graph">图标</string>
     <string name="export">导出设定</string>
@@ -136,4 +136,37 @@
     <string name="PausedNotification_RESUME_AND_CHECK">恢复并检查</string>
     <string name="notifications_error_description">我们无法安排下一次检查！</string>
     <string name="pref_key_intro_v1_0_0" translatable="false">pref_key_intro_v1_0_0</string>
+    <string name="PausedNotification_RESUME">恢复通知</string>
+    <string name="enablePauseNotification">暂停时启用通知</string>
+    <string name="open_volume_settings">打开音量设置</string>
+    <string name="channel_name_calendar_error">日历错误</string>
+    <string name="channel_description_calendar_error">检测到日历时显示错误</string>
+    <string name="main_tab_keyword">关键词</string>
+    <string name="main_tab_checkup">检查</string>
+    <string name="keyword_add_new">添加新的关键词</string>
+    <string name="keyword_dialog_textfield_hint">输入关键词</string>
+    <string name="keyword_dialog_title_title">创建关键词</string>
+    <string name="import_deletion_warning">导入会删除所有旧配置！</string>
+    <string name="GrantContactsPermissionAccessDescription">此应用程序需要访问本地联系人。为了确保您的电话在紧急情况下不会被阻止，请授予对联系人的访问权限。这是可选的，我们只会在需要时使用此权限向您显示警告。</string>
+    <string name="GrantCalendarPermissionAccessDescription">此应用程序需要访问本地日历。为了让此应用程序的使用更方便，请授予权限访问您的日历！</string>
+    <string name="GrantBluetoothPermissionAccessDescription">此应用程序使用蓝牙，例如在连接到汽车时静音您的设备。这是一个可选的权限。它会以查找附近设备的请求形式出现。这是因为蓝牙可能被滥用来追踪您的位置。此应用程序不会追踪您。</string>
+    <string name="GrantCalendarPermissionAccess">日历权限请求！</string>
+    <string name="GrantBluetoothPermissionAccess">蓝牙权限请求！</string>
+    <string name="contact_permission_hint">您需要联系人访问权限才能使用此功能。</string>
+    <string name="ignore_all_day">忽略整天事件</string>
+    <string name="fragment_title_schedules">日程安排</string>
+    <string name="importSettingsDescription">将导入你的所有设置。注意！这会替换当前所有设置！</string>
+    <string name="volume_settings_icon_content_description">检查时间的音量通道。</string>
+    <string name="calendarSettingsDescription">决定您的日历应如何调整音量</string>
+    <string name="generalSettingsDescription">应用程序的整体行为</string>
+    <string name="general_settings_icon_content_description">齿轮/设置图标</string>
+    <string name="import_settings_icon_content_description">导入图标</string>
+    <string name="export_settings_icon_content_description">到处图标</string>
+    <string name="volume_settings_description">设置音量通道</string>
+    <string name="volume_settings_media_description">当手机设置为响铃时的媒体音量</string>
+    <string name="volume_settings_notifications_description">当手机设置为响铃时的通知音量</string>
+    <string name="volume_settings_alarm_description">当手机设置为响铃时的闹钟音量</string>
+    <string name="volume_settings_ringer_description">当手机设置为响铃时的铃声音量</string>
+    <string name="volume_settings_default_volume">默认音量</string>
+    <string name="volume_settings_unset_value_description">选择当没有日历或日程影响时的音量</string>
 </resources>
