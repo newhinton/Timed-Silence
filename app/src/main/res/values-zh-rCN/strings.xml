@@ -58,4 +58,11 @@
     <string name="timecheck_paused">暂停</string>
     <string name="GrantDNDPermissionAccess">此应用需要访问“请勿打扰”权限来静音和恢复铃声设备。请授予权限，然后按返回键回到此应用。</string>
     <string name="GrantDND">已授予！</string>
+    <string name="bluetooth_missing_permissions">没给俺蓝牙访问权限。</string>
+    <string name="dnd_missing_permission_action_title">修复！</string>
+    <string name="dnd_missing_permissions_title">缺少权限！</string>
+    <string name="dialog_bluetooth_select_device">选择一个已配对的设备</string>
+    <string name="bluetooth_dialog_title_title">添加蓝牙设备</string>
+    <string name="bluetooth_add_new">添加新的蓝牙设置</string>
+    <string name="adapter_bluetooth_device_description_misc">杂项</string>
 </resources>
