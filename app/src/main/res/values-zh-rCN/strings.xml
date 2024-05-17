@@ -169,4 +169,23 @@
     <string name="volume_settings_ringer_description">当手机设置为响铃时的铃声音量</string>
     <string name="volume_settings_default_volume">默认音量</string>
     <string name="volume_settings_unset_value_description">选择当没有日历或日程影响时的音量</string>
+    <string name="headphones_help">当耳机连接时，媒体音量不会改变，即使它的音量较大也是如此。您可以在设置中禁用这种行为。</string>
+    <string name="fragment_title_wifi">WiFi 条目</string>
+    <string name="fragment_title_keywords">关键词条目</string>
+    <string name="fragment_title_calendar">日历条目</string>
+    <string name="intro_slide_donotdisturb_title">勿扰</string>
+    <string name="ignore_cancelled_events">忽略已取消的事件</string>
+    <string name="general">应用设置</string>
+    <string name="exportSettingsDescription">导出此应用的所有设置</string>
+    <string name="intro_slide_notification_title">收到通知！</string>
+    <string name="intro_slide_calendar_title">日历</string>
+    <string name="volume_change_ringer_description">如果你允许这个应用程序改变铃声，当设置为静音时它就不会响。这样做的结果是，*不会*发出任何噪音，也就是说，“勿扰”设置的例外情况也不会响。小心使用，并确认你得到预期的效果。</string>
+    <string name="export_fileaccess_revoked">未授予文件访问权限！</string>
+    <string name="volume_settings_warning">警告⚠️！这是一个非常底层的设置！</string>
+    <string name="settings_behaviour">行为</string>
+    <string name="dnd_missing_permissions">你没有授予\"打扰\"权限。我们改不了你的音量！</string>
+    <string name="fragment_title_checkup">检查概览</string>
+    <string name="appwidget_text" translatable="false">donotdelete-placeholder</string>
+    <string name="pause_check_schedule" translatable="false">暂停定时静音</string>
+    <string name="volume_change_ringer">更改铃声音量，而不是使用“勿扰”</string>
 </resources>
