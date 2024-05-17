@@ -112,4 +112,22 @@
     <string name="sat">周六</string>
     <string name="sun">周日</string>
     <string name="main_tab_wifi_connected">无线网络</string>
+    <string name="Request">请求！</string>
+    <string name="wifi_add_new">添加新的 Wi-Fi 设置</string>
+    <string name="schedule_add_new">添加新的计划</string>
+    <string name="wifi_permission_hint">你需要启用位置访问权限，因为 Wi-Fi 可以用来识别位置。我们并没有这样做，请参见 X</string>
+    <string name="wifi_dialog_ssid_textfield_hint">Wi-Fi 名称</string>
+    <string name="wifi_type_connected">当连接时</string>
+    <string name="wifi_type_searching">当搜索时</string>
+    <string name="calendar_missing_permissions">未授予日历访问权限。</string>
+    <string name="main_tab_graph">图标</string>
+    <string name="export">导出设定</string>
+    <string name="import_button">导入设定</string>
+    <string name="import_file_success">导入成功！</string>
+    <string name="vibrate">仅振动！</string>
+    <string name="silent">静音！</string>
+    <string name="loud">响铃！</string>
+    <string name="PausedNotification">暂停通知</string>
+    <string name="PausedNotification_TITLE">已暂停！</string>
+    <string name="PausedNotification_CONTENT">音量检查已暂停。</string>
 </resources>
