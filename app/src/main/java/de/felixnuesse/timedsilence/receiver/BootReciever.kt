@@ -17,7 +17,9 @@ class BootReciever : BroadcastReceiver(){
             Log.e(TAG(), "BootReciever: Started Device!")
             VolumeHandler(context).setVolumeStateAndApply(StateGenerator(context).stateAt(System.currentTimeMillis()))
 
-            if(PreferencesManager(context).shouldRestartOnBoot()){
+            val prefs = PreferencesManager(context)
+
+            if(prefs.shouldRestartOnBoot() || prefs.forceRestartOnBoot()){
                 Log.e(TAG(), "BootReciever: Started Checks!")
                 Trigger(context).createAlarmIntime()
                 return

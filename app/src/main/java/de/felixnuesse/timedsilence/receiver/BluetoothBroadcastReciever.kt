@@ -32,12 +32,12 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
 
             HeadsetHandler.getPairedDevicesWithDatabaseState(context).forEach {
                 if(address == it.address) {
-                    var volumeHandler = VolumeHandler(context)
+                    val volumeHandler = VolumeHandler(context)
                     volumeHandler.ignoreMusicPlaying(true)
 
-                    var state = VolumeState(it.volumeState)
+                    val state = VolumeState(it.volumeState)
                     state.setReason(REASON_BLUETOOTH_CONNECTED, it.alias)
-                    var supposedState = StateGenerator(context).stateAt(System.currentTimeMillis())
+                    val supposedState = StateGenerator(context).stateAt(System.currentTimeMillis())
 
                     if (supposedState.state > state.state) {
                         volumeHandler.setVolumeStateAndApply(state)

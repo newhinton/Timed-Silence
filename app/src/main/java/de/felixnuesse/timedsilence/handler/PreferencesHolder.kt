@@ -22,6 +22,7 @@ class PreferencesHolder(@Transient val mDefaultVolumeValue: Int = 80) {
 
     @EncodeDefault var headsetConnectionCheck = true
     @Transient var shouldRestartOnBoot = false
+    @EncodeDefault var forceRestartOnBoot = false
     @EncodeDefault var showNotifications = true
     @EncodeDefault var runWhenIdle = true
 

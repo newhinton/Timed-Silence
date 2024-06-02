@@ -189,4 +189,5 @@
     <string name="dnd_missing_permissions_title">Missing Permissions!</string>
     <string name="dnd_missing_permission_action_title">Fix!</string>
     <string name="bluetooth_missing_permissions">Bluetooth Access not granted.</string>
+    <string name="force_restart_checks_after_reboot">When the device restarted, also restart checks, regardless of their pre-reboot-state.</string>
 </resources>

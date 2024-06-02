@@ -19,6 +19,13 @@
             android:defaultValue="true"
             android:title="@string/enablePauseNotification"
             android:key="@string/pref_general_show_notifications_when_paused"/>
+
+        <SwitchPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:title="@string/force_restart_checks_after_reboot"
+            android:key="@string/pref_general_boot_force_restart" />
     </PreferenceCategory>
 
 </PreferenceScreen>

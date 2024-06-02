@@ -23,6 +23,7 @@
     <string name="pref_general_change_ringer" translatable="false">PREF_INFLUENCE_RINGER_VOLUME</string>
 
     <string name="pref_general_boot_restart" translatable="false">PREF_BOOT_RESTART</string>
+    <string name="pref_general_boot_force_restart" translatable="false">PREF_BOOT_FORCE_RESTART</string>
 
 
 

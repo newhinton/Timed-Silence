@@ -18,6 +18,7 @@ class PreferencesManager(private var mContext: Context) {
         checkIfHeadsetIsConnected()
         shouldShowNotification()
         shouldRestartOnBoot()
+        forceRestartOnBoot()
         runWhenIdle()
         changeRingerVolume()
 
@@ -48,6 +49,16 @@ class PreferencesManager(private var mContext: Context) {
 
     fun setRestartOnBoot(restart: Boolean) {
         mPreferencesEditor.putBoolean(getKey(R.string.pref_general_boot_restart), restart)
+        mPreferencesEditor.apply()
+    }
+
+    fun forceRestartOnBoot(): Boolean {
+        mPreferencesHolder.forceRestartOnBoot = mPreferences.getBoolean(getKey(R.string.pref_general_boot_force_restart), mPreferencesHolder.forceRestartOnBoot)
+        return mPreferencesHolder.shouldRestartOnBoot
+    }
+
+    fun setForceRestartOnBoot(restart: Boolean) {
+        mPreferencesEditor.putBoolean(getKey(R.string.pref_general_boot_force_restart), restart)
         mPreferencesEditor.apply()
     }
 
@@ -144,6 +155,7 @@ class PreferencesManager(private var mContext: Context) {
         mPreferencesEditor.putBoolean(getKey(R.string.pref_calendar_ignore_free), preferences.ignoreFree)
 
         mPreferencesEditor.putBoolean(getKey(R.string.pref_general_change_ringer), preferences.changeRingerVolume)
+        mPreferencesEditor.putBoolean(getKey(R.string.pref_general_boot_force_restart), preferences.forceRestartOnBoot)
         mPreferencesEditor.apply()
     }
 
