@@ -1,5 +1,6 @@
 package de.felixnuesse.timedsilence.receiver
 
+import android.bluetooth.BluetoothClass.Device.Major.AUDIO_VIDEO
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -23,7 +24,7 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
             Log.e(TAG(), "BluetoothBroadcastReciever: Device connected!")
 
             val bluetoothDevice: BluetoothDevice? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE,BluetoothDevice::class.java)
+                intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java)
             } else {
                 intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
             }
@@ -48,9 +49,23 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
         }
 
         if (intent.action == BluetoothDevice.ACTION_ACL_DISCONNECTED) {
-            Log.e(TAG(), "BluetoothBroadcastReciever: Device disconnected!")
+
+            val device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE) as BluetoothDevice?
+            val name = if (device != null) {
+                device.name
+            } else {
+                "Unknown!"
+            }
+
+            Log.e(TAG(), "BluetoothBroadcastReciever: Device disconnected: $name!")
+
+            var isAudioDevice = false
+            if(device?.bluetoothClass?.majorDeviceClass == AUDIO_VIDEO) {
+                isAudioDevice = true
+            }
 
             try {
+                // Why do we sleep here? So that the device is gone when we check?
                 Thread.sleep(1000)
             } catch (ex: InterruptedException) {
                 Log.e(TAG(), "BluetoothBroadcastReciever: Could not sleep!")
@@ -58,7 +73,10 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
 
             if(Trigger(context).checkIfNextAlarmExists()){
                 var volumeHandler = VolumeHandler(context)
-                volumeHandler.ignoreMusicPlaying(true)
+                // is this what we want? Override existing playing content?
+                // yes, but only if the device we are loosing are headphones.
+                // Todo: Check if headphones disconnected!
+                volumeHandler.ignoreMusicPlaying(isAudioDevice)
                 volumeHandler.setVolumeStateAndApply(StateGenerator(context).stateAt(System.currentTimeMillis()))
             } else {
                 Log.e(TAG(), "BluetoothBroadcastReciever: No next alarm scheduled, don't update!")
