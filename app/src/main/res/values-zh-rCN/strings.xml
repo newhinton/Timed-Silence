@@ -188,4 +188,5 @@
     <string name="appwidget_text" translatable="false">donotdelete-placeholder</string>
     <string name="pause_check_schedule" translatable="false">暂停定时静音</string>
     <string name="volume_change_ringer">更改铃声音量，而不是使用“勿扰”</string>
+    <string name="force_restart_checks_after_reboot">当设备重启时，也会重启检查，无论其重启前的状态如何。</string>
 </resources>
