@@ -77,6 +77,11 @@ class PreferencesManager(private var mContext: Context) {
         mPreferencesEditor.apply()
     }
 
+    fun shouldSearchInNotifications(): Boolean{
+        mPreferencesHolder.shouldSearchNotifications = mPreferences.getBoolean(getKey(R.string.pref_general_search_notifications), mPreferencesHolder.shouldSearchNotifications)
+        return mPreferencesHolder.shouldSearchNotifications
+    }
+
 
     ///////////////////////
     // --- Calendar --- ///

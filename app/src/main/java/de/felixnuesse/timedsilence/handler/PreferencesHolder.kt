@@ -27,4 +27,5 @@ class PreferencesHolder(@Transient val mDefaultVolumeValue: Int = 80) {
     @EncodeDefault var runWhenIdle = true
 
     @EncodeDefault var changeRingerVolume = false
+    @EncodeDefault var shouldSearchNotifications = false
 }
