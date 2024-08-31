@@ -189,4 +189,6 @@
     <string name="pause_check_schedule" translatable="false">暂停定时静音</string>
     <string name="volume_change_ringer">更改铃声音量，而不是使用“勿扰”</string>
     <string name="force_restart_checks_after_reboot">当设备重启时，也会重启检查，无论其重启前的状态如何。</string>
+    <string name="notification_listener_service_name">定时静音通知监听器</string>
+    <string name="use_keywords_for_notifications">允许根据关键词搜索通知内容</string>
 </resources>
