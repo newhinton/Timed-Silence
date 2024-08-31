@@ -51,8 +51,8 @@ open class Notifications(private var mContext: Context): DeterministicCalculatio
         mDB.getKeywords().forEach {
             if (toSearch.lowercase().contains(it.keyword.lowercase())) {
                 val state = VolumeState(it.volume)
-                state.startTime = System.currentTimeMillis()
-                state.endTime = state.startTime + 60*1000 // add a minute
+                state.startTime = System.currentTimeMillis() - 60*1000
+                state.endTime = state.startTime + 120*1000 // add a minute
                 state.setReason(Constants.REASON_NOTIFICATION_VISIBLE, "Keyword: ${it.keyword}")
                 return state
             }
