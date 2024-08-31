@@ -1,5 +1,6 @@
 package de.felixnuesse.timedsilence.receiver
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothClass.Device.Major.AUDIO_VIDEO
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
@@ -13,10 +14,12 @@ import de.felixnuesse.timedsilence.handler.calculator.HeadsetHandler
 import de.felixnuesse.timedsilence.handler.trigger.Trigger
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
+import de.felixnuesse.timedsilence.util.PermissionManager
 import de.felixnuesse.timedsilence.volumestate.StateGenerator
 
 class BluetoothBroadcastReciever : BroadcastReceiver(){
 
+    @SuppressLint("MissingPermission")
     override fun onReceive(context: Context, intent: Intent) {
         Log.e(TAG(), "BluetoothBroadcastReciever: ${intent.action}")
 
@@ -50,8 +53,9 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
 
         if (intent.action == BluetoothDevice.ACTION_ACL_DISCONNECTED) {
 
+            val allowed = PermissionManager(context).grantedBluetoothAccess()
             val device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE) as BluetoothDevice?
-            val name = if (device != null) {
+            val name = if (device != null && allowed) {
                 device.name
             } else {
                 "Unknown!"
@@ -60,8 +64,10 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
             Log.e(TAG(), "BluetoothBroadcastReciever: Device disconnected: $name!")
 
             var isAudioDevice = false
-            if(device?.bluetoothClass?.majorDeviceClass == AUDIO_VIDEO) {
-                isAudioDevice = true
+            if(allowed) {
+                if(device?.bluetoothClass?.majorDeviceClass == AUDIO_VIDEO) {
+                    isAudioDevice = true
+                }
             }
 
             try {
