@@ -57,7 +57,7 @@ class AlarmBroadcastReciever : BroadcastReceiver() {
 
             if (intent?.getStringExtra(Constants.BROADCAST_INTENT_ACTION).equals(Constants.BROADCAST_INTENT_ACTION_UPDATE_VOLUME)) {
                 Log.d(TAG(), "Alarmintent: Content is to \"check the time\"")
-                VolumeHandler(context).setVolumeStateAndApply(StateGenerator(context).stateAt(System.currentTimeMillis()))
+                VolumeHandler(context, "AlarmBroadcastReciever").setVolumeStateAndApply(StateGenerator(context).stateAt(System.currentTimeMillis()))
                 Trigger(context).createAlarmIntime()
 
             }

@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         mTrigger = Trigger(this)
-        mVolumeHandler = VolumeHandler(this)
+        mVolumeHandler = VolumeHandler(this, "MainActivity")
 
         button_check = getString(R.string.timecheck_stopped)
 

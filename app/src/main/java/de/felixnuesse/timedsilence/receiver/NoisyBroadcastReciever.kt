@@ -14,7 +14,7 @@ class NoisyBroadcastReciever : BroadcastReceiver(){
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == AudioManager.ACTION_AUDIO_BECOMING_NOISY) {
             Log.e(TAG(), "NoisyBroadcastReciever: Becoming Noisy! Checking Volume Again!")
-            VolumeHandler(context).setVolumeStateAndApply(StateGenerator(context).stateAt(System.currentTimeMillis()))
+            VolumeHandler(context, "NoisyBroadcastReciever").setVolumeStateAndApply(StateGenerator(context).stateAt(System.currentTimeMillis()))
         }
     }
 

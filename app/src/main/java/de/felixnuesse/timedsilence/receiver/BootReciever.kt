@@ -15,7 +15,7 @@ class BootReciever : BroadcastReceiver(){
     override fun onReceive(context: Context, intent: Intent) {
         if(intent.action==Intent.ACTION_BOOT_COMPLETED){
             Log.e(TAG(), "BootReciever: Started Device!")
-            VolumeHandler(context).setVolumeStateAndApply(StateGenerator(context).stateAt(System.currentTimeMillis()))
+            VolumeHandler(context, "BootReciever").setVolumeStateAndApply(StateGenerator(context).stateAt(System.currentTimeMillis()))
 
             val prefs = PreferencesManager(context)
 

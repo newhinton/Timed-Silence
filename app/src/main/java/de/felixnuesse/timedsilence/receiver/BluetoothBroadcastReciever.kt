@@ -33,7 +33,7 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
 
             HeadsetHandler.getPairedDevicesWithDatabaseState(context).forEach {
                 if(address == it.address) {
-                    val volumeHandler = VolumeHandler(context)
+                    val volumeHandler = VolumeHandler(context, "BluetoothBroadcastReciever")
                     volumeHandler.ignoreMusicPlaying(true)
 
                     val state = VolumeState(it.volumeState)
@@ -72,7 +72,7 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
             }
 
             if(Trigger(context).checkIfNextAlarmExists()){
-                var volumeHandler = VolumeHandler(context)
+                var volumeHandler = VolumeHandler(context, "BluetoothBroadcastReciever")
                 // is this what we want? Override existing playing content?
                 // yes, but only if the device we are loosing are headphones.
                 // Todo: Check if headphones disconnected!
