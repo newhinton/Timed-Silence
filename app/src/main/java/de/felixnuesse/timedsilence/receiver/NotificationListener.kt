@@ -1,55 +1,61 @@
 package de.felixnuesse.timedsilence.receiver
 
-
+import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
-import de.felixnuesse.timedsilence.Constants
+import androidx.annotation.RequiresApi
 import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.handler.volume.VolumeHandler
-import de.felixnuesse.timedsilence.handler.volume.VolumeState
-import de.felixnuesse.timedsilence.model.database.DatabaseHandler
 import de.felixnuesse.timedsilence.volumestate.StateGenerator
 
 
 class NotificationListener : NotificationListenerService() {
 
-    private val TAG: String = this.javaClass.simpleName
+    companion object {
+        private var service: NotificationListener? = null
+        fun getService(): NotificationListener? {
+            return service
+        }
+    }
+
+    var allNotifications = arrayListOf<StatusBarNotification>()
+
+    override fun onCreate() {
+        super.onCreate()
+        service = this
+    }
+
+    fun getAllActiveNotifications(): ArrayList<StatusBarNotification> {
+        return allNotifications
+    }
 
     override fun onNotificationPosted(notification: StatusBarNotification) {
-        handleNotification(false, notification)
+        if(notification.packageName == this.baseContext.packageName) {
+            return
+        }
+        allNotifications.clear()
+        allNotifications.addAll(activeNotifications)
+        handleNotification()
     }
 
     override fun onNotificationRemoved(notification: StatusBarNotification) {
-        handleNotification(true, notification)
+        if(notification.packageName == this.baseContext.packageName) {
+            return
+        }
+        allNotifications.clear()
+        allNotifications.addAll(activeNotifications)
+        handleNotification()
     }
 
-    fun handleNotification(isRemove: Boolean, notification: StatusBarNotification) {
+    private fun handleNotification() {
         val proceed = PreferencesManager(this).shouldSearchInNotifications()
         if(!proceed) {
             return
         }
 
-        if(isRemove) {
-            Log.e(TAG(), "NotificationListener: Removed notification, check!")
-            VolumeHandler(this, "NotificationListener").setVolumeStateAndApply(StateGenerator(this).stateAt(System.currentTimeMillis()))
-            return
-        }
-
-        Log.e(TAG(), "NotificationListener: Posted notification, check!")
-
-        val toSearch =  notification.notification.extras.toString()+notification.notification.toString()+notification.toString()
-
-        val db = DatabaseHandler(this)
-        db.getKeywords().forEach {
-            if (toSearch.lowercase().contains(it.keyword.lowercase())) {
-                val state = VolumeState(it.volume)
-                state.setReason(Constants.REASON_MANUALLY_SET, "Keyword ${it.keyword} was found in notification")
-                VolumeHandler(this, "NotificationListener").setVolumeStateAndApply(state)
-                return
-            }
-        }
+        Log.e(TAG(), "NotificationListener: Posted or removed notification, check!")
+        VolumeHandler(this, "NotificationListener").setVolumeStateAndApply(StateGenerator(this).stateAt(System.currentTimeMillis()))
     }
-
 }

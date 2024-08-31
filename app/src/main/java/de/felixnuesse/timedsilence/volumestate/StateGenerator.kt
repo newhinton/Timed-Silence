@@ -24,6 +24,7 @@ class StateGenerator(private var mContext: Context) {
     private var mEvents = Events(mContext)
     private var mKeywords = Keywords(mContext)
     private var mSchedules = Schedule(mContext)
+    private var mNotifications = Notifications(mContext)
 
     init {
         LogHandler.writeLog(mContext, TAG(), "instantiate","VolumeCalculator was now instantiated")
@@ -50,6 +51,7 @@ class StateGenerator(private var mContext: Context) {
         stateList.addAll(mEvents.states())
         stateList.addAll(mKeywords.states())
         stateList.addAll(mSchedules.states())
+        stateList.addAll(mNotifications.states())
 
         Collections.sort(stateList, VolumeStateStartComparator())
 
@@ -64,13 +66,13 @@ class StateGenerator(private var mContext: Context) {
 
         // Todo: check if the performance can be improved
         timeList.forEach {
-            var deleteList = ArrayList<VolumeState>()
-            var addList = ArrayList<VolumeState>()
+            val deleteList = ArrayList<VolumeState>()
+            val addList = ArrayList<VolumeState>()
 
             for(state in stateList) {
                 if(state.startTime < it && it < state.endTime) {
-                    var a = state.copy()
-                    var b = state.copy()
+                    val a = state.copy()
+                    val b = state.copy()
 
                     a.endTime = it
                     b.startTime = it
@@ -95,7 +97,7 @@ class StateGenerator(private var mContext: Context) {
             }
         }
 
-        var linearList = ArrayList<VolumeState>()
+        val linearList = ArrayList<VolumeState>()
         map.forEach { (_, value) ->
             if(value.size > 1) {
                 Collections.sort(value, VolumeStateStateComparator())

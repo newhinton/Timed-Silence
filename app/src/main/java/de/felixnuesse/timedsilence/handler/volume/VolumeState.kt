@@ -1,8 +1,10 @@
 package de.felixnuesse.timedsilence.handler.volume
 
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_BLUETOOTH_CONNECTED
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_CALENDAR
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_KEYWORD
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_MANUALLY_SET
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_NOTIFICATION_VISIBLE
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_TIME
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_UNDEFINED
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_WIFI
@@ -44,6 +46,7 @@ class VolumeState(var state: Int) {
         this.reasonDescription = reasonDescription
     }
 
+    // in milliseconds
     var startTime: Long = 0
     var endTime: Long = startTime
 
@@ -69,6 +72,8 @@ class VolumeState(var state: Int) {
             REASON_UNDEFINED -> s = "Default Volume."
             REASON_WIFI -> s = "Volume changed because of wifi: $reasonDescription"
             REASON_MANUALLY_SET -> s = "Volume was set manually: $reasonDescription"
+            REASON_BLUETOOTH_CONNECTED -> s = "Volume was set because bluetooth was connected: $reasonDescription"
+            REASON_NOTIFICATION_VISIBLE -> s = "Notification Visible: $reasonDescription"
         }
         return s
     }

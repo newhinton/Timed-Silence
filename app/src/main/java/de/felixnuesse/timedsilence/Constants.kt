@@ -73,6 +73,7 @@ class Constants {
         const val REASON_KEYWORD = 3
         const val REASON_MANUALLY_SET = 4
         const val REASON_BLUETOOTH_CONNECTED = 5
+        const val REASON_NOTIFICATION_VISIBLE = 6
     }
 
 }
