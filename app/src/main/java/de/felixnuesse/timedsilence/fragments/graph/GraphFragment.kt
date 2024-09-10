@@ -229,7 +229,7 @@ class GraphFragment : Fragment(), View.OnClickListener {
      * Required to dismiss old tooltips when a new was opened
      */
     fun handleTooltipRight(context: Context, tooltip: String, view: View){
-        view.showAlignLeft(getTooltip(context, tooltip, ArrowOrientation.RIGHT).build())
+        view.showAlignLeft(getTooltip(context, tooltip, ArrowOrientation.END).build())
     }
 
 
