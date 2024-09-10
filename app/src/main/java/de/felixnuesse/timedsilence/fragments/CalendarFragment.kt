@@ -49,7 +49,7 @@ class CalendarFragment : Fragment() {
 
         val db = DatabaseHandler(view.context)
         viewManager = LinearLayoutManager(view.context)
-        viewAdapter = CalendarListAdapter(db.getAllCalendarEntries(), calHandler)
+        viewAdapter = CalendarListAdapter(db.getAllCalendarEntries(), calHandler, this)
 
         binding.calendarFragmentRecylcerListView.apply {
             // use this setting to improve performance if you know that changes
@@ -101,7 +101,8 @@ class CalendarFragment : Fragment() {
         val db = DatabaseHandler(context)
         db.createCalendarEntry(co)
         viewAdapter = CalendarListAdapter(db.getAllCalendarEntries(),
-            DeviceCalendar(context)
+            DeviceCalendar(context),
+            this
         )
 
         binding.calendarFragmentRecylcerListView.apply {

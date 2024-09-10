@@ -14,6 +14,10 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.AdapterCalendarListBinding
+import de.felixnuesse.timedsilence.dialogs.CalendarDialog
+import de.felixnuesse.timedsilence.dialogs.KeywordDialog
+import de.felixnuesse.timedsilence.fragments.CalendarFragment
+import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
@@ -46,7 +50,11 @@ import de.felixnuesse.timedsilence.volumestate.calendar.DeviceCalendar
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
-class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, private var calHandler: DeviceCalendar) : RecyclerView.Adapter<CalendarListAdapter.CalendarViewHolder>() {
+class CalendarListAdapter(
+        private var myDataset: ArrayList<CalendarObject>,
+        private var calHandler: DeviceCalendar,
+        private var calendarFragment: CalendarFragment
+) : RecyclerView.Adapter<CalendarListAdapter.CalendarViewHolder>() {
 
         private fun removeAt(position: Int) {
                 myDataset.removeAt(position)
@@ -81,6 +89,13 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
                         removeAt(position)
                 }
 
+                holder.calendarView.textViewCalendarRowTitle.setOnClickListener {
+                        val dialog = CalendarDialog(calendarFragment.requireContext(), calendarFragment)
+                        dialog.setCalendarObject(calObject)
+                        dialog.show()
+
+                }
+
                 val color = calHandler.getCalendarColor(calObject.name)
                 holder.calendarView.cardView.setCardBackgroundColor(color)
                 holder.calendarView.deleteCalendarElement.setColorFilter(color)
@@ -92,7 +107,6 @@ class CalendarListAdapter(private var myDataset: ArrayList<CalendarObject>, priv
                         holder.calendarView.textViewCalendarRowTitle.setTextColor(color)
                         holder.calendarView.volumeState.imageTintList = ColorStateList.valueOf(color)
                 }
-
 
                 var imageID=R.drawable.icon_volume_up
                 when (calObject.volume) {

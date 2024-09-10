@@ -14,10 +14,8 @@ class VibrationUtil {
                 val vibrationService = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
                 vibrationService.defaultVibrator
             } else {
-                val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                vibrator
+                context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             }
-
             return v.hasVibrator()
         }
     }

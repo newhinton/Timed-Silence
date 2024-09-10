@@ -60,7 +60,6 @@
     <string name="schedule_add_new">Füge neuen Zeitplan hinzu</string>
     <string name="calendar_add_new">Füge neue Kalendereinstellung hinzu</string>
     <string name="calendar_dialog_save">Speichern</string>
-    <string name="calendar_dialog_title_title">Kalender auswählen</string>
     <string name="calendar_list_empty">Sie haben keine Kalender.</string>
     <string name="calendar_missing_permissions">Auf die Kalender wurde kein Zugriff gewährt.</string>
     <string name="wifi_dialog_ssid_textfield_hint">Wlan-Name</string>
@@ -83,9 +82,7 @@
     <string name="channel_name_calendar_error">Kalenderfehler</string>
     <string name="channel_description_calendar_error">Zeige Fehler bei der Kalenderfindung</string>
     <string name="main_tab_keyword">Stichworte</string>
-    <string name="keyword_add_new">Neues Stichwort</string>
     <string name="keyword_dialog_textfield_hint">Neues Stichwort eingeben</string>
-    <string name="keyword_dialog_title_title">Stichwort erstellen</string>
     <string name="GrantCalendarPermissionAccess">Erlauben!</string>
     <string name="GrantCalendarPermissionAccessDescription">Diese Anwendung wird besser funktionieren wenn du Zugriff auf die Kalender erlaubst.</string>
     <string name="import_deletion_warning">Einstellungen importieren löscht ALLE alten Einstellungen!</string>

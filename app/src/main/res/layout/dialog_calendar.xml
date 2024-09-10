@@ -2,17 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout2"
+    android:id="@+id/container"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="?attr/colorSurfaceVariant">
 
     <LinearLayout
-        android:id="@+id/linearLayout4"
+        android:id="@+id/titlebar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimaryContainer"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
+            android:text="@string/calendar_add_new"
             android:textColor="?attr/colorOnPrimaryContainer"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -32,38 +33,81 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="333dp"
+        android:fadeScrollbars="false"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+        app:layout_constraintTop_toBottomOf="@+id/titlebar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/calendar_id_layout"
+            <ImageView
+                android:id="@+id/calendarIcon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                app:srcCompat="@drawable/icon_calendar_today"
+                app:tint="?attr/colorPrimaryContainer" />
+
+            <TextView
+                android:id="@+id/calendarTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/calendar_selector_title"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/calendarSubTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/calendar_selector_subtitle"
+                android:textAlignment="center" />
+
+            <RadioGroup
+                android:id="@+id/calendar_radio_group"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_marginBottom="24dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp" />
 
-                <RadioGroup
-                    android:id="@+id/calendar_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
 
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/volumeIcon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                app:srcCompat="@drawable/icon_vibration"
+                app:tint="?attr/colorPrimaryContainer" />
+
+            <TextView
+                android:id="@+id/volumeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/volume_selector_title"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/volumeSubTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/volume_selector_subtitle"
+                android:textAlignment="center" />
 
             <RadioGroup
                 android:id="@+id/calendar_dialog_rb_volume"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="0dp"
-                android:padding="10dp">
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
 
                 <RadioButton
                     android:id="@+id/calendar_dialog_rb_loud"
@@ -96,55 +140,30 @@
         android:id="@+id/linearLayout5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="end"
         android:minHeight="48dp"
         android:orientation="horizontal"
+        android:paddingEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
         tools:visibility="visible">
 
         <Button
             android:id="@+id/calendar_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:minWidth="0dp"
             android:text="@string/cancel" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/calendar_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:minWidth="0dp"
-            android:text="@string/back" />
-
-        <Button
-            android:id="@+id/calendar_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:minWidth="0dp"
-            android:text="@string/next" />
 
         <Button
             android:id="@+id/calendar_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:minWidth="0dp"
-            android:text="@string/calendar_dialog_save"
-            android:visibility="gone" />
+            android:text="@string/calendar_dialog_save" />
     </LinearLayout>
 
 

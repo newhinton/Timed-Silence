@@ -180,7 +180,7 @@ class BluetoothDialog(context: Context) : Dialog(context, R.style.AlertDialogCus
 
         when (state) {
             0 -> {
-                binding.bluetoothDialogTitle.text = context.getText(R.string.keyword_dialog_title_title)
+                binding.bluetoothDialogTitle.text = context.getText(R.string.bluetooth_dialog_title_title)
                 binding.bluetoothLayout.visibility = View.VISIBLE
             }
             1 -> {

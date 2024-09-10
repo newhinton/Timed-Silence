@@ -46,7 +46,7 @@ class KeywordFragment : Fragment() {
 
         val db = DatabaseHandler(view.context)
         viewManager = LinearLayoutManager(view.context)
-        viewAdapter = KeywordListAdapter(db.getKeywords())
+        viewAdapter = KeywordListAdapter(db.getKeywords(), this)
 
         binding.calendarFragmentRecylcerListView.apply {
             setHasFixedSize(true)
@@ -59,7 +59,7 @@ class KeywordFragment : Fragment() {
     fun saveKeyword(context: Context, keywordObject: KeywordObject){
         val db = DatabaseHandler(context)
         db.createKeyword(keywordObject)
-        viewAdapter = KeywordListAdapter(db.getKeywords())
+        viewAdapter = KeywordListAdapter(db.getKeywords(), this)
 
         binding.calendarFragmentRecylcerListView.apply {
             // use this setting to improve performance if you know that changes

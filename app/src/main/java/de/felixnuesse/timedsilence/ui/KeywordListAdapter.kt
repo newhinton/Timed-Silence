@@ -11,6 +11,8 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.AdapterKeywordListBinding
+import de.felixnuesse.timedsilence.dialogs.KeywordDialog
+import de.felixnuesse.timedsilence.fragments.KeywordFragment
 import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.model.data.CalendarObject
 import de.felixnuesse.timedsilence.model.database.DatabaseHandler
@@ -42,7 +44,7 @@ import kotlin.collections.ArrayList
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
 
-class KeywordListAdapter(private var myDataset: ArrayList<KeywordObject>) : RecyclerView.Adapter<KeywordListAdapter.CalendarKeywordViewHolder>() {
+class KeywordListAdapter(private var myDataset: ArrayList<KeywordObject>, private var keywordFragment: KeywordFragment) : RecyclerView.Adapter<KeywordListAdapter.CalendarKeywordViewHolder>() {
 
         private fun removeAt(position: Int) {
                 myDataset.removeAt(position)
@@ -68,13 +70,20 @@ class KeywordListAdapter(private var myDataset: ArrayList<KeywordObject>) : Recy
         override fun onBindViewHolder(holder: CalendarKeywordViewHolder, position: Int) {
                 // - get element from your dataset at this position
                 // - replace the contents of the view with that element
-                val keywordObject=myDataset.get(position)
+                val keywordObject= myDataset[position]
 
                 holder.calendarKeywordView.keywordKeyword.text = keywordObject.keyword
 
                 holder.calendarKeywordView.deleteKeywordElement.setOnClickListener {
                         DatabaseHandler(holder.calendarKeywordView.root.context).deleteKeyword(keywordObject.id)
                         removeAt(position)
+                }
+
+                holder.calendarKeywordView.keywordKeyword.setOnClickListener {
+                        val dialog = KeywordDialog(keywordFragment.requireContext(), keywordFragment)
+                        dialog.setKeyword(keywordObject)
+                        dialog.show()
+
                 }
 
                 var imageID=R.drawable.icon_volume_up

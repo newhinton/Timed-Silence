@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?attr/colorSurfaceVariant">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
+            android:text="@string/keyword_add_new"
             android:textColor="?attr/colorOnPrimaryContainer"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -51,14 +54,38 @@
                         android:importantForAutofill="no"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/volumeIcon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                app:srcCompat="@drawable/icon_vibration"
+                app:tint="?attr/colorPrimaryContainer" />
+
+            <TextView
+                android:id="@+id/volumeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/volume_selector_title"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/volumeSubTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/volume_selector_subtitle"
+                android:textAlignment="center" />
 
             <RadioGroup
                 android:id="@+id/keyword_dialog_rb_volume"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp">
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
                 <RadioButton
                     android:id="@+id/keyword_dialog_rb_loud"
@@ -90,50 +117,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="end"
         android:orientation="horizontal"
+        android:paddingEnd="10dp"
         tools:visibility="visible">
 
         <Button
             android:id="@+id/keyword_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:minWidth="0dp"
             android:text="@string/cancel" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/keyword_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:minWidth="0dp"
-            android:text="@string/back" />
-
-        <Button
-            android:id="@+id/keyword_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:minWidth="0dp"
-            android:text="@string/next" />
 
         <Button
             android:id="@+id/keyword_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:minWidth="0dp"
-            android:text="@string/calendar_dialog_save"
-            android:visibility="gone" />
+            android:text="@string/calendar_dialog_save" />
     </LinearLayout>
 
 

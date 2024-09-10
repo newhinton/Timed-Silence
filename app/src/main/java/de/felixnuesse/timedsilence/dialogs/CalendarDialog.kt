@@ -20,6 +20,7 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.model.data.CalendarObject
+import de.felixnuesse.timedsilence.model.data.KeywordObject
 import de.felixnuesse.timedsilence.util.SizeUtil
 import de.felixnuesse.timedsilence.util.VibrationUtil
 import de.felixnuesse.timedsilence.util.WindowUtils
@@ -57,6 +58,7 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
 
     private var tfrag: CalendarFragment? = null
     private lateinit var calHandler: DeviceCalendar
+    private var calendarObject: CalendarObject? = null
 
 
     private var radioMap: HashMap<Int,Long> = HashMap()
@@ -65,13 +67,19 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
     private lateinit var binding: DialogCalendarBinding
 
     constructor(context: Context, tfragment: CalendarFragment, calHandler: DeviceCalendar) : this(context) {
-        tfrag=tfragment
+        tfrag = tfragment
         this.calHandler=calHandler
     }
 
 
-    private var state: Int = 0
+    constructor(context: Context, calendarFragment: CalendarFragment) : this(context) {
+        tfrag = calendarFragment
+        calHandler = DeviceCalendar(context)
+    }
 
+    fun setCalendarObject(calendarObject: CalendarObject) {
+        this.calendarObject = calendarObject
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,15 +96,16 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
             binding.calendarDialogRbVibrate.visibility = View.GONE
         }
 
+        if(calendarObject != null) {
+            when(calendarObject!!.volume) {
+                TIME_SETTING_LOUD -> binding.calendarDialogRbLoud.isChecked = true
+                TIME_SETTING_SILENT -> binding.calendarDialogRbSilent.isChecked = true
+                else ->  binding.calendarDialogRbVibrate.isChecked = true
+            }
+        }
+
         window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         setCanceledOnTouchOutside(true)
-
-
-        hideAll()
-        binding.calendarBack.visibility = View.INVISIBLE
-        binding.calendarDialogTitle.text = context.getText(R.string.calendar_dialog_title_title)
-        binding.calendarIdLayout.visibility = View.VISIBLE
-
 
         val rg = findViewById<RadioGroup>(R.id.calendar_radio_group)
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -108,8 +117,8 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
 
             radioButton.setText(Html.fromHtml(text), TextView.BufferType.NORMAL)
             radioButton.id = View.generateViewId()
-            radioMap.put(radioButton.id,calObject.externalID)
-            radioNameMap.put(calObject.externalID,calObject.name)
+            radioMap[radioButton.id] = calObject.externalID
+            radioNameMap[calObject.externalID] = calObject.name
 
             val params = RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.WRAP_CONTENT,
@@ -121,22 +130,6 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
 
         rg.check(calHandler.getDeviceCalendars()[0].externalID.toInt())
 
-        binding.calendarNext.setOnClickListener {
-            Log.e(TAG(), "CalendarDialog: next!")
-
-            hideAll()
-            state++
-            decideState()
-        }
-
-        binding.calendarBack.setOnClickListener {
-            Log.e(TAG(), "CalendarDialog: back!")
-
-            hideAll()
-            state--
-            decideState()
-        }
-
         binding.calendarCancel.setOnClickListener {
             Log.e(TAG(), "CalendarDialog: cancel!")
             this.cancel()
@@ -147,10 +140,10 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
 
             val volId = getValueForVolumeRadioGroup();
             val calId = getValueForCalendarRadioGroup();
-            Log.e(TAG(), "CalendarDialog: Volume: "+volId)
-            Log.e(TAG(), "CalendarDialog: CalID:  "+calId)
+            Log.e(TAG(), "CalendarDialog: Volume: $volId")
+            Log.e(TAG(), "CalendarDialog: CalID:  $calId")
             val so = CalendarObject(
-                0,//calendar_id_select.text.toString(),
+                calendarObject?.id ?: 0,
                 calId,
                 volId
             )
@@ -160,11 +153,6 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
 
             this.cancel()
         }
-    }
-
-    private fun hideAll() {
-        binding.calendarIdLayout.visibility = View.GONE
-        binding.calendarDialogRbVolume.visibility = View.GONE
     }
 
     private fun getValueForVolumeRadioGroup(): Int{
@@ -178,42 +166,11 @@ class CalendarDialog(context: Context) : Dialog(context, R.style.AlertDialogCust
 
     private fun getValueForCalendarRadioGroup(): Long{
         var ret: Long = 0
-        var key: Int = binding.calendarRadioGroup.checkedRadioButtonId
+        val key: Int = binding.calendarRadioGroup.checkedRadioButtonId
 
         if(radioMap.containsKey(key)){
             ret= radioMap[key]!!
         }
         return ret;
-    }
-
-    private fun decideState() {
-
-        if(state==0){
-            binding.calendarBack.visibility = View.INVISIBLE
-            binding.calendarSave.visibility = View.GONE
-            binding.calendarNext.visibility = View.VISIBLE
-        }else if (state == 1){
-            binding.calendarSave.visibility = View.VISIBLE
-            binding.calendarBack.visibility = View.VISIBLE
-            binding.calendarNext.visibility = View.GONE
-        }else {
-            binding.calendarBack.visibility = View.VISIBLE
-            binding.calendarNext.visibility = View.VISIBLE
-            binding.calendarSave.visibility = View.GONE
-        }
-
-        when (state) {
-            0 -> {
-                binding.calendarDialogTitle.text = context.getText(R.string.schedule_dialog_title_title)
-                binding.calendarIdLayout.visibility = View.VISIBLE
-            }
-            1 -> {
-                binding.calendarDialogTitle.text = context.getText(R.string.schedule_dialog_title_volume)
-                binding.calendarDialogRbVolume.visibility = View.VISIBLE
-
-            }
-
-        }
-
     }
 }

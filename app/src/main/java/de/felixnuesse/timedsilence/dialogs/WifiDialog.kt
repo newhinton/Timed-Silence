@@ -77,7 +77,7 @@ class WifiDialog(context: Context) : Dialog(context, R.style.AlertDialogCustom) 
 
         hideAll()
         binding.wifiBack.visibility = View.INVISIBLE
-        binding.wifiDialogTitle.text = context.getText(R.string.calendar_dialog_title_title)
+        binding.wifiDialogTitle.text = context.getText(R.string.wifi_dialog_title_title)
         binding.wifiSsidLayout.visibility = View.VISIBLE
 
         binding.wifiNext.setOnClickListener {
