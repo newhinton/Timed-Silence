@@ -22,7 +22,6 @@
     <string name="intro_slide_notification_description">我们希望在此应用暂停时向您显示通知，因此请授予我们发送通知的权限。通知不会打扰您！</string>
     <string name="main_tab_calendar">日历</string>
     <string name="calendar_add_new">添加新的日历设置</string>
-    <string name="calendar_dialog_title_title">选择日历</string>
     <string name="calendar_list_empty">你没有日历。</string>
     <string name="intro_slide_calendar_description">如果你想在会议和活动期间将手机静音，我们需要访问你的日历</string>
     <string name="intro_slide_donotdisturb_description">要使您的手机真正静音，我们需要访问“勿扰模式”权限。</string>
@@ -145,7 +144,6 @@
     <string name="main_tab_checkup">检查</string>
     <string name="keyword_add_new">添加新的关键词</string>
     <string name="keyword_dialog_textfield_hint">输入关键词</string>
-    <string name="keyword_dialog_title_title">创建关键词</string>
     <string name="import_deletion_warning">导入会删除所有旧配置！</string>
     <string name="GrantContactsPermissionAccessDescription">此应用程序需要访问本地联系人。为了确保您的电话在紧急情况下不会被阻止，请授予对联系人的访问权限。这是可选的，我们只会在需要时使用此权限向您显示警告。</string>
     <string name="GrantCalendarPermissionAccessDescription">此应用程序需要访问本地日历。为了让此应用程序的使用更方便，请授予权限访问您的日历！</string>
