@@ -189,4 +189,9 @@
     <string name="force_restart_checks_after_reboot">当设备重启时，也会重启检查，无论其重启前的状态如何。</string>
     <string name="notification_listener_service_name">定时静音通知监听器</string>
     <string name="use_keywords_for_notifications">允许根据关键词搜索通知内容</string>
+    <string name="wifi_dialog_title_title">添加 WiFi</string>
+    <string name="volume_selector_title">音量</string>
+    <string name="volume_selector_subtitle">选择手机的反应方式</string>
+    <string name="calendar_selector_title">日历</string>
+    <string name="calendar_selector_subtitle">选择要应用的日历</string>
 </resources>
