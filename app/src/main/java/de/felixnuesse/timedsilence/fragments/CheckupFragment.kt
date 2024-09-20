@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.databinding.FragmentCheckupBinding
+import de.felixnuesse.timedsilence.handler.PreferencesManager
 import de.felixnuesse.timedsilence.model.contacts.Contact
 import de.felixnuesse.timedsilence.model.contacts.ContactUtil
 import de.felixnuesse.timedsilence.ui.ContactsListAdapter
@@ -196,6 +197,7 @@ class CheckupFragment : Fragment() {
             adapter = viewAdapter
         }
 
+        binding.checkupChangeRingerWarningContainer.visibility = if(PreferencesManager(requireContext()).changeRingerVolume()) View.VISIBLE else View.GONE
     }
 
     /**

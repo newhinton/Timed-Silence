@@ -148,15 +148,14 @@ class VolumeHandler(private var mContext: Context, private var mInstanceContext:
             notifcationVolume
         )
 
-        if(mPreferencesManager.changeRingerVolume()){
-            Log.d(TAG(), "VolumeHandler - $mInstanceContext: STREAM_RING: $ringerVolume")
-            Log.d(TAG(), "VolumeHandler - $mInstanceContext: Setting Ringer! This might be not what you want!")
-            setStreamToPercent(
-                manager,
-                AudioManager.STREAM_RING,
-                ringerVolume
-            )
-        }
+
+        // If we set the device to loud, this is exactly what we want.
+        Log.d(TAG(), "VolumeHandler - $mInstanceContext: STREAM_RING: $ringerVolume")
+        setStreamToPercent(
+            manager,
+            AudioManager.STREAM_RING,
+            ringerVolume
+        )
 
     }
 
