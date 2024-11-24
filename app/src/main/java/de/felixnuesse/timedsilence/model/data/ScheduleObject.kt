@@ -1,5 +1,8 @@
 package de.felixnuesse.timedsilence.model.data
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 import java.time.DayOfWeek
 
@@ -31,7 +34,25 @@ import java.time.DayOfWeek
  *
  */
 @Serializable
-data class ScheduleObject(var name: String, var timeStart: Long, var timeEnd: Long, var timeSetting: Int, var id: Long) {
+@Entity(tableName="timetable")
+data class ScheduleObject(
+
+    @ColumnInfo(name = "SCHEDULE_NAME")
+    var name: String?,
+
+    @ColumnInfo(name = "time_start")
+    var timeStart: Long?,
+
+    @ColumnInfo(name = "time_end")
+    var timeEnd: Long?,
+
+    @ColumnInfo(name = "schedule_volume")
+    var timeSetting: Int?,
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    var id: Long?
+) {
 
 
     constructor(name: String, timeStart: Long, timeEnd: Long, timeSetting: Int, id: Long,
@@ -48,12 +69,19 @@ data class ScheduleObject(var name: String, var timeStart: Long, var timeEnd: Lo
 
     }
 
+    @ColumnInfo(name = "schedule_active_mon")
     var mon: Boolean = false
+    @ColumnInfo(name = "schedule_active_tue")
     var tue: Boolean = false
+    @ColumnInfo(name = "schedule_active_wed")
     var wed: Boolean = false
+    @ColumnInfo(name = "schedule_active_thu")
     var thu: Boolean = false
+    @ColumnInfo(name = "schedule_active_fri")
     var fri: Boolean = false
+    @ColumnInfo(name = "schedule_active_sat")
     var sat: Boolean = false
+    @ColumnInfo(name = "schedule_active_sun")
     var sun: Boolean = false
 
     fun isValidOnWeekday(weekday: DayOfWeek): Boolean {

@@ -15,6 +15,7 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDUL
 import android.content.ContentValues
 import android.database.Cursor
 import android.util.Log
+import androidx.room.Room
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_MANUALLY_SET
 import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.extensions.e
@@ -54,6 +55,7 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_SS
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_TABLE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_TYPE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_VOL_MODE
+import de.felixnuesse.timedsilence.model.database.room.AppDatabase
 import java.time.DayOfWeek
 
 
@@ -163,64 +165,6 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         }
     }
 
-
-    fun getAllSchedules(): ArrayList<ScheduleObject> {
-        if (cachedSchedules.cacheInitialized && cachingEnabled) {
-            return cachedSchedules
-        }
-
-        val db = readableDatabase
-
-        // Filter results WHERE "title" = 'My Title'
-        val selection = ""
-        val selectionArgs = arrayOf<String>()
-
-        // How you want the results sorted in the resulting Cursor
-        val sortOrder = SCHEDULE_ID + " ASC"
-
-        val cursor = db.query(
-            SCHEDULE_TABLE, // The table to query
-            getScheduleProjection(), // The array of columns to return (pass null to get all)
-            selection, // The columns for the WHERE clause
-            selectionArgs, // don't group the rows
-            null, null, // don't filter by row groups
-            sortOrder                                   // The sort order
-        )// The values for the WHERE clause
-        val results = arrayListOf<ScheduleObject>()
-        while (cursor.moveToNext()) {
-            val so = ScheduleObject(
-                cursor.getString(1),
-                cursor.getLong(2),
-                cursor.getLong(3),
-                cursor.getInt(4),
-                cursor.getLong(0),
-                intToBool(cursor.getInt(5)),
-                intToBool(cursor.getInt(6)),
-                intToBool(cursor.getInt(7)),
-                intToBool(cursor.getInt(8)),
-                intToBool(cursor.getInt(9)),
-                intToBool(cursor.getInt(10)),
-                intToBool(cursor.getInt(11))
-            )
-            results.add(so)
-        }
-        cursor.close()
-
-        db.close()
-        cachedSchedules.set(results)
-        //Log.e("Database", "content: ${results.size}")
-        //Log.e("Database", "content: ${cachedSchedules.size}")
-        return cachedSchedules
-    }
-
-    fun getSchedulesForWeekday(weekday: DayOfWeek): ArrayList<ScheduleObject> {
-        if (cachedSchedules.cacheInitialized && cachingEnabled) {
-            return cachedSchedules.filter { it.isValidOnWeekday(weekday) } as ArrayList<ScheduleObject>
-        }
-        return getAllSchedules().filter { it.isValidOnWeekday(weekday) } as ArrayList<ScheduleObject>
-    }
-
-
     fun intToBool(value: Int): Boolean{
         if(value==0){
             return false
@@ -228,167 +172,48 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         return true
     }
 
+
+    val db = Room.databaseBuilder(
+        context,
+        AppDatabase::class.java,
+        DATABASE_NAME
+    ).build()
+
+
+    /*  #########################  */
+    /*  ROOM DB - SCHEDULE OBJECT  */
+    /*  #########################  */
+    fun getAllSchedules(): ArrayList<ScheduleObject> {
+        return ArrayList(db.scheduleDao().getAllSchedules())
+    }
+
+    fun getSchedulesForWeekday(weekday: DayOfWeek): ArrayList<ScheduleObject> {
+        return getAllSchedules().filter { it.isValidOnWeekday(weekday) } as ArrayList<ScheduleObject>
+    }
+
     @Deprecated("This is not cached!")
     fun getScheduleByID(id: Long): ScheduleObject {
-        val db = readableDatabase
-
-        val selection = SCHEDULE_ID + " = ?"
-        val selectionArgs = arrayOf(id.toString())
-
-        val sortOrder = SCHEDULE_ID + " DESC"
-
-
-        val cursor = db.query(
-            SCHEDULE_TABLE, // The table to query
-            getScheduleProjection(), // The array of columns to return (pass null to get all)
-            selection, // The columns for the WHERE clause
-            selectionArgs, // don't group the rows
-            null, null, // don't filter by row groups
-            sortOrder                                   // The sort order
-        )// The values for the WHERE clause
-
-        val results = arrayListOf<ScheduleObject>()
-        while (cursor.moveToNext()) {
-
-            val so = ScheduleObject(
-                cursor.getString(1),
-                cursor.getLong(2),
-                cursor.getLong(3),
-                cursor.getInt(4),
-                cursor.getLong(0),
-                intToBool(cursor.getInt(5)),
-                intToBool(cursor.getInt(6)),
-                intToBool(cursor.getInt(7)),
-                intToBool(cursor.getInt(8)),
-                intToBool(cursor.getInt(9)),
-                intToBool(cursor.getInt(10)),
-                intToBool(cursor.getInt(11))
-            )
-
-
-            results.add(so)
-        }
-        cursor.close()
-        return results.get(0)
+        return db.scheduleDao().getScheduleByID(id)
     }
 
-    private fun getScheduleProjection(): Array<String> {
-        return arrayOf(
-            SCHEDULE_ID,
-            SCHEDULE_NAME,
-            SCHEDULE_START,
-            SCHEDULE_END,
-            SCHEDULE_SETTING,
-            SCHEDULE_MON,
-            SCHEDULE_TUE,
-            SCHEDULE_WED,
-            SCHEDULE_THU,
-            SCHEDULE_FRI,
-            SCHEDULE_SAT,
-            SCHEDULE_SUN
-        )
+    fun deleteScheduleEntry(id: Long) {
+        db.scheduleDao().deleteScheduleEntry(id)
     }
 
-    /**
-     * Deletes ScheduleObject with the given id
-     * @param id Switch to delete
-     * @return amount of rows affected
-     */
-    fun deleteScheduleEntry(id: Long): Int {
-        val db = writableDatabase
-        // Define 'where' part of query.
-        val selection = SCHEDULE_ID + " LIKE ?"
-        // Specify arguments in placeholder order.
-        val selectionArgs = arrayOf(id.toString())
-
-        // Issue SQL statement.
-        val retcode: Int = db.delete(SCHEDULE_TABLE, selection, selectionArgs)
-        db.close()
-
-        return retcode
-
-
-
-    }
-
-    /**
-     * Creates a switch entry
-     * @param so Switch to create
-     * @return id
-     */
     fun createScheduleEntry(so: ScheduleObject): ScheduleObject {
-        val db = writableDatabase
-
-        // Create a new map of values, where column names are the keys
-        val values = ContentValues()
-        //values.put(SCHEDULE_ID, so.id)
-        values.put(SCHEDULE_NAME, so.name)
-        values.put(SCHEDULE_START, so.timeStart)
-        values.put(SCHEDULE_END, so.timeEnd)
-        values.put(SCHEDULE_SETTING, so.timeSetting)
-        values.put(SCHEDULE_MON, so.mon)
-        values.put(SCHEDULE_TUE, so.tue)
-        values.put(SCHEDULE_WED, so.wed)
-        values.put(SCHEDULE_THU, so.thu)
-        values.put(SCHEDULE_FRI, so.fri)
-        values.put(SCHEDULE_SAT, so.sat)
-        values.put(SCHEDULE_SUN, so.sun)
-
-        // Insert the new row, returning the primary key value of the new row
-        val newRowId = db.insert(SCHEDULE_TABLE, null, values)
-
-        val newObject = ScheduleObject("",0,0,0,newRowId)
-
-        newObject.name=so.name
-        newObject.timeStart=so.timeStart
-        newObject.timeEnd=so.timeEnd
-        newObject.timeSetting=so.timeSetting
-        newObject.mon=so.mon
-        newObject.tue=so.tue
-        newObject.wed=so.wed
-        newObject.thu=so.thu
-        newObject.fri=so.fri
-        newObject.sat=so.sat
-        newObject.sun=so.sun
-
-        db.close()
-        return newObject
+        val id = db.scheduleDao().createScheduleEntry(so)
+        return db.scheduleDao().getScheduleByID(id)
 
     }
 
     fun updateScheduleEntry(so: ScheduleObject) {
-        val db = writableDatabase
-
-        // Create a new map of values, where column names are the keys
-        val values = ContentValues()
-        values.put(SCHEDULE_ID, so.id)
-        values.put(SCHEDULE_NAME, so.name)
-        values.put(SCHEDULE_START, so.timeStart)
-        values.put(SCHEDULE_END, so.timeEnd)
-        values.put(SCHEDULE_SETTING, so.timeSetting)
-        values.put(SCHEDULE_MON, so.mon)
-        values.put(SCHEDULE_TUE, so.tue)
-        values.put(SCHEDULE_WED, so.wed)
-        values.put(SCHEDULE_THU, so.thu)
-        values.put(SCHEDULE_FRI, so.fri)
-        values.put(SCHEDULE_SAT, so.sat)
-        values.put(SCHEDULE_SUN, so.sun)
-
-        val idofchangedobject = arrayOf<String>(
-            so.id.toString()
-        )
-
-        // Insert the new row, returning the primary key value of the new row
-        db.update(
-            SCHEDULE_TABLE,
-            values,
-            SCHEDULE_ID + " = ?",
-            idofchangedobject
-        )
-
-        db.close()
-
+        db.scheduleDao().updateScheduleEntry(so)
     }
+
+    /*    #############################  */
+    /*  ROOM DB - SCHEDULE OBJECT - END  */
+    /*    #############################  */
+
 
 
     fun getAllWifiEntries(): ArrayList<WifiObject> {
