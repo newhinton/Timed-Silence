@@ -15,8 +15,10 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDUL
 import android.content.ContentValues
 import android.database.Cursor
 import android.util.Log
+import de.felixnuesse.timedsilence.Constants.Companion.REASON_MANUALLY_SET
 import de.felixnuesse.timedsilence.extensions.TAG
 import de.felixnuesse.timedsilence.extensions.e
+import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import de.felixnuesse.timedsilence.model.data.*
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.BLUETOOTH_MAC
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.BLUETOOTH_TABLE
@@ -31,6 +33,9 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.KEYWORD
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.KEYWORD_KEYWORD
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.KEYWORD_TABLE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.KEYWORD_VOL_MODE
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.LOG_ENTRY_CONTENT
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.LOG_ENTRY_TABLE
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.LOG_ENTRY_TIMESTAMP
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_MON
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_TUE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SCHEDULE_WED
@@ -42,6 +47,7 @@ import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CRE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_CALENDAR
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_KEYWORD
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_ENTRIES_WIFI
+import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_CREATE_LOG_ENTRY_TABLE
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.SQL_UPDATE_CALENDAR_ADD_NAME
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_ID
 import de.felixnuesse.timedsilence.model.database.DatabaseInfo.Companion.WIFI_SSID
@@ -105,6 +111,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         db.execSQL(SQL_UPDATE_CALENDAR_ADD_NAME)
         db.execSQL(SQL_CREATE_ENTRIES_KEYWORD)
         db.execSQL(SQL_CREATE_ENTRIES_BLUETOOTH)
+        db.execSQL(SQL_CREATE_LOG_ENTRY_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -127,6 +134,10 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         if(oldVersion<9){
             db.execSQL(SQL_CREATE_ENTRIES_BLUETOOTH)
+        }
+
+        if(oldVersion<10){
+            db.execSQL(SQL_CREATE_LOG_ENTRY_TABLE)
         }
     }
 
@@ -773,6 +784,43 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val retcode: Int = db.delete(BLUETOOTH_TABLE, selection, selectionArgs)
         db.close()
         return retcode
+    }
+
+
+    fun getLogEntries(): ArrayList<VolumeState> {
+
+        val db = readableDatabase
+        val cursor = db.query(
+            LOG_ENTRY_TABLE,
+            arrayOf(
+                LOG_ENTRY_TIMESTAMP,
+                LOG_ENTRY_CONTENT
+            ),
+            "",
+            arrayOf<String>(),
+            null, null,
+            "$LOG_ENTRY_TIMESTAMP DESC"
+        )
+
+        val results = arrayListOf<VolumeState>()
+        /*while (cursor.moveToNext()) {
+            val cko = BluetoothObject(
+                "",
+                cursor.getString(0)
+            )
+            cko.volumeState = cursor.getInt(1)
+            results.add(cko)
+        }*/
+
+        val state = VolumeState(2)
+        state.setReason(REASON_MANUALLY_SET, "main reason.")
+
+        results.add(state)
+        cursor.close()
+        return results
+    }
+
+    fun addLogEntry(state: VolumeState){
     }
 
 }

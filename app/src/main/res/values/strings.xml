@@ -196,4 +196,5 @@
     <string name="calendar_selector_title">Calendars</string>
     <string name="calendar_selector_subtitle">Select to wich calendar should apply</string>
     <string name="checkup_ringer_volume_warning">You are changing the ringer volume. This is likely not what you want!</string>
+    <string name="main_tab_logs">Logs</string>
 </resources>

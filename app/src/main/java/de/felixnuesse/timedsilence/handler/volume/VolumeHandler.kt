@@ -50,11 +50,8 @@ class VolumeHandler(private var mContext: Context, private var mInstanceContext:
     private var mIgnoreMusicPlaying = false
 
     fun setVolumeStateAndApply(state: VolumeState) {
-        setVolumeState(state)
-        applyVolume()
-    }
-    fun setVolumeState(state: VolumeState) {
         volumeState = state
+        applyVolume()
     }
 
     fun setSilent(){
@@ -233,6 +230,9 @@ class VolumeHandler(private var mContext: Context, private var mInstanceContext:
     }
 
     fun applyVolume(){
+        //todo: create log entry
+
+
         if(!PermissionManager(mContext).grantedDoNotDisturbAndNotify()){
             Log.d(TAG(), "VolumeHandler - $mInstanceContext: VolumeSetting: Do not disturb not granted! Not changing Volume!")
             return

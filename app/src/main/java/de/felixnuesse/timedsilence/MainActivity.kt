@@ -61,6 +61,7 @@ import de.felixnuesse.timedsilence.fragments.BluetoothFragment
 import de.felixnuesse.timedsilence.fragments.CalendarFragment
 import de.felixnuesse.timedsilence.fragments.CheckupFragment
 import de.felixnuesse.timedsilence.fragments.KeywordFragment
+import de.felixnuesse.timedsilence.fragments.LogFragment
 import de.felixnuesse.timedsilence.fragments.ScheduleFragment
 import de.felixnuesse.timedsilence.fragments.graph.GraphFragment
 import de.felixnuesse.timedsilence.handler.*
@@ -396,6 +397,7 @@ class MainActivity : AppCompatActivity(), TimerInterface {
                 elements.add(BluetoothFragment())
             }
             elements.add(CheckupFragment())
+            elements.add(LogFragment())
         }
 
         override fun getCount(): Int = elements.size
