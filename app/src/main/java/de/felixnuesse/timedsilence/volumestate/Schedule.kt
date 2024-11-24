@@ -33,19 +33,19 @@ class Schedule(private var mContext: Context): DeterministicCalculationInterface
                 val midnightToEnd = VolumeState(it.timeSetting)
                 midnightToEnd.startTime = dayStart.toInstant().toEpochMilli()
                 midnightToEnd.endTime = dayStart.plusMinutes(endToMinutes).toInstant().toEpochMilli()
-                midnightToEnd.setReason(REASON_TIME, it.name)
+                midnightToEnd.setReason(REASON_TIME, it.name, "Schedule")
                 list.add(midnightToEnd)
 
                 val startToMidnight = VolumeState(it.timeSetting)
                 startToMidnight.startTime = dayStart.plusMinutes(startToMinutes).toInstant().toEpochMilli()
                 startToMidnight.endTime = dayStart.plusHours(24).toInstant().toEpochMilli()
-                startToMidnight.setReason(REASON_TIME, it.name)
+                startToMidnight.setReason(REASON_TIME, it.name, "Schedule")
                 list.add(startToMidnight)
             } else {
                 val vs = VolumeState(it.timeSetting)
                 vs.startTime = dayStart.plusMinutes(startToMinutes).toInstant().toEpochMilli()
                 vs.endTime = dayStart.plusMinutes(endToMinutes).toInstant().toEpochMilli()
-                vs.setReason(REASON_TIME, it.name)
+                vs.setReason(REASON_TIME, it.name, "Schedule")
                 list.add(vs)
             }
         }

@@ -32,7 +32,7 @@ class DatabaseInfo{
     companion object {
 
         // If you change the database schema, you must increment the database version.
-        const val DATABASE_VERSION = 10
+        const val DATABASE_VERSION = 9
         const val DATABASE_NAME = "TimedSilence.db"
 
         val SCHEDULE_TABLE="timetable"
@@ -115,17 +115,6 @@ class DatabaseInfo{
             "CREATE TABLE IF NOT EXISTS $BLUETOOTH_TABLE (" +
                     "$BLUETOOTH_MAC TEXT PRIMARY KEY," +
                     "$BLUETOOTH_VOL_MODE INT)"
-
-
-
-        val LOG_ENTRY_TABLE="LOG_ENTRY_TABLE"
-        val LOG_ENTRY_TIMESTAMP= "LOG_ENTRY_TIMESTAMP"
-        val LOG_ENTRY_CONTENT= "LOG_ENTRY_CONTENT"
-
-        val SQL_CREATE_LOG_ENTRY_TABLE =
-            "CREATE TABLE IF NOT EXISTS $LOG_ENTRY_TABLE (" +
-                    "$LOG_ENTRY_TIMESTAMP INT PRIMARY KEY," +
-                    "$LOG_ENTRY_CONTENT TEXT)"
 
     }
 }

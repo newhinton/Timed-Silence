@@ -42,6 +42,10 @@ import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SET
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
 import de.felixnuesse.timedsilence.util.PermissionManager
 import de.felixnuesse.timedsilence.extensions.TAG
+import de.felixnuesse.timedsilence.model.database.room.LogDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class VolumeHandler(private var mContext: Context, private var mInstanceContext: String) {
 
@@ -56,17 +60,17 @@ class VolumeHandler(private var mContext: Context, private var mInstanceContext:
 
     fun setSilent(){
         volumeState = VolumeState(TIME_SETTING_SILENT)
-        volumeState.setReason(REASON_MANUALLY_SET, "Set from Main View")
+        volumeState.setReason(REASON_MANUALLY_SET, "Set from Main View", "Main UI")
     }
 
     fun setVibrate(){
         volumeState = VolumeState(TIME_SETTING_VIBRATE)
-        volumeState.setReason(REASON_MANUALLY_SET, "Set from Main View")
+        volumeState.setReason(REASON_MANUALLY_SET, "Set from Main View", "Main UI")
     }
 
     fun setLoud(){
         volumeState = VolumeState(TIME_SETTING_LOUD)
-        volumeState.setReason(REASON_MANUALLY_SET, "Set from Main View")
+        volumeState.setReason(REASON_MANUALLY_SET, "Set from Main View", "Main UI")
     }
 
     fun ignoreMusicPlaying(ignore: Boolean) {
@@ -230,8 +234,12 @@ class VolumeHandler(private var mContext: Context, private var mInstanceContext:
     }
 
     fun applyVolume(){
-        //todo: create log entry
 
+        runBlocking {
+            launch(Dispatchers.IO) {
+                LogDatabase.get(mContext).logEntryDao().createLogEntry(volumeState)
+            }
+        }
 
         if(!PermissionManager(mContext).grantedDoNotDisturbAndNotify()){
             Log.d(TAG(), "VolumeHandler - $mInstanceContext: VolumeSetting: Do not disturb not granted! Not changing Volume!")

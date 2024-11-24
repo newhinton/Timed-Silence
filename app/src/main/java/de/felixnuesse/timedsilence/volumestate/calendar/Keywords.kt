@@ -34,7 +34,7 @@ class Keywords(private var mContext: Context): Events(mContext) {
                     val vs = VolumeState(keyword.volume)
                     vs.startTime = it.mStart
                     vs.endTime = it.mEnd
-                    vs.setReason(REASON_KEYWORD, keyword.keyword)
+                    vs.setReason(REASON_KEYWORD, keyword.keyword,"Keyword in Calendar Event")
 
                     list.add(vs)
                     continue

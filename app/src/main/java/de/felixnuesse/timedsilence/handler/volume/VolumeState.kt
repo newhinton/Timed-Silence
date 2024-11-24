@@ -1,5 +1,8 @@
 package de.felixnuesse.timedsilence.handler.volume
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_BLUETOOTH_CONNECTED
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_CALENDAR
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_KEYWORD
@@ -9,6 +12,7 @@ import de.felixnuesse.timedsilence.Constants.Companion.REASON_TIME
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_UNDEFINED
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_WIFI
 import de.felixnuesse.timedsilence.util.DateUtil
+import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -16,7 +20,17 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-class VolumeState(var state: Int) {
+
+@Serializable
+@Entity
+class VolumeState(
+    var state: Int
+) {
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    var id: Long = 0
+
 
     companion object {
         const val TIME_SETTING_SILENT = 1
@@ -42,30 +56,33 @@ class VolumeState(var state: Int) {
         this.startTime = startTime
         this.endTime = startTime
         this.state = state
-        this.reason = reason
+        this.reasonId = reason
         this.reasonDescription = reasonDescription
     }
 
     // in milliseconds
-    var startTime: Long = 0
-    var endTime: Long = startTime
+    @ColumnInfo var startTime: Long = 0
+    @ColumnInfo var endTime: Long = startTime
 
-    private var reason: Int = REASON_UNDEFINED
-    private var reasonDescription: String = ""
+
+    @ColumnInfo var reasonId: Int = REASON_UNDEFINED
+    @ColumnInfo var reasonDescription: String = ""
+    @ColumnInfo var reasonSource: String = ""
 
     val duration: Long
         get() = endTime-startTime
 
 
-    fun setReason(reason: Int, reasonDescription: String) {
-        this.reason = reason
+    fun setReason(reason: Int, reasonDescription: String, reasonSource: String) {
+        this.reasonId = reason
         this.reasonDescription = reasonDescription
+        this.reasonSource = reasonSource
     }
 
     //Todo: translate this!
     fun getReason(): String {
         var s = ""
-        when (reason) {
+        when (reasonId) {
             REASON_CALENDAR -> s = "Volume changed because of calendar: $reasonDescription"
             REASON_KEYWORD -> s = "Volume changed because of Keyword in calendar: $reasonDescription"
             REASON_TIME -> s = "Volume changed because of time: $reasonDescription"
@@ -107,8 +124,8 @@ class VolumeState(var state: Int) {
 
     override fun toString(): String {
 
-        var stringReason = reason.toString()
-        when (reason) {
+        var stringReason = reasonId.toString()
+        when (reasonId) {
             REASON_CALENDAR -> stringReason = "CALENDAR"
             REASON_KEYWORD -> stringReason = "KEYWORD"
             REASON_TIME -> stringReason = "TIME"
@@ -124,7 +141,7 @@ class VolumeState(var state: Int) {
         val copy = VolumeState(state)
         copy.startTime = startTime
         copy.endTime = endTime
-        copy.reason = reason
+        copy.reasonId = reasonId
         copy.reasonDescription = reasonDescription
         return copy
     }

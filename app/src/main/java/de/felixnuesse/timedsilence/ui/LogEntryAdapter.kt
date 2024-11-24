@@ -36,7 +36,7 @@ import kotlin.collections.ArrayList
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
-class LogEntryAdapter(private val entries: ArrayList<VolumeState>) : RecyclerView.Adapter<LogEntryAdapter.LogViewHolder>() {
+class LogEntryAdapter(private val entries: List<VolumeState>) : RecyclerView.Adapter<LogEntryAdapter.LogViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogViewHolder {
@@ -49,9 +49,6 @@ class LogEntryAdapter(private val entries: ArrayList<VolumeState>) : RecyclerVie
         val logentry =  entries[position]
         val context = holder.logView.root.context
 
-
-
-
         var imageID = R.drawable.icon_volume_up
         when (logentry.state) {
             TIME_SETTING_LOUD -> imageID= R.drawable.icon_volume_up
@@ -60,9 +57,8 @@ class LogEntryAdapter(private val entries: ArrayList<VolumeState>) : RecyclerVie
         }
         holder.logView.stateIcon.setImageDrawable(AppCompatResources.getDrawable(context, imageID))
 
-
-
-        holder.logView.logContent.text =logentry.getReason()
+        holder.logView.logTitle.text = logentry.reasonSource
+        holder.logView.logContent.text = logentry.getReason()
 
     }
 

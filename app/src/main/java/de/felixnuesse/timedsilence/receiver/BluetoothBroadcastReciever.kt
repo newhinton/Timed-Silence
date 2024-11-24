@@ -40,7 +40,7 @@ class BluetoothBroadcastReciever : BroadcastReceiver(){
                     volumeHandler.ignoreMusicPlaying(true)
 
                     val state = VolumeState(it.volumeState)
-                    state.setReason(REASON_BLUETOOTH_CONNECTED, it.alias)
+                    state.setReason(REASON_BLUETOOTH_CONNECTED, it.alias, "Bluetooth Broadcast Reciever")
                     val supposedState = StateGenerator(context).stateAt(System.currentTimeMillis())
 
                     if (supposedState.state > state.state) {

@@ -157,7 +157,7 @@ open class Events(private var mContext: Context): DeterministicCalculationInterf
                 vs.startTime = it.mStart
                 vs.endTime = it.mEnd
 
-                vs.setReason(REASON_CALENDAR, "$calendarName (${it.mTitle})")
+                vs.setReason(REASON_CALENDAR, "$calendarName (${it.mTitle})", "Calendar Event")
 
                 list.add(vs)
             }

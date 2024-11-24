@@ -1,15 +1,21 @@
 package de.felixnuesse.timedsilence.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.databinding.FragmentLogsBinding
-import de.felixnuesse.timedsilence.model.database.DatabaseHandler
+import de.felixnuesse.timedsilence.model.database.room.LogDatabase
 import de.felixnuesse.timedsilence.ui.LogEntryAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class LogFragment : Fragment() {
@@ -29,17 +35,33 @@ class LogFragment : Fragment() {
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         viewManager = LinearLayoutManager(view.context)
+        refreshLogs()
+
+        binding.labelLogFragment.setOnClickListener {
+            refreshLogs()
+        }
+
+    }
 
 
-        val db = DatabaseHandler(view.context)
-        viewAdapter = LogEntryAdapter(db.getLogEntries())
+    fun refreshLogs() {
+        runBlocking {
+            launch(Dispatchers.IO) {
 
-        binding.logList.apply {
-            setHasFixedSize(false)
-            layoutManager = viewManager
-            adapter = viewAdapter
+                val logs = LogDatabase.get(requireContext()).logEntryDao()
+                var logEntries = logs.getAllLoggedStates()
+
+                val handler = Handler(Looper.getMainLooper())
+                handler.post {
+                    viewAdapter = LogEntryAdapter(logEntries)
+                    binding.logList.apply {
+                        setHasFixedSize(false)
+                        layoutManager = viewManager
+                        adapter = viewAdapter
+                    }
+                }
+            }
         }
     }
 

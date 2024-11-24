@@ -53,7 +53,7 @@ open class Notifications(private var mContext: Context): DeterministicCalculatio
                 val state = VolumeState(it.volume)
                 state.startTime = System.currentTimeMillis() - 60*1000
                 state.endTime = state.startTime + 120*1000 // add a minute
-                state.setReason(Constants.REASON_NOTIFICATION_VISIBLE, "Keyword: ${it.keyword}")
+                state.setReason(Constants.REASON_NOTIFICATION_VISIBLE, "Keyword: ${it.keyword}", "Notification Reciever")
                 return state
             }
         }
