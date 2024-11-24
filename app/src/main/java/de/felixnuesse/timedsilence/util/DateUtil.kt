@@ -1,15 +1,17 @@
 package de.felixnuesse.timedsilence.util
 
-import androidx.annotation.RequiresApi
+import java.lang.System.currentTimeMillis
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.Month
 import java.time.ZoneId
-import java.time.temporal.Temporal
-import java.util.*
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
 
 
 /**
@@ -90,6 +92,14 @@ class DateUtil{
         fun getMidnight(date: LocalDateTime): LocalDateTime {
             val midnight: LocalTime = LocalTime.MIDNIGHT
             return LocalDateTime.of(date.toLocalDate(), midnight)
+        }
+
+        fun format(milliSeconds: Long, format: DateTimeFormatter): String {
+            val localDateTime = Instant.ofEpochMilli(milliSeconds)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime()
+            val dateTime = localDateTime.atZone(ZoneId.systemDefault())
+            return dateTime.format(format)
         }
     }
 

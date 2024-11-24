@@ -73,7 +73,7 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/icon_verify"
+                android:icon="@drawable/icon_list_alt"
                 android:text="@string/main_tab_logs" />
         </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>

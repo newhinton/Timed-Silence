@@ -1,16 +1,22 @@
 package de.felixnuesse.timedsilence.ui;
 
-import androidx.recyclerview.widget.RecyclerView
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.recyclerview.widget.RecyclerView
 import de.felixnuesse.timedsilence.R
 import de.felixnuesse.timedsilence.databinding.AdapterLogEntryBinding
 import de.felixnuesse.timedsilence.handler.volume.VolumeState
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_LOUD
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_SILENT
 import de.felixnuesse.timedsilence.handler.volume.VolumeState.Companion.TIME_SETTING_VIBRATE
-import kotlin.collections.ArrayList
+import de.felixnuesse.timedsilence.util.DateUtil
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.Locale
 
 
 /**
@@ -60,6 +66,19 @@ class LogEntryAdapter(private val entries: List<VolumeState>) : RecyclerView.Ada
         holder.logView.logTitle.text = logentry.reasonSource
         holder.logView.logContent.text = logentry.getReason()
 
+        holder.logView.card.setOnClickListener { showTimestamp(logentry.id, context) }
+        holder.logView.logTitle.setOnClickListener { showTimestamp(logentry.id, context) }
+        holder.logView.logContent.setOnClickListener { showTimestamp(logentry.id, context) }
+        holder.logView.stateIcon.setOnClickListener { showTimestamp(logentry.id, context) }
+    }
+
+    private fun showTimestamp(inMs: Long, context: Context) {
+        val format = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+        val text = DateUtil.format(inMs, format)
+        Toast.makeText(
+            context, text,
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     // Return the size of your dataset (invoked by the layout manager)

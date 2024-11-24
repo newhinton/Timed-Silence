@@ -13,12 +13,6 @@ import de.felixnuesse.timedsilence.Constants.Companion.REASON_UNDEFINED
 import de.felixnuesse.timedsilence.Constants.Companion.REASON_WIFI
 import de.felixnuesse.timedsilence.util.DateUtil
 import kotlinx.serialization.Serializable
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 
 @Serializable
@@ -27,9 +21,9 @@ class VolumeState(
     var state: Int
 ) {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "id")
-    var id: Long = 0
+    var id: Long = System.currentTimeMillis()
 
 
     companion object {
@@ -101,15 +95,6 @@ class VolumeState(
 
     fun getFormattedEndDate(): String {
         return DateUtil.getDate(endTime, "HH:mm")
-    }
-
-    private fun getFormattedDate(time: Long): String {
-        var today = LocalDate.now(ZoneId.systemDefault())
-        var todayMidnight = LocalDateTime.of(today, LocalTime.MIDNIGHT)
-        val timestamp = todayMidnight.plusMinutes(time)
-
-        var shortFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
-        return timestamp.toLocalTime().format(shortFormat)
     }
 
     fun stateString(): String {
