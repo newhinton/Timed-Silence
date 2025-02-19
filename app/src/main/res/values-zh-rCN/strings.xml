@@ -194,4 +194,6 @@
     <string name="volume_selector_subtitle">选择手机的反应方式</string>
     <string name="calendar_selector_title">日历</string>
     <string name="calendar_selector_subtitle">选择要应用的日历</string>
+    <string name="checkup_ringer_volume_warning">您正在更改铃声音量。这可能不是您想要的！</string>
+    <string name="main_tab_logs">日志</string>
 </resources>
