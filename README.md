@@ -21,7 +21,7 @@ height="80">](https://f-droid.org/packages/de.felixnuesse.timedsilence)
 </div>
 
 -----------
-An app that manages your phones volume. It will mute your phone for you, so that you never get disturbed when doing important things!
+An Android app that manages your phone's volume. It will mute your phone for you, so you never get disturbed when doing important things!
 <br/>
 
 Screenshots
